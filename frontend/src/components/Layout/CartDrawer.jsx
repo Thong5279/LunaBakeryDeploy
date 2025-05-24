@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
+import CartContents from '../Cart/CartContents';
 const CartDrawer = ({drawerOpen, toggleCartDrawer}) => {
  
 
 return (
     <div
-        className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-1/4 h-full bg-[#fdf8f9] shadow-lg transform 
+        className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-[#fdf4f9] shadow-lg transform 
         transition-transform duration-300 flex flex-col z-50 ${
             drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
@@ -20,6 +21,7 @@ return (
         <div className='flex-grow p-4 overflow-y-auto'>
             <h2 className='text-xl text-[#a37ba3] font-bold mb-4'>Giỏ hàng</h2>
             {/* Add your cart items here */}
+            <CartContents />
         </div>   
         {/* checkout button fixed at the bottom */}
         <div className='pg-4 bg-white sticky bottom-0'>
