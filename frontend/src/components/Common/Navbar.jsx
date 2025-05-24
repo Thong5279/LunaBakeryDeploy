@@ -3,10 +3,16 @@ import { FiShoppingCart, FiUser, FiSearch, FiX } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
+import CartDrawer from "../Layout/CartDrawer";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const toggleCartDrawer = () => {
+      setDrawerOpen(!drawerOpen);
+  };
+  
   return (
     <>
       <nav className="bg-white shadow-md sticky top-0 z-40">
@@ -56,7 +62,7 @@ const Navbar = () => {
                 title="Tài khoản"
               />
             </Link>
-            <button>
+            <button onClick={toggleCartDrawer}>
               <FiShoppingCart
                 className="text-xl hover:text-[#a37ba3] cursor-pointer"
                 title="Giỏ hàng"
@@ -68,11 +74,6 @@ const Navbar = () => {
                 4
               </span>
             </button>
-
-            {/* <FiSearch
-              className="text-xl hover:text-[#a37ba3] cursor-pointer"
-              title="Tìm kiếm"
-            /> */}
 
             {/*Tìm kiếm */}
             <div className="overflow-hidden">
@@ -90,6 +91,9 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+       
+      
+
 
       {/* Mobile Sidebar Menu */}
       <div
@@ -123,6 +127,7 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(false)}
         />
       )}
+      <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer}/>
     </>
   );
 };
