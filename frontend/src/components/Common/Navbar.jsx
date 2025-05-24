@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiX } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import Searchbar from "./Searchbar";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,10 +49,7 @@ const Navbar = () => {
 
           {/* Icon bên phải */}
           <div className="flex items-center gap-4 text-gray-700">
-            <FiSearch
-              className="text-xl hover:text-[#a37ba3] cursor-pointer"
-              title="Tìm kiếm"
-            />
+           
             <Link to={"/profile"}>
               <FiUser
                 className="text-xl hover:text-[#a37ba3] cursor-pointer"
@@ -71,6 +69,16 @@ const Navbar = () => {
               </span>
             </button>
 
+            {/* <FiSearch
+              className="text-xl hover:text-[#a37ba3] cursor-pointer"
+              title="Tìm kiếm"
+            /> */}
+
+            {/*Tìm kiếm */}
+            <div className="overflow-hidden">
+               <Searchbar/>
+            </div>
+             
             {/* Nút mở menu mobile */}
             <div className="md:hidden">
               <HiMenu
