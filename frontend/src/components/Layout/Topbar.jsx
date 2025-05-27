@@ -1,23 +1,33 @@
-import React from 'react';
-import { FaFacebookF, FaInstagram } from 'react-icons/fa';
-import { SiZalo } from 'react-icons/si';
+import React from 'react'
+import { FaFacebookF, FaInstagram } from 'react-icons/fa'
+import { SiZalo } from 'react-icons/si'
+
+// Component phân cách đẹp, tự ẩn trên mobile
+const Divider = () => (
+  <span
+    className="mx-2 text-gray-300 select-none opacity-50 sm:inline hidden transition-opacity duration-200"
+    aria-hidden="true"
+  >
+    |
+  </span>
+)
 
 const Topbar = () => {
   return (
     <div className="bg-[#fceffb] text-white text-xs sm:text-sm py-2">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
-        
+
         {/* Bên trái: Social icons */}
-        <div className="flex items-center gap-3 order-1 md:order-1 ">
-          <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="hover:text-#814d81 text-[#a37ba3]" title="Facebook">
+        <div className="flex items-center gap-1 order-1 md:order-1 text-[#a37ba3]">
+          <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="hover:text-[#814d81] transition-colors duration-200" title="Facebook">
             <FaFacebookF />
           </a>
-          <a href="" className='text-[#d8c6db]'>|</a>
-          <a href="#" className="hover:text-#814d81 text-[#a37ba3]" title="Zalo">
+          <Divider />
+          <a href="#" className="hover:text-[#814d81] transition-colors duration-200" title="Zalo">
             <SiZalo />
           </a>
-          <a href="" className='text-[#d8c6db]'>|</a>
-          <a href="#" className="hover:text-#814d81 text-[#a37ba3]" title="Instagram">
+          <Divider />
+          <a href="#" className="hover:text-[#814d81] transition-colors duration-200" title="Instagram">
             <FaInstagram />
           </a>
         </div>
@@ -33,15 +43,15 @@ const Topbar = () => {
         {/* Bên phải: Info */}
         <div className="flex flex-col md:flex-row items-center gap-1 md:gap-3 order-2 md:order-3 text-[11px] sm:text-sm">
           <span className="whitespace-nowrap text-[#3c3c3c]">☎ 0987 654 321</span>
-          <a href="" className='text-[#d8c6db]'>|</a>
+          <Divider />
           <span className="hidden sm:inline text-[#3c3c3c]">✉ luna@bakery.com</span>
-          <a href="" className='text-[#d8c6db]'>|</a>
+          <Divider />
           <span className="hidden sm:inline text-[#666666]">🕒 08:00 - 21:00</span>
         </div>
 
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Topbar;
+export default Topbar
