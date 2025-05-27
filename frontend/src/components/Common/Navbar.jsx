@@ -26,27 +26,27 @@ const Navbar = () => {
           <div>
             <ul className="hidden md:flex gap-6 font-medium text-gray-700">
               <div>
-                <Link to={"#"} className="hover:text-[#a37ba3] cursor-pointer">
+                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
                   Trang chủ
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-[#a37ba3] cursor-pointer">
+                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
                   Sản phẩm
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-[#a37ba3] cursor-pointer">
+                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
                   Về chúng tôi
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-[#a37ba3] cursor-pointer">
+                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
                   Liên hệ
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-[#a37ba3] cursor-pointer">
+                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
                   Tin tức
                 </Link>
               </div>
@@ -111,13 +111,13 @@ const Navbar = () => {
         </div>
 
         <ul className="flex flex-col gap-4 p-4 text-gray-700 font-medium">
-          <Link className="hover:text-[#a37ba3] cursor-pointer">Trang chủ</Link>
-          <Link className="hover:text-[#a37ba3] cursor-pointer">Sản phẩm</Link>
-          <Link className="hover:text-[#a37ba3] cursor-pointer">
+          <Link className="hover:text-pink-500 cursor-pointer">Trang chủ</Link>
+          <Link className="hover:text-pink-500 cursor-pointer">Sản phẩm</Link>
+          <Link className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi
           </Link>
-          <Link className="hover:text-[#a37ba3] cursor-pointer">Liên hệ</Link>
-          <Link className="hover:text-[#a37ba3] cursor-pointer">Tin tức</Link>
+          <Link className="hover:text-pink-500 cursor-pointer">Liên hệ</Link>
+          <Link className="hover:text-pink-500 cursor-pointer">Tin tức</Link>
         </ul>
       </div>
 
