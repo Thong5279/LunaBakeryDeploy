@@ -1,6 +1,6 @@
-
 import React, { use, useEffect, useState } from "react";
 import { toast } from "sonner";
+import ProductGrid from "./ProductGrid";
 
 const selectedProduct = {
   name: "Bánh tiramisu",
@@ -25,7 +25,48 @@ const selectedProduct = {
   // layers: [1, 2, 3],
   // eggless: false,
 };
-const ProductDetails = () => {
+
+const similarProducts = [
+    {
+       _id: "1",
+        name: "product 1",
+        price: 50000,
+        originalPrice: 60000,
+        images: [
+            {
+                url: "https://picsum.photos/500/500?random=3",
+            },],
+    }
+    , {
+        _id: "2",
+        name: "product 2",
+        price: 70000,
+        originalPrice: 80000,
+        images: [
+            {
+                url: "https://picsum.photos/500/500?random=4",
+            },],
+    }, {
+        _id: "3",
+        name: "product 3",
+        price: 90000,
+        originalPrice: 100000,
+        images: [
+            {
+                url: "https://picsum.photos/500/500?random=5",
+            },],
+    }, {
+        _id: "4",
+        name: "product 4",
+        price: 110000,
+        originalPrice: 120000,
+        images: [
+            {
+                url: "https://picsum.photos/500/500?random=6",
+            },],
+    },
+];
+    const ProductDetails = () => {
   const [mainImage, setMainImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedFlavor, setSelectedFlavor] = useState("");
@@ -47,8 +88,10 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     if (!selectedSize || !selectedFlavor) {
-      toast.error("Vui lòng chọn kích thước và hương vị trước khi thêm vào giỏ hàng.");
-        return;
+      toast.error(
+        "Vui lòng chọn kích thước và hương vị trước khi thêm vào giỏ hàng."
+      );
+      return;
     }
     setButtonDisabled(true);
     // Giả lập thêm vào giỏ hàng
@@ -57,9 +100,8 @@ const ProductDetails = () => {
         duration: 1000,
       });
       setButtonDisabled(false);
-    },500);
-
-  }
+    }, 500);
+  };
 
   return (
     <div className="p-6">
@@ -199,15 +241,22 @@ const ProductDetails = () => {
             </div>
 
             {/* Nút thêm vào giỏ hàng */}
-            <button className={`bg-[#4b2995] text-white px-6 py-2 rounded-full w-full font-semibold hover:bg-[#3a2378] transition duration-300 shadow-md ${buttonDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg"}`} 
-                    onClick={handleAddToCart}
-                    disabled={buttonDisabled}
+            <button
+              className={`bg-[#4b2995] text-white px-6 py-2 rounded-full w-full font-semibold hover:bg-[#3a2378] transition duration-300 shadow-md ${
+                buttonDisabled
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:shadow-lg"
+              }`}
+              onClick={handleAddToCart}
+              disabled={buttonDisabled}
             >
-                 <span className="text-lg">🛒</span> {buttonDisabled ? "Đang thêm..." : "Thêm vào giỏ hàng"}
+              <span className="text-lg">🛒</span>{" "}
+              {buttonDisabled ? "Đang thêm..." : "Thêm vào giỏ hàng"}
             </button>
           </div>
         </div>
-        <section className="py-12 bg-white">
+        <div className="">
+            <section className="py-12 bg-white">
           <div className="max-w-6xl mx-auto text-center">
             <h2 className="text-2xl font-bold text-purple-800 mb-8">
               Khách hàng nói gì về chúng tôi
@@ -225,9 +274,7 @@ const ProductDetails = () => {
                 <p className="text-gray-700 italic">
                   “Tôi đặt bánh sinh nhật cho con gái, ai cũng khen!”
                 </p>
-                <p className="mt-4 font-semibold text-purple-700">
-                  – Anh Khôi
-                </p>
+                <p className="mt-4 font-semibold text-purple-700">– Anh Khôi</p>
               </div>
               <div className="p-6 bg-purple-50 rounded-lg shadow">
                 <p className="text-gray-700 italic">
@@ -243,6 +290,14 @@ const ProductDetails = () => {
             <span className="text-2xl">20</span>
           </div>
         </section>
+        </div>
+        {/* Sản phẩm gợi ý */}
+        <div className="mt-20">
+          <h2 className="text-2xl text-center font-semibold mb-6 text-pink-600">
+            🌟 Bạn có thể thích 🌟
+          </h2>
+          <ProductGrid products={similarProducts}/>
+        </div>
       </div>
     </div>
   );
