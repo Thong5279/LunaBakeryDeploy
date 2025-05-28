@@ -5,7 +5,7 @@ import NewArrivals from "../components/Products/NewArrivals";
 import ProductDetails from "../components/Products/ProductDetails";
 import ProductGrid from "../components/Products/ProductGrid";
 import FeaturedCakes from "../components/Products/FeaturedCakes";
-
+import FeaturedColection from "../components/Products/featuredCollection";
 const placeholderProducts = [
   {
     _id: "5",
@@ -118,6 +118,7 @@ const Home = () => {
          <ProductGrid products={placeholderProducts} />
       </div>
      <FeaturedCakes />
+     <FeaturedColection />
     </div>
   );
 };
