@@ -1,4 +1,6 @@
+
 import React, { use, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const selectedProduct = {
   name: "Bánh tiramisu",
@@ -25,12 +27,40 @@ const selectedProduct = {
 };
 const ProductDetails = () => {
   const [mainImage, setMainImage] = useState("");
-
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedFlavor, setSelectedFlavor] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   useEffect(() => {
     if (selectedProduct?.images?.length > 0) {
       setMainImage(selectedProduct.images[0].url);
     }
   }, [selectedProduct]);
+
+  const handleQuantityChange = (action) => {
+    if (action === "plus") {
+      setQuantity((prev) => prev + 1);
+    } else if (action === "minus") {
+      setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedFlavor) {
+      toast.error("Vui lòng chọn kích thước và hương vị trước khi thêm vào giỏ hàng.");
+        return;
+    }
+    setButtonDisabled(true);
+    // Giả lập thêm vào giỏ hàng
+    setTimeout(() => {
+      toast.success("Đã thêm vào giỏ hàng!", {
+        duration: 1000,
+      });
+      setButtonDisabled(false);
+    },500);
+
+  }
+
   return (
     <div className="p-6">
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
@@ -43,7 +73,12 @@ const ProductDetails = () => {
                 src={image.url}
                 alt={image.altText || `Thumbnail ${index}`}
                 onClick={() => setMainImage(image.url)}
-                className="w-20 h-20 object-cover rounded-lg cursor-pointer border"
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${
+                  mainImage === image.url
+                    ? "border-[#4b2995] shadow-lg"
+                    : "border-gray-300 hover:border-[#4b2995]"
+                }
+                transition duration-200`}
               />
             ))}
           </div>
@@ -64,7 +99,13 @@ const ProductDetails = () => {
                 key={index}
                 src={image.url}
                 alt={image.altText || `Thumbnail ${index}`}
-                className="w-20 h-20 object-cover rounded-lg cursor-pointer border"
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border ${
+                  mainImage === image.url
+                    ? "border-[#4b2995] shadow-lg"
+                    : "border-gray-300 hover:border-[#4b2995]"
+                } transition duration-200`}
+                style={{ flexShrink: 0, marginRight: "8px" }}
+                onClick={() => setMainImage(image.url)}
               />
             ))}
           </div>
@@ -102,7 +143,12 @@ const ProductDetails = () => {
                 {selectedProduct.sizes.map((size) => (
                   <button
                     key={size}
-                    className="px-4 py-1 rounded-full bg-[#ede9fe] text-[#6d28d9] font-medium hover:bg-[#dcd4fc] transition shadow-sm"
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-1 rounded-full bg-[#ede9fe] text-[#6d28d9] font-medium hover:bg-[#dcd4fc] transition shadow-sm ${
+                      selectedSize === size
+                        ? "border-2 border-[#6d28d9] shadow-lg"
+                        : "border border-transparent"
+                    }`}
                   >
                     {size} cm
                   </button>
@@ -117,7 +163,12 @@ const ProductDetails = () => {
                 {selectedProduct.flavors.map((flavor) => (
                   <button
                     key={flavor}
-                    className="px-4 py-1 rounded-full bg-[#ffe4e6] text-[#db2777] font-medium hover:bg-[#fecdd3] transition shadow-sm"
+                    onClick={() => setSelectedFlavor(flavor)}
+                    className={`px-4 py-1 rounded-full bg-[#ffe4e6] text-[#db2777] font-medium hover:bg-[#fecdd3] transition shadow-sm ${
+                      selectedFlavor === flavor
+                        ? "border-2 border-[#db2777] shadow-lg"
+                        : "border border-transparent"
+                    }`}
                   >
                     {flavor}
                   </button>
@@ -129,19 +180,30 @@ const ProductDetails = () => {
             <div>
               <p className="text-[#4b2995] font-semibold mb-2">Số lượng:</p>
               <div className="flex items-center gap-3">
-                <button className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f3f4f6] hover:bg-[#e5e7eb] transition text-lg font-bold shadow">
+                <button
+                  onClick={() => handleQuantityChange("minus")}
+                  className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f3f4f6] hover:bg-[#e5e7eb] transition text-lg font-bold shadow"
+                >
                   -
                 </button>
-                <span className="text-xl font-semibold text-gray-800">1</span>
-                <button className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f3f4f6] hover:bg-[#e5e7eb] transition text-lg font-bold shadow">
+                <span className="text-xl font-semibold text-gray-800">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => handleQuantityChange("plus")}
+                  className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f3f4f6] hover:bg-[#e5e7eb] transition text-lg font-bold shadow"
+                >
                   +
                 </button>
               </div>
             </div>
 
             {/* Nút thêm vào giỏ hàng */}
-            <button className="bg-[#4b2995] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#3a2378] transition duration-300 shadow-md">
-              <span>🛒</span> Thêm vào giỏ hàng
+            <button className={`bg-[#4b2995] text-white px-6 py-2 rounded-full w-full font-semibold hover:bg-[#3a2378] transition duration-300 shadow-md ${buttonDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg"}`} 
+                    onClick={handleAddToCart}
+                    disabled={buttonDisabled}
+            >
+                 <span className="text-lg">🛒</span> {buttonDisabled ? "Đang thêm..." : "Thêm vào giỏ hàng"}
             </button>
           </div>
         </div>
@@ -156,7 +218,7 @@ const ProductDetails = () => {
                   “Bánh vừa đẹp vừa ngon, giao hàng đúng hẹn. Rất hài lòng!”
                 </p>
                 <p className="mt-4 font-semibold text-purple-700">
-                  – Linh Nguyễn
+                  – Huỳnh Tuyên
                 </p>
               </div>
               <div className="p-6 bg-purple-50 rounded-lg shadow">
@@ -164,7 +226,7 @@ const ProductDetails = () => {
                   “Tôi đặt bánh sinh nhật cho con gái, ai cũng khen!”
                 </p>
                 <p className="mt-4 font-semibold text-purple-700">
-                  – Hạnh Trần
+                  – Anh Khôi
                 </p>
               </div>
               <div className="p-6 bg-purple-50 rounded-lg shadow">
@@ -177,7 +239,8 @@ const ProductDetails = () => {
           </div>
           <div className="bg-purple-100 text-purple-800 text-center py-4 rounded-lg mb-8 mt-4">
             🎁 Giảm 20% cho đơn đầu tiên – Dùng mã:{" "}
-            <span className="font-semibold">L U N A</span> <span className="text-2xl">20</span>  
+            <span className="font-semibold">L U N A</span>{" "}
+            <span className="text-2xl">20</span>
           </div>
         </section>
       </div>

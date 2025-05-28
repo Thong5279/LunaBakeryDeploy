@@ -13,56 +13,96 @@ const NewArrivals = () => {
       name: "Bánh mì baguette",
       description: "Bánh mì baguette Pháp truyền thống...",
       price: 25000,
-      images: [{ url: "https://picsum.photos/500/500?random=1", altText: "Bánh mì baguette" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=1",
+          altText: "Bánh mì baguette",
+        },
+      ],
     },
     {
       id: 2,
       name: "Bánh cupcake socola",
       description: "Bánh cupcake socola ngọt ngào...",
       price: 30000,
-      images: [{ url: "https://picsum.photos/500/500?random=2", altText: "Bánh cupcake socola" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=2",
+          altText: "Bánh cupcake socola",
+        },
+      ],
     },
     {
       id: 3,
       name: "Bánh tart trái cây",
       description: "Bánh tart trái cây tươi ngon...",
       price: 40000,
-      images: [{ url: "https://picsum.photos/500/500?random=3", altText: "Bánh tart trái cây" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=3",
+          altText: "Bánh tart trái cây",
+        },
+      ],
     },
     {
       id: 4,
       name: "Bánh mì sandwich",
       description: "Bánh mì sandwich mềm mịn...",
       price: 20000,
-      images: [{ url: "https://picsum.photos/500/500?random=4", altText: "Bánh mì sandwich" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=4",
+          altText: "Bánh mì sandwich",
+        },
+      ],
     },
     {
       id: 5,
       name: "Bánh cookie hạnh nhân",
       description: "Bánh cookie hạnh nhân giòn tan...",
       price: 15000,
-      images: [{ url: "https://picsum.photos/500/500?random=5", altText: "Bánh cookie hạnh nhân" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=5",
+          altText: "Bánh cookie hạnh nhân",
+        },
+      ],
     },
     {
       id: 6,
       name: "Bánh cheesecake dâu tây",
       description: "Bánh cheesecake dâu tây mịn màng...",
       price: 60000,
-      images: [{ url: "https://picsum.photos/500/500?random=6", altText: "Bánh cheesecake dâu tây" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=6",
+          altText: "Bánh cheesecake dâu tây",
+        },
+      ],
     },
     {
       id: 7,
       name: "Bánh mì ciabatta",
       description: "Bánh mì ciabatta Ý...",
       price: 28000,
-      images: [{ url: "https://picsum.photos/500/500?random=7", altText: "Bánh mì ciabatta" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=7",
+          altText: "Bánh mì ciabatta",
+        },
+      ],
     },
     {
       id: 8,
       name: "Bánh muffin việt quất",
       description: "Bánh muffin việt quất thơm ngon...",
       price: 22000,
-      images: [{ url: "https://picsum.photos/500/500?random=8", altText: "Bánh muffin việt quất" }],
+      images: [
+        {
+          url: "https://picsum.photos/500/500?random=8",
+          altText: "Bánh muffin việt quất",
+        },
+      ],
     },
   ];
 
@@ -107,11 +147,12 @@ const NewArrivals = () => {
           🌟 Các loại bánh mới !!
         </h2>
         <p className="text-gray-500 mb-8">
-          Khám phá những loại bánh thơm ngon vừa ra mắt – chỉ dành riêng cho bạn!
+          Khám phá những loại bánh thơm ngon vừa ra mắt – chỉ dành riêng cho
+          bạn!
         </p>
 
         {/* Nút scroll */}
-        <div className="absolute right-4 top-[50%] transform -translate-y-1/2 flex space-x-2 z-10">
+        <div className="absolute right-4 top-[50%] transform -translate-y-1/2 hidden sm:flex space-x-2 z-10">
           <button
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
