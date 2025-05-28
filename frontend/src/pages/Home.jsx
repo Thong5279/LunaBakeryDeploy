@@ -4,6 +4,7 @@ import CategorySection from "../components/Products/CategorySection";
 import NewArrivals from "../components/Products/NewArrivals";
 import ProductDetails from "../components/Products/ProductDetails";
 import ProductGrid from "../components/Products/ProductGrid";
+import FeaturedCakes from "../components/Products/FeaturedCakes";
 
 const placeholderProducts = [
   {
@@ -114,8 +115,9 @@ const Home = () => {
         <h2 className="text-3xl text-center font-bold mb-4 text-pink-600">
           Bánh Ngọt Được Ưa Chuộng Nhất 🍰
         </h2>
+         <ProductGrid products={placeholderProducts} />
       </div>
-      <ProductGrid products={placeholderProducts} />
+     <FeaturedCakes />
     </div>
   );
 };
