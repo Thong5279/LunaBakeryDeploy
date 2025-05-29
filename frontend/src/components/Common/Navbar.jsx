@@ -15,7 +15,7 @@ const Navbar = () => {
   
   return (
     <>
-      <nav className="bg-white shadow-md sticky top-0 z-40 ">
+      <nav className="bg-white shadow-md lg:fixed sticky w-full top-0 z-40 mt-[36px] ">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           {/* Logo bên trái */}
           <div className="text-xl font-bold text-[#a37ba3] tracking-wide">
