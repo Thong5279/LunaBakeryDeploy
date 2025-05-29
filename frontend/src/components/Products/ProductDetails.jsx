@@ -189,7 +189,7 @@ const similarProducts = [
                     onClick={() => setSelectedSize(size)}
                     className={`px-4 py-1 rounded-full bg-[#ffe4e6] text-[#db2777] font-medium hover:bg-[#fecdd3] transition shadow-sm ${
                       selectedSize === size
-                        ? "border-2 border-[#6d28d9] shadow-lg"
+                        ? "border-2 border-[#db2777] shadow-lg"
                         : "border border-transparent"
                     }`}
                   >
@@ -293,7 +293,7 @@ const similarProducts = [
               Khách hàng nói gì về chúng tôi
             </h2>
             <div className="grid md:grid-cols-3 gap-8 px-4">
-              <div className="p-6 bg-purple-50 rounded-lg shadow">
+              <div className="p-6 bg-pink-100 rounded-lg shadow">
                 <p className="text-gray-700 italic">
                   “Bánh vừa đẹp vừa ngon, giao hàng đúng hẹn. Rất hài lòng!”
                 </p>
@@ -301,13 +301,13 @@ const similarProducts = [
                   – Huỳnh Tuyên
                 </p>
               </div>
-              <div className="p-6 bg-purple-50 rounded-lg shadow">
+              <div className="p-6 bg-pink-100 rounded-lg shadow">
                 <p className="text-gray-700 italic">
                   “Tôi đặt bánh sinh nhật cho con gái, ai cũng khen!”
                 </p>
                 <p className="mt-4 font-semibold text-pink-500">– Anh Khôi</p>
               </div>
-              <div className="p-6 bg-purple-50 rounded-lg shadow">
+              <div className="p-6 bg-pink-100 rounded-lg shadow">
                 <p className="text-gray-700 italic">
                   “Trang web dễ dùng, chọn bánh nhanh và nhiều tùy chọn.”
                 </p>
@@ -315,10 +315,9 @@ const similarProducts = [
               </div>
             </div>
           </div>
-          <div className="bg-purple-100 text-pink-500 text-center py-4 rounded-lg mb-8 mt-4">
+          <div className="bg-pink-100 text-pink-500 text-center py-4 rounded-lg mb-8 mt-4">
             🎁 Giảm 20% cho đơn đầu tiên – Dùng mã:{" "}
-            <span className="font-semibold">L U N A</span>{" "}
-            <span className="text-2xl">20</span>
+            <span className="font-semibold">L U N A 2 0</span>{" "}
           </div>
         </section>
         </div>

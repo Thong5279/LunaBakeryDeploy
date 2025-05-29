@@ -11,8 +11,8 @@ const features = [
   },
   {
     icon: <FaUndo className="text-3xl text-pink-500" />,
-    title: '45 ngày đổi trả',
-    desc: 'Đảm bảo hoàn tiền nếu không hài lòng',
+    title: 'Đổi trả hàng miễn phí',
+    desc: 'Đảm bảo hoàn tiền nếu sang phẩm không đúng mô tả',
   },
   {
     icon: <FaLock className="text-3xl text-pink-500" />,

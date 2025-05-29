@@ -24,7 +24,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
               placeholder="Nhập email của bạn"
             />
           </div>
@@ -34,13 +34,13 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
               placeholder="Nhập mật khẩu"
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-pink-50 hover:bg-purple-700 text-pink-500 p-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
+            className="w-full bg-pink-50 hover:bg-pink-200 text-[#db2777] p-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
           >
             Đăng nhập
           </button>
