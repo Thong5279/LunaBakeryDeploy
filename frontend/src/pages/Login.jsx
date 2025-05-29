@@ -1,0 +1,73 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import loginImage from '../assets/login.jpg';
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Left: Form */}
+      <div className="w-full md:w-1/2 flex justify-center items-center p-8 md:p-16 bg-white shadow-xl relative z-10">
+        <form className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl font-bold text-pink-500">Luna Baker</h2>
+          </div>
+          <h3 className="text-2xl font-semibold text-center mb-4">Xin chào 👋</h3>
+          <p className="text-center text-gray-500 mb-6">
+            Vui lòng đăng nhập tên tài khoản và mật khẩu để tiếp tục
+          </p>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Nhập email của bạn"
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Mật khẩu</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Nhập mật khẩu"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-pink-50 hover:bg-purple-700 text-pink-500 p-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
+          >
+            Đăng nhập
+          </button>
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Chưa có tài khoản?
+            <Link to="/register">
+              <span className="text-pink-500 font-semibold hover:underline ml-1">Đăng ký ngay</span>
+            </Link>
+          </p>
+        </form>
+      </div>
+
+      {/* Right: Image */}
+      <div className="hidden md:flex w-1/2 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20 z-10" />
+        <img
+          src={loginImage}
+          alt="Login Background"
+          className="w-full h-full object-cover object-center scale-105 filter blur-[1px] brightness-90 transition duration-500"
+        />
+        <div className="absolute bottom-6 left-6 text-white z-20">
+          <h2 className="text-2xl font-semibold drop-shadow-lg">Welcome to Luna 🍰</h2>
+          <p className="text-sm drop-shadow-md text-gray-100">Không chỉ là bánh – là nghệ thuật</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

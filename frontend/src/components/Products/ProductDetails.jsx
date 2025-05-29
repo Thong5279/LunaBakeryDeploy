@@ -154,7 +154,7 @@ const similarProducts = [
           </div>
           <div className="md:w-1/2 md:ml-10 space-y-7">
             {/* Tên sản phẩm */}
-            <h1 className="text-3xl font-extrabold text-[#4b2995]">
+            <h1 className="text-3xl font-extrabold text-pink-500">
               {selectedProduct.name}
             </h1>
 
@@ -181,13 +181,13 @@ const similarProducts = [
 
             {/* Kích thước */}
             <div>
-              <p className="text-[#4b2995] font-semibold mb-2">Kích thước:</p>
+              <p className="text-[#f472b6] font-semibold mb-2">Kích thước:</p>
               <div className="flex flex-wrap gap-3">
                 {selectedProduct.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-1 rounded-full bg-[#ede9fe] text-[#6d28d9] font-medium hover:bg-[#dcd4fc] transition shadow-sm ${
+                    className={`px-4 py-1 rounded-full bg-[#ffe4e6] text-[#db2777] font-medium hover:bg-[#fecdd3] transition shadow-sm ${
                       selectedSize === size
                         ? "border-2 border-[#6d28d9] shadow-lg"
                         : "border border-transparent"
@@ -201,7 +201,7 @@ const similarProducts = [
 
             {/* Hương vị */}
             <div>
-              <p className="text-[#4b2995] font-semibold mb-2">Hương vị:</p>
+              <p className="text-[#f472b6] font-semibold mb-2">Hương vị:</p>
               <div className="flex flex-wrap gap-3">
                 {selectedProduct.flavors.map((flavor) => (
                   <button
@@ -221,7 +221,7 @@ const similarProducts = [
 
             {/* Số lượng */}
             <div>
-              <p className="text-[#4b2995] font-semibold mb-2">Số lượng:</p>
+              <p className="text-[#f472b6] font-semibold mb-2">Số lượng:</p>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => handleQuantityChange("minus")}
@@ -289,7 +289,7 @@ const similarProducts = [
         <div className="">
             <section className="py-12 bg-white">
           <div className="max-w-6xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-purple-800 mb-8">
+            <h2 className="text-2xl font-bold text-pink-500 mb-8">
               Khách hàng nói gì về chúng tôi
             </h2>
             <div className="grid md:grid-cols-3 gap-8 px-4">
@@ -297,7 +297,7 @@ const similarProducts = [
                 <p className="text-gray-700 italic">
                   “Bánh vừa đẹp vừa ngon, giao hàng đúng hẹn. Rất hài lòng!”
                 </p>
-                <p className="mt-4 font-semibold text-purple-700">
+                <p className="mt-4 font-semibold text-pink-500">
                   – Huỳnh Tuyên
                 </p>
               </div>
@@ -305,17 +305,17 @@ const similarProducts = [
                 <p className="text-gray-700 italic">
                   “Tôi đặt bánh sinh nhật cho con gái, ai cũng khen!”
                 </p>
-                <p className="mt-4 font-semibold text-purple-700">– Anh Khôi</p>
+                <p className="mt-4 font-semibold text-pink-500">– Anh Khôi</p>
               </div>
               <div className="p-6 bg-purple-50 rounded-lg shadow">
                 <p className="text-gray-700 italic">
                   “Trang web dễ dùng, chọn bánh nhanh và nhiều tùy chọn.”
                 </p>
-                <p className="mt-4 font-semibold text-purple-700">– Minh Anh</p>
+                <p className="mt-4 font-semibold text-pink-500">– Minh Anh</p>
               </div>
             </div>
           </div>
-          <div className="bg-purple-100 text-purple-800 text-center py-4 rounded-lg mb-8 mt-4">
+          <div className="bg-purple-100 text-pink-500 text-center py-4 rounded-lg mb-8 mt-4">
             🎁 Giảm 20% cho đơn đầu tiên – Dùng mã:{" "}
             <span className="font-semibold">L U N A</span>{" "}
             <span className="text-2xl">20</span>

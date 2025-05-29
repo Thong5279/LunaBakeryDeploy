@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import UserLayout from './components/Layout/UserLayout'
 import Home from './pages/Home'
 import { Toaster } from 'sonner'
+import Login from './pages/Login'
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -10,6 +12,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<UserLayout/>}>
           <Route index element={<Home />} />
+          <Route path="/login" element={<Login/>} />
         </Route>
         <Route>{/* admin layout */}</Route>
       </Routes>
