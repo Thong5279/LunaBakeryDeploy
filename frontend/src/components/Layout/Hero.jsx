@@ -44,7 +44,7 @@ const HeroSlider = () => {
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 drop-shadow"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 2 }}
           >
             Chào mừng đến với <span className="text-pink-300">Luna Bakery</span>
           </motion.h1>
@@ -61,7 +61,7 @@ const HeroSlider = () => {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 1.3 }}
+            transition={{ delay: 2.3 }}
           >
             <Link
               to="/products"
