@@ -12,7 +12,7 @@ const Login = () => {
       <div className="w-full md:w-1/2 flex justify-center items-center p-8 md:p-16 bg-white shadow-xl relative z-10">
         <form className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold text-pink-500">Luna Baker</h2>
+            <h2 className="text-3xl font-bold text-pink-500">Luna Bakery</h2>
           </div>
           <h3 className="text-2xl font-semibold text-center mb-4">Xin chào 👋</h3>
           <p className="text-center text-gray-500 mb-6">
