@@ -14,7 +14,7 @@ const Divider = () => (
 
 const Topbar = () => {
   return (
-    <div className="bg-[#fceffb] text-white text-xs sm:text-sm py-2 lg:fixed sticky z-100 w-full ">
+    <div className="bg-[#fceffb] text-white text-xs sm:text-sm py-2  z-100 w-full ">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2">
 
         {/* Bên trái: Social icons */}

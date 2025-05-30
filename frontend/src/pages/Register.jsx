@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import loginImage from '../assets/login.jpg';
+import registerImage from '../assets/login.jpg';
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setname] = useState("");
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle registration logic here
-    console.log("User Login:", { email, password });
-};
+    // Function to handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle registration logic here
+        console.log("Registering:", { name, email, password });
+    };
+
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Left: Form */}
       <div className="w-full md:w-1/2 flex justify-center items-center p-8 md:p-16 bg-white shadow-xl relative z-10">
-        <form className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all"
-          onSubmit={handleSubmit}
+        <form className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all" 
+            onSubmit={handleSubmit}
         >
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-pink-500">Luna Bakery</h2>
@@ -27,6 +29,16 @@ const Login = () => {
           <p className="text-center text-gray-500 mb-6">
             Vui lòng đăng nhập tên tài khoản và mật khẩu để tiếp tục
           </p>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1 text-gray-700">Tên của bạn</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setname(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
+              placeholder="Nhập tên của bạn"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1 text-gray-700">Email</label>
             <input
@@ -51,12 +63,12 @@ const Login = () => {
             type="submit"
             className="w-full bg-pink-50 hover:bg-pink-200 text-[#db2777] p-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
           >
-            Đăng nhập
+            Đăng ký
           </button>
           <p className="mt-6 text-center text-sm text-gray-600">
             Chưa có tài khoản?
-            <Link to="/register">
-              <span className="text-pink-500 font-semibold hover:underline ml-1">Đăng ký ngay</span>
+            <Link to="/login">
+              <span className="text-pink-500 font-semibold hover:underline ml-1">Đăng nhập </span>
             </Link>
           </p>
         </form>
@@ -66,7 +78,7 @@ const Login = () => {
       <div className="hidden md:flex w-1/2 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20 z-10" />
         <img
-          src={loginImage}
+          src={registerImage}
           alt="Login Background"
           className="w-full h-full object-cover object-center scale-105 filter blur-[1px] brightness-90 transition duration-500"
         />
@@ -79,4 +91,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
