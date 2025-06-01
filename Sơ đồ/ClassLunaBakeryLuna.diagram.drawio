@@ -1,0 +1,365 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="27.1.1">
+  <diagram id="class_diagram_luna_bakery" name="Class Diagram Luna Bakery">
+    <mxGraphModel dx="3069" dy="1260" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="User_Class" value="&lt;u&gt;User&lt;/u&gt;&lt;div style=&quot;text-align: left&quot;&gt;- userID: String&lt;br&gt;- tenDangNhap: String&lt;br&gt;- matKhau: String&lt;br&gt;- email: String&lt;br&gt;- soDienThoai: String&lt;br&gt;- diaChi: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ dangNhap()&lt;br&gt;+ dangXuat()&lt;br&gt;+ capNhatThongTinCaNhan()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFF2CC;strokeColor=#D6B656;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="50" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Customer_Class" value="&lt;b&gt;Customer&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- tenKhachHang: String&lt;br&gt;- diemTichLuy: int&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ datHang()&lt;br&gt;+ xemLichSuDonHang()&lt;br&gt;+ xemSanPham()&lt;br&gt;+ timKiemSanPham()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="80" y="320" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="GuestCustomer_Class" value="&lt;b&gt;GuestCustomer&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ xemSanPham()&lt;br&gt;+ timKiemSanPham()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="160" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Admin_Class" value="&lt;b&gt;Admin&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ manageUserAccounts()&lt;br&gt;+ manageProductCategories()&lt;br&gt;+ managePromotions()&lt;br&gt;+ viewRevenueReports()&lt;br&gt;+ assignUserRoles()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="330" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Manager_Class" value="&lt;b&gt;Manager&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ manageInventory()&lt;br&gt;+ viewBusinessReports()&lt;br&gt;+ manageProducts()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="677" y="320" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Baker_Class" value="&lt;b&gt;Baker&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ viewBakingOrders()&lt;br&gt;+ updateProductionStatus()&lt;br&gt;+ viewRecipeIngredients()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="990" y="330" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="DeliveryStaff_Class" value="&lt;b&gt;DeliveryStaff&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ receiveDeliveryOrder()&lt;br&gt;+ updateDeliveryStatus()&lt;br&gt;+ contactCustomer()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1280" y="330" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Product_Class" value="&lt;b&gt;Product&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- productId: String&lt;br&gt;- productName: String&lt;br&gt;- description: String&lt;br&gt;- price: double&lt;br&gt;- stockQuantity: int&lt;br&gt;- imageUrl: String&lt;br&gt;- status: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ getProductInfo()&lt;br&gt;+ updateStockQuantity()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-10" y="710" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Category_Class" value="&lt;b&gt;Category&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- categoryId: String&lt;br&gt;- categoryName: String&lt;br&gt;- description: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ addProductToCategory()&lt;br&gt;+ removeProductFromCategory()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-300" y="645" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Order_Class" value="&lt;b&gt;Order&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- orderId: String&lt;br&gt;- orderDate: Date&lt;br&gt;- totalAmount: double&lt;br&gt;- orderStatus: String&lt;br&gt;- deliveryAddress: String&lt;br&gt;- notes: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ createOrder()&lt;br&gt;+ updateStatus()&lt;br&gt;+ calculateTotal()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="580" y="640" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="OrderDetail_Class" value="&lt;b&gt;OrderDetail&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- orderDetailId: String&lt;br&gt;- productId: String&lt;br&gt;- quantity: int&lt;br&gt;- unitPrice: double&lt;br&gt;- subtotal: double&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="310" y="780" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Payment_Class" value="&lt;b&gt;Payment&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- transactionId: String&lt;br&gt;- paymentDate: Date&lt;br&gt;- amount: double&lt;br&gt;- paymentMethod: String&lt;br&gt;- paymentStatus: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ processPayment()&lt;br&gt;+ checkPaymentStatus()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="460" y="1000" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Promotion_Class" value="&lt;b&gt;Promotion&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- promoCode: String&lt;br&gt;- promoName: String&lt;br&gt;- description: String&lt;br&gt;- discountValue: double&lt;br&gt;- startDate: Date&lt;br&gt;- endDate: Date&lt;br&gt;- conditions: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ applyPromoCode()&lt;br&gt;+ checkValidity()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1310" y="630" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Ingredient_Class" value="&lt;b&gt;Ingredient&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- ingredientId: String&lt;br&gt;- ingredientName: String&lt;br&gt;- unitOfMeasure: String&lt;br&gt;- stockQuantity: int&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ updateStock()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="857" y="980" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Recipe_Class" value="&lt;b&gt;Recipe&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- recipeId: String&lt;br&gt;- recipeName: String&lt;br&gt;- description: String&lt;br&gt;- preparationTime: int&lt;br&gt;- instructions: String&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ getRecipeInfo()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1151" y="980" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="User_Customer_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="Customer_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="170" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="User_Admin_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="Admin_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="470" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="User_Manager_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="Manager_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="770" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="770" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="User_Baker_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="Baker_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1070" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1070" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="User_DeliveryStaff_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;entryX=0.997;entryY=0.442;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="DeliveryStaff_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1370" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1370" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Customer_GuestCustomer_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="GuestCustomer_Class" target="Customer_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="450" as="sourcePoint" />
+            <mxPoint x="170" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_OrderDetail_Composition" value="contains" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;endSize=12;startArrow=diamond;startFill=1;startSize=12;labelBackgroundColor=none;" parent="1" edge="1">
+          <mxGeometry x="0.3689" y="4" width="160" relative="1" as="geometry">
+            <mxPoint x="580" y="810.0033333333333" as="sourcePoint" />
+            <mxPoint x="490" y="848.3366666666668" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_OrderDetail_Label" value="1&lt;br&gt;N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Order_OrderDetail_Composition" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-20" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Payment_Association" value="has" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Order_Class" target="Payment_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="940" y="520" as="sourcePoint" />
+            <mxPoint x="980" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Payment_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Order_Payment_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-15" y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Payment_Label_2" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Order_Payment_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="17" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Customer_Association" value="placed by" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Order_Class" target="Customer_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="680" y="520" as="sourcePoint" />
+            <mxPoint x="260" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Customer_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Order_Customer_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-27" y="-14" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Order_Customer_Label_2" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Order_Customer_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="30" y="29" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-24" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" vertex="1" parent="Order_Customer_Association">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-240" y="235" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_Category_Association" value="belongs to" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="Product_Class" target="Category_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="40" y="-40" as="sourcePoint" />
+            <mxPoint x="-20" y="-40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_Category_Label_1" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Product_Category_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-20" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_Category_Label_2" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Product_Category_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_OrderDetail_Association" value="is part of" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="Product_Class" target="OrderDetail_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="560" y="600" as="sourcePoint" />
+            <mxPoint x="680" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_OrderDetail_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Product_OrderDetail_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Product_OrderDetail_Label_2" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Product_OrderDetail_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Promotion_Order_Association" value="applies to" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Promotion_Class" target="Order_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1280" y="520" as="sourcePoint" />
+            <mxPoint x="860" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Promotion_Order_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Promotion_Order_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-30" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Promotion_Order_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Promotion_Order_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="83" y="4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Baker_Recipe_Association" value="uses" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Baker_Class" target="Recipe_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1070" y="400" as="sourcePoint" />
+            <mxPoint x="1070" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Baker_Recipe_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Baker_Recipe_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Baker_Recipe_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Baker_Recipe_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-13" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Recipe_Ingredient_Association" value="requires" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="Recipe_Class" target="Ingredient_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="957" y="360" as="sourcePoint" />
+            <mxPoint x="837" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Recipe_Ingredient_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Recipe_Ingredient_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-11" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Recipe_Ingredient_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Recipe_Ingredient_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="23" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Ingredient_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Manager_Class" target="Ingredient_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="860" y="320" as="sourcePoint" />
+            <mxPoint x="980" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Ingredient_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Ingredient_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="5" y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Ingredient_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Ingredient_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-9" y="-30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Product_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Manager_Class" target="Product_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="680" y="320" as="sourcePoint" />
+            <mxPoint x="560" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Product_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Product_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-20" y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Product_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Product_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="30" y="-6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Order_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Manager_Class" target="Order_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="770" y="400" as="sourcePoint" />
+            <mxPoint x="770" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Order_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Order_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-2" y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Manager_Order_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Manager_Order_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-4" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DeliveryStaff_Order_Association" value="delivers" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="DeliveryStaff_Class" target="Order_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1280" y="320" as="sourcePoint" />
+            <mxPoint x="860" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DeliveryStaff_Order_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DeliveryStaff_Order_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-40" y="25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DeliveryStaff_Order_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DeliveryStaff_Order_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="53" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_User_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Admin_Class" target="User_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="470" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="470" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_User_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_User_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_User_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_User_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Category_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Admin_Class" target="Category_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="380" y="320" as="sourcePoint" />
+            <mxPoint x="180" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Category_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_Category_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-10" y="12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Category_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_Category_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="50" y="-15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Promotion_Association" value="manages" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="Admin_Class" target="Promotion_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="560" y="320" as="sourcePoint" />
+            <mxPoint x="1280" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Promotion_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_Promotion_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Admin_Promotion_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="Admin_Promotion_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-22" style="rounded=0;hachureGap=4;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;endArrow=open;endFill=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="1" source="wm4WBrUV163qpR0Whki1-6" target="Product_Class">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-6" value="&lt;b&gt;Wishlist&lt;br&gt;&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maDanhSachUoc: String&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;-&amp;nbsp;ngayTao: Date&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;- ngayCapNhatCuoi: Date&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ themSanPham(product: Product)&lt;br&gt;+ xoaSanPham(product: Product)&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ xemDanhSachSanPham()&lt;br&gt;+ timKiemSanPham()&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;+&amp;nbsp;diChuyenSanPhamVaoGioHang(product: Product)&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="-400" y="310" width="280" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-8" style="rounded=0;hachureGap=4;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.009;exitY=0.431;exitDx=0;exitDy=0;entryX=-0.002;entryY=0.308;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;endArrow=open;endFill=0;fillColor=#dae8fc;strokeColor=#6c8ebf;exitPerimeter=0;" edge="1" parent="1" source="wm4WBrUV163qpR0Whki1-6" target="Customer_Class">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-18" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-20" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-130" y="360" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wm4WBrUV163qpR0Whki1-23" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-120" y="490" width="30" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

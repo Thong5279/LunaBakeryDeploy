@@ -1,0 +1,190 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="27.1.1">
+  <diagram id="cdm_luna_bakery_mongodb_extended_vi" name="Sơ đồ CDM Luna Bakery (MongoDB Mở rộng)">
+    <mxGraphModel dx="2733" dy="1105" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="san_pham_Collection" value="&lt;b&gt;san_pham&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tenSP: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;moTa: Chuỗi&lt;br&gt;gia: Số Thực &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;soLuongTonKho: Số Nguyên &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;urlHinhAnh&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[Chuỗi]&lt;/font&gt;&lt;br&gt;trangThai: Chuỗi &lt;i&gt;(&quot;còn hàng&quot;, &quot;hết hàng&quot; v.v.)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maDanhMuc&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: danh_muc_san_pham)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;theTag&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[Chuỗi]&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayTao&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayCapNhatCuoi&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;diemDanhGiaTrungBinh: Số Thực &lt;i&gt;(denormalized)&lt;/i&gt;&lt;br&gt;soLuongDanhGia: Số Nguyên &lt;i&gt;(denormalized)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="180" width="300" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="danh_muc_san_pham_Collection" value="&lt;b&gt;danh_muc_san_pham&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tenDM: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;moTa: Chuỗi&lt;br&gt;soLuongSanPham: Số Nguyên &lt;i&gt;(denormalized)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maDanhMucCha&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tự tham chiếu cho danh mục con)&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-30" y="190" width="250" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="don_hang_Collection" value="&lt;b&gt;don_hang&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maKhachHang&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayDatHang&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;tongTien: Số Thực &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;trangThaiDonHang: Chuỗi &lt;i&gt;(&quot;đang chờ xử lý&quot;, &quot;đã giao&quot; v.v.)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF00FF&quot;&gt;diaChiGiaoHang&lt;/font&gt;: &lt;font color=&quot;#FF00FF&quot;&gt;{soNha, duong, thanhPho, maBuuDien, tenNguoiNhan, sdtNguoiNhan}&lt;/font&gt;&lt;br&gt;ghiChu: Chuỗi&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;chiTietDonHang&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[{maSP, tenSP, soLuong, donGia, thanhTien, urlHinhAnhSP}]&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maKhuyenMai&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: khuyen_mai, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maVoucherSuDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;String &lt;i&gt;(tham chiếu: vouchers, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maGiaoDichThanhToan&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: giao_dich_thanh_toan, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNhanVienGiaoHang&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayGiaoHangDuKien&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayGiaoHangThucTe&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-10" y="530" width="350" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="khuyen_mai_Collection" value="&lt;b&gt;khuyen_mai&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;maKM: Chuỗi &lt;i&gt;(duy nhất, tùy chọn)&lt;/i&gt;&lt;br&gt;tenKM: Chuỗi&lt;br&gt;moTa: Chuỗi&lt;br&gt;giaTriGiam: Số Thực&lt;br&gt;loaiGiamGia: Chuỗi &lt;i&gt;(&quot;phần trăm&quot;, &quot;số tiền cố định&quot;, &quot;miễn phí vận chuyển&quot;)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayBatDau&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayKetThuc&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;dieuKienApDung: Chuỗi &lt;i&gt;(&quot;đơn tối thiểu:50k&quot;, &quot;khách hàng mới&quot;)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;sanPhamApDung&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[ObjectID] &lt;i&gt;(tham chiếu: san_pham, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;dangHoatDong: Boolean&lt;br&gt;gioiHanSuDung: Số Nguyên &lt;i&gt;(tổng số lượt sử dụng)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-400" y="890" width="300" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="nguyen_lieu_Collection" value="&lt;b&gt;nguyen_lieu&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tenNL: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;donViTinh: Chuỗi &lt;i&gt;(&quot;gram&quot;, &quot;ml&quot;, &quot;cái&quot;, &quot;kg&quot;)&lt;/i&gt;&lt;br&gt;soLuongTonKho: Số Thực&lt;br&gt;mucTonToiThieu: Số Thực&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayNhapKhoGanNhat&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayHetHan&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;thongTinNhaCungCap: Chuỗi&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayCapNhatCuoi&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1260" y="280" width="280" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="cong_thuc_Collection" value="&lt;b&gt;cong_thuc&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tenCT: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;moTa: Chuỗi&lt;br&gt;thoiGianCheBienPhut: Số Nguyên&lt;br&gt;huongDan: Chuỗi&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;nguyenLieuCan&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[{maNL, soLuong, donViTinh}]&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maThoLamBanh&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;khauPhan: Chuỗi&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1260" y="550" width="280" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="vouchers_Collection" value="&lt;b&gt;vouchers&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;maVoucher: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maKhuyenMai&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: khuyen_mai, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, tùy chọn - nếu là voucher riêng)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;daSuDung: Boolean &lt;i&gt;(mặc định: false)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngaySuDung&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maDonHang&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: don_hang, tùy chọn - nếu đã sử dụng)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;dangHoatDong: Boolean&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="260" y="960" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="giao_dich_thanh_toan_Collection" value="&lt;b&gt;giao_dich_thanh_toan&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maDonHang&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: don_hang, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;maGiaoDichNgoai: Chuỗi &lt;i&gt;(từ cổng thanh toán, duy nhất)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayThanhToan&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;soTien: Số Thực &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;phuongThucThanhToan: Chuỗi &lt;i&gt;(&quot;thẻ tín dụng&quot;, &quot;tiền mặt&quot;, &quot;chuyển khoản&quot;)&lt;/i&gt;&lt;br&gt;trangThaiThanhToan: Chuỗi &lt;i&gt;(&quot;hoàn thành&quot;, &quot;đang chờ&quot;, &quot;thất bại&quot;, &quot;đã hoàn tiền&quot;)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF00FF&quot;&gt;phanHoiCongThanhToan&lt;/font&gt;: &lt;font color=&quot;#FF00FF&quot;&gt;{...} &lt;i&gt;(phản hồi thô từ cổng)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;tienTe: Chuỗi &lt;i&gt;(ví dụ: &quot;VND&quot;, &quot;USD&quot;)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-490" y="615" width="300" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="danh_sach_yeu_thich_Collection" value="&lt;b&gt;danh_sach_yeu_thich&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, duy nhất, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;sanPham&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[{maSP, ngayThem, ghiChu}] &lt;i&gt;(tham chiếu: san_pham)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayTao&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayCapNhatCuoi&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="-30" y="360" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="danh_gia_san_pham_Collection" value="&lt;b&gt;danh_gia_san_pham&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maSP&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: san_pham, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, bắt buộc)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;xepHang: Số Nguyên &lt;i&gt;(1-5)&lt;/i&gt;&lt;br&gt;binhLuan: Chuỗi&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayDanhGia&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;daDuyet: Boolean &lt;i&gt;(để kiểm duyệt)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;urlHinhAnhKemTheo&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[Chuỗi]&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="961" y="290" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="gio_hang_Collection" value="&lt;b&gt;gio_hang&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, duy nhất, tùy chọn cho khách vãng lai)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;cacSanPham&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[{maSP, soLuong, donGia, ngayThem}]&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayCapNhatCuoi&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;laGioHangKhachVangLai: Boolean&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maVoucherApDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;String &lt;i&gt;(tham chiếu: khuyen_mai/vouchers)&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="580" y="939" width="300" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="thong_bao_Collection" value="&lt;b&gt;thong_bao&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, tùy chọn cho thông báo chung)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;loai: Chuỗi &lt;i&gt;(&quot;cập nhật đơn hàng&quot;, &quot;khuyến mãi&quot;, &quot;hệ thống&quot; v.v.)&lt;/i&gt;&lt;br&gt;noiDung: Chuỗi &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;daDoc: Boolean &lt;i&gt;(mặc định: false)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayGui&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF00FF&quot;&gt;thucTheLienQuan&lt;/font&gt;: &lt;font color=&quot;#FF00FF&quot;&gt;{id: ObjectID, collection: Chuỗi} &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1260" y="770" width="280" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="bai_viet_blog_Collection" value="&lt;b&gt;bai_viet_blog&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tieuDe: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;noiDung: Chuỗi &lt;i&gt;(văn bản đa dạng)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maTacGia&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, cho quản lý/admin)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayDang&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;trangThai: Chuỗi &lt;i&gt;(&quot;bản nháp&quot;, &quot;đã xuất bản&quot;)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;theTag&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[Chuỗi]&lt;/font&gt;&lt;br&gt;slug: Chuỗi &lt;i&gt;(cho SEO)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1260" y="970" width="280" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="phan_hoi_Collection" value="&lt;b&gt;phan_hoi&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#008000&quot;&gt;maNguoiDung&lt;/font&gt;: &lt;font color=&quot;#008000&quot;&gt;ObjectID &lt;i&gt;(tham chiếu: nguoi_dung, tùy chọn)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;ten: Chuỗi &lt;i&gt;(nếu không đăng nhập)&lt;/i&gt;&lt;br&gt;email: Chuỗi &lt;i&gt;(nếu không đăng nhập)&lt;/i&gt;&lt;br&gt;chuDe: Chuỗi&lt;br&gt;noiDung: Chuỗi &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayGui&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;trangThai: Chuỗi &lt;i&gt;(&quot;mới&quot;, &quot;đang xử lý&quot;, &quot;đã giải quyết&quot;)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="951" y="979" width="280" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="san_pham_danh_muc_Ref" value="&lt;b&gt;thuộc danh mục&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#008000;" parent="1" source="san_pham_Collection" target="danh_muc_san_pham_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="740" y="239" as="sourcePoint" />
+            <mxPoint x="790" y="239" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="don_hang_nguoi_dung_Ref" value="&lt;b&gt;được đặt bởi&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="don_hang_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="240" y="459" as="sourcePoint" />
+            <mxPoint x="240" y="429" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="490" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="don_hang_khuyen_mai_Ref" value="&lt;b&gt;áp dụng KM&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="don_hang_Collection" target="khuyen_mai_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="440" y="579" as="sourcePoint" />
+            <mxPoint x="440" y="579" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="don_hang_vouchers_Ref" value="&lt;b&gt;sử dụng voucher&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="don_hang_Collection" target="vouchers_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="440" y="809" as="sourcePoint" />
+            <mxPoint x="440" y="809" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="don_hang_giao_dich_thanh_toan_Ref" value="&lt;b&gt;có giao dịch thanh toán&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="don_hang_Collection" target="giao_dich_thanh_toan_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="240" y="859" as="sourcePoint" />
+            <mxPoint x="240" y="889" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="don_hang_nhan_vien_giao_hang_Ref" value="&lt;b&gt;được giao bởi NVGH&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="don_hang_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="390" y="709" as="sourcePoint" />
+            <mxPoint x="370" y="329" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="460" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cong_thuc_nguyen_lieu_Ref" value="&lt;b&gt;yêu cầu nguyên liệu&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="cong_thuc_Collection" target="nguyen_lieu_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="930" y="539" as="sourcePoint" />
+            <mxPoint x="930" y="509" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cong_thuc_tho_lam_banh_Ref" value="&lt;b&gt;được tạo bởi thợ làm bánh&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="cong_thuc_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="790" y="579" as="sourcePoint" />
+            <mxPoint x="390" y="329" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vouchers_khuyen_mai_Ref" value="&lt;b&gt;dựa trên KM&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="vouchers_Collection" target="khuyen_mai_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="580" y="759" as="sourcePoint" />
+            <mxPoint x="580" y="709" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vouchers_nguoi_dung_Ref" value="&lt;b&gt;cấp cho người dùng&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="vouchers_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="440" y="759" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="danh_sach_yeu_thich_nguoi_dung_Ref" value="&lt;b&gt;thuộc về người dùng&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="danh_sach_yeu_thich_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="440" y="989" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="danh_sach_yeu_thich_san_pham_Ref" value="&lt;b&gt;chứa sản phẩm&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="danh_sach_yeu_thich_Collection" target="san_pham_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="720" y="1049" as="sourcePoint" />
+            <mxPoint x="740" y="259" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="danh_gia_san_pham_san_pham_Ref" value="&lt;b&gt;đánh giá sản phẩm&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="danh_gia_san_pham_Collection" target="san_pham_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="790" y="779" as="sourcePoint" />
+            <mxPoint x="740" y="259" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="danh_gia_san_pham_nguoi_dung_Ref" value="&lt;b&gt;được viết bởi người dùng&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="danh_gia_san_pham_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="790" y="779" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gio_hang_nguoi_dung_Ref" value="&lt;b&gt;thuộc về người dùng&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="gio_hang_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="790" y="999" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gio_hang_san_pham_Ref" value="&lt;b&gt;chứa sản phẩm&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="nguoi_dung_Collection" target="san_pham_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1090" y="1089" as="sourcePoint" />
+            <mxPoint x="740" y="259" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="thong_bao_nguoi_dung_Ref" value="&lt;b&gt;cho người dùng&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#D6B656;" parent="1" source="thong_bao_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1110" y="439" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bai_viet_blog_nguoi_dung_Ref" value="&lt;b&gt;được viết bởi&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="bai_viet_blog_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1110" y="669" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="phan_hoi_nguoi_dung_Ref" value="&lt;b&gt;được gửi bởi&lt;/b&gt;" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#D6B656;" parent="1" source="phan_hoi_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1110" y="889" as="sourcePoint" />
+            <mxPoint x="390" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Legend_Title" value="&lt;b&gt;Chú thích Sơ đồ CDM MongoDB&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="1690" y="150" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Legend_Items" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;b&gt;Collection (Bộ sưu tập)&lt;/b&gt;: &lt;font color=&quot;#FFD966&quot;&gt;Hộp màu vàng&lt;/font&gt;&lt;br&gt;&lt;b&gt;_id / ObjectID&lt;/b&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Chữ màu cam&lt;/font&gt;&lt;br&gt;&lt;b&gt;Kiểu Ngày (Date)&lt;/b&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Chữ màu cam&lt;/font&gt;&lt;br&gt;&lt;b&gt;Tham chiếu (Khóa ngoại - FK)&lt;/b&gt;: &lt;font color=&quot;#008000&gt;Chữ màu xanh lá cây&lt;/font&gt;&lt;br&gt;&lt;b&gt;Tài liệu con nhúng (Embedded Doc)&lt;/b&gt;: &lt;font color=&quot;#FF00FF&quot;&gt;Chữ màu hồng&lt;/font&gt;&lt;br&gt;&lt;b&gt;Kiểu Mảng (Array)&lt;/b&gt;: &lt;font color=&quot;#800080&quot;&gt;Chữ màu tím&lt;/font&gt;&lt;br&gt;&lt;b&gt;Các trường khác&lt;/b&gt;: Chữ màu đen&lt;br&gt;&lt;br&gt;&lt;b&gt;Các mối quan hệ:&lt;/b&gt;&lt;br&gt;- &lt;b&gt;Đường thẳng với mũi tên mở:&lt;/b&gt; Tham chiếu (1-N hoặc N-1)&lt;br&gt;- &lt;b&gt;Các trường lồng nhau:&lt;/b&gt; Nhúng (1-1 hoặc 1-N với N nhỏ)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1690" y="190" width="220" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="MongoDB_Design_Notes" value="&lt;b&gt;Các Nguyên tắc Thiết kế MongoDB Chính:&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;1. Nhúng dữ liệu (Embedding / Denormalization):&lt;/b&gt;&lt;br&gt;   - Dữ liệu thường được truy cập cùng nhau sẽ được nhúng vào một tài liệu duy nhất.&lt;br&gt;   - Ví dụ: &lt;i&gt;chiTietDonHang&lt;/i&gt; trong &lt;b&gt;don_hang&lt;/b&gt;; &lt;i&gt;thongTinKhachHang&lt;/i&gt; trong &lt;b&gt;nguoi_dung&lt;/b&gt;; &lt;i&gt;nguyenLieuCan&lt;/i&gt; trong &lt;b&gt;cong_thuc&lt;/b&gt;.&lt;br&gt;   - Lợi ích: Giảm số lượng truy vấn, cải thiện hiệu suất đọc, giao dịch tương tự ACID trên tài liệu đơn lẻ.&lt;br&gt;&lt;br&gt;&lt;b&gt;2. Tham chiếu dữ liệu (Referencing / Normalization):&lt;/b&gt;&lt;br&gt;   - Được sử dụng khi dữ liệu lớn, thay đổi thường xuyên hoặc cần được truy cập độc lập.&lt;br&gt;   - Ví dụ: &lt;b&gt;don_hang&lt;/b&gt; tham chiếu đến &lt;b&gt;nguoi_dung&lt;/b&gt;; &lt;b&gt;san_pham&lt;/b&gt; tham chiếu đến &lt;b&gt;danh_muc_san_pham&lt;/b&gt;.&lt;br&gt;   - Lợi ích: Giảm trùng lặp dữ liệu, cải thiện hiệu suất ghi, mối quan hệ linh hoạt.&lt;br&gt;&lt;br&gt;&lt;b&gt;3. Denormalization để tối ưu đọc:&lt;/b&gt;&lt;br&gt;   - Sao chép các trường phổ biến để tránh các thao tác lookup (ví dụ: &lt;i&gt;tenSP, donGia&lt;/i&gt; trong &lt;i&gt;chiTietDonHang&lt;/i&gt;).&lt;br&gt;   - &lt;i&gt;diemDanhGiaTrungBinh, soLuongDanhGia&lt;/i&gt; trong &lt;b&gt;san_pham&lt;/b&gt; để hiển thị nhanh.&lt;br&gt;&lt;br&gt;&lt;b&gt;4. Mảng cho danh sách:&lt;/b&gt;&lt;br&gt;   - Lưu trữ danh sách các giá trị hoặc tài liệu con nhúng (ví dụ: &lt;i&gt;vaiTro&lt;/i&gt; trong &lt;b&gt;nguoi_dung&lt;/b&gt;, &lt;i&gt;urlHinhAnh&lt;/i&gt; trong &lt;b&gt;san_pham&lt;/b&gt;).&lt;br&gt;&lt;br&gt;&lt;b&gt;5. Schema linh hoạt:&lt;/b&gt;&lt;br&gt;   - Cho phép thêm/xóa các trường mà không cần di chuyển schema nghiêm ngặt. Ví dụ: &lt;i&gt;thongTinKhachHang&lt;/i&gt; chỉ tồn tại cho người dùng có vai trò &quot;khach_hang&quot;.&lt;br&gt;" style="note;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=left;" parent="1" vertex="1">
+          <mxGeometry x="1960" y="150" width="350" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="gl3tx2O8kWpw73A2BVUp-1" value="" style="endArrow=open;html=1;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#B85450;" parent="1" source="gio_hang_Collection" target="nguoi_dung_Collection" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="876" y="2039" as="sourcePoint" />
+            <mxPoint x="506" y="-601" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nguoi_dung_Collection" value="&lt;b&gt;nguoi_dung&lt;/b&gt; (Collection)&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;font color=&quot;#FF8000&quot;&gt;_id&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;ObjectID&lt;/font&gt;&lt;br&gt;tenDangNhap: Chuỗi &lt;i&gt;(duy nhất, bắt buộc)&lt;/i&gt;&lt;br&gt;matKhauHash: Chuỗi &lt;i&gt;(bắt buộc)&lt;/i&gt;&lt;br&gt;email: Chuỗi &lt;i&gt;(duy nhất, tùy chọn)&lt;/i&gt;&lt;br&gt;soDienThoai: Chuỗi &lt;i&gt;(tùy chọn)&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#FF00FF&quot;&gt;diaChi&lt;/font&gt;: &lt;font color=&quot;#FF00FF&quot;&gt;{soNha, duong, thanhPho, maBuuDien, quocGia, viDo, kinhDo}&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayBatDauTaoTaiKhoan&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF8000&quot;&gt;ngayDangNhapGanNhat&lt;/font&gt;: &lt;font color=&quot;#FF8000&quot;&gt;Ngày&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#800080&quot;&gt;vaiTro&lt;/font&gt;: &lt;font color=&quot;#800080&quot;&gt;[Chuỗi] &lt;i&gt;(&quot;khach_hang&quot;, &quot;admin&quot;, &quot;quan_ly&quot;, &quot;tho_lam_banh&quot;, &quot;nhan_vien_giao_hang&quot;)&lt;/i&gt;&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#FF00FF&quot;&gt;thongTinKhachHang&lt;/font&gt;: &lt;font color=&quot;#FF00FF&gt;{hoTen, diemTichLuy, ngaySinh, phuongThucLienHeUuTien}&lt;/font&gt;&lt;br&gt;dangHoatDong: Boolean&lt;br&gt;urlAnhDaiDien: Chuỗi&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="630" y="539" width="300" height="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

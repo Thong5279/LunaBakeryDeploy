@@ -1,0 +1,368 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="27.1.1">
+  <diagram id="class_diagram_luna_bakery_vi" name="Sơ đồ Lớp Luna Bakery (Tiếng Việt)">
+    <mxGraphModel dx="635" dy="357" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NguoiDung_Class" value="&lt;u&gt;Người Dùng&lt;/u&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maNguoiDung: Chuỗi&lt;br&gt;- tenDangNhap: Chuỗi&lt;br&gt;- matKhau: Chuỗi&lt;br&gt;- email: Chuỗi&lt;br&gt;- soDienThoai: Chuỗi&lt;br&gt;- diaChi: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ dangNhap()&lt;br&gt;+ dangXuat()&lt;br&gt;+ capNhatThongTinCaNhan()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFF2CC;strokeColor=#D6B656;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="50" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="KhachHang_Class" value="&lt;b&gt;Khách Hàng&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- tenKhachHang: Chuỗi&lt;br&gt;- diemTichLuy: Số Nguyên&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ datHang()&lt;br&gt;+ xemLichSuDonHang()&lt;br&gt;+ xemSanPham()&lt;br&gt;+ timKiemSanPham()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="80" y="270" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="KhachHangVangLai_Class" value="&lt;b&gt;Khách Hàng Vãng Lai&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ xemSanPham()&lt;br&gt;+ timKiemSanPham()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="80" y="450" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="QuanTriVien_Class" value="&lt;b&gt;Quản Trị Viên (Admin)&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ quanLyTaiKhoanNguoiDung()&lt;br&gt;+ quanLyDanhMucSanPham()&lt;br&gt;+ quanLyChuongTrinhKhuyenMai()&lt;br&gt;+ xemBaoCaoDoanhThu()&lt;br&gt;+ phanQuyenNguoiDung()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="270" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="QuanLy_Class" value="&lt;b&gt;Quản Lý&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ quanLyKho()&lt;br&gt;+ xemBaoCaoKinhDoanh()&lt;br&gt;+ quanLySanPham()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="680" y="270" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="NhanVienLamBanh_Class" value="&lt;b&gt;Nhân Viên Làm Bánh&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ xemDonHangLamBanh()&lt;br&gt;+ capNhatTrangThaiSanXuat()&lt;br&gt;+ xemCongThucNguyenLieu()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="980" y="270" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="NhanVienGiaoHang_Class" value="&lt;b&gt;Nhân Viên Giao Hàng&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ nhanDonHangGiao()&lt;br&gt;+ capNhatTrangThaiGiaoBanh()&lt;br&gt;+ lienHeKhachHang()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1280" y="270" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="SanPham_Class" value="&lt;b&gt;Sản Phẩm&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maSP: Chuỗi&lt;br&gt;- tenSP: Chuỗi&lt;br&gt;- moTa: Chuỗi&lt;br&gt;- gia: Số Thực&lt;br&gt;- soLuongTonKho: Số Nguyên&lt;br&gt;- hinhAnh: Chuỗi&lt;br&gt;- trangThai: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ layThongTinSP()&lt;br&gt;+ capNhatSoLuongTon()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="380" y="550" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="DanhMucSanPham_Class" value="&lt;b&gt;Danh Mục Sản Phẩm&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maDM: Chuỗi&lt;br&gt;- tenDM: Chuỗi&lt;br&gt;- moTa: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ themSPVaoDM()&lt;br&gt;+ xoaSPKhoiDM()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="140" y="600" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="DonHang_Class" value="&lt;b&gt;Đơn Hàng&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maDH: Chuỗi&lt;br&gt;- ngayDatHang: Ngày&lt;br&gt;- tongTien: Số Thực&lt;br&gt;- trangThaiDonHang: Chuỗi&lt;br&gt;- diaChiGiaoHang: Chuỗi&lt;br&gt;- ghiChu: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ taoDonHang()&lt;br&gt;+ capNhatTrangThai()&lt;br&gt;+ tinhTongTien()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="680" y="470" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ChiTietDonHang_Class" value="&lt;b&gt;Chi Tiết Đơn Hàng&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maChiTietDH: Chuỗi&lt;br&gt;- maSP: Chuỗi&lt;br&gt;- soLuong: Số Nguyên&lt;br&gt;- donGia: Số Thực&lt;br&gt;- thanhTien: Số Thực&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="690.14" y="870" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ThanhToan_Class" value="&lt;b&gt;Thanh Toán&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maGD: Chuỗi&lt;br&gt;- ngayThanhToan: Ngày&lt;br&gt;- soTien: Số Thực&lt;br&gt;- phuongThucThanhToan: Chuỗi&lt;br&gt;- trangThaiThanhToan: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ thucHienThanhToan()&lt;br&gt;+ kiemTraTrangThaiThanhToan()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="940" y="640" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="KhuyenMai_Class" value="&lt;b&gt;Khuyến Mãi&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maKM: Chuỗi&lt;br&gt;- tenKM: Chuỗi&lt;br&gt;- moTa: Chuỗi&lt;br&gt;- giaTriGiam: Số Thực&lt;br&gt;- ngayBatDau: Ngày&lt;br&gt;- ngayKetThuc: Ngày&lt;br&gt;- dieuKienApDung: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ apDungMaGiamGia()&lt;br&gt;+ kiemTraHieuLuc()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1280" y="470" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="NguyenLieu_Class" value="&lt;b&gt;Nguyên Liệu&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maNL: Chuỗi&lt;br&gt;- tenNL: Chuỗi&lt;br&gt;- donViTinh: Chuỗi&lt;br&gt;- soLuongTonKho: Số Nguyên&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ capNhatTonKho()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="990.14" y="870" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="CongThuc_Class" value="&lt;b&gt;Công Thức&lt;/b&gt;&lt;div style=&quot;text-align: left&quot;&gt;- maCT: Chuỗi&lt;br&gt;- tenCT: Chuỗi&lt;br&gt;- moTa: Chuỗi&lt;br&gt;- thoiGianCheBien: Số Nguyên&lt;br&gt;- huongDan: Chuỗi&lt;/div&gt;&lt;hr&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ layThongTinCongThuc()&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#D5E8D4;strokeColor=#82B366;fontFamily=Helvetica;fontSize=12;align=center;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="1290.14" y="870" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="NguoiDung_KhachHang_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="KhachHang_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="170" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NguoiDung_QuanTriVien_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="QuanTriVien_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="470" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NguoiDung_QuanLy_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="QuanLy_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="770" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="770" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NguoiDung_NhanVienLamBanh_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="NhanVienLamBanh_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1070" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1070" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NguoiDung_NhanVienGiaoHang_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="NhanVienGiaoHang_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1370" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1370" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KhachHang_KhachHangVangLai_Inheritance" value="" style="endArrow=block;endFill=0;endSize=12;html=1;strokeColor=#6C8EBF;" parent="1" source="KhachHangVangLai_Class" target="KhachHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="170" y="450" as="sourcePoint" />
+            <mxPoint x="170" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_ChiTietDonHang_Composition" value="chứa" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;endSize=12;startArrow=diamond;startFill=1;startSize=12;labelBackgroundColor=none;" parent="1" source="DonHang_Class" target="ChiTietDonHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="770" y="650" as="sourcePoint" />
+            <mxPoint x="770" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="770" y="665" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_ChiTietDonHang_Label" value="1&lt;br&gt;N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DonHang_ChiTietDonHang_Composition" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-10" y="40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_ThanhToan_Association" value="có" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="DonHang_Class" target="ThanhToan_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="940" y="520" as="sourcePoint" />
+            <mxPoint x="980" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_ThanhToan_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DonHang_ThanhToan_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_ThanhToan_Label_2" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DonHang_ThanhToan_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_KhachHang_Association" value="được đặt bởi" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="DonHang_Class" target="KhachHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="680" y="520" as="sourcePoint" />
+            <mxPoint x="260" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_KhachHang_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DonHang_KhachHang_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DonHang_KhachHang_Label_2" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="DonHang_KhachHang_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_DanhMucSanPham_Association" value="thuộc" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="SanPham_Class" target="DanhMucSanPham_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="380" y="600" as="sourcePoint" />
+            <mxPoint x="320" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_DanhMucSanPham_Label_1" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="SanPham_DanhMucSanPham_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_DanhMucSanPham_Label_2" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="SanPham_DanhMucSanPham_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_ChiTietDonHang_Association" value="là một phần của" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="SanPham_Class" target="ChiTietDonHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="560" y="680" as="sourcePoint" />
+            <mxPoint x="680" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="620" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_ChiTietDonHang_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="SanPham_ChiTietDonHang_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SanPham_ChiTietDonHang_Label_2" value="N" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="SanPham_ChiTietDonHang_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KhuyenMai_DonHang_Association" value="áp dụng cho" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="KhuyenMai_Class" target="DonHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1280" y="520" as="sourcePoint" />
+            <mxPoint x="860" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KhuyenMai_DonHang_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="KhuyenMai_DonHang_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="KhuyenMai_DonHang_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="KhuyenMai_DonHang_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienLamBanh_CongThuc_Association" value="sử dụng" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="NhanVienLamBanh_Class" target="CongThuc_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1070" y="400" as="sourcePoint" />
+            <mxPoint x="1070" y="680" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1070" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienLamBanh_CongThuc_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="NhanVienLamBanh_CongThuc_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienLamBanh_CongThuc_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="NhanVienLamBanh_CongThuc_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CongThuc_NguyenLieu_Association" value="yêu cầu" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#82B366;" parent="1" source="CongThuc_Class" target="NguyenLieu_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1290.14" y="920" as="sourcePoint" />
+            <mxPoint x="1170.14" y="920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CongThuc_NguyenLieu_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="CongThuc_NguyenLieu_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CongThuc_NguyenLieu_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="CongThuc_NguyenLieu_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_NguyenLieu_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanLy_Class" target="NguyenLieu_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="860" y="320" as="sourcePoint" />
+            <mxPoint x="980" y="730" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="920" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_NguyenLieu_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_NguyenLieu_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_NguyenLieu_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_NguyenLieu_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_SanPham_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanLy_Class" target="SanPham_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="680" y="320" as="sourcePoint" />
+            <mxPoint x="560" y="600" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="620" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_SanPham_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_SanPham_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_SanPham_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_SanPham_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_DonHang_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanLy_Class" target="DonHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="770" y="400" as="sourcePoint" />
+            <mxPoint x="770" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_DonHang_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_DonHang_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanLy_DonHang_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanLy_DonHang_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienGiaoHang_DonHang_Association" value="giao hàng" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="NhanVienGiaoHang_Class" target="DonHang_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1280" y="320" as="sourcePoint" />
+            <mxPoint x="860" y="520" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1070" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienGiaoHang_DonHang_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="NhanVienGiaoHang_DonHang_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NhanVienGiaoHang_DonHang_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="NhanVienGiaoHang_DonHang_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_NguoiDung_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanTriVien_Class" target="NguoiDung_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="470" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="470" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_NguoiDung_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_NguoiDung_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_NguoiDung_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_NguoiDung_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_DanhMucSanPham_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanTriVien_Class" target="DanhMucSanPham_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="380" y="320" as="sourcePoint" />
+            <mxPoint x="180" y="600" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="320" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_DanhMucSanPham_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_DanhMucSanPham_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_DanhMucSanPham_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_DanhMucSanPham_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_KhuyenMai_Association" value="quản lý" style="endArrow=open;html=1;endSize=12;fontFamily=Helvetica;fontSize=12;verticalAlign=bottom;labelBackgroundColor=none;strokeColor=#6C8EBF;" parent="1" source="QuanTriVien_Class" target="KhuyenMai_Class" edge="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="560" y="320" as="sourcePoint" />
+            <mxPoint x="1280" y="520" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="920" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_KhuyenMai_Label_1" value="1" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_KhuyenMai_Association" vertex="1">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QuanTriVien_KhuyenMai_Label_2" value="*" style="resizable=0;html=1;align=center;verticalAlign=bottom;fontSize=10;" parent="QuanTriVien_KhuyenMai_Association" vertex="1">
+          <mxGeometry x="1" relative="1" as="geometry">
+            <mxPoint x="-20" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GhiChu_ThanhToan_KhuyenMai" value="Ghi chú: Trong thực tế triển khai, Thanh Toán có thể sử dụng Mã Khuyến Mãi (một chuỗi) để kiểm tra và áp dụng đối tượng Khuyến Mãi, chứ không trực tiếp liên kết đến đối tượng Khuyến Mãi." style="note;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#FFFECC;strokeColor=#E6D0DE;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="60" width="180" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
