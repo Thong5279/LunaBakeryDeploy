@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useState({});
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     category: "", // Loại bánh: "bánh kem", "bánh mì", ...
     flavor: "", // Hương vị: "Socola", "Dâu", ...
@@ -76,6 +78,37 @@ const FilterSidebar = () => {
     ]);
   }, [searchParams]);
 
+  const handleFilterChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    let newFilters = { ...filters };
+    if (type === "checkbox") {
+      if (checked) {
+        newFilters[name] = [...(newFilters[name] || []), value];
+      } else {
+        newFilters[name] = (newFilters[name] || []).filter(
+          (item) => item !== value
+        );
+      }
+    } else {
+      newFilters[name] = value;
+    }
+    setFilters(newFilters);
+    // console.log(newFilters);
+    updateURLParams(newFilters);
+  };
+
+  const updateURLParams = (newFilters) => {
+    const params = new URLSearchParams();
+    Object.keys(newFilters).forEach((key) => {
+        if(Array.isArray(newFilters[key]) && newFilters[key].length > 0) {
+            params.append(key, newFilters[key].join(","));
+        } else if (newFilters[key]) {
+            params.append(key, newFilters[key]);
+        }
+    });
+    setSearchParams(params);
+    navigate(`?${params.toString()}`);
+  };
   return (
     <div className="p-4">
       <h3 className="text-xl font-medium text-gray-800 mb-4">Lọc sản phẩm</h3>
@@ -84,71 +117,78 @@ const FilterSidebar = () => {
         <label className="block text-gray-600 font-medium mb-2">
           Loại Bánh
         </label>
-        <div className="flex items-center mb-1">
-        </div>
+        <div className="flex items-center mb-1"></div>
         {categories.map((category) => (
           <div key={category} className="flex items-center mb-1">
             <input
               type="radio"
               name="category"
+              checked={filters.category === category}
+              value={category}
+              onChange={handleFilterChange}
               className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
             />
             <span className="text-gray-700">{category}</span>
           </div>
         ))}
       </div>
-       
-        {/* flavor filter */}
 
-        <div className="mb-4">
-        <label className="block text-gray-600 font-medium mb-2">
-          Vị bánh
-        </label>
-        <div className="flex items-center mb-1">
-        </div>
+      {/* flavor filter */}
+
+      <div className="mb-4">
+        <label className="block text-gray-600 font-medium mb-2">Vị bánh</label>
+        <div className="flex items-center mb-1"></div>
         {flavors.map((flavors) => (
           <div key={flavors} className="flex items-center mb-1">
             <input
               type="radio"
-              name="category"
+              name="flavor"
+              value={flavors}
+              checked={filters.flavor === flavors}
+              onChange={handleFilterChange}
               className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
             />
             <span className="text-gray-700">{flavors}</span>
           </div>
         ))}
       </div>
-        {/* size filter */}
-        <div className="mb-4">
+      {/* size filter */}
+      <div className="mb-4">
         <label className="block text-gray-600 font-medium mb-2">
           Size bánh
         </label>
-        <div className="flex items-center mb-1">
-        </div>
+        <div className="flex items-center mb-1"></div>
         {sizes.map((sizes) => (
           <div key={sizes} className="flex items-center mb-1">
             <input
-              type="radio"
-              name="category"
+              type="checkbox"
+              name="size"
+              value={sizes}
+              checked={filters.size.includes(sizes)}
+              onChange={handleFilterChange}
               className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
             />
             <span className="text-gray-700">{sizes}</span>
           </div>
         ))}
       </div>
-        {/* Price filter */}
-        <div className="mb-8">
-            <label className="block text-gray-600 font-medium mb-2">
-                Khoảng giá
-            </label>
-            <input 
-            type="range" name="priceRange" min={0} max={1000000} 
-            className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
-                <span>0 VND</span>
-                <span>1.000.000 VND</span>
-            </div>
+      {/* Price filter */}
+      <div className="mb-8">
+        <label className="block text-gray-600 font-medium mb-2">
+          Khoảng giá
+        </label>
+        <input
+          type="range"
+          name="priceRange"
+          min={0}
+          max={1000000}
+          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+        />
+        <div className="flex justify-between text-sm text-gray-600 mt-2">
+          <span>0 VND</span>
+          <span>1.000.000 VND</span>
         </div>
+      </div>
     </div>
   );
 };
