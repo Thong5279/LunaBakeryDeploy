@@ -119,10 +119,10 @@ const FilterSidebar = () => {
 
   return (
     <div className="p-4">
-      <h3 className="text-xl font-medium text-gray-800 mb-4">Lọc sản phẩm</h3>
+      <h3 className="text-xl font-medium text-pink-500 mb-4">Lọc sản phẩm</h3>
       {/* category filter */}
       <div className="mb-4">
-        <label className="block text-gray-600 font-medium mb-2">
+        <label className="block text-[#f472b6] font-medium mb-2">
           Loại Bánh
         </label>
         <div className="flex items-center mb-1"></div>
@@ -144,7 +144,7 @@ const FilterSidebar = () => {
       {/* flavor filter */}
 
       <div className="mb-4">
-        <label className="block text-gray-600 font-medium mb-2">Vị bánh</label>
+        <label className="block text-[#f472b6] font-medium mb-2">Vị bánh</label>
         <div className="flex items-center mb-1"></div>
         {flavors.map((flavors) => (
           <div key={flavors} className="flex items-center mb-1">
@@ -162,7 +162,7 @@ const FilterSidebar = () => {
       </div>
       {/* size filter */}
       <div className="mb-4">
-        <label className="block text-gray-600 font-medium mb-2">
+        <label className="block text-[#f472b6] font-medium mb-2">
           Size bánh
         </label>
         <div className="flex items-center mb-1"></div>
@@ -182,7 +182,7 @@ const FilterSidebar = () => {
       </div>
       {/* Price filter */}
       <div className="mb-8">
-        <label className="block text-gray-600 font-medium mb-2">
+        <label className="block text-[#f472b6] font-medium mb-2">
           Khoảng giá
         </label>
         <input
