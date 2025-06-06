@@ -109,7 +109,7 @@ const CollectionPage = () => {
         <FilterSidebar/>
      </div>
      <div className="flex-grow p-4">
-        <h2 className='text-2xl uppercase mb-4 text-pink-500'>Toàn bộ sản phẩm</h2>
+     <h2 className="text-3xl font-bold uppercase mb-6 text-pink-500 tracking-wide">Toàn bộ sản phẩm</h2>
 
         {/* sort Options */}
         <SortOptions/>
