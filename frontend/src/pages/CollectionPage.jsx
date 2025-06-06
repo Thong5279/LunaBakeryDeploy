@@ -28,7 +28,7 @@ const CollectionPage = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    })
+    },[])
 
   useEffect(() => {
     setTimeout(() => {
@@ -100,7 +100,7 @@ const CollectionPage = () => {
         <button onClick={toggleSidebar} className='lg:hidden border p-2 flex justify-center items-center'>
             <FaFilter className='mr-2'/> Lọc sản phẩm 
         </button>
-
+        
         {/* filter sidebar */}
      <div ref={sidebarRef} 
      className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 z-50 left-0 w-64

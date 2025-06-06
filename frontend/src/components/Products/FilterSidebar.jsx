@@ -21,8 +21,6 @@ const FilterSidebar = () => {
   const [priceRange, setPriceRange] = useState([0, 1000000]);
 
   const categories = [
-    "Bánh kem",
-    "Bánh mì",
     "Bánh ngọt",
     "Bánh sinh nhật",
     "Bánh trung thu",
@@ -31,7 +29,6 @@ const FilterSidebar = () => {
     "Bánh mousse",
     "Bánh cupcake",
     "Bánh su kem",
-    "Bánh sandwich",
     "panacosta",
     "Bánh bông lan",
     "bánh cưới",
@@ -43,7 +40,7 @@ const FilterSidebar = () => {
     "Vanilla",
     "Trà xanh",
     "bánh oreo",
-    "Hạnh nhân",
+    "trái cây hỗn hợp",
     "Hạt dẻ cười",
     "Cam",
     "Chanh dây",
@@ -56,8 +53,6 @@ const FilterSidebar = () => {
     "18cm",
     "20cm",
     "22cm",
-    "1kg",
-    "2kg",
   ];
 
   useEffect(() => {
