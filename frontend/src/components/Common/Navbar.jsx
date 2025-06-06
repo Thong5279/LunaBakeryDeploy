@@ -26,7 +26,7 @@ const Navbar = () => {
           <div>
             <ul className="hidden md:flex gap-6 font-medium text-gray-700">
               <div>
-                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
+                <Link to={"/"} className="hover:text-pink-500 cursor-pointer">
                   Trang chủ
                 </Link>
               </div>
