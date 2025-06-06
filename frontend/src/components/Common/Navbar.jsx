@@ -111,8 +111,8 @@ const Navbar = () => {
         </div>
 
         <ul className="flex flex-col gap-4 p-4 text-gray-700 font-medium">
-          <Link className="hover:text-pink-500 cursor-pointer">Trang chủ</Link>
-          <Link className="hover:text-pink-500 cursor-pointer">Sản phẩm</Link>
+          <Link to={"/"} className="hover:text-pink-500 cursor-pointer">Trang chủ</Link>
+          <Link to={"collections/all"} className="hover:text-pink-500 cursor-pointer">Sản phẩm</Link>
           <Link className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi
           </Link>
