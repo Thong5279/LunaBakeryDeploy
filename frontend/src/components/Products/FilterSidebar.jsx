@@ -32,6 +32,7 @@ const FilterSidebar = () => {
     "panacosta",
     "Bánh bông lan",
     "bánh cưới",
+    
   ];
   const flavors = [
     "Socola",
