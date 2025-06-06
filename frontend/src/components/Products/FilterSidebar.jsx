@@ -100,15 +100,28 @@ const FilterSidebar = () => {
   const updateURLParams = (newFilters) => {
     const params = new URLSearchParams();
     Object.keys(newFilters).forEach((key) => {
-        if(Array.isArray(newFilters[key]) && newFilters[key].length > 0) {
-            params.append(key, newFilters[key].join(","));
-        } else if (newFilters[key]) {
-            params.append(key, newFilters[key]);
-        }
+      if (Array.isArray(newFilters[key]) && newFilters[key].length > 0) {
+        params.append(key, newFilters[key].join(","));
+      } else if (newFilters[key]) {
+        params.append(key, newFilters[key]);
+      }
     });
     setSearchParams(params);
-    navigate(`?${params.toString()}`);
+    navigate(`?${params.toString()}`); // Cập nhật URL với các tham số mới
   };
+
+  const handlePriceChange = (e) => {
+    const newPrice = e.target.value;
+    setPriceRange([0, newPrice]);
+    const newFilters = {
+      ...filters,
+      minPrice: 0,
+      maxPrice: newPrice,
+    };
+    setFilters(filters);
+    updateURLParams(newFilters);
+  };
+
   return (
     <div className="p-4">
       <h3 className="text-xl font-medium text-gray-800 mb-4">Lọc sản phẩm</h3>
@@ -182,11 +195,13 @@ const FilterSidebar = () => {
           name="priceRange"
           min={0}
           max={1000000}
+          value={priceRange[1]}
+          onChange={handlePriceChange}
           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-sm text-gray-600 mt-2">
           <span>0 VND</span>
-          <span>1.000.000 VND</span>
+          <span>{priceRange[1]} VND</span>
         </div>
       </div>
     </div>
