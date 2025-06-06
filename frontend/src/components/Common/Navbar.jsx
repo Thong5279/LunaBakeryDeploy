@@ -31,13 +31,13 @@ const Navbar = () => {
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
+                <Link to={"collections/all"} className="hover:text-pink-500 cursor-pointer">
                   Sản phẩm
                 </Link>
               </div>
               <div>
                 <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
-                  Về chúng tôi
+                  Nguyên liệu
                 </Link>
               </div>
               <div>
