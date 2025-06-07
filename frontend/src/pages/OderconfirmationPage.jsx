@@ -37,11 +37,9 @@ const checkout = {
 };
 
 const OderconfirmationPage = () => {
-  const calculateEstimatedDelivery = (createdAt) => {
+  const calculateEstimatedDelivery = (createdAt, daysToAdd) => {
     const orderDate = new Date(createdAt);
-    const estimatedDeliveryDate = new Date(orderDate);
-
-    orderDate.setDate(orderDate.getDate() + 2); // Giả sử giao hàng trong vòng 5 ngày
+    orderDate.setDate(orderDate.getDate() + daysToAdd);
     return orderDate.toLocaleDateString();
   };
   return (
@@ -69,9 +67,9 @@ const OderconfirmationPage = () => {
               {/* estimated delivery dự kiến giao hàng */}
               <div>
                 <p className="text-gray-600 text-sm">
-                  Dự kiến giao hàng từ :{" "}
-                  {calculateEstimatedDelivery(checkout.createdAt)} -{" "}
-                  {calculateEstimatedDelivery(checkout.createdAt)}
+                  Dự kiến giao hàng từ : {" "}
+                  {calculateEstimatedDelivery(checkout.createdAt, 2)}-{" "}
+                  {calculateEstimatedDelivery(checkout.createdAt, 4)}
                 </p>
               </div>
             </div>
