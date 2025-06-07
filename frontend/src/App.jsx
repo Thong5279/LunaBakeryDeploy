@@ -27,7 +27,7 @@ const App = () => {
           <Route path='product/:id' element={<ProductDetails/>} />
           <Route path='checkout' element={<Checkout/>}/>
           <Route path='orders-confimation' element={<OderconfirmationPage/>} />
-          <Route path='orders/:id'element={<OrderDetailsPage/>}/>
+          <Route path='order/:id'element={<OrderDetailsPage/>}/>
           <Route path="my-orders" element={<MyOrdersPage/>} />
         </Route>
         <Route>{/* admin layout */}</Route>
