@@ -178,7 +178,7 @@ const OrderDetailsPage = () => {
             </table>
           </div>
           {/* trở về trang đơn hàng */}
-          <Link to="my-orders" className="text-purple-400 hover:underline">
+          <Link to="/my-orders" className="text-purple-400 hover:underline">
             <span className="text-sm font-medium">Trở về trang đơn hàng</span>
           </Link>
         </div>

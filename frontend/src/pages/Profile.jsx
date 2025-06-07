@@ -1,5 +1,5 @@
 import React from "react";
-import MyOrdersPage from "./MyOrderspPage";
+import MyOrdersPage from "./MyOrdersPage";
 
 const Profile = () => {
   return <div className="min-h-screen flex flex-col">
