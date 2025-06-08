@@ -10,9 +10,9 @@ const Navbar = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const toggleCartDrawer = () => {
-      setDrawerOpen(!drawerOpen);
+    setDrawerOpen(!drawerOpen);
   };
-  
+
   return (
     <>
       <nav className="bg-white shadow-md sticky top-0 z-40  ">
@@ -31,7 +31,10 @@ const Navbar = () => {
                 </Link>
               </div>
               <div>
-                <Link to={"collections/all"} className="hover:text-pink-500 cursor-pointer">
+                <Link
+                  to={"collections/all"}
+                  className="hover:text-pink-500 cursor-pointer"
+                >
                   Sản phẩm
                 </Link>
               </div>
@@ -55,7 +58,8 @@ const Navbar = () => {
 
           {/* Icon bên phải */}
           <div className="flex items-center gap-4 text-gray-700">
-           
+            <Link to={"/admin"} className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm">Admin</Link>
+
             <Link to={"/profile"}>
               <FiUser
                 className="text-xl hover:text-[#a37ba3] cursor-pointer"
@@ -77,9 +81,9 @@ const Navbar = () => {
 
             {/*Tìm kiếm */}
             <div className="overflow-hidden">
-               <Searchbar/>
+              <Searchbar />
             </div>
-             
+
             {/* Nút mở menu mobile */}
             <div className="md:hidden">
               <HiMenu
@@ -91,9 +95,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-       
-      
-
 
       {/* Mobile Sidebar Menu */}
       <div
@@ -111,8 +112,15 @@ const Navbar = () => {
         </div>
 
         <ul className="flex flex-col gap-4 p-4 text-gray-700 font-medium">
-          <Link to={"/"} className="hover:text-pink-500 cursor-pointer">Trang chủ</Link>
-          <Link to={"collections/all"} className="hover:text-pink-500 cursor-pointer">Sản phẩm</Link>
+          <Link to={"/"} className="hover:text-pink-500 cursor-pointer">
+            Trang chủ
+          </Link>
+          <Link
+            to={"collections/all"}
+            className="hover:text-pink-500 cursor-pointer"
+          >
+            Sản phẩm
+          </Link>
           <Link className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi
           </Link>
@@ -128,7 +136,7 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(false)}
         />
       )}
-      <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer}/>
+      <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer} />
     </>
   );
 };
