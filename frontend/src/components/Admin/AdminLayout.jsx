@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import AdminSidebar from "./AdminSidebar";
 import AdminHomePage from "../../pages/AdminHomePage";
+import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,7 +40,7 @@ const AdminLayout = () => {
       </div>
       {/* nội dung chính của trang quản trị viên*/}
       <div className="flex-grow p-6 overflow-autor">
-        <AdminHomePage/>
+      <Outlet/>
       </div>
     </div>
   );
