@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const UserManagement = () => {
   const users = [
     {
+      _id: "12313",
       name: "Bui Ngoc Nhu",
       email: "Luna@gmail.com",
       role: "admin",
@@ -22,17 +23,26 @@ const UserManagement = () => {
       [e.target.name]: e.target.value,
     });
   };
-//   reset về mặc định khi submit
-  const handleSubmit = (e) =>{
+  //   reset về mặc định khi submit
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     setFormData({
-        name: "",
-        email: "",
-        password: "",
-        role: "",
-
+      name: "",
+      email: "",
+      password: "",
+      role: "",
     });
+  };
+
+  const handleRoleChange = (userId, newRole) =>{
+    console.log({id: userId, role: newRole})
+  }
+  const handleDeleteUser = (userId) =>{
+    if(window.confirm("Bạn có chắc muốn xoá tài khoản này?"))
+    {
+      console.log("xoá người dùng với id " , userId)
+    }
   }
 
   return (
@@ -95,20 +105,65 @@ const UserManagement = () => {
               id=""
               className="w-full p-2 border rounded"
             >
-                <option value="customer">khách hàng</option>
-                <option value="admin">Admin</option>
-                <option value="manager">Quản lý</option>
-                <option value="baker">Nhân viên làm bánh</option>
-                <option value="Shipper">Giao bánh</option>
+              <option value="customer">khách hàng</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Quản lý</option>
+              <option value="baker">Nhân viên làm bánh</option>
+              <option value="shipper">Giao bánh</option>
             </select>
           </div>
-          <button type="submit" className="bg-green-500 text-white py-2 px-4 hover:bg-green-600">
-            Thêm tài khoản 
+          <button
+            type="submit"
+            className="bg-green-500 text-white py-2 px-4 hover:bg-green-600"
+          >
+            Thêm tài khoản
           </button>
         </form>
       </div>
       {/* danh sách người dùng */}
-     
+      <div className="overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="min-w-full text-left text-gray-500">
+          <thead className="bg-gray-100 text-xs uppercase text-gray-700">
+            <tr>
+              <th className="py-3 px-4">Tên</th>
+              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">Quyền</th>
+              <th className="py-3 px-4">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="border-b hover:bg-gray-50">
+                <td className="p-4 font-medium text-gray-900 whitespace-nowrap">
+                  {user.name}
+                </td>
+                <td className="p-4">{user.email}</td>
+                <td className="p-4">
+                  <select
+                    name=""
+                    id=""
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    className="p-2 border rounded"
+                  >
+                    <option value="customer">Khách hàng</option>
+                    <option value="admin">Admin</option>
+                    <option value="manager">Quản lý</option>
+                    <option value="banker">Nhân viên làm bánh</option>
+                    <option value="shipper">Nhân viên giao bánh</option>
+                  </select>
+                </td>
+                <td className="p-4">
+                  <button onClick={() => handleDeleteUser(user._id)}
+                    className="bg-red-300 text-white px-4 py-2 rounded hover:bg-red-500"
+                    >
+                      Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
