@@ -46,7 +46,7 @@ const ProductManagement = () => {
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
                 >
                   <td className="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap">{product.name}</td>
-                  <td className="px-6 py-4">{product.price}</td>
+                  <td className="px-6 py-4">{new Intl.NumberFormat("vi-VN").format(product.price)}</td>
                   <td className="px-6 py-4">{product.sku}</td>
                   <td className="px-6 py-4">
                     <Link to={`/admin/products/${product._id}/edit`}
