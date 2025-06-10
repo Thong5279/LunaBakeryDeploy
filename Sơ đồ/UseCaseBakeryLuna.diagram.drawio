@@ -179,7 +179,7 @@
         <mxCell id="uc_cap_nhat_tt_giao" value="Cập nhật trạng thái giao bánh" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
           <mxGeometry x="790" y="75" width="170" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="uc_lien_he_kh" value="Liên hệ khách hàng" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
+        <mxCell id="uc_lien_he_kh" value="Xem thông tin đơn hàng&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
           <mxGeometry x="790" y="130" width="170" height="50" as="geometry" />
         </mxCell>
         <mxCell id="uc_nhan_dh_giao" value="Nhận đơn hàng giao" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
@@ -229,6 +229,9 @@
         </mxCell>
         <mxCell id="uc_cap_nhat_tt" value="Cập nhật thông tin cá nhân" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
           <mxGeometry x="80" y="265" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IGEohdD2Z1WYNDtNmkWi-21" value="&lt;meta charset=&quot;utf-8&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;Extends&lt;/span&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="uc_dang_nhap" target="IGEohdD2Z1WYNDtNmkWi-20">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="uc_dang_nhap" value="Đăng nhập" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" parent="1" vertex="1">
           <mxGeometry x="80" y="185" width="120" height="50" as="geometry" />
@@ -365,6 +368,9 @@
             <mxPoint x="358.96000000000004" y="830" as="sourcePoint" />
             <mxPoint x="469.96000000000004" y="851" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="IGEohdD2Z1WYNDtNmkWi-20" value="Đăng xuất" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" vertex="1" parent="1">
+          <mxGeometry x="280" y="180" width="120" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
