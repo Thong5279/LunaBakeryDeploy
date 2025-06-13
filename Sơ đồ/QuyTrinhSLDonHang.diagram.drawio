@@ -106,7 +106,7 @@
           <mxGeometry x="90" y="1160" width="20" height="20" as="geometry" />
         </mxCell>
         <mxCell id="manager_report" value="Tổng kết doanh thu/báo cáo" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_manager" vertex="1">
-          <mxGeometry x="40" y="1080" width="120" height="60" as="geometry" />
+          <mxGeometry x="40" y="1070" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="manager_update_status" value="Cập nhật trạng thái đơn hàng (Đã hoàn thành)" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_manager" vertex="1">
           <mxGeometry x="40" y="980" width="120" height="60" as="geometry" />
@@ -178,17 +178,6 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="110" y="410" as="sourcePoint" />
             <mxPoint x="110" y="450" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="flow_manager_handover_to_delivery_view" value="Nhận đơn hàng cần giao" style="endArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" parent="swimlane_baker" source="manager_handover_delivery" edge="1">
-          <mxGeometry x="0.4769" width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="-10" y="835" as="sourcePoint" />
-            <mxPoint x="310" y="465" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="190" y="830" />
-              <mxPoint x="190" y="465" />
-            </Array>
-            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="swimlane_delivery" value="Nhân viên giao hàng" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
@@ -296,6 +285,17 @@
               <mxPoint x="240" y="590" />
               <mxPoint x="240" y="450" />
             </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="flow_manager_handover_to_delivery_view" value="Nhận đơn hàng cần giao" style="endArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" parent="1" source="manager_handover_delivery" target="delivery_view_order" edge="1">
+          <mxGeometry x="-0.5862" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="885" as="sourcePoint" />
+            <mxPoint x="800" y="515" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="680" y="880" />
+              <mxPoint x="680" y="510" />
+            </Array>
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
