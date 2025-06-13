@@ -1,11 +1,11 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="27.1.1">
   <diagram id="order_process_flow_vi" name="Sơ đồ Quy trình Xử lý Đơn hàng">
-    <mxGraphModel dx="1426" dy="789" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+    <mxGraphModel dx="1639" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="swimlane_customer" value="Khách hàng" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
-          <mxGeometry x="50" y="50" width="220" height="1190" as="geometry" />
+          <mxGeometry x="40" y="50" width="220" height="1190" as="geometry" />
         </mxCell>
         <mxCell id="customer_view_order" value="Xem chi tiết đơn hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_customer" vertex="1">
           <mxGeometry x="30" y="270" width="120" height="60" as="geometry" />
@@ -47,7 +47,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="swimlane_manager" value="Quản lý" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#FFF2CC;strokeColor=#D6B656;" parent="1" vertex="1">
-          <mxGeometry x="270" y="50" width="220" height="1190" as="geometry" />
+          <mxGeometry x="260" y="50" width="220" height="1190" as="geometry" />
         </mxCell>
         <mxCell id="flow_manager_review_to_assign_baker" value="Duyệt đơn hàng" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_manager" source="manager_review_assign" target="manager_assign_baker" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -139,7 +139,7 @@
           <mxGeometry x="40" y="50" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="swimlane_baker" value="Nhân viên làm bánh" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#D5E8D4;strokeColor=#82B366;" parent="1" vertex="1">
-          <mxGeometry x="490" y="50" width="220" height="1190" as="geometry" />
+          <mxGeometry x="480" y="50" width="220" height="1190" as="geometry" />
         </mxCell>
         <mxCell id="baker_view_order" value="Xem chi tiết đơn hàng (các loại bánh)" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_baker" vertex="1">
           <mxGeometry x="50" y="140" width="120" height="60" as="geometry" />
@@ -181,7 +181,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="swimlane_delivery" value="Nhân viên giao hàng" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
-          <mxGeometry x="710" y="50" width="220" height="1190" as="geometry" />
+          <mxGeometry x="700" y="50" width="220" height="1190" as="geometry" />
         </mxCell>
         <mxCell id="delivery_view_order" value="Xem thông tin đơn hàng &amp; địa chỉ giao hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
           <mxGeometry x="50" y="430" width="120" height="60" as="geometry" />
