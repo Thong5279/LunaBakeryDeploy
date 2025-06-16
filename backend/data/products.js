@@ -15,11 +15,11 @@ const products = [
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery1_1/500/500",
+        "url": "https://picsum.photos/500/500?random=39",
         "altText": "Ảnh sản phẩm 1 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery1_2/500/500",
+        "url": "https://picsum.photos/500/500?random=40",
         "altText": "Ảnh sản phẩm 1 - góc 2"
       }
     ],
