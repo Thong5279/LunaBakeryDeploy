@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -109,5 +110,13 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error!" });
   }
 });
+
+// @route GET /api/users/profile
+//@desc Lấy hồ sơ người dùng đã đăng nhập
+//@access Private
+
+router.get("/profile",protect, async (req, res) => {
+    res.json(req.user);
+})
 
 module.exports = router;
