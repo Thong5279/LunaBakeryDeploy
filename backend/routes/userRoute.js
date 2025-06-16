@@ -23,9 +23,37 @@ router.post("/register", async (req, res) => {
     });
     await user.save();
 
-   
+    //create jwt payload
+
+    const payload = {
+      user: {
+        id: user._id,
+        role: user.role,
+      },
+    };
+
+    //sign and return the token
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "40h" },
+      (err, token) => {
+        if (err) throw err;
+
+        res.status(201).json({
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+          token,
+        });
+      }
+    );
   } catch (error) {
-    console.error(error);
+    console.error(" Error",error);
     res.status(500).json({ message: "Server error" });
   }
 });

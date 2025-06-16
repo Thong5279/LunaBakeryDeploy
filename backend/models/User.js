@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique: true,
+            // unique: true, //cho phép trùng tên 
             trim: true
         },
         password: {
