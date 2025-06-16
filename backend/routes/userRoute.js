@@ -53,8 +53,60 @@ router.post("/register", async (req, res) => {
       }
     );
   } catch (error) {
-    console.error(" Error",error);
+    console.error(" Error", error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+//@route POST /api/users/login
+// @desc Mô tả quyền xác nhập truy cập
+//@access Public
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    //kiểm tra người dùng có tồn tại hay không
+    if (!user)
+      return res
+        .status(400)
+        .json({ message: "Thông tin đăng nhập không hợp lệ!" });
+    const isMatch = await user.matchPassword(password);
+    //kiểm tra mật khẩu
+    if (!isMatch)
+      return res
+        .status(400)
+        .json({ message: "Thông tin đăng nhập không hợp lệ!" });
+
+    //sign and return the token
+    const payload = {
+      user: {
+        id: user._id,
+        role: user.role,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "40h" },
+      (err, token) => {
+        if (err) throw err;
+
+        res.json({
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+          token,
+        });
+      }
+    );
+  } catch (err) {
+    console.log(error);
+    res.status(500).json({ message: "Server error!" });
   }
 });
 
