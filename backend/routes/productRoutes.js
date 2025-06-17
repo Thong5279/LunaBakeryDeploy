@@ -192,6 +192,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @route GET /api/products/best-sellers
+// @desc Retrieve the produuct with the highest rating
+// @access Public
+
+router.get("/best-sellers", async (req, res) => {
+  try {
+    const bestSellers = await Product.findOne().sort({ rating: -1 });
+    if (bestSellers) {
+      res.json(bestSellers);
+    }else {
+      res.status(404).json({ message: "No best sellers found" });
+    }
+
+  } catch (error) {
+    console.error("Error fetching best sellers:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+})
+
+
 //@route GET /api/products/:id
 //@desc Get a single product by ID
 //@access Public
