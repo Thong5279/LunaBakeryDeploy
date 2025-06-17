@@ -168,5 +168,25 @@ router.delete("/", async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 
+});
+
+//@route GET /api/cart
+//@desc Get logged-in user's or guest's cart
+//@access Public
+
+router.get("/", protect, async (req, res) => {
+    const {userId , guestId} = req.query;
+    try {
+        const cart = await getCart(userId, guestId);
+        if (cart) {
+            return res.status(404).json(cart);
+        }else {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+    } catch (error) {
+        console.error("Error fetching cart:", error);
+        res.status(500).json({ message: "Server error" });
+    }
 })
+
 module.exports = router;
