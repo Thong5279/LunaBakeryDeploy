@@ -7,6 +7,7 @@ dotenv.config();
 const connectDB = require("./config/db")
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoutes");
+const cartRoute = require("./routes/cartRoutes");
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.get("/",(req, res) => {
 //API Routes
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/cart", cartRoute);
 
 
 app.listen(PORT, () => {

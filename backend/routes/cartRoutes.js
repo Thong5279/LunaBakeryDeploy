@@ -1,0 +1,95 @@
+const express = require('express');
+const Cart = require('../models/Cart');
+const Product = require('../models/Product');
+const { protect } = require('../middleware/authMiddleware');
+
+const router = express.Router();
+
+//helper function to get cart by userId or guestId . hàm trợ giúp để lấy giỏ hàng theo userId hoặc guestId
+const getCart = async (userId, guestId) => {
+    if (userId) {
+        // If user is logged in, find cart by user ID
+        return await Cart.findOne({ user: userId });
+    } else if (guestId) {
+        // If guest, find cart by guest ID
+        return await Cart.findOne({ guestId });
+    } else {
+        // If neither, return null
+        return null;
+    }
+}
+
+// @route POST /api/cart
+// @desc Add product to cart for a guest or logged-in user  .  Thêm sản phẩm vào giỏ hàng cho khách hoặc người dùng đã đăng nhập
+// @access Public 
+
+router.post('/', async (req, res) => {
+    const { productId, quantity, size, flavor ,guestId ,userId } = req.body;
+
+    try {
+        const product = await Product.findById(productId); 
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        //determine if the user is logged in or a guest
+        let cart = await getCart(userId,guestId);
+
+        //if the cart exists, update it
+        if(cart){
+            const productIndex = cart.products.findIndex(
+                (e) =>
+                 e.productId.toString() === productId.toString() &&
+                    e.size === size &&
+                    e.flavor === flavor
+            );
+
+            if (productIndex > -1) {
+                // If product already exists in cart, update quantity
+                cart.products[productIndex].quantity += quantity;
+            } else {
+                // If product does not exist, add it to cart
+                cart.products.push({
+                    productId: product._id,
+                    name: product.name,
+                    image: product.image,
+                    price: product.price,
+                    quantity,
+                    size,
+                    flavor
+                });
+            }
+            // Recalculate total price
+            cart.totalPrice = cart.products.reduce(
+                (acc , item) => acc + item.price * item.quantity,
+             0
+            );
+            await cart.save();
+            return res.status(200).json(cart);
+        }else{
+            const newCart = await Cart.create({
+                user: userId ? userId : undefined, 
+                guestId: guestId ? guestId : "guest_" + new Date().getTime(), // Generate a unique guest ID
+                products: [
+                    {
+                    productId,
+                    name: product.name,
+                    image: product.images[0].url, // Assuming the first image is the main one
+                    price: product.price,
+                    quantity,
+                    size,
+                    flavor,
+                }
+            ],
+            totalPrice: product.price * quantity,
+            });
+            return res.status(201).json(newCart);
+        }
+    } catch (error) {
+        console.error('Error adding product to cart:', error);
+        res.status(500).json({ message: 'Server error' });
+        
+    }
+})
+
+module.exports = router;
