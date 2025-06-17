@@ -2,176 +2,246 @@ const products = [
   {
     "name": "Bánh Bánh Kem Đặc Biệt 1",
     "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 240182,
-    "discountPrice": 223286,
-    "countInStock": 20,
+    "price": 360529,
+    "discountPrice": 350097,
+    "countInStock": 11,
     "sku": "BÁN-101",
     "category": "Bánh Kem",
     "sizes": [
-      "Gói 1kg"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
       "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/500/500?random=39",
+        "url": "https://picsum.photos/500/500?random=2",
         "altText": "Ảnh sản phẩm 1 - góc 1"
       },
       {
-        "url": "https://picsum.photos/500/500?random=40",
+        "url": "https://picsum.photos/500/500?random=3",
         "altText": "Ảnh sản phẩm 1 - góc 2"
       }
     ],
-    "rating": 4.5,
-    "numReviews": 45
+    "rating": 4.3,
+    "numReviews": 28
   },
   {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 2",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 374630,
-    "discountPrice": 194482,
-    "countInStock": 20,
+    "name": "Bánh Bánh Kem Đặc Biệt 2",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 298365,
+    "discountPrice": 285807,
+    "countInStock": 19,
     "sku": "BÁN-102",
-    "category": "Bánh Lạnh",
-    "sizes": [],
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
     "flavors": [
-      "Matcha"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery2_1/500/500",
+        "url": "https://picsum.photos/500/500?random=4",
         "altText": "Ảnh sản phẩm 2 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery2_2/500/500",
+        "url": "https://picsum.photos/500/500?random=5",
         "altText": "Ảnh sản phẩm 2 - góc 2"
+      }
+    ],
+    "rating": 4.9,
+    "numReviews": 37
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 3",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 326904,
+    "discountPrice": 310652,
+    "countInStock": 7,
+    "sku": "BÁN-103",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=6",
+        "altText": "Ảnh sản phẩm 3 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=7",
+        "altText": "Ảnh sản phẩm 3 - góc 2"
+      }
+    ],
+    "rating": 4.8,
+    "numReviews": 21
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 4",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 362792,
+    "discountPrice": 352289,
+    "countInStock": 17,
+    "sku": "BÁN-104",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=8",
+        "altText": "Ảnh sản phẩm 4 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=9",
+        "altText": "Ảnh sản phẩm 4 - góc 2"
+      }
+    ],
+    "rating": 4.9,
+    "numReviews": 11
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 5",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 330068,
+    "discountPrice": 328840,
+    "countInStock": 21,
+    "sku": "BÁN-105",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=10",
+        "altText": "Ảnh sản phẩm 5 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=11",
+        "altText": "Ảnh sản phẩm 5 - góc 2"
+      }
+    ],
+    "rating": 4.6,
+    "numReviews": 10
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 6",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 225336,
+    "discountPrice": 216668,
+    "countInStock": 23,
+    "sku": "BÁN-106",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=12",
+        "altText": "Ảnh sản phẩm 6 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=13",
+        "altText": "Ảnh sản phẩm 6 - góc 2"
+      }
+    ],
+    "rating": 4.1,
+    "numReviews": 31
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 7",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 200350,
+    "discountPrice": 181994,
+    "countInStock": 19,
+    "sku": "BÁN-107",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=14",
+        "altText": "Ảnh sản phẩm 7 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=15",
+        "altText": "Ảnh sản phẩm 7 - góc 2"
+      }
+    ],
+    "rating": 4.7,
+    "numReviews": 50
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 8",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 388690,
+    "discountPrice": 385215,
+    "countInStock": 29,
+    "sku": "BÁN-108",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=16",
+        "altText": "Ảnh sản phẩm 8 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=17",
+        "altText": "Ảnh sản phẩm 8 - góc 2"
       }
     ],
     "rating": 4.5,
     "numReviews": 38
   },
   {
-    "name": "Bánh Bánh Truyền Thống Đặc Biệt 3",
-    "description": "Sản phẩm bánh truyền thống thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 349461,
-    "discountPrice": 346568,
-    "countInStock": 16,
-    "sku": "BÁN-103",
-    "category": "Bánh Truyền Thống",
-    "sizes": [],
-    "flavors": [
-      "Chocolate"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery3_1/500/500",
-        "altText": "Ảnh sản phẩm 3 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery3_2/500/500",
-        "altText": "Ảnh sản phẩm 3 - góc 2"
-      }
-    ],
-    "rating": 4.1,
-    "numReviews": 49
-  },
-  {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 4",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 250550,
-    "discountPrice": 139271,
-    "countInStock": 27,
-    "sku": "BÁN-104",
-    "category": "Bánh Lạnh",
-    "sizes": [
-      "Hộp nhỏ",
-      "Hộp lớn"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery4_1/500/500",
-        "altText": "Ảnh sản phẩm 4 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery4_2/500/500",
-        "altText": "Ảnh sản phẩm 4 - góc 2"
-      }
-    ],
-    "rating": 4.8,
-    "numReviews": 41
-  },
-  {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 5",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 153589,
-    "discountPrice": 228201,
-    "countInStock": 21,
-    "sku": "BÁN-105",
-    "category": "Bánh Lạnh",
-    "sizes": [
-      "22cm",
-      "26cm"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery5_1/500/500",
-        "altText": "Ảnh sản phẩm 5 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery5_2/500/500",
-        "altText": "Ảnh sản phẩm 5 - góc 2"
-      }
-    ],
-    "rating": 4.2,
-    "numReviews": 26
-  },
-  {
-    "name": "Bánh Bánh Kem Đặc Biệt 6",
+    "name": "Bánh Bánh Kem Đặc Biệt 9",
     "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 256086,
-    "discountPrice": 202222,
-    "countInStock": 20,
-    "sku": "BÁN-106",
-    "category": "Bánh Kem",
-    "sizes": [
-      "16cm",
-      "18cm",
-      "22cm"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery6_1/500/500",
-        "altText": "Ảnh sản phẩm 6 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery6_2/500/500",
-        "altText": "Ảnh sản phẩm 6 - góc 2"
-      }
-    ],
-    "rating": 4.2,
-    "numReviews": 39
-  },
-  {
-    "name": "Bánh Bánh Kem Đặc Biệt 7",
-    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 277582,
-    "discountPrice": 255444,
+    "price": 233368,
+    "discountPrice": 231339,
     "countInStock": 6,
-    "sku": "BÁN-107",
+    "sku": "BÁN-109",
     "category": "Bánh Kem",
     "sizes": [
-      "16cm",
       "18cm",
+      "20cm",
       "22cm"
     ],
     "flavors": [
@@ -179,272 +249,260 @@ const products = [
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery7_1/500/500",
-        "altText": "Ảnh sản phẩm 7 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery7_2/500/500",
-        "altText": "Ảnh sản phẩm 7 - góc 2"
-      }
-    ],
-    "rating": 5.0,
-    "numReviews": 42
-  },
-  {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 8",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 335753,
-    "discountPrice": 187410,
-    "countInStock": 15,
-    "sku": "NGU-108",
-    "category": "Nguyên Liệu",
-    "sizes": [
-      "Gói 1kg"
-    ],
-    "flavors": [
-      "Dâu",
-      "Vanilla"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery8_1/500/500",
-        "altText": "Ảnh sản phẩm 8 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery8_2/500/500",
-        "altText": "Ảnh sản phẩm 8 - góc 2"
-      }
-    ],
-    "rating": 4.1,
-    "numReviews": 50
-  },
-  {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 9",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 192518,
-    "discountPrice": 297974,
-    "countInStock": 20,
-    "sku": "NGU-109",
-    "category": "Nguyên Liệu",
-    "sizes": [],
-    "flavors": [
-      "Phô mai"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery9_1/500/500",
+        "url": "https://picsum.photos/500/500?random=18",
         "altText": "Ảnh sản phẩm 9 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery9_2/500/500",
+        "url": "https://picsum.photos/500/500?random=19",
         "altText": "Ảnh sản phẩm 9 - góc 2"
       }
     ],
-    "rating": 4.8,
-    "numReviews": 33
+    "rating": 4.6,
+    "numReviews": 17
   },
   {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 10",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 321467,
-    "discountPrice": 338908,
-    "countInStock": 23,
+    "name": "Bánh Bánh Kem Đặc Biệt 10",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 351168,
+    "discountPrice": 335668,
+    "countInStock": 29,
     "sku": "BÁN-110",
-    "category": "Bánh Lạnh",
+    "category": "Bánh Kem",
     "sizes": [
-      "22cm",
-      "26cm"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
-      "Matcha"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery10_1/500/500",
+        "url": "https://picsum.photos/500/500?random=20",
         "altText": "Ảnh sản phẩm 10 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery10_2/500/500",
+        "url": "https://picsum.photos/500/500?random=21",
         "altText": "Ảnh sản phẩm 10 - góc 2"
       }
     ],
-    "rating": 4.8,
+    "rating": 5.0,
     "numReviews": 29
   },
   {
-    "name": "Bánh Bánh Truyền Thống Đặc Biệt 11",
-    "description": "Sản phẩm bánh truyền thống thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 210553,
-    "discountPrice": 339374,
-    "countInStock": 25,
+    "name": "Bánh Bánh Kem Đặc Biệt 11",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 210861,
+    "discountPrice": 196173,
+    "countInStock": 8,
     "sku": "BÁN-111",
-    "category": "Bánh Truyền Thống",
-    "sizes": [],
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
     "flavors": [
       "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery11_1/500/500",
+        "url": "https://picsum.photos/500/500?random=22",
         "altText": "Ảnh sản phẩm 11 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery11_2/500/500",
+        "url": "https://picsum.photos/500/500?random=23",
         "altText": "Ảnh sản phẩm 11 - góc 2"
       }
     ],
-    "rating": 4.1,
-    "numReviews": 46
+    "rating": 4.2,
+    "numReviews": 50
   },
   {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 12",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 367154,
-    "discountPrice": 283660,
-    "countInStock": 6,
+    "name": "Bánh Bánh Kem Đặc Biệt 12",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 358834,
+    "discountPrice": 356704,
+    "countInStock": 12,
     "sku": "BÁN-112",
-    "category": "Bánh Lạnh",
+    "category": "Bánh Kem",
     "sizes": [
-      "Gói 1kg"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
       "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery12_1/500/500",
+        "url": "https://picsum.photos/500/500?random=24",
         "altText": "Ảnh sản phẩm 12 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery12_2/500/500",
+        "url": "https://picsum.photos/500/500?random=25",
         "altText": "Ảnh sản phẩm 12 - góc 2"
       }
     ],
-    "rating": 4.4,
-    "numReviews": 41
+    "rating": 5.0,
+    "numReviews": 16
   },
   {
-    "name": "Bánh Bánh Truyền Thống Đặc Biệt 13",
-    "description": "Sản phẩm bánh truyền thống thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 368010,
-    "discountPrice": 311005,
-    "countInStock": 17,
+    "name": "Bánh Bánh Kem Đặc Biệt 13",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 278994,
+    "discountPrice": 276904,
+    "countInStock": 15,
     "sku": "BÁN-113",
-    "category": "Bánh Truyền Thống",
+    "category": "Bánh Kem",
     "sizes": [
-      "22cm",
-      "26cm"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
       "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery13_1/500/500",
+        "url": "https://picsum.photos/500/500?random=26",
         "altText": "Ảnh sản phẩm 13 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery13_2/500/500",
+        "url": "https://picsum.photos/500/500?random=27",
         "altText": "Ảnh sản phẩm 13 - góc 2"
       }
     ],
     "rating": 4.1,
-    "numReviews": 48
+    "numReviews": 34
   },
   {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 14",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 216606,
-    "discountPrice": 108638,
-    "countInStock": 8,
-    "sku": "NGU-114",
-    "category": "Nguyên Liệu",
+    "name": "Bánh Bánh Kem Đặc Biệt 14",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 254141,
+    "discountPrice": 252917,
+    "countInStock": 13,
+    "sku": "BÁN-114",
+    "category": "Bánh Kem",
     "sizes": [
-      "16cm",
       "18cm",
+      "20cm",
       "22cm"
     ],
     "flavors": [
-      "Dâu",
-      "Vanilla"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery14_1/500/500",
+        "url": "https://picsum.photos/500/500?random=28",
         "altText": "Ảnh sản phẩm 14 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery14_2/500/500",
+        "url": "https://picsum.photos/500/500?random=29",
         "altText": "Ảnh sản phẩm 14 - góc 2"
       }
     ],
-    "rating": 4.6,
-    "numReviews": 46
+    "rating": 4.9,
+    "numReviews": 15
   },
   {
     "name": "Bánh Bánh Kem Đặc Biệt 15",
     "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 255087,
-    "discountPrice": 207641,
-    "countInStock": 11,
+    "price": 285240,
+    "discountPrice": 274102,
+    "countInStock": 19,
     "sku": "BÁN-115",
     "category": "Bánh Kem",
-    "sizes": [],
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
     "flavors": [
-      "Dâu",
-      "Vanilla"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery15_1/500/500",
+        "url": "https://picsum.photos/500/500?random=30",
         "altText": "Ảnh sản phẩm 15 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery15_2/500/500",
+        "url": "https://picsum.photos/500/500?random=31",
         "altText": "Ảnh sản phẩm 15 - góc 2"
+      }
+    ],
+    "rating": 4.2,
+    "numReviews": 5
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 16",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 320954,
+    "discountPrice": 302992,
+    "countInStock": 19,
+    "sku": "BÁN-116",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=32",
+        "altText": "Ảnh sản phẩm 16 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=33",
+        "altText": "Ảnh sản phẩm 16 - góc 2"
+      }
+    ],
+    "rating": 4.9,
+    "numReviews": 37
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 17",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 244273,
+    "discountPrice": 240982,
+    "countInStock": 18,
+    "sku": "BÁN-117",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=34",
+        "altText": "Ảnh sản phẩm 17 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=35",
+        "altText": "Ảnh sản phẩm 17 - góc 2"
       }
     ],
     "rating": 4.8,
     "numReviews": 7
   },
   {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 16",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 154759,
-    "discountPrice": 332981,
-    "countInStock": 16,
-    "sku": "NGU-116",
-    "category": "Nguyên Liệu",
+    "name": "Bánh Bánh Kem Đặc Biệt 18",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 362507,
+    "discountPrice": 345979,
+    "countInStock": 29,
+    "sku": "BÁN-118",
+    "category": "Bánh Kem",
     "sizes": [
-      "Gói 1kg"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery16_1/500/500",
-        "altText": "Ảnh sản phẩm 16 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery16_2/500/500",
-        "altText": "Ảnh sản phẩm 16 - góc 2"
-      }
-    ],
-    "rating": 4.1,
-    "numReviews": 17
-  },
-  {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 17",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 183036,
-    "discountPrice": 167127,
-    "countInStock": 19,
-    "sku": "NGU-117",
-    "category": "Nguyên Liệu",
-    "sizes": [
-      "16cm",
       "18cm",
+      "20cm",
       "22cm"
     ],
     "flavors": [
@@ -452,242 +510,219 @@ const products = [
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery17_1/500/500",
-        "altText": "Ảnh sản phẩm 17 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery17_2/500/500",
-        "altText": "Ảnh sản phẩm 17 - góc 2"
-      }
-    ],
-    "rating": 4.5,
-    "numReviews": 25
-  },
-  {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 18",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 181309,
-    "discountPrice": 119253,
-    "countInStock": 6,
-    "sku": "NGU-118",
-    "category": "Nguyên Liệu",
-    "sizes": [
-      "Gói 1kg"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery18_1/500/500",
+        "url": "https://picsum.photos/500/500?random=36",
         "altText": "Ảnh sản phẩm 18 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery18_2/500/500",
+        "url": "https://picsum.photos/500/500?random=37",
         "altText": "Ảnh sản phẩm 18 - góc 2"
       }
     ],
     "rating": 4.5,
-    "numReviews": 36
+    "numReviews": 39
   },
   {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 19",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 382012,
-    "discountPrice": 318704,
-    "countInStock": 15,
-    "sku": "NGU-119",
-    "category": "Nguyên Liệu",
-    "sizes": [
-      "Hộp nhỏ",
-      "Hộp lớn"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery19_1/500/500",
-        "altText": "Ảnh sản phẩm 19 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery19_2/500/500",
-        "altText": "Ảnh sản phẩm 19 - góc 2"
-      }
-    ],
-    "rating": 4.8,
-    "numReviews": 11
-  },
-  {
-    "name": "Bánh Bánh Truyền Thống Đặc Biệt 20",
-    "description": "Sản phẩm bánh truyền thống thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 124197,
-    "discountPrice": 152332,
-    "countInStock": 23,
-    "sku": "BÁN-120",
-    "category": "Bánh Truyền Thống",
-    "sizes": [
-      "22cm",
-      "26cm"
-    ],
-    "flavors": [
-      "Chocolate"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery20_1/500/500",
-        "altText": "Ảnh sản phẩm 20 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery20_2/500/500",
-        "altText": "Ảnh sản phẩm 20 - góc 2"
-      }
-    ],
-    "rating": 4.4,
-    "numReviews": 48
-  },
-  {
-    "name": "Bánh Bánh Lạnh Đặc Biệt 21",
-    "description": "Sản phẩm bánh lạnh thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 180815,
-    "discountPrice": 315729,
-    "countInStock": 19,
-    "sku": "BÁN-121",
-    "category": "Bánh Lạnh",
-    "sizes": [
-      "16cm",
-      "18cm",
-      "22cm"
-    ],
-    "flavors": [
-      "Matcha"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery21_1/500/500",
-        "altText": "Ảnh sản phẩm 21 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery21_2/500/500",
-        "altText": "Ảnh sản phẩm 21 - góc 2"
-      }
-    ],
-    "rating": 4.5,
-    "numReviews": 20
-  },
-  {
-    "name": "Bánh Bánh Kem Đặc Biệt 22",
+    "name": "Bánh Bánh Kem Đặc Biệt 19",
     "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 122901,
-    "discountPrice": 188247,
-    "countInStock": 18,
-    "sku": "BÁN-122",
+    "price": 297595,
+    "discountPrice": 294941,
+    "countInStock": 8,
+    "sku": "BÁN-119",
     "category": "Bánh Kem",
     "sizes": [
-      "22cm",
-      "26cm"
-    ],
-    "flavors": [
-      "Dâu",
-      "Vanilla"
-    ],
-    "images": [
-      {
-        "url": "https://picsum.photos/seed/bakery22_1/500/500",
-        "altText": "Ảnh sản phẩm 22 - góc 1"
-      },
-      {
-        "url": "https://picsum.photos/seed/bakery22_2/500/500",
-        "altText": "Ảnh sản phẩm 22 - góc 2"
-      }
-    ],
-    "rating": 4.2,
-    "numReviews": 4
-  },
-  {
-    "name": "Bánh Bánh Truyền Thống Đặc Biệt 23",
-    "description": "Sản phẩm bánh truyền thống thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 227722,
-    "discountPrice": 287666,
-    "countInStock": 30,
-    "sku": "BÁN-123",
-    "category": "Bánh Truyền Thống",
-    "sizes": [
-      "22cm",
-      "26cm"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
       "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery23_1/500/500",
+        "url": "https://picsum.photos/500/500?random=38",
+        "altText": "Ảnh sản phẩm 19 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=39",
+        "altText": "Ảnh sản phẩm 19 - góc 2"
+      }
+    ],
+    "rating": 4.8,
+    "numReviews": 31
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 20",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 205433,
+    "discountPrice": 187847,
+    "countInStock": 7,
+    "sku": "BÁN-120",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=40",
+        "altText": "Ảnh sản phẩm 20 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=41",
+        "altText": "Ảnh sản phẩm 20 - góc 2"
+      }
+    ],
+    "rating": 4.1,
+    "numReviews": 9
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 21",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 227064,
+    "discountPrice": 222477,
+    "countInStock": 12,
+    "sku": "BÁN-121",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=42",
+        "altText": "Ảnh sản phẩm 21 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=43",
+        "altText": "Ảnh sản phẩm 21 - góc 2"
+      }
+    ],
+    "rating": 5.0,
+    "numReviews": 10
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 22",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 292471,
+    "discountPrice": 283494,
+    "countInStock": 23,
+    "sku": "BÁN-122",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=44",
+        "altText": "Ảnh sản phẩm 22 - góc 1"
+      },
+      {
+        "url": "https://picsum.photos/500/500?random=45",
+        "altText": "Ảnh sản phẩm 22 - góc 2"
+      }
+    ],
+    "rating": 4.4,
+    "numReviews": 17
+  },
+  {
+    "name": "Bánh Bánh Kem Đặc Biệt 23",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 218420,
+    "discountPrice": 203456,
+    "countInStock": 30,
+    "sku": "BÁN-123",
+    "category": "Bánh Kem",
+    "sizes": [
+      "18cm",
+      "20cm",
+      "22cm"
+    ],
+    "flavors": [
+      "Phô mai"
+    ],
+    "images": [
+      {
+        "url": "https://picsum.photos/500/500?random=46",
         "altText": "Ảnh sản phẩm 23 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery23_2/500/500",
+        "url": "https://picsum.photos/500/500?random=47",
         "altText": "Ảnh sản phẩm 23 - góc 2"
       }
     ],
-    "rating": 4.7,
-    "numReviews": 18
+    "rating": 4.0,
+    "numReviews": 32
   },
   {
     "name": "Bánh Bánh Kem Đặc Biệt 24",
     "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 226705,
-    "discountPrice": 306809,
-    "countInStock": 9,
+    "price": 350583,
+    "discountPrice": 342505,
+    "countInStock": 21,
     "sku": "BÁN-124",
     "category": "Bánh Kem",
     "sizes": [
-      "22cm",
-      "26cm"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
-      "Cà phê",
-      "Hạnh nhân"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery24_1/500/500",
+        "url": "https://picsum.photos/500/500?random=48",
         "altText": "Ảnh sản phẩm 24 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery24_2/500/500",
+        "url": "https://picsum.photos/500/500?random=49",
         "altText": "Ảnh sản phẩm 24 - góc 2"
       }
     ],
-    "rating": 4.7,
-    "numReviews": 41
+    "rating": 4.9,
+    "numReviews": 14
   },
   {
-    "name": "Bánh Nguyên Liệu Đặc Biệt 25",
-    "description": "Sản phẩm nguyên liệu thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
-    "price": 399022,
-    "discountPrice": 210640,
-    "countInStock": 21,
-    "sku": "NGU-125",
-    "category": "Nguyên Liệu",
+    "name": "Bánh Bánh Kem Đặc Biệt 25",
+    "description": "Sản phẩm bánh kem thơm ngon, chất lượng cao, thích hợp cho mọi dịp.",
+    "price": 262981,
+    "discountPrice": 254416,
+    "countInStock": 27,
+    "sku": "BÁN-125",
+    "category": "Bánh Kem",
     "sizes": [
-      "Hộp nhỏ",
-      "Hộp lớn"
+      "18cm",
+      "20cm",
+      "22cm"
     ],
     "flavors": [
-      "Chocolate"
+      "Phô mai"
     ],
     "images": [
       {
-        "url": "https://picsum.photos/seed/bakery25_1/500/500",
+        "url": "https://picsum.photos/500/500?random=50",
         "altText": "Ảnh sản phẩm 25 - góc 1"
       },
       {
-        "url": "https://picsum.photos/seed/bakery25_2/500/500",
+        "url": "https://picsum.photos/500/500?random=51",
         "altText": "Ảnh sản phẩm 25 - góc 2"
       }
     ],
-    "rating": 4.7,
-    "numReviews": 34
+    "rating": 4.8,
+    "numReviews": 11
   }
 ];
 

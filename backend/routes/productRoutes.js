@@ -191,4 +191,51 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+//@route GET /api/products/:id
+//@desc Get a single product by ID
+//@access Public
+
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//@route GET /api/products/similar/:id
+//@desc Retrieve similar products based on category and flavors
+//@access Public 
+
+router.get("/similar/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const similarProducts = await Product.find({
+      _id: { $ne: id }, // Exclude the current product
+      category: product.category, // Same category
+      flavors: { $in: product.flavors }, // At least one matching flavor
+    }).limit(4); // Limit to 4 similar products
+    
+    res.json(similarProducts);
+    
+  } catch (error) {
+    console.error("Error fetching similar products:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+})
+
 module.exports = router;
