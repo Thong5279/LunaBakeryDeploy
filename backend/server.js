@@ -6,6 +6,7 @@ const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoutes");
 const cartRoute = require("./routes/cartRoutes");
 const checkoutRoute = require("./routes/checkoutRoutes");
+const orderRoute = require("./routes/orderRoutes");
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/checkout", checkoutRoute);
+app.use("/api/orders", orderRoute);
 
 
 app.listen(PORT, () => {
