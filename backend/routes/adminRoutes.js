@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/User");
 const { protect, admin } = require("../middleware/authMiddleware");
+const { route } = require("./userRoute");
 
 const router = express.Router();
 
@@ -33,6 +34,43 @@ router.post("/", protect, admin, async (req, res) => {
   } catch (error) {
     console.error("Error creating user:", error);
     return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// @route PUT /api/admin/users/:id
+//@desc Update user info (Admin only) - Name , email , and role
+//@access Private/Admin
+router.put("/:id", protect, admin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if(user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.role = req.body.role || user.role;
+    }
+    const updatedUser = await user.save();
+    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+})
+
+// @route DELETE /api/admin/users/:id
+// @desc Delete a user (Admin only)
+// @access Private/Admin
+router.delete("/:id", protect, admin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+   if(user){
+    await user.deleteOne(); // Use deleteOne to remove the user
+    res.status(200).json({ message: "User deleted successfully" });
+   }else{
+    res.status(404).json({ message: "User not found" });
+   }
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
