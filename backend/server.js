@@ -8,6 +8,7 @@ const cartRoute = require("./routes/cartRoutes");
 const checkoutRoute = require("./routes/checkoutRoutes");
 const orderRoute = require("./routes/orderRoutes");
 const uploadRoute = require("./routes/uploadRoutes");
+const subscriberRoute = require("./routes/subscribeRoute");
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/cart", cartRoute);
 app.use("/api/checkout", checkoutRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/upload", uploadRoute);
+app.use("/api/subscribe", subscriberRoute);
 
 
 
