@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import loginImage from '../assets/login.jpg';
+import {loginUser} from '../redux/slices/authSlice'; // Import the login action
+import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch(); // Import useDispatch from react-redux
 
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("User Login:", { email, password });
+    dispatch(loginUser({ email, password })) // Dispatch the login action
 };
 
   return (

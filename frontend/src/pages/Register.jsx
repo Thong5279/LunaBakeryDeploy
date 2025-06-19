@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import registerImage from '../assets/login.jpg';
+import {registerUser} from '../redux/slices/authSlice'; // Import the register action
+import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setname] = useState("");
+  const dispatch = useDispatch(); // Import useDispatch from react-redux
 
     // Function to handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle registration logic here
-        console.log("Registering:", { name, email, password });
+       dispatch(registerUser({ name, email, password })) // Dispatch the register action
     };
 
 
