@@ -1,6 +1,7 @@
 const express = require("express");
 const Product = require("../models/Product");
 const { protect, admin } = require("../middleware/authMiddleware");
+const mongoose = require("mongoose");
 
 const router = express.Router();
 
@@ -207,7 +208,8 @@ router.get("/best-sellers", async (req, res) => {
 
   } catch (error) {
     console.error("Error fetching best sellers:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" ,error: error.message });
+
   }
 })
 
@@ -249,28 +251,27 @@ router.get("/:id", async (req, res) => {
 //@route GET /api/products/similar/:id
 //@desc Retrieve similar products based on category and flavors
 //@access Public 
-
 router.get("/similar/:id", async (req, res) => {
   const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "ID không hợp lệ" });
+  }
+
   try {
     const product = await Product.findById(id);
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
+    if (!product) return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
 
     const similarProducts = await Product.find({
-      _id: { $ne: id }, // Exclude the current product
-      category: product.category, // Same category
-      flavors: { $in: product.flavors }, // At least one matching flavor
-    }).limit(4); // Limit to 4 similar products
-    
+      category: product.category,
+      _id: { $ne: product._id }, // Exclude the current product
+    }).limit(4);
+
     res.json(similarProducts);
-    
   } catch (error) {
     console.error("Error fetching similar products:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Lỗi server", error: error.message });
   }
-})
+});
 
 module.exports = router;

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -7,104 +8,21 @@ const NewArrivals = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const newArrivals = [
-    {
-      id: 1,
-      name: "Bánh mì baguette",
-      description: "Bánh mì baguette Pháp truyền thống...",
-      price: 25000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=1",
-          altText: "Bánh mì baguette",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Bánh cupcake socola",
-      description: "Bánh cupcake socola ngọt ngào...",
-      price: 30000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=2",
-          altText: "Bánh cupcake socola",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Bánh tart trái cây",
-      description: "Bánh tart trái cây tươi ngon...",
-      price: 40000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=3",
-          altText: "Bánh tart trái cây",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Bánh mì sandwich",
-      description: "Bánh mì sandwich mềm mịn...",
-      price: 20000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=4",
-          altText: "Bánh mì sandwich",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Bánh cookie hạnh nhân",
-      description: "Bánh cookie hạnh nhân giòn tan...",
-      price: 15000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=5",
-          altText: "Bánh cookie hạnh nhân",
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: "Bánh cheesecake dâu tây",
-      description: "Bánh cheesecake dâu tây mịn màng...",
-      price: 60000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=6",
-          altText: "Bánh cheesecake dâu tây",
-        },
-      ],
-    },
-    {
-      id: 7,
-      name: "Bánh mì ciabatta",
-      description: "Bánh mì ciabatta Ý...",
-      price: 28000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=7",
-          altText: "Bánh mì ciabatta",
-        },
-      ],
-    },
-    {
-      id: 8,
-      name: "Bánh muffin việt quất",
-      description: "Bánh muffin việt quất thơm ngon...",
-      price: 22000,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=8",
-          altText: "Bánh muffin việt quất",
-        },
-      ],
-    },
-  ];
+  const [newArrivals, setNewArrivals] = useState([]);
+  
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
+        );
+        setNewArrivals(response.data);
+      } catch (error) {
+        console.error("Error fetching new arrivals:", error);
+      }
+    };
+    fetchNewArrivals();
+  }, []);
 
   const updateScrollButtons = () => {
     const container = scrollRef.current;
@@ -138,7 +56,7 @@ const NewArrivals = () => {
       container.removeEventListener("scroll", updateScrollButtons);
       window.removeEventListener("resize", updateScrollButtons);
     };
-  }, []);
+  }, [newArrivals]);
 
   return (
     <section>
@@ -185,18 +103,18 @@ const NewArrivals = () => {
         className="flex overflow-x-auto space-x-6 px-4 scroll-smooth"
         style={{ scrollBehavior: "smooth" }}
       >
-        {newArrivals.map((product) => (
+        {Array.isArray(newArrivals) && newArrivals.map((product) => (
           <div
-            key={product.id}
+            key={product._id}
             className="min-w-[80%] sm:min-w-[50%] lg:min-w-[30%] relative group rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
           >
             <img
-              src={product.images[0]?.url}
-              alt={product.images[0]?.altText || product.name}
+           src={product.images?.[0]?.url || "https://via.placeholder.com/500"}
+           alt={product.images?.[0]?.altText || product.name}
               className="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-5">
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/product/${product._id}`}>
                 <h4 className="text-xl font-semibold group-hover:text-pink-400 transition duration-300">
                   {product.name}
                 </h4>
