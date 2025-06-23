@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import registerImage from '../assets/login.jpg';
 import {registerUser} from '../redux/slices/authSlice'; // Import the register action
-import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
+import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch from react-redux
+import { mergeCart } from '../redux/slices/cartSlice';
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
   const dispatch = useDispatch(); // Import useDispatch from react-redux
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+  //lay tham so chuyen huong va kiem tra
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+  const isCheckoutRedirect = redirect.includes("checkout");
+
+  useEffect(() => {
+    if (user) {
+      if (cart?.products.length > 0 && guestId) {
+        dispatch(mergeCart({ guestId, user })).then(() => {
+          navigate(isCheckoutRedirect ? "/checkout" : "/");
+        });
+      } else {
+        navigate(isCheckoutRedirect ? "/checkout" : "/");
+      }
+    }
+  }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
+
 
     // Function to handle form submission
     const handleSubmit = (e) => {
@@ -36,7 +58,7 @@ const Register = () => {
             <input
               type="text"
               value={name}
-              onChange={(e) => setname(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
               placeholder="Nhập tên của bạn"
             />
@@ -69,7 +91,7 @@ const Register = () => {
           </button>
           <p className="mt-6 text-center text-sm text-gray-600">
             Chưa có tài khoản?
-            <Link to="/login">
+            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`}>
               <span className="text-pink-500 font-semibold hover:underline ml-1">Đăng nhập </span>
             </Link>
           </p>
