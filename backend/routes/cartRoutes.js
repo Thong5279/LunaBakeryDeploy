@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
         cart.products.push({
           productId: product._id,
           name: product.name,
-          image: product.image,
+          image: product.images[0]?.url || "",
           price: product.price,
           quantity,
           size,
