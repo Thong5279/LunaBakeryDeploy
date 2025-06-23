@@ -4,11 +4,15 @@ import { HiMenu } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 import CartDrawer from "../Layout/CartDrawer";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const {cart} = useSelector((state) => state.cart);
+
+  const cartItemCount = cart?.products?.reduce((total, product) => total + product.quantity, 0) || 0;
+
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -69,14 +73,14 @@ const Navbar = () => {
             <button onClick={toggleCartDrawer}>
               <FiShoppingCart
                 className="text-xl hover:text-[#a37ba3] cursor-pointer"
-                title="Giỏ hàng"
               />
-              <span
+              {cartItemCount > 0 && (  <span
                 className="absolute bg-[#a37ba3] text-white text-xs rounded-full px-2 py-0.5"
                 style={{ top: "6px" }}
               >
-                4
-              </span>
+                {cartItemCount}
+              </span>)}
+            
             </button>
 
             {/*Tìm kiếm */}

@@ -54,30 +54,33 @@ export const updateCartItemQuantity = createAsyncThunk(
     async ({ productId,size,flavor, quantity, userId, guestId }, { rejectWithValue }) => {
         try {
         const response = await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/api/cart/${itemId}`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
             { productId,quantity, userId, guestId , size, flavor } // Include size and flavor if needed
         );
         return response.data;
         } catch (error) {
         console.error("Error updating cart item quantity:", error);
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response?.data);
         }
     }
 );
 //remove an item from the cart
-export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({ productId, userId, guestId }, { rejectWithValue }) => {
-    try {
+export const removeFromCart = createAsyncThunk(
+    "cart/removeFromCart",
+    async ({ productId, size, flavor, userId, guestId }, { rejectWithValue }) => {
+      try {
         const response = await axios({
-            method: "DELETE",
-            url: `${import.meta.env.VITE_BACKEND_URL}/api/cart/${productId}`,
-            data: { userId, guestId, productId, size, flavor } // Assuming size and flavor are not needed for deletion
+          method: "DELETE",
+          url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+          data: { userId, guestId, productId, size, flavor },
         });
         return response.data;
-    } catch (error) {
+      } catch (error) {
         console.error("Error removing from cart:", error);
         return rejectWithValue(error.response.data);
+      }
     }
-})
+  );
 
 //Merge the cart for a user and guest
 export const mergeCart = createAsyncThunk("cart/mergeCart", async ({ userId, guestId }, { rejectWithValue }) => {
@@ -169,6 +172,21 @@ const cartSlice = createSlice({
             state.loading = false;
             state.error = action.payload?.message || "Failed to merge cart";
         })
+        // 👇 THÊM phần này vào extraReducers
+.addCase(updateCartItemQuantity.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+  })
+  .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
+    state.cart = action.payload;
+    state.loading = false;
+    saveCartToLocalStorage(action.payload);
+  })
+  .addCase(updateCartItemQuantity.rejected, (state, action) => {
+    state.loading = false;
+    state.error = action.payload?.message || "Failed to update cart item";
+  })
+  
 
     }
 })

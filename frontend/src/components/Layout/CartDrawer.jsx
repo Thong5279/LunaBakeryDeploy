@@ -2,10 +2,23 @@ import React, { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import CartContents from '../Cart/CartContents';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 const CartDrawer = ({drawerOpen, toggleCartDrawer}) => {
  const navigate = useNavigate();
+ const {user, guestId} = useSelector((state) => state.auth);
+const {cart} = useSelector((state) => state.cart);
+const userId = user ? user._id : null;
+
+
     const handleCheckout = () => {
-        navigate('/checkout');
+        toggleCartDrawer();
+        if(!user){
+            navigate('/login?redirect=checkout');
+        }else{
+            navigate('/checkout');
+        }
+       
     };
 return (
     <div
@@ -23,17 +36,25 @@ return (
         {/* Cart Content with scrollable arena */}    
         <div className='flex-grow p-4 overflow-y-auto'>
             <h2 className='text-xl text-[#a37ba3] font-bold mb-4'>Giỏ hàng</h2>
+            {cart && cart?.products?.length > 0 ? ( <CartContents  cart={cart} userId={userId} guestId={guestId}/>) :(
+             <p className='text-gray-500 text-center'>Giỏ hàng của bạn đang trống</p>
+            )}
             {/* Add your cart items here */}
-            <CartContents />
+           
         </div>   
         {/* checkout button fixed at the bottom */}
         <div className='pg-4 bg-white sticky bottom-0'>
-            <button onClick={handleCheckout} className='w-full bg-[#f5c396] text-[#3c3c3c] py-3 rounded-lg font font-semibold hover:bg-[#f4b07d]
+            {cart && cart?.products?.length > 0 && (
+                <>
+                  <button onClick={handleCheckout} className='w-full bg-[#f5c396] text-[#3c3c3c] py-3 rounded-lg font font-semibold hover:bg-[#f4b07d]
             transition '>
                 Thanh toán</button> 
             <p className='text-sm tracking-tighter text-gray-500 mt-2 texxt-center  '>
             Vận chuyển, thuế và mã giảm giá được tính tại thanh toán.
             </p>
+                </>
+            )}
+          
         </div>
      
         {/* <div className='p-4 border-t'>
