@@ -4,7 +4,7 @@ import axios from "axios";
 //helper function to load cart from localStorage
 const loadCartFromLocalStorage = () => {
   const  storedCart = localStorage.getItem("cart");
-  return storedCart ? JSON.parse(storedCart) : { product:[] };
+  return storedCart ? JSON.parse(storedCart) : { products:[] };
 };
 
 //Helper function to save cart to localStorage
@@ -111,7 +111,7 @@ const cartSlice = createSlice({
     reducers: {
         // Reducer to clear the cart
         clearCart: (state) => {
-            state.cart = { product: [] };
+            state.cart = { products: [] };
             localStorage.removeItem("cart");
         },
     },

@@ -1,36 +1,62 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import loginImage from '../assets/login.jpg';
-import {loginUser} from '../redux/slices/authSlice'; // Import the login action
-import { useDispatch } from 'react-redux'; // Import useDispatch from react-redux
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import loginImage from "../assets/login.jpg";
+import { loginUser } from "../redux/slices/authSlice"; // Import the login action
+import { useDispatch, useSelector } from "react-redux"; // Import useDispatch from react-redux
+import { mergeCart } from "../redux/slices/cartSlice";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch(); // Import useDispatch from react-redux
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+  //lay tham so chuyen huong va kiem tra
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+  const isCheckoutRedirect = redirect.includes("checkout");
+
+  useEffect(() => {
+    if (user) {
+      if (cart?.products.length > 0 && guestId) {
+        dispatch(mergeCart({ guestId, user })).then(() => {
+          navigate(isCheckoutRedirect ? "/checkout" : "/");
+        });
+      } else {
+        navigate(isCheckoutRedirect ? "/checkout" : "/");
+      }
+    }
+  }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
 
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password })) // Dispatch the login action
-};
+    dispatch(loginUser({ email, password })); // Dispatch the login action
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Left: Form */}
       <div className="w-full md:w-1/2 flex justify-center items-center p-8 md:p-16 bg-white shadow-xl relative z-10">
-        <form className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all"
+        <form
+          className="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-200 transition-all"
           onSubmit={handleSubmit}
         >
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-pink-500">Luna Bakery</h2>
           </div>
-          <h3 className="text-2xl font-semibold text-center mb-4">Xin chào 👋</h3>
+          <h3 className="text-2xl font-semibold text-center mb-4">
+            Xin chào 👋
+          </h3>
           <p className="text-center text-gray-500 mb-6">
             Vui lòng đăng nhập tên tài khoản và mật khẩu để tiếp tục
           </p>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Email</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -40,7 +66,9 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Mật khẩu</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">
+              Mật khẩu
+            </label>
             <input
               type="password"
               value={password}
@@ -57,8 +85,10 @@ const Login = () => {
           </button>
           <p className="mt-6 text-center text-sm text-gray-600">
             Chưa có tài khoản?
-            <Link to="/register">
-              <span className="text-pink-500 font-semibold hover:underline ml-1">Đăng ký ngay</span>
+            <Link to={`/register?redirect=${encodeURIComponent(redirect)}`}>
+              <span className="text-pink-500 font-semibold hover:underline ml-1">
+                Đăng ký ngay
+              </span>
             </Link>
           </p>
         </form>
@@ -73,8 +103,12 @@ const Login = () => {
           className="w-full h-full object-cover object-center scale-105 filter blur-[1px] brightness-90 transition duration-500"
         />
         <div className="absolute bottom-6 left-6 text-white z-20">
-          <h2 className="text-2xl font-semibold drop-shadow-lg">Welcome to Luna 🍰</h2>
-          <p className="text-sm drop-shadow-md text-gray-100">Không chỉ là bánh – là nghệ thuật</p>
+          <h2 className="text-2xl font-semibold drop-shadow-lg">
+            Welcome to Luna 🍰
+          </h2>
+          <p className="text-sm drop-shadow-md text-gray-100">
+            Không chỉ là bánh – là nghệ thuật
+          </p>
         </div>
       </div>
     </div>
