@@ -175,6 +175,7 @@ const Checkout = () => {
             </label>
             <textarea
               value={shippingAddress.description}
+              placeholder="bạn có thể cho chúng tôi tên lời chúc tốt đẹp... hoặc để tặng nến sinh nhật nếu có nhé :)"
               onChange={(e) =>
                 setShippingAddress({
                   ...shippingAddress,
