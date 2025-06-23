@@ -1,42 +1,17 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PayPalButton from "./PayPalButton";
+import axios from "axios";
+import { createCheckout } from "../../redux/slices/checkoutSlice"; // đường dẫn đúng theo cấu trúc project của bạn
 
-const cart = {
-  products: [
-    {
-      name: "bánh tiramisu",
-      price: 50000,
-      size: "12cm",
-      flavor: "socola",
-      description:
-        "Bánh tiramisu là một loại bánh ngọt truyền thống của Ý, nổi tiếng với hương vị cà phê đậm đà và lớp kem mascarpone mịn màng. Bánh thường được xếp lớp với bánh quy ladyfinger ngâm trong cà phê espresso, tạo nên sự kết hợp hoàn hảo giữa vị ngọt và đắng.",
-      img: "https://picsum.photos/150?random=1",
-    },
-    {
-      name: "bánh kem dâu",
-      price: 60000,
-      size: "14cm",
-      flavor: "dâu tây",
-      description:
-        "Bánh kem dâu là một loại bánh ngọt nhẹ nhàng, thường được làm từ lớp bánh bông lan mềm mịn, phủ kem tươi và trang trí bằng dâu tây tươi. Hương vị ngọt ngào của dâu tây kết hợp với kem tươi tạo nên một món tráng miệng hoàn hảo cho những ngày hè.",
-      img: "https://picsum.photos/150?random=2",
-    },
-    {
-      name: "bánh mousse trà xanh",
-      price: 70000,
-      size: "16cm",
-      flavor: "trà xanh",
-      description:
-        "Bánh mousse trà xanh là một món tráng miệng thanh mát, được làm từ lớp mousse trà xanh mịn màng, thường được phủ lớp chocolate trắng hoặc kem tươi. Hương vị nhẹ nhàng của trà xanh kết hợp với độ béo ngậy của mousse tạo nên một trải nghiệm thú vị.",
-      img: "https://picsum.photos/150?random=3",
-    },
-  ],
-  totalPrice: 180000, // Tổng giá trị của các sản phẩm trong giỏ hàng
-};
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { cart, loading, error } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
+
   const [checkoutId, setCheckoutId] = useState(null);
   const [shippingAddress, setShippingAddress] = useState({
     firstname: "",
@@ -48,15 +23,79 @@ const Checkout = () => {
     description: "",
   });
 
-  const handleCreateCheckout = (e) => { 
-  e.preventDefault();
-  setCheckoutId("checkout12345"); // Simulate checkout ID creation
-}
-
-    const handlePaymentSuccess = (details) => {
-        console.log("Payment successful:", details);
-        navigate("/orders-confimation"); // Redirect to orders page after successful payment
+  //gio hang khong duoc tai truoc
+  useEffect(() => {
+    if (!cart || !cart.products || cart.products.length === 0) {
+      navigate("/");
     }
+  }, [cart, navigate]);
+
+  const handleCreateCheckout = async (e) => {
+    e.preventDefault();
+    const fullName = `${shippingAddress.firstname} ${shippingAddress.lastname}`;
+
+    const formattedAddress = {
+      ...shippingAddress,
+      name: fullName, 
+    };
+
+    if (cart && cart.products.length > 0) {
+      const res = await dispatch(
+        createCheckout({
+          checkoutItems: cart.products,
+          shippingAddress: formattedAddress,
+          paymentMethod: "Paypal",
+          totalPrice: cart.totalPrice,
+        })
+      );
+      if (res.payload && res.payload._id) {
+        setCheckoutId(res.payload._id);
+      }
+    }
+
+
+  };
+
+  const handlePaymentSuccess = async (details) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
+        { paymentStatus: "paid", paymentDetails: details },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      
+      if (response.status === 200) {
+        navigate("/orders-confirmation"); // ✅ sửa lại đường dẫn đúng
+      }
+    } catch (error) {
+      console.log("Lỗi thanh toán PayPal:", error);
+    }
+  };
+
+  const handleFinalizeCheckout = async (checkoutId) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
+        {
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`
+          },
+        }
+      );
+      navigate("/order-confirmation");
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  if(loading) return <p>Đang tải giỏ hàng...</p>;
+  if(error) return <p>Error: {error}</p>;
+  if(!cart || !cart.products || cart.products.length === 0){
+    return <p>Giỏ hàng của bạn đang trống</p>
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter ">
@@ -71,7 +110,7 @@ const Checkout = () => {
             </label>
             <input
               type="email"
-              value="ten@gmail.com"
+              value={user? user.email : ""}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-pink-500"
               disabled
             />
@@ -187,21 +226,24 @@ const Checkout = () => {
             ></textarea>
           </div>
           <div className="mt-6">
-                {!checkoutId ? (
-                    <button type="submit" 
-                    className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition"
-                    >Tiếp tục hình thức thanh toán</button>
-                ) : (
-                    <div>
-                        <h3 className="text-lg mb-4">Thanh toán với Paypal</h3>
-                        {/* Paypal compnent */}
-                        <PayPalButton 
-                        amount={1000} 
-                        onSuccess={handlePaymentSuccess} 
-                        onError={(err) => alert("Payment failed: ")} />
-                    
-                    </div>
-                )}
+            {!checkoutId ? (
+              <button
+                type="submit"
+                className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition"
+              >
+                Tiếp tục hình thức thanh toán
+              </button>
+            ) : (
+              <div>
+                <h3 className="text-lg mb-4">Thanh toán với Paypal</h3>
+                {/* Paypal compnent */}
+                <PayPalButton
+                  amount={cart.totalPrice}
+                  onSuccess={handlePaymentSuccess}
+                  onError={(err) => alert("Payment failed: ")}
+                />
+              </div>
+            )}
           </div>
         </form>
       </div>
@@ -209,59 +251,60 @@ const Checkout = () => {
       <div className="bg-gray-50 p-6 rounded-lg">
         <h3 className="text-lg mb-4">Tổng đơn hàng</h3>
         <div className="border-t py-4 mb-4">
-            {cart.products.map((product, index) => (
-            <div 
-            key={index} 
-            className="flex items-start justify-between py-2 border-b">
-            <div className="flex items-start ">
-                <img src={product.img} alt={product .name} className="w-20 h-24 object-cover mr-4 rounded" />
+          {cart.products.map((product, index) => (
+            <div
+              key={index}
+              className="flex items-start justify-between py-2 border-b"
+            >
+              <div className="flex items-start ">
+                <img
+                  src={product.img}
+                  alt={product.name}
+                  className="w-20 h-24 object-cover mr-4 rounded"
+                />
                 <div>
-                    <h3 className="text-gray-800 font-semibold">{product.name}</h3>
-                    <p className="text-gray-600 text-sm">{product.flavor}</p>
-                    <p className="text-gray-600 text-sm">Size : {product.size}</p>
-                    {/* <p className="text-gray-500 text-xs">{item.description}</p> */}
-                    <p className="text-gray-500 text-xs mt-1">Số lượng: 1</p>
-                    
+                  <h3 className="text-gray-800 font-semibold">
+                    {product.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{product.flavor}</p>
+                  <p className="text-gray-600 text-sm">Size : {product.size}</p>
+                  {/* <p className="text-gray-500 text-xs">{item.description}</p> */}
+                  <p className="text-gray-500 text-xs mt-1">Số lượng: 1</p>
                 </div>
-
-            </div>
-           <p className="text-xl">
+              </div>
+              <p className="text-xl">
                 {product.price?.toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                }
-                )}
-           </p>
-          </div>   
-            ))} 
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </p>
+            </div>
+          ))}
         </div>
         <div className="flex justify-between items-center text-lg mb-4">
-        <p>Tổng giá sản phẩm</p>
-        <p>
-            ${cart.totalPrice?.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-            }
-            )}
-        </p>
-        </div>
-        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
-        
-        <p> Phí vận chuyển </p>
-            <p>miễn phí</p>
-        </div>
-        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
-        <p>Tổng cộng</p>
-        <p>
+          <p>Tổng giá sản phẩm</p>
+          <p>
+            $
             {cart.totalPrice?.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-            }
-            )}
-        </p>
+              style: "currency",
+              currency: "VND",
+            })}
+          </p>
+        </div>
+        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
+          <p> Phí vận chuyển </p>
+          <p>miễn phí</p>
+        </div>
+        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
+          <p>Tổng cộng</p>
+          <p>
+            {cart.totalPrice?.toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </p>
         </div>
       </div>
-      
     </div>
   );
 };
