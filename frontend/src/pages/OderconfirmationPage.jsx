@@ -1,42 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../redux/slices/cartSlice";
 
-const checkout = {
-  _id: "checkout12345",
-  createdAt: new Date(),
-  checkoutItems: [
-    {
-      productId: "product1",
-      name: "Bánh Tiramisu",
-      price: 50000,
-      size: "12cm",
-      flavor: "Socola",
-      description:
-        "Bánh tiramisu là một loại bánh ngọt truyền thống của Ý, nổi tiếng với hương vị cà phê đậm đà và lớp kem mascarpone mịn màng.",
-      img: "https://picsum.photos/150?random=1",
-      quantity: 2,
-    },
-    {
-      productId: "product2",
-      name: "Bánh Kem Dâu",
-      price: 60000,
-      size: "14cm",
-      flavor: "Dâu tây",
-      description:
-        "Bánh kem dâu là một loại bánh ngọt nhẹ nhàng, thường được làm từ lớp bánh bông lan mềm mịn, phủ kem tươi và trang trí bằng dâu tây tươi.",
-      img: "https://picsum.photos/150?random=2",
-      quantity: 1,
-    },
-  ],
-  shippingAddress: {
-    adress: "123 Đường ABC",
-    city: "Hà Nội",
-    firstname: "Nguyễn",
-    lastname: "Văn A",
-    phonenumber: "0123456789",
-  },
-};
 
 const OderconfirmationPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const checkout = useSelector((state) => state.checkout.checkoutData);
+
+  useEffect(() => {
+    if(checkout && checkout._id){
+      dispatch(clearCart());
+      localStorage.removeItem("cart");
+    }else{
+      navigate("/my-orders")
+    }
+  },[checkout,dispatch]);
+
   const calculateEstimatedDelivery = (createdAt, daysToAdd) => {
     const orderDate = new Date(createdAt);
     orderDate.setDate(orderDate.getDate() + daysToAdd);
@@ -81,6 +62,7 @@ const OderconfirmationPage = () => {
               <div key={item.productId} className="flex items-center mb-4">
                 <img
                   src={item.img}
+                  referrerPolicy="no-referrer"
                   alt={item.name}
                   className="w-24 h-24 object-cover rounded mr-4"
                 />

@@ -6,6 +6,7 @@ import axios from "axios";
 import { createCheckout } from "../../redux/slices/checkoutSlice"; // đường dẫn đúng theo cấu trúc project của bạn
 
 
+
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ const Checkout = () => {
           },
         }
       );
-      navigate("/order-confirmation");
+      navigate("/orders-confirmation");
     } catch (error) {
       console.log(error)
     }
@@ -259,6 +260,7 @@ const Checkout = () => {
               <div className="flex items-start ">
                 <img
                   src={product.img}
+                  referrerPolicy="no-referrer"
                   alt={product.name}
                   className="w-20 h-24 object-cover mr-4 rounded"
                 />
