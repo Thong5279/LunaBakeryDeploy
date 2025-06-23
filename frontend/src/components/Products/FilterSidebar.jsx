@@ -22,6 +22,7 @@ const FilterSidebar = () => {
 
   const categories = [
     "Bánh ngọt",
+    "Bánh Kem",
     "Bánh sinh nhật",
     "Bánh trung thu",
     "Bánh quy",
@@ -43,6 +44,7 @@ const FilterSidebar = () => {
     "bánh oreo",
     "trái cây hỗn hợp",
     "Hạt dẻ cười",
+    "Phô mai",
     "Cam",
     "Chanh dây",
   ];
