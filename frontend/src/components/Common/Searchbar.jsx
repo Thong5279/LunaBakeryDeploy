@@ -1,25 +1,27 @@
 import React from 'react'
 import { FiSearch } from 'react-icons/fi';
 import { HiMiniXMark } from 'react-icons/hi2';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setFilters, fetchProductsByFilters } from '../../redux/slices/productsSlice';
+
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [isOpen, setIsOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSearchToggle = () => {
         setIsOpen(!isOpen);
-        // if (!isOpen) {
-        //     setSearchTerm(''); // Reset search term when opening
-        // }
     }
 
     const handleSearch = (e) => {
         e.preventDefault();
-        //Xử lý logic tìm kiếm ở đây, ví dụ: chuyển hướng đến trang kết quả tìm kiếm
-        console.log("Searching for:", searchTerm);
-        // Đặt lại thuật ngữ tìm kiếm sau khi gửi
-        console.log("Search term submitted:", searchTerm);
-        setIsOpen(false); // Đóng thanh tìm kiếm sau khi gửi
+        dispatch(setFilters({search: searchTerm}));
+        dispatch(fetchProductsByFilters({search : searchTerm}))
+        navigate(`/collections/all?search=${searchTerm}`)
+        setIsOpen(false)
     }
   return (
      <div
