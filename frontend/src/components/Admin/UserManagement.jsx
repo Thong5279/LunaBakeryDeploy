@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";  
+import { useNavigate } from "react-router-dom";
+import { addUser, updateUser, deleteUser } from "../../redux/slices/adminSlice";
 
 const UserManagement = () => {
-  const users = [
-    {
-      _id: "12313",
-      name: "Bui Ngoc Nhu",
-      email: "Luna@gmail.com",
-      role: "admin",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {user} = useSelector((state) => state.auth);
+  const {users, loading, error} = useSelector((state) => state.admin);
 
+  useEffect(() => {
+   if(user &&  user.role !== "admin") {
+    navigate("/");
+   }
+  }, [user, navigate]);
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,7 +31,8 @@ const UserManagement = () => {
   //   reset về mặc định khi submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    dispatch(addUser(formData));
+
     setFormData({
       name: "",
       email: "",
@@ -36,12 +42,12 @@ const UserManagement = () => {
   };
 
   const handleRoleChange = (userId, newRole) =>{
-    console.log({id: userId, role: newRole})
+    dispatch(updateUser({id: userId, role: newRole}));
   }
   const handleDeleteUser = (userId) =>{
     if(window.confirm("Bạn có chắc muốn xoá tài khoản này?"))
     {
-      console.log("xoá người dùng với id " , userId)
+      dispatch(deleteUser(userId));
     }
   }
 
@@ -49,6 +55,8 @@ const UserManagement = () => {
     <div className="max-w-7xl mx-auto p-6 ">
       <h2 className="text-2xl font-bold mb-4">Quản lý người dùng</h2>
       {/* add new user from */}
+      {loading && <p>Đang tải dữ liệu...</p>}
+      {error && <p>Lỗi khi tải dữ liệu: {error}</p>}
       <div className="p-6 rounded-lg mb-6">
         <h3 className="text-lg font-bold mb-4">Thêm tài khoản </h3>
         <form action="" className="" onSubmit={handleSubmit}>
@@ -149,7 +157,7 @@ const UserManagement = () => {
                     <option value="customer">Khách hàng</option>
                     <option value="admin">Admin</option>
                     <option value="manager">Quản lý</option>
-                    <option value="banker">Nhân viên làm bánh</option>
+                    <option value="baker">Nhân viên làm bánh</option>
                     <option value="shipper">Nhân viên giao bánh</option>
                   </select>
                 </td>
