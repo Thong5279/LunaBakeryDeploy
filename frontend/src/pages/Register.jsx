@@ -13,7 +13,7 @@ const Register = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId loading} = useSelector((state) => state.auth);
+     const { user, guestId, loading} = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
   //lay tham so chuyen huong va kiem tra
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
