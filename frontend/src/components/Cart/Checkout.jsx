@@ -70,7 +70,8 @@ const Checkout = () => {
       );
       
       if (response.status === 200) {
-        navigate("/orders-confirmation"); // ✅ sửa lại đường dẫn đúng
+        // ✅ Gọi finalize để chuyển checkout thành order
+        await handleFinalizeCheckout(checkoutId);
       }
     } catch (error) {
       console.log("Lỗi thanh toán PayPal:", error);
@@ -79,8 +80,9 @@ const Checkout = () => {
 
   const handleFinalizeCheckout = async (checkoutId) => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
+        {}, // Empty body
         {
           headers:{
             Authorization: `Bearer ${localStorage.getItem("userToken")}`
@@ -89,7 +91,7 @@ const Checkout = () => {
       );
       navigate("/orders-confirmation");
     } catch (error) {
-      console.log(error)
+      console.log("Lỗi finalize checkout:", error)
     }
   };
   if(loading) return <p>Đang tải giỏ hàng...</p>;
@@ -241,7 +243,7 @@ const Checkout = () => {
                 <PayPalButton
                   amount={cart.totalPrice}
                   onSuccess={handlePaymentSuccess}
-                  onError={(err) => alert("Payment failed: ")}
+                  onError={() => alert("Payment failed: ")}
                 />
               </div>
             )}

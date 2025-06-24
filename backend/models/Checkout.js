@@ -22,9 +22,9 @@ const checkoutItemSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: true
-    }
-    // size: String,      // Nếu sản phẩm có size
-    // flavor: String     // Nếu sản phẩm có hương vị
+    },
+    size: String,      // Nếu sản phẩm có size
+    flavor: String     // Nếu sản phẩm có hương vị
 
 },
 { _id: false } // Không tạo _id riêng cho từng item
@@ -64,7 +64,7 @@ const checkoutSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    paiAt: {
+    paidAt: {
         type: Date,
     },
     paymentStatus: {
