@@ -42,7 +42,7 @@ const OderManagement = () => {
                   </td>
                   <td className="p-4">{order.user.name}</td>
                   <td className="p-4">
-                    {new Intl.NumberFormat("vi-VN").format(order.totalPrice)}
+                    {new Intl.NumberFormat("vi-VN").format(order.totalPrice)} vnđ
                   </td>
                   <td className="p-4">
                     <select
