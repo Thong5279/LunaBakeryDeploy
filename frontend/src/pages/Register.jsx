@@ -13,7 +13,7 @@ const Register = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId loading} = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
   //lay tham so chuyen huong va kiem tra
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
@@ -87,7 +87,7 @@ const Register = () => {
             type="submit"
             className="w-full bg-pink-50 hover:bg-pink-200 text-[#db2777] p-3 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl"
           >
-            Đăng ký
+            {loading ? "Đang đăng ký..." : "Đăng ký"}
           </button>
           <p className="mt-6 text-center text-sm text-gray-600">
             Chưa có tài khoản?
