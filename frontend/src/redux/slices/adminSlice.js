@@ -37,16 +37,20 @@ export const addUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "admin/updateUser",
   async ({ id, name, email, role }, { rejectWithValue }) => {
-    const response = await axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
-      { name, email, role },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-        },
-      }
-    );
-    response.data;
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
+        { name, email, role },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      return response.data.user;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 //delete a user
@@ -88,8 +92,8 @@ const adminSlice = createSlice({
         const index = state.users.findIndex(
           (user) => user._id === updatedUser._id
         );
-        if (userIndex !== -1) {
-          state.users[userIndex] = updatedUser;
+        if (index !== -1) {
+          state.users[index] = updatedUser;
         }
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
