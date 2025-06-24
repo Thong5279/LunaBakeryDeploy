@@ -261,7 +261,7 @@ const Checkout = () => {
             >
               <div className="flex items-start ">
                 <img
-                  src={product.img}
+                  src={product.image}
                   referrerPolicy="no-referrer"
                   alt={product.name}
                   className="w-20 h-24 object-cover mr-4 rounded"

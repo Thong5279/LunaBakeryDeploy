@@ -1,46 +1,20 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrderDetails } from "../redux/slices/orderSlice";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
-  const [orderDetails, setOrderDetails] = useState(null);
-
+  const dispatch = useDispatch();
+  const {orderDetails, loading, error} = useSelector((state) => state.orders);
   useEffect(() => {
-    const mockOrderDetails = {
-      _id: id,
-      createdAt: new Date(),
-      isPaid: true,
-      isDelivered: false,
-      paymentMethod: "PayPal",
-      shippingAddress: {
-        address: "123 ly tu trong",
-        district: "ninh kiều",
-        city: "can tho",
-      },
-      orderItems: [
-        {
-          productId: "product1",
-          name: "Bánh Tiramisu",
-          price: 50000,
-          size: "12cm",
-          flavor: "Socola",
-          img: "https://picsum.photos/150?random=1",
-          quantity: 2,
-        },
-        {
-          productId: "product2",
-          name: "Bánh Kem Dâu",
-          price: 60000,
-          size: "14cm",
-          flavor: "Dâu tây",
-          img: "https://picsum.photos/150?random=2",
-          quantity: 1,
-        },
-      ],
-    };
-    setOrderDetails(mockOrderDetails);
-  }, [id]);
+    dispatch(fetchOrderDetails(id));
+  }, [dispatch, id]);
+
+  if(loading) return <p>Đang tải đơn hàng...</p>;
+  if(error) return <p>Error: {error}</p>;
+  if(!orderDetails) return <p>Không có đơn hàng nào</p>;
+ 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 ">
       <h2 className=" text-2xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-950">
@@ -143,7 +117,7 @@ const OrderDetailsPage = () => {
                   >
                     <td className="py-3 px-4 flex items-center gap-4">
                       <img
-                        src={item.img}
+                        src={item.image}
                         alt={item.name}
                         className="w-14 h-14 object-cover rounded-md border border-gray-300"
                       />

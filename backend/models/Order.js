@@ -50,6 +50,9 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: true
         },
+        phonenumber: {
+            type: String,
+        },
     },
     paymentMethod: {
         type: String,

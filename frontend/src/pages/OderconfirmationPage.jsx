@@ -61,7 +61,7 @@ const OderconfirmationPage = () => {
             {checkout.checkoutItems.map((item) => (
               <div key={item.productId} className="flex items-center mb-4">
                 <img
-                  src={item.img}
+                  src={item.image}
                   referrerPolicy="no-referrer"
                   alt={item.name}
                   className="w-24 h-24 object-cover rounded mr-4"
@@ -97,13 +97,10 @@ const OderconfirmationPage = () => {
             <div>
               <h4 className="text-lg font-semibold mb-2">Giao hàng</h4>
               <p className="">
-                địa chỉ : {checkout.shippingAddress.adress} ,thành phố{" "}
-                {checkout.shippingAddress.city},
+                Địa chỉ: {checkout.shippingAddress.address}, {checkout.shippingAddress.city}
               </p>
-
               <p>
-                tên: {checkout.shippingAddress.firstname}{" "}
-                {checkout.shippingAddress.lastname},
+                Tên: {checkout.shippingAddress.name}
               </p>
               <p>Số điện thoại: {checkout.shippingAddress.phonenumber}</p>
             </div>
