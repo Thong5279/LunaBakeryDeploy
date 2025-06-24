@@ -75,6 +75,13 @@ const EditProductPage = () => {
     }
   };
 
+  const handleRemoveImage = (indexToRemove) => {
+    setProductData((prevData) => ({
+      ...prevData,
+      images: prevData.images.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Updating product with ID:", id);
@@ -233,13 +240,21 @@ const EditProductPage = () => {
           />
           {uploading && <p className="text-blue-500 mt-2">Đang tải ảnh...</p>}
           <div className="flex gap-4 mt-4">
-            {productData.images.map((image, index) => (
-              <div key={index}>
+            {productData.images && productData.images.map((image, index) => (
+              <div key={index} className="relative group">
                 <img
                   src={image.url}
                   alt={image.altText || "Ảnh sản phẩm"}
                   className="w-20 h-20 object-cover rounded-md shadow-md"
                 />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                  title="Xóa ảnh"
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>
