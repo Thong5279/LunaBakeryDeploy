@@ -9,9 +9,12 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const {cart} = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
-  const cartItemCount = cart?.products?.reduce((total, product) => total + product.quantity, 0) || 0;
+  const cartItemCount =
+    cart?.products?.reduce((total, product) => total + product.quantity, 0) ||
+    0;
 
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -62,7 +65,14 @@ const Navbar = () => {
 
           {/* Icon bên phải */}
           <div className="flex items-center gap-4 text-gray-700">
-            <Link to={"/admin"} className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm">Admin</Link>
+            {user && user.role === "admin" && (
+              <Link
+                to={"/admin"}
+                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm"
+              >
+                Admin
+              </Link>
+            )}
 
             <Link to={"/profile"}>
               <FiUser
@@ -71,16 +81,15 @@ const Navbar = () => {
               />
             </Link>
             <button onClick={toggleCartDrawer}>
-              <FiShoppingCart
-                className="text-xl hover:text-[#a37ba3] cursor-pointer"
-              />
-              {cartItemCount > 0 && (  <span
-                className="absolute bg-[#a37ba3] text-white text-xs rounded-full px-2 py-0.5"
-                style={{ top: "6px" }}
-              >
-                {cartItemCount}
-              </span>)}
-            
+              <FiShoppingCart className="text-xl hover:text-[#a37ba3] cursor-pointer" />
+              {cartItemCount > 0 && (
+                <span
+                  className="absolute bg-[#a37ba3] text-white text-xs rounded-full px-2 py-0.5"
+                  style={{ top: "6px" }}
+                >
+                  {cartItemCount}
+                </span>
+              )}
             </button>
 
             {/*Tìm kiếm */}
