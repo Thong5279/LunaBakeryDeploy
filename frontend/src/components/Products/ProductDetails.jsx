@@ -31,8 +31,10 @@ const ProductDetails = ({ productId }) => {
   }, [idToFetch, dispatch]);
 
   useEffect(() => {
-    if (selectedProduct?.images?.length > 0) {
+    if (selectedProduct?.images?.length > 0 && selectedProduct.images[0]?.url) {
       setMainImage(selectedProduct.images[0].url);
+    } else {
+      setMainImage("https://via.placeholder.com/500x500?text=No+Image");
     }
   }, [selectedProduct]);
 
@@ -41,8 +43,17 @@ const ProductDetails = ({ productId }) => {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedFlavor) {
-      toast.error("Vui lòng chọn kích thước và hương vị.");
+    // Check if product has sizes/flavors and they are required
+    const hasSizes = selectedProduct.sizes && selectedProduct.sizes.length > 0;
+    const hasFlavors = selectedProduct.flavors && selectedProduct.flavors.length > 0;
+    
+    if (hasSizes && !selectedSize) {
+      toast.error("Vui lòng chọn kích thước.");
+      return;
+    }
+    
+    if (hasFlavors && !selectedFlavor) {
+      toast.error("Vui lòng chọn hương vị.");
       return;
     }
 
@@ -51,8 +62,8 @@ const ProductDetails = ({ productId }) => {
       addToCart({
         productId: idToFetch,
         quantity,
-        size: selectedSize,
-        flavor: selectedFlavor,
+        size: selectedSize || "Mặc định",
+        flavor: selectedFlavor || "Mặc định",
         guestId,
         userId: user?._id,
       })
@@ -78,16 +89,22 @@ const ProductDetails = ({ productId }) => {
               className="w-full h-auto object-cover rounded-lg shadow-lg"
             />
             <div className="flex gap-3 overflow-x-auto">
-              {selectedProduct.images.map((img, i) => (
-                <img
-                  key={i}
-                  src={img.url}
-                  onClick={() => setMainImage(img.url)}
-                  className={`w-20 h-20 object-cover rounded-lg border cursor-pointer ${
-                    mainImage === img.url ? "border-pink-500" : "border-gray-300"
-                  }`}
-                />
-              ))}
+              {selectedProduct.images && selectedProduct.images.length > 0 ? (
+                selectedProduct.images.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img?.url || "https://via.placeholder.com/80x80?text=No+Image"}
+                    onClick={() => setMainImage(img?.url || "https://via.placeholder.com/500x500?text=No+Image")}
+                    className={`w-20 h-20 object-cover rounded-lg border cursor-pointer ${
+                      mainImage === (img?.url || "https://via.placeholder.com/500x500?text=No+Image") ? "border-pink-500" : "border-gray-300"
+                    }`}
+                  />
+                ))
+              ) : (
+                <div className="w-20 h-20 bg-gray-200 rounded-lg border border-gray-300 flex items-center justify-center">
+                  <span className="text-xs text-gray-500">No Image</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -109,34 +126,42 @@ const ProductDetails = ({ productId }) => {
             <div>
               <p className="font-semibold text-pink-500 mb-2">Kích thước:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.sizes.map((s) => (
-                  <button
-                    key={s}
-                    className={`px-4 py-1 rounded-full ${
-                      selectedSize === s ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
-                    }`}
-                    onClick={() => setSelectedSize(s)}
-                  >
-                    {s} cm
-                  </button>
-                ))}
+                {selectedProduct.sizes && selectedProduct.sizes.length > 0 ? (
+                  selectedProduct.sizes.map((s) => (
+                    <button
+                      key={s}
+                      className={`px-4 py-1 rounded-full ${
+                        selectedSize === s ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedSize(s)}
+                    >
+                      {s} cm
+                    </button>
+                  ))
+                ) : (
+                  <span className="text-gray-500">Chưa có kích thước</span>
+                )}
               </div>
             </div>
 
             <div>
               <p className="font-semibold text-pink-500 mb-2">Hương vị:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.flavors.map((f) => (
-                  <button
-                    key={f}
-                    className={`px-4 py-1 rounded-full ${
-                      selectedFlavor === f ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
-                    }`}
-                    onClick={() => setSelectedFlavor(f)}
-                  >
-                    {f}
-                  </button>
-                ))}
+                {selectedProduct.flavors && selectedProduct.flavors.length > 0 ? (
+                  selectedProduct.flavors.map((f) => (
+                    <button
+                      key={f}
+                      className={`px-4 py-1 rounded-full ${
+                        selectedFlavor === f ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedFlavor(f)}
+                    >
+                      {f}
+                    </button>
+                  ))
+                ) : (
+                  <span className="text-gray-500">Chưa có hương vị</span>
+                )}
               </div>
             </div>
 

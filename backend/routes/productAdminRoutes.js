@@ -78,25 +78,35 @@ router.post("/", protect, admin, async (req, res) => {
             category,
             images,
             sizes,
-            flavors
+            flavors,
+            countInStock
         } = req.body;
+
+        console.log("Creating product with data:", req.body);
 
         const product = new Product({
             name,
             description,
             price,
             sku,
-            category,
+            category: category || "Bánh ngọt", // Default category if not provided
             images: images || [],
             sizes: sizes || [],
-            flavors: flavors || []
+            flavors: flavors || [],
+            countInStock: countInStock || 10, // Default stock
+            user: req.user._id, // Set the admin user as creator
+            isPublished: true // Make it published by default
         });
 
         const createdProduct = await product.save();
         res.status(201).json(createdProduct);
     } catch (error) {
         console.error("Error creating product:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("Error details:", error.message);
+        res.status(500).json({ 
+            message: "Server error",
+            error: error.message 
+        });
     }
 });
 
