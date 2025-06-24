@@ -1,19 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchProductDetails } from "../../redux/slices/productsSlice";
+import { updateProduct } from "../../redux/slices/adminProductSlice"; 
+import axios from "axios";
+
 const EditProductPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { selectedProduct, loading, error } = useSelector(
+    (state) => state.products
+  );
+  const [uploading, setUploading] = useState(false);
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProductDetails(id));
+    }
+  }, [id, dispatch]);
+  useEffect(() => {
+    if (selectedProduct) {
+      setProductData(selectedProduct);
+    }
+  }, [selectedProduct]);
+
   const [productData, setProductData] = useState({
     name: "",
     price: 0,
     sku: "",
     description: "",
     category: "",
-    images: [
-      {
-        url: "https://picsum.photos/150?random=1",
-      },
-      {
-        url: "https://picsum.photos/150?random=2",
-      },
-    ],
+    images: [],
     sizes: "",
     flavors: "", // hương vị
   });
@@ -28,12 +45,39 @@ const EditProductPage = () => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    console.log(file);
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setUploading(true);
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/products/upload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setProductData((prevData) => ({
+        ...prevData,
+        images: [...prevData.images, { url: data.url, altText: "" }],
+      }));
+      setUploading(false);
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh:", error);
+      setUploading(false);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(productData)
+    dispatch(updateProduct(id, productData));
+    navigate("/admin/products");
+  };
+  if(loading) {
+    return <p>Đang tải dữ liệu...</p>
+  }
+  if(error) {
+    return <p>Lỗi khi tải dữ liệu: {error}</p>
   }
 
   return (
