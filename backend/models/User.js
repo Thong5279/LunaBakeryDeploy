@@ -28,6 +28,16 @@ const userSchema = new mongoose.Schema(
             trim: true,
             match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/], // Basic email validation 
 
+        },
+        phone: {
+            type: String,
+            trim: true,
+            default: ""
+        },
+        address: {
+            type: String,
+            trim: true,
+            default: ""
         }
     },
     {timestamps: true}, // Automatically manage createdAt and updatedAt fields
