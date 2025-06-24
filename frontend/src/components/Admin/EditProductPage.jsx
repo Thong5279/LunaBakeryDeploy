@@ -20,7 +20,12 @@ const EditProductPage = () => {
   }, [id, dispatch]);
   useEffect(() => {
     if (selectedProduct) {
-      setProductData(selectedProduct);
+      setProductData({
+        ...selectedProduct,
+        sizes: selectedProduct.sizes ? selectedProduct.sizes.join(", ") : "",
+        flavors: selectedProduct.flavors ? selectedProduct.flavors.join(", ") : "",
+        countInStock: selectedProduct.countInStock || 0
+      });
     }
   }, [selectedProduct]);
 
@@ -30,6 +35,7 @@ const EditProductPage = () => {
     sku: "",
     description: "",
     category: "",
+    countInStock: 0,
     images: [],
     sizes: "",
     flavors: "", // hương vị
@@ -91,8 +97,17 @@ const EditProductPage = () => {
       console.error("No product ID found!");
       return;
     }
+
+    // Convert sizes and flavors strings back to arrays, and ensure numeric fields
+    const formattedData = {
+      ...productData,
+      price: Number(productData.price),
+      countInStock: Number(productData.countInStock),
+      sizes: productData.sizes ? productData.sizes.split(",").map(size => size.trim()).filter(size => size) : [],
+      flavors: productData.flavors ? productData.flavors.split(",").map(flavor => flavor.trim()).filter(flavor => flavor) : []
+    };
     
-    dispatch(updateProduct({ id, productData }))
+    dispatch(updateProduct({ id, productData: formattedData }))
       .then((result) => {
         console.log("Update result:", result);
         if (result.type.endsWith("/fulfilled")) {
@@ -180,6 +195,52 @@ const EditProductPage = () => {
             onChange={handleChange}
           />
         </div>
+        {/* category */}
+        <div className="mb-6">
+          <label
+            htmlFor=""
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Danh mục
+          </label>
+          <select
+            name="category"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+            value={productData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Chọn danh mục</option>
+            <option value="Bánh ngọt">Bánh ngọt</option>
+            <option value="Bánh Kem">Bánh Kem</option>
+            <option value="Bánh sinh nhật">Bánh sinh nhật</option>
+            <option value="Bánh trung thu">Bánh trung thu</option>
+            <option value="Bánh quy">Bánh quy</option>
+            <option value="Bánh tart">Bánh tart</option>
+            <option value="Bánh mousse">Bánh mousse</option>
+            <option value="Bánh cupcake">Bánh cupcake</option>
+            <option value="Bánh su kem">Bánh su kem</option>
+            <option value="Bánh bông lan">Bánh bông lan</option>
+          </select>
+        </div>
+        {/* countInStock */}
+        <div className="mb-6">
+          <label
+            htmlFor=""
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Số lượng tồn kho
+          </label>
+          <input
+            type="number"
+            name="countInStock"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+            value={productData.countInStock}
+            onChange={handleChange}
+            min="0"
+            required
+          />
+        </div>
         {/* size */}
         <div className="mb-6">
           <label
@@ -193,13 +254,10 @@ const EditProductPage = () => {
             name="sizes"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
             value={productData.sizes}
-            onChange={(e) =>
-              setProductData({
-                ...productData,
-                sizes: e.target.value.split(",").map((size) => size.trim()),
-              })
-            }
+            onChange={handleChange}
+            placeholder="12cm, 14cm, 16cm"
           />
+          <p className="text-xs text-gray-500 mt-1">Phân cách các kích thước bằng dấu phẩy</p>
         </div>
         {/* flavor */}
         <div className="mb-6">
@@ -214,15 +272,10 @@ const EditProductPage = () => {
             name="flavors"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
             value={productData.flavors}
-            onChange={(e) =>
-              setProductData({
-                ...productData,
-                flavors: e.target.value
-                  .split(",")
-                  .map((flavor) => flavor.trim()),
-              })
-            }
+            onChange={handleChange}
+            placeholder="Socola, Dâu, Vanilla"
           />
+          <p className="text-xs text-gray-500 mt-1">Phân cách các hương vị bằng dấu phẩy</p>
         </div>
         {/* images */}
         <div className="mb-6">
