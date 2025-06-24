@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
+const { protect } = require("../middleware/authMiddleware");
 
 require("dotenv").config();
 
@@ -20,9 +21,12 @@ const upload = multer({ storage });
 
 // @route POST /api/upload
 // @desc Upload image to Cloudinary
-// @access Public or Protected (tùy bạn)
-router.post("/", upload.single("image"), async (req, res) => {
+// @access Private
+router.post("/", protect, upload.single("image"), async (req, res) => {
   try {
+    console.log("Upload route hit by user:", req.user?.name);
+    console.log("File received:", req.file ? "Yes" : "No");
+    
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -43,7 +47,9 @@ router.post("/", upload.single("image"), async (req, res) => {
     };
 
     // Await the upload result
+    console.log("Starting Cloudinary upload...");
     const result = await streamUpload(req.file.buffer);
+    console.log("Upload successful, URL:", result.secure_url);
 
     // Respond with the uploaded image URL
     res.json({

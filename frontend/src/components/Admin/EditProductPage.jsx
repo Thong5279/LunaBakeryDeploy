@@ -50,16 +50,23 @@ const EditProductPage = () => {
 
     try {
       setUploading(true);
+      const baseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:9000";
+      const uploadUrl = `${baseUrl}/api/upload`;
+      console.log("Upload URL:", uploadUrl);
+      console.log("Environment:", import.meta.env.VITE_BACKEND_URL);
+      
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/products/upload`,
+        uploadUrl,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 
+            "Authorization": `Bearer ${localStorage.getItem("userToken")}`
+          },
         }
       );
       setProductData((prevData) => ({
         ...prevData,
-        images: [...prevData.images, { url: data.url, altText: "" }],
+        images: [...prevData.images, { url: data.imageUrl, altText: "" }],
       }));
       setUploading(false);
     } catch (error) {
@@ -208,6 +215,7 @@ const EditProductPage = () => {
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
             onChange={handleImageUpload}
           />
+          {uploading && <p className="text-blue-500 mt-2">Đang tải ảnh...</p>}
           <div className="flex gap-4 mt-4">
             {productData.images.map((image, index) => (
               <div key={index}>
