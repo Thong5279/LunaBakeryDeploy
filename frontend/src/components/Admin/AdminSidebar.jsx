@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaStore,
   FaUser,
+  FaChartBar,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -71,6 +72,19 @@ const AdminSidebar = () => {
         >
           <FaClipboardList className="text-pink-500"></FaClipboardList>
           <span className="">Đơn hàng</span>
+        </NavLink>
+        {/*  */}
+        <NavLink
+          to={"/admin/analytics"}
+          className={({ isActive }) =>
+            isActive
+              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
+              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+          }
+          end
+        >
+          <FaChartBar className="text-pink-500"></FaChartBar>
+          <span className="">Thống kê</span>
         </NavLink>
         {/*  */}
         <NavLink
