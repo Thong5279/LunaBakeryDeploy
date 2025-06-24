@@ -11,7 +11,7 @@ export const fetchAllUsers = createAsyncThunk("admin/fetchUsers", async () => {
       },
     }
   );
-  response.data;
+  return response.data;
 });
 //add the create user action
 export const addUser = createAsyncThunk(
