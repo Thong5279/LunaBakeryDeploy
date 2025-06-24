@@ -77,8 +77,24 @@ const EditProductPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateProduct(id, productData));
-    navigate("/admin/products");
+    console.log("Updating product with ID:", id);
+    console.log("Product data:", productData);
+    
+    if (!id) {
+      console.error("No product ID found!");
+      return;
+    }
+    
+    dispatch(updateProduct({ id, productData }))
+      .then((result) => {
+        console.log("Update result:", result);
+        if (result.type.endsWith("/fulfilled")) {
+          navigate("/admin/products");
+        }
+      })
+      .catch((error) => {
+        console.error("Update failed:", error);
+      });
   };
   if(loading) {
     return <p>Đang tải dữ liệu...</p>
