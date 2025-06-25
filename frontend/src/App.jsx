@@ -20,6 +20,8 @@ import EditProductPage from "./components/Admin/EditProductPage";
 import OderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import GoogleCallback from "./components/Auth/GoogleCallback";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
 
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
@@ -43,6 +45,8 @@ const App = () => {
             />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="payment-success" element={<PaymentSuccessPage />} />
+            <Route path="zalopay-return" element={<ZaloPayManualReturn />} />
             <Route
               path="orders-confirmation"
               element={<OderconfirmationPage />}
