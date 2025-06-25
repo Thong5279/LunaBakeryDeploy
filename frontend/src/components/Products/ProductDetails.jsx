@@ -19,8 +19,25 @@ const ProductDetails = ({ productId }) => {
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(0);
 
   const idToFetch = productId || routeID;
+
+  // Tính giá theo size đã chọn
+  const calculateCurrentPrice = () => {
+    if (!selectedProduct) return 0;
+    
+    // Nếu có sizePricing và đã chọn size
+    if (selectedProduct.sizePricing && selectedProduct.sizePricing.length > 0 && selectedSize) {
+      const sizePrice = selectedProduct.sizePricing.find(sp => sp.size === selectedSize);
+      if (sizePrice) {
+        return sizePrice.discountPrice || sizePrice.price;
+      }
+    }
+    
+    // Fallback về giá gốc
+    return selectedProduct.discountPrice || selectedProduct.price;
+  };
 
   useEffect(() => {
     if (idToFetch && idToFetch !== "undefined") {
@@ -36,10 +53,25 @@ const ProductDetails = ({ productId }) => {
     } else {
       setMainImage("https://via.placeholder.com/500x500?text=No+Image");
     }
+    
+    // Auto-select first size if available
+    if (selectedProduct?.sizes?.length > 0 && !selectedSize) {
+      setSelectedSize(selectedProduct.sizes[0]);
+    }
   }, [selectedProduct]);
+
+  // Cập nhật giá khi selectedSize hoặc selectedProduct thay đổi
+  useEffect(() => {
+    const newPrice = calculateCurrentPrice();
+    setCurrentPrice(newPrice);
+  }, [selectedSize, selectedProduct]);
 
   const handleQuantityChange = (action) => {
     setQuantity((prev) => (action === "plus" ? prev + 1 : Math.max(1, prev - 1)));
+  };
+
+  const handleSizeChange = (size) => {
+    setSelectedSize(size);
   };
 
   const handleAddToCart = () => {
@@ -112,13 +144,16 @@ const ProductDetails = ({ productId }) => {
           <div className="md:w-1/2 space-y-6">
             <h1 className="text-3xl font-bold text-pink-600">{selectedProduct.name}</h1>
 
+            {/* Hiển thị giá - chỉ 1 giá duy nhất */}
             <div className="space-y-1">
-              <p className="line-through text-gray-400">
-                {selectedProduct.originalPrice?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+              <p className="text-3xl text-pink-500 font-bold">
+                {currentPrice.toLocaleString("vi-VN")} ₫
               </p>
-              <p className="text-2xl text-pink-500 font-semibold">
-                {selectedProduct.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
-              </p>
+              {selectedSize && selectedProduct.sizePricing && (
+                <p className="text-sm text-blue-600">
+                  Giá cho size: {selectedSize}
+                </p>
+              )}
             </div>
 
             <p className="text-gray-600">{selectedProduct.description}</p>
@@ -130,12 +165,14 @@ const ProductDetails = ({ productId }) => {
                   selectedProduct.sizes.map((s) => (
                     <button
                       key={s}
-                      className={`px-4 py-1 rounded-full ${
-                        selectedSize === s ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
+                      className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                        selectedSize === s 
+                          ? "bg-pink-500 text-white border-pink-500 shadow-lg" 
+                          : "bg-white text-gray-700 border-gray-300 hover:border-pink-300"
                       }`}
-                      onClick={() => setSelectedSize(s)}
+                      onClick={() => handleSizeChange(s)}
                     >
-                      {s} cm
+                      {s.includes('cm') || s.includes('Size') || s.includes('Hộp') || s.includes('Nhỏ') || s.includes('Vừa') || s.includes('Lớn') ? s : `${s} cm`}
                     </button>
                   ))
                 ) : (
@@ -166,9 +203,19 @@ const ProductDetails = ({ productId }) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <button onClick={() => handleQuantityChange("minus")}>-</button>
-              <span>{quantity}</span>
-              <button onClick={() => handleQuantityChange("plus")}>+</button>
+              <button 
+                onClick={() => handleQuantityChange("minus")}
+                className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
+              >
+                -
+              </button>
+              <span className="px-4 py-1 border rounded">{quantity}</span>
+              <button 
+                onClick={() => handleQuantityChange("plus")}
+                className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
+              >
+                +
+              </button>
             </div>
 
             <motion.button

@@ -38,7 +38,8 @@ const PRODUCT_FLAVORS = [
   'Thơm/khớm',
   'Vải',
   'Dưa lưới',
-  'Cherry'
+  'Cherry',
+  'Truyền thống'
 ];
 
 // Các size phổ biến
@@ -54,7 +55,8 @@ const PRODUCT_SIZES = [
   'Lớn',
   'Size S',
   'Size M',
-  'Size L'
+  'Size L',
+  'Hộp thiết'
 ];
 
 module.exports = {

@@ -2,6 +2,37 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductGrid = ({ products ,loading, error }) => {
+  // Hàm tính giá hiển thị cho sản phẩm
+  const getDisplayPrice = (product) => {
+    // Ưu tiên discountPrice nếu có
+    if (product.discountPrice) {
+      return product.discountPrice;
+    }
+    
+    // Nếu có sizePricing, lấy giá thấp nhất
+    if (product.sizePricing && product.sizePricing.length > 0) {
+      const lowestPrice = Math.min(...product.sizePricing.map(sp => sp.discountPrice || sp.price));
+      return lowestPrice;
+    }
+    
+    // Fallback về giá gốc
+    return product.price;
+  };
+
+  const getMinMaxPriceText = (product) => {
+    if (product.sizePricing && product.sizePricing.length > 1) {
+      const prices = product.sizePricing.map(sp => sp.discountPrice || sp.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      
+      if (minPrice !== maxPrice) {
+        return `${minPrice.toLocaleString("vi-VN")} - ${maxPrice.toLocaleString("vi-VN")} ₫`;
+      }
+    }
+    
+    return `${getDisplayPrice(product).toLocaleString("vi-VN")} ₫`;
+  };
+
   if (loading) {
     return <div className="text-center text-gray-500">Loading...</div>;
   }
@@ -22,7 +53,7 @@ const ProductGrid = ({ products ,loading, error }) => {
 
         return (
           <Link key={index} to={`/product/${product._id}`} className="block">
-            <div className="bg-white p-4 rounded-lg">
+            <div className="bg-white p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
               <div className="w-full h-96 mb-4">
                 <img
                   src={imageUrl}
@@ -30,17 +61,19 @@ const ProductGrid = ({ products ,loading, error }) => {
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
-              <h3 className="text-sm mb-2">
+              <h3 className="text-sm mb-2 font-medium">
                   {product.name.length > 25
                       ? `${product.name.slice(0, 25)}...`
                       : product.name}
               </h3>
-             <p className="text-gray-500 font-medium text-sm tracking-tighter">
-               {product.price.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                   })}
+             <p className="text-pink-500 font-bold text-sm">
+               {getMinMaxPriceText(product)}
              </p>
+             {product.sizePricing && product.sizePricing.length > 1 && (
+               <p className="text-xs text-gray-500 mt-1">
+                 {product.sizes?.length} kích thước
+               </p>
+             )}
             </div>
           </Link>
         );

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAdminProducts, deleteProduct, createProduct } from "../../redux/slices/adminProductSlice";
-import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
-
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
@@ -24,6 +23,23 @@ const ProductManagement = () => {
     flavors: [],
     countInStock: "10"
   });
+
+  // Tính giá tự động cho các size
+  const calculateSizePricing = (basePrice, selectedSizes) => {
+    if (!basePrice || selectedSizes.length === 0) return [];
+    
+    const sortedSizes = [...selectedSizes].sort((a, b) => {
+      // Sắp xếp size theo thứ tự tăng dần
+      const sizeOrder = PRODUCT_SIZES.indexOf(a) - PRODUCT_SIZES.indexOf(b);
+      return sizeOrder;
+    });
+
+    return sortedSizes.map((size, index) => ({
+      size,
+      price: Number(basePrice) + (index * SIZE_PRICE_INCREMENT),
+      discountPrice: 0
+    }));
+  };
 
   useEffect(() => {
     dispatch(fetchAdminProducts());
@@ -76,10 +92,14 @@ const ProductManagement = () => {
   const handleSubmitNewProduct = (e) => {
     e.preventDefault();
     
+    // Tính giá cho từng size
+    const sizePricing = calculateSizePricing(newProduct.price, newProduct.sizes);
+    
     const productData = {
       ...newProduct,
       price: Number(newProduct.price),
       countInStock: Number(newProduct.countInStock),
+      sizePricing
     };
 
     console.log("Sending product data:", productData);
@@ -98,6 +118,9 @@ const ProductManagement = () => {
         setCreateError("Có lỗi xảy ra khi thêm sản phẩm");
       });
   };
+
+  // Tính preview giá cho các size đã chọn
+  const sizePricingPreview = calculateSizePricing(newProduct.price, newProduct.sizes);
 
   if(loading) {
     return <p>Đang tải dữ liệu...</p>
@@ -309,6 +332,26 @@ const ProductManagement = () => {
                 <p className="text-xs text-gray-500 mt-1">
                   Đã chọn: {newProduct.sizes.join(", ") || "Chưa chọn"}
                 </p>
+                
+                {/* Preview giá theo size */}
+                {sizePricingPreview.length > 0 && (
+                  <div className="mt-3 p-2 bg-gray-50 rounded-md">
+                    <p className="text-sm font-medium text-gray-700 mb-2">Preview giá theo size:</p>
+                    <div className="space-y-1">
+                      {sizePricingPreview.map((sizePrice, index) => (
+                        <div key={index} className="flex justify-between text-xs text-gray-600">
+                          <span>{sizePrice.size}:</span>
+                          <span className="font-medium">
+                            {new Intl.NumberFormat("vi-VN").format(sizePrice.price)} VNĐ
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-blue-600 mt-2">
+                      * Mỗi size tăng {SIZE_PRICE_INCREMENT.toLocaleString()} VNĐ
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="mb-6">

@@ -276,36 +276,26 @@ const Checkout = () => {
                   <p className="text-gray-500 text-xs mt-1">Số lượng: 1</p>
                 </div>
               </div>
-              <p className="text-xl">
-                {product.price?.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}
+              <p className="text-xl font-semibold text-pink-500">
+                {product.price?.toLocaleString("vi-VN")} ₫
               </p>
             </div>
           ))}
         </div>
         <div className="flex justify-between items-center text-lg mb-4">
           <p>Tổng giá sản phẩm</p>
-          <p>
-            $
-            {cart.totalPrice?.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
+          <p className="font-semibold text-pink-500">
+            {cart.totalPrice?.toLocaleString("vi-VN")} ₫
           </p>
         </div>
         <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
           <p> Phí vận chuyển </p>
           <p>miễn phí</p>
         </div>
-        <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
+        <div className="flex justify-between items-center text-xl font-bold mt-4 border-t pt-4">
           <p>Tổng cộng</p>
-          <p>
-            {cart.totalPrice?.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
+          <p className="text-pink-500">
+            {cart.totalPrice?.toLocaleString("vi-VN")} ₫
           </p>
         </div>
       </div>

@@ -14,10 +14,24 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
+    // Đây sẽ là giá base, giá theo size sẽ được tính từ đây
   },
   discountPrice: {
     type: Number,
   },
+  sizePricing: [{
+    size: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    discountPrice: {
+      type: Number
+    }
+  }],
   countInStock: {
     //kiểm tra hàng còn hay không
     type: Number,

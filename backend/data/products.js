@@ -5,13 +5,18 @@ const products = [
   {
     "name": "Bánh Kem Dâu Tươi",
     "description": "Bánh kem mềm mịn với lớp kem tươi thơm ngon và dâu tây tươi ngọt, thích hợp cho sinh nhật và các dịp đặc biệt.",
-    "price": 350000,
-    "discountPrice": 320000,
+    "price": 320000,
+    "discountPrice": 300000,
     "countInStock": 15,
     "sku": "BK-001",
     "category": "Bánh kem",
     "sizes": ["18cm", "20cm", "22cm"],
-    "flavors": ["Dâu"],
+    "sizePricing": [
+      { "size": "18cm", "price": 320000, "discountPrice": 300000 },
+      { "size": "20cm", "price": 370000, "discountPrice": 350000 },
+      { "size": "22cm", "price": 420000, "discountPrice": 400000 }
+    ],
+    "flavors": ["Dâu", "Truyền thống"],
     "images": [
       {
         "url": "https://picsum.photos/500/500?random=1",
@@ -26,13 +31,19 @@ const products = [
   {
     "name": "Bánh Kem Socola Đen",
     "description": "Bánh kem socola đậm đà với lớp ganache mềm mịn, dành cho những người yêu thích vị đắng ngọt của socola.",
-    "price": 380000,
-    "discountPrice": 350000,
+    "price": 350000,
+    "discountPrice": 330000,
     "countInStock": 12,
     "sku": "BK-002",
     "category": "Bánh kem",
-    "sizes": ["18cm", "20cm", "22cm"],
-    "flavors": ["Socola"],
+    "sizes": ["18cm", "20cm", "22cm", "25cm"],
+    "sizePricing": [
+      { "size": "18cm", "price": 350000, "discountPrice": 330000 },
+      { "size": "20cm", "price": 400000, "discountPrice": 380000 },
+      { "size": "22cm", "price": 450000, "discountPrice": 430000 },
+      { "size": "25cm", "price": 500000, "discountPrice": 480000 }
+    ],
+    "flavors": ["Socola", "Truyền thống"],
     "images": [
       {
         "url": "https://picsum.photos/500/500?random=2",
@@ -49,13 +60,18 @@ const products = [
   {
     "name": "Bánh Tiramisu Matcha",
     "description": "Bánh tiramisu với hương vị matcha đặc trưng, mát lạnh và thơm ngon, hoàn hảo cho mùa hè.",
-    "price": 450000,
-    "discountPrice": 420000,
+    "price": 420000,
+    "discountPrice": 400000,
     "countInStock": 8,
     "sku": "BL-001",
     "category": "Bánh lạnh",
-    "sizes": ["Vừa", "Lớn"],
-    "flavors": ["Matcha"],
+    "sizes": ["Vừa", "Lớn", "Hộp thiết"],
+    "sizePricing": [
+      { "size": "Vừa", "price": 420000, "discountPrice": 400000 },
+      { "size": "Lớn", "price": 470000, "discountPrice": 450000 },
+      { "size": "Hộp thiết", "price": 520000, "discountPrice": 500000 }
+    ],
+    "flavors": ["Matcha", "Truyền thống"],
     "images": [
       {
         "url": "https://picsum.photos/500/500?random=3",
@@ -72,13 +88,18 @@ const products = [
   {
     "name": "Macaron Mix 12 Chiếc",
     "description": "Hộp 12 chiếc macaron với 6 vị khác nhau: dâu, socola, matcha, chanh, vải, và hạt dẻ cười.",
-    "price": 180000,
-    "discountPrice": 160000,
+    "price": 160000,
+    "discountPrice": 150000,
     "countInStock": 20,
     "sku": "MC-001",
     "category": "Macaron",
-    "sizes": ["Hộp 12 chiếc"],
-    "flavors": ["Dâu", "Socola", "Matcha", "Chanh", "Vải", "Hạt dẻ cười"],
+    "sizes": ["Hộp thiết", "Size M", "Size L"],
+    "sizePricing": [
+      { "size": "Hộp thiết", "price": 160000, "discountPrice": 150000 },
+      { "size": "Size M", "price": 210000, "discountPrice": 200000 },
+      { "size": "Size L", "price": 260000, "discountPrice": 250000 }
+    ],
+    "flavors": ["Dâu", "Socola", "Matcha", "Chanh", "Vải", "Hạt dẻ cười", "Truyền thống"],
     "images": [
       {
         "url": "https://picsum.photos/500/500?random=4",

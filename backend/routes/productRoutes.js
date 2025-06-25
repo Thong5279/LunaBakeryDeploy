@@ -24,6 +24,7 @@ router.post("/", protect, admin, async (req, res) => {
       images,
       isFeatured,
       isPublished,
+      sizePricing,
     } = req.body;
 
     const product = new Product({
@@ -39,6 +40,7 @@ router.post("/", protect, admin, async (req, res) => {
       images,
       isFeatured,
       isPublished,
+      sizePricing,
       user: req.user._id, // id của admin người tạo sản phẩm
     });
 
@@ -69,6 +71,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       images,
       isFeatured,
       isPublished,
+      sizePricing,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -84,6 +87,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       product.sizes = sizes || product.sizes;
       product.flavors = flavors || product.flavors;
       product.images = images || product.images;
+      product.sizePricing = sizePricing || product.sizePricing;
       product.isFeatured =
         isFeatured !== undefined ? isFeatured : product.isFeatured;
       product.isPublished =
@@ -271,6 +275,45 @@ router.get("/similar/:id", async (req, res) => {
   } catch (error) {
     console.error("Error fetching similar products:", error);
     res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+});
+
+//@route PUT /api/products/:id/add-size-pricing
+//@desc Add sizePricing to existing product
+//@access Private (Admin)
+router.put("/:id/add-size-pricing", protect, admin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+
+    if (product) {
+      // Tính sizePricing tự động dựa trên sizes hiện có
+      const basePrice = product.discountPrice || product.price;
+      const sizePricing = [];
+      
+      if (product.sizes && product.sizes.length > 0) {
+        product.sizes.forEach((size, index) => {
+          sizePricing.push({
+            size: size,
+            price: basePrice + (index * 50000), // Mỗi size tăng 50k
+            discountPrice: basePrice + (index * 50000)
+          });
+        });
+      }
+
+      product.sizePricing = sizePricing;
+      const updatedProduct = await product.save();
+      
+      res.json({
+        message: "SizePricing added successfully",
+        product: updatedProduct
+      });
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error adding sizePricing:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

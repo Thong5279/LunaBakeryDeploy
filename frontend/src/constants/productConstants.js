@@ -38,7 +38,8 @@ export const PRODUCT_FLAVORS = [
   'Thơm/khớm',
   'Vải',
   'Dưa lưới',
-  'Cherry'
+  'Cherry',
+  'Truyền thống'
 ];
 
 // Các size phổ biến
@@ -54,5 +55,9 @@ export const PRODUCT_SIZES = [
   'Lớn',
   'Size S',
   'Size M',
-  'Size L'
-]; 
+  'Size L',
+  'Hộp thiết'
+];
+
+// Cấu hình giá theo size (cách nhau 50,000 VNĐ)
+export const SIZE_PRICE_INCREMENT = 50000; 

@@ -19,6 +19,21 @@ const getCart = async (userId, guestId) => {
   }
 };
 
+// Helper function to calculate price based on size
+const calculatePriceBySize = (product, size) => {
+  // Nếu có sizePricing và size được chọn
+  if (product.sizePricing && product.sizePricing.length > 0 && size) {
+    const sizePrice = product.sizePricing.find(sp => sp.size === size);
+    if (sizePrice) {
+      // Ưu tiên discountPrice nếu có, không thì lấy price
+      return sizePrice.discountPrice || sizePrice.price;
+    }
+  }
+  
+  // Fallback về giá gốc - ưu tiên discountPrice
+  return product.discountPrice || product.price;
+};
+
 // @route POST /api/cart
 // @desc Add product to cart for a guest or logged-in user  .  Thêm sản phẩm vào giỏ hàng cho khách hoặc người dùng đã đăng nhập
 // @access Public
@@ -31,6 +46,9 @@ router.post("/", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    // Tính giá theo size đã chọn
+    const priceBySize = calculatePriceBySize(product, size);
 
     //determine if the user is logged in or a guest
     let cart = await getCart(userId, guestId);
@@ -53,7 +71,7 @@ router.post("/", async (req, res) => {
           productId: product._id,
           name: product.name,
           image: product.images[0]?.url || "",
-          price: product.price,
+          price: priceBySize, // Sử dụng giá đã tính theo size
           quantity,
           size,
           flavor,
@@ -75,13 +93,13 @@ router.post("/", async (req, res) => {
             productId,
             name: product.name,
             image: product.images[0].url, // Assuming the first image is the main one
-            price: product.price,
+            price: priceBySize, // Sử dụng giá đã tính theo size
             quantity,
             size,
             flavor,
           },
         ],
-        totalPrice: product.price * quantity,
+        totalPrice: priceBySize * quantity, // Sử dụng giá đã tính theo size
       });
       return res.status(201).json(newCart);
     }

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductDetails } from "../../redux/slices/productsSlice";
 import { updateProduct } from "../../redux/slices/adminProductSlice"; 
 import axios from "axios";
-import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
 
 const EditProductPage = () => {
   const dispatch = useDispatch();
@@ -14,11 +14,29 @@ const EditProductPage = () => {
     (state) => state.products
   );
   const [uploading, setUploading] = useState(false);
+  
+  // Tính giá tự động cho các size
+  const calculateSizePricing = (basePrice, selectedSizes) => {
+    if (!basePrice || selectedSizes.length === 0) return [];
+    
+    const sortedSizes = [...selectedSizes].sort((a, b) => {
+      const sizeOrder = PRODUCT_SIZES.indexOf(a) - PRODUCT_SIZES.indexOf(b);
+      return sizeOrder;
+    });
+
+    return sortedSizes.map((size, index) => ({
+      size,
+      price: Number(basePrice) + (index * SIZE_PRICE_INCREMENT),
+      discountPrice: 0
+    }));
+  };
+
   useEffect(() => {
     if (id) {
       dispatch(fetchProductDetails(id));
     }
   }, [id, dispatch]);
+  
   useEffect(() => {
     if (selectedProduct) {
       setProductData({
@@ -59,6 +77,9 @@ const EditProductPage = () => {
         : prev[type].filter(item => item !== value)
     }));
   };
+
+  // Tính preview giá cho các size đã chọn
+  const sizePricingPreview = calculateSizePricing(productData.price, productData.sizes);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -109,10 +130,14 @@ const EditProductPage = () => {
       return;
     }
 
+    // Tính giá cho từng size
+    const sizePricing = calculateSizePricing(productData.price, productData.sizes);
+
     const formattedData = {
       ...productData,
       price: Number(productData.price),
       countInStock: Number(productData.countInStock),
+      sizePricing
     };
     
     dispatch(updateProduct({ id, productData: formattedData }))
@@ -269,6 +294,26 @@ const EditProductPage = () => {
           <p className="text-xs text-gray-500 mt-1">
             Đã chọn: {productData.sizes.join(", ") || "Chưa chọn"}
           </p>
+          
+          {/* Preview giá theo size */}
+          {sizePricingPreview.length > 0 && (
+            <div className="mt-3 p-2 bg-gray-50 rounded-md">
+              <p className="text-sm font-medium text-gray-700 mb-2">Preview giá theo size:</p>
+              <div className="space-y-1">
+                {sizePricingPreview.map((sizePrice, index) => (
+                  <div key={index} className="flex justify-between text-xs text-gray-600">
+                    <span>{sizePrice.size}:</span>
+                    <span className="font-medium">
+                      {new Intl.NumberFormat("vi-VN").format(sizePrice.price)} VNĐ
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-blue-600 mt-2">
+                * Mỗi size tăng {SIZE_PRICE_INCREMENT.toLocaleString()} VNĐ
+              </p>
+            </div>
+          )}
         </div>
         {/* flavor */}
         <div className="mb-6">

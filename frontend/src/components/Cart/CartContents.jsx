@@ -91,11 +91,8 @@ const CartContents = ({ cart, userId, guestId }) => {
             </div>
 
             <div className="mt-2 flex items-center justify-between">
-              <p className="text-lg font-semibold text-gray-900">
-                {product.price.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}
+              <p className="text-lg font-semibold text-pink-500">
+                {product.price.toLocaleString("vi-VN")} ₫
               </p>
               <button
                 className="text-[#814d81] hover:text-[#a37ba3] transition"

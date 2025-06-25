@@ -58,6 +58,23 @@ const NewArrivals = () => {
     };
   }, [newArrivals]);
 
+  // Hàm tính giá hiển thị cho sản phẩm
+  const getDisplayPrice = (product) => {
+    // Ưu tiên discountPrice nếu có
+    if (product.discountPrice) {
+      return product.discountPrice;
+    }
+    
+    // Nếu có sizePricing, lấy giá thấp nhất
+    if (product.sizePricing && product.sizePricing.length > 0) {
+      const lowestPrice = Math.min(...product.sizePricing.map(sp => sp.discountPrice || sp.price));
+      return lowestPrice;
+    }
+    
+    // Fallback về giá gốc
+    return product.price;
+  };
+
   return (
     <section>
       <div className="max-w-screen-xl mx-auto text-center mb-10 relative px-4">
@@ -118,8 +135,8 @@ const NewArrivals = () => {
                 <h4 className="text-xl font-semibold group-hover:text-pink-400 transition duration-300">
                   {product.name}
                 </h4>
-                <p className="mt-1 font-medium text-lg text-pink-200">
-                  {product.price.toLocaleString()}đ
+                <p className="text-pink-500 font-bold text-sm">
+                  {getDisplayPrice(product).toLocaleString("vi-VN")} ₫
                 </p>
               </Link>
             </div>
