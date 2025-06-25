@@ -5,6 +5,45 @@ const mongoose = require("mongoose");
 
 const router = express.Router();
 
+// Hàm helper để tự động tạo sizePricing (giống với productAdminRoutes.js)
+const generateSizePricing = (sizes, basePrice) => {
+  if (!sizes || sizes.length === 0) {
+      return [];
+  }
+
+  // Hàm xác định increment cho từng loại size
+  const getSizeIncrement = (size) => {
+      const sizeStr = size.toLowerCase();
+      
+      // Size nhỏ, vừa, lớn - cách nhau 10,000
+      if (sizeStr.includes('nhỏ') || sizeStr.includes('vừa') || sizeStr.includes('lớn')) {
+          return 10000;
+      }
+      
+      // Size S, M, L - cách nhau 5,000
+      if (sizeStr === 's' || sizeStr === 'm' || sizeStr === 'l' || 
+          sizeStr === 'size s' || sizeStr === 'size m' || sizeStr === 'size l') {
+          return 5000;
+      }
+      
+      // Các size khác (18cm, 20cm, 22cm...) - cách nhau 50,000
+      return 50000;
+  };
+
+  const increment = getSizeIncrement(sizes[0]);
+  const sizePricing = [];
+
+  sizes.forEach((size, index) => {
+      sizePricing.push({
+          size: size,
+          price: basePrice + (index * increment),
+          discountPrice: basePrice + (index * increment)
+      });
+  });
+
+  return sizePricing;
+};
+
 //@route POST /api/products
 //@desc Create a new product
 //@access Private (Admin)
@@ -31,7 +70,7 @@ router.post("/", protect, admin, async (req, res) => {
       name,
       description,
       price,
-      discountPrice,
+      discountPrice: discountPrice || price,
       countInStock,
       sku,
       category,
@@ -43,6 +82,14 @@ router.post("/", protect, admin, async (req, res) => {
       sizePricing,
       user: req.user._id, // id của admin người tạo sản phẩm
     });
+
+    // Tự động tạo sizePricing nếu có sizes và chưa có sizePricing
+    if (sizes && sizes.length > 0 && (!sizePricing || sizePricing.length === 0)) {
+      const basePrice = discountPrice || price;
+      product.sizePricing = generateSizePricing(sizes, basePrice);
+      console.log(`✅ Tự động tạo sizePricing cho sản phẩm mới: ${name}`);
+      console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
+    }
 
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
@@ -93,6 +140,15 @@ router.put("/:id", protect, admin, async (req, res) => {
       product.isPublished =
         isPublished !== undefined ? isPublished : product.isPublished;
 
+      // Tự động tạo sizePricing nếu có sizes và chưa có sizePricing hoặc sizePricing rỗng
+      if (product.sizes && product.sizes.length > 0 && 
+          (!product.sizePricing || product.sizePricing.length === 0)) {
+          const basePrice = product.discountPrice || product.price;
+          product.sizePricing = generateSizePricing(product.sizes, basePrice);
+          console.log(`✅ Tự động tạo sizePricing cho sản phẩm: ${product.name}`);
+          console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
+      }
+
       const updatedProduct = await product.save();
       res.json(updatedProduct);
     } else {
@@ -103,6 +159,8 @@ router.put("/:id", protect, admin, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// ... existing code ...
 
 //@Route DELETE /api/products/:id
 //@desc Delete a product
@@ -287,21 +345,13 @@ router.put("/:id/add-size-pricing", protect, admin, async (req, res) => {
     const product = await Product.findById(id);
 
     if (product) {
-      // Tính sizePricing tự động dựa trên sizes hiện có
+      // Sử dụng hàm generateSizePricing mới
       const basePrice = product.discountPrice || product.price;
-      const sizePricing = [];
       
       if (product.sizes && product.sizes.length > 0) {
-        product.sizes.forEach((size, index) => {
-          sizePricing.push({
-            size: size,
-            price: basePrice + (index * 50000), // Mỗi size tăng 50k
-            discountPrice: basePrice + (index * 50000)
-          });
-        });
+        product.sizePricing = generateSizePricing(product.sizes, basePrice);
       }
 
-      product.sizePricing = sizePricing;
       const updatedProduct = await product.save();
       
       res.json({

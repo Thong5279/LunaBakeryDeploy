@@ -4,6 +4,45 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+// Hàm helper để tự động tạo sizePricing
+const generateSizePricing = (sizes, basePrice) => {
+    if (!sizes || sizes.length === 0) {
+        return [];
+    }
+
+    // Hàm xác định increment cho từng loại size
+    const getSizeIncrement = (size) => {
+        const sizeStr = size.toLowerCase();
+        
+        // Size nhỏ, vừa, lớn - cách nhau 10,000
+        if (sizeStr.includes('nhỏ') || sizeStr.includes('vừa') || sizeStr.includes('lớn')) {
+            return 10000;
+        }
+        
+        // Size S, M, L - cách nhau 5,000
+        if (sizeStr === 's' || sizeStr === 'm' || sizeStr === 'l' || 
+            sizeStr === 'size s' || sizeStr === 'size m' || sizeStr === 'size l') {
+            return 5000;
+        }
+        
+        // Các size khác (18cm, 20cm, 22cm...) - cách nhau 50,000
+        return 50000;
+    };
+
+    const increment = getSizeIncrement(sizes[0]);
+    const sizePricing = [];
+
+    sizes.forEach((size, index) => {
+        sizePricing.push({
+            size: size,
+            price: basePrice + (index * increment),
+            discountPrice: basePrice + (index * increment)
+        });
+    });
+
+    return sizePricing;
+};
+
 //@route GET /api/admin/products
 //@desc Get all products for admin
 //@access Private/Admin
@@ -37,6 +76,15 @@ router.put("/:id", protect, admin, async (req, res) => {
         product.images = req.body.images || product.images;
         product.sizes = req.body.sizes || product.sizes;
         product.flavors = req.body.flavors || product.flavors;
+
+        // Tự động tạo sizePricing nếu có sizes và chưa có sizePricing hoặc sizePricing rỗng
+        if (product.sizes && product.sizes.length > 0 && 
+            (!product.sizePricing || product.sizePricing.length === 0)) {
+            const basePrice = req.body.discountPrice || req.body.price || product.discountPrice || product.price;
+            product.sizePricing = generateSizePricing(product.sizes, basePrice);
+            console.log(`✅ Tự động tạo sizePricing cho sản phẩm: ${product.name}`);
+            console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
+        }
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
@@ -79,7 +127,8 @@ router.post("/", protect, admin, async (req, res) => {
             images,
             sizes,
             flavors,
-            countInStock
+            countInStock,
+            discountPrice
         } = req.body;
 
         console.log("Creating product with data:", req.body);
@@ -95,8 +144,17 @@ router.post("/", protect, admin, async (req, res) => {
             flavors: flavors || [],
             countInStock: countInStock || 10, // Default stock
             user: req.user._id, // Set the admin user as creator
-            isPublished: true // Make it published by default
+            isPublished: true, // Make it published by default
+            discountPrice: discountPrice || price
         });
+
+        // Tự động tạo sizePricing nếu có sizes
+        if (sizes && sizes.length > 0) {
+            const basePrice = discountPrice || price;
+            product.sizePricing = generateSizePricing(sizes, basePrice);
+            console.log(`✅ Tự động tạo sizePricing cho sản phẩm mới: ${name}`);
+            console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
+        }
 
         const createdProduct = await product.save();
         res.status(201).json(createdProduct);
