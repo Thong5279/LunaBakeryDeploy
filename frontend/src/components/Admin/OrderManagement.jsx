@@ -57,7 +57,7 @@ useEffect(() => {
                   <td className="py-4 px-4 font-medium text-gray-900 whitespace-nowrap">
                     #{order._id}
                   </td>
-                  <td className="p-4">{order.user.name}</td>
+                  <td className="p-4">{order.user?.name || "Không xác định"}</td>
                   <td className="p-4">
                     {new Intl.NumberFormat("vi-VN").format(order.totalPrice)} vnđ
                   </td>

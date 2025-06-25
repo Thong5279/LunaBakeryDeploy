@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAdminProducts } from "../redux/slices/adminProductSlice";
 import { fetchAllOrders } from "../redux/slices/adminOrderSlice";
 
+
 const AdminHomePage = () => {
   const dispatch = useDispatch();
   const {
@@ -27,6 +28,7 @@ const AdminHomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+
       <h1 className="text-3xl font-bold mb-6">Trang quản trị viên </h1>
       {productLoading || orderLoading ? (
         <p>Đang tải dữ liệu...</p>
@@ -75,7 +77,7 @@ const AdminHomePage = () => {
                   className="border-b hover:bg-gray-50 cursor-pointer"
                 >
                   <td className="py-3 px-4">#{order._id}</td>
-                  <td className="py-3 px-4">{order.user.name}</td>
+                  <td className="py-3 px-4">{order.user?.name || "Không xác định"}</td>
                   <td className="py-3 px-4">
                     {new Intl.NumberFormat("vi-VN").format(order.totalPrice)}{" "}
                     vnđ

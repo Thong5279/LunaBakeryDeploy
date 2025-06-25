@@ -22,6 +22,8 @@ import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import GoogleCallback from "./components/Auth/GoogleCallback";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
+import PaymentReturnHelper from "./pages/PaymentReturnHelper";
+import ZaloPayInstructions from "./pages/ZaloPayInstructions";
 
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
@@ -47,6 +49,8 @@ const App = () => {
             <Route path="checkout" element={<Checkout />} />
             <Route path="payment-success" element={<PaymentSuccessPage />} />
             <Route path="zalopay-return" element={<ZaloPayManualReturn />} />
+            <Route path="zalopay-instructions" element={<ZaloPayInstructions />} />
+            <Route path="payment-helper" element={<PaymentReturnHelper />} />
             <Route
               path="orders-confirmation"
               element={<OderconfirmationPage />}

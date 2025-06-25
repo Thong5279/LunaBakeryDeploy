@@ -91,6 +91,8 @@ const Checkout = () => {
 
   const handlePaymentSuccess = async (details) => {
     try {
+      console.log('🎯 PayPal payment success:', details);
+      
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
         { paymentStatus: "paid", paymentDetails: details },
@@ -102,12 +104,25 @@ const Checkout = () => {
       );
       
       if (response.status === 200) {
-        await handleFinalizeCheckout(checkoutId);
+        // Finalize checkout KHÔNG navigate
+        await handleFinalizeCheckoutSilent(checkoutId);
+        
         // Clear cart sau khi thanh toán thành công
         dispatch(clearCart());
         // Xóa checkoutId khỏi localStorage
         localStorage.removeItem('currentCheckoutId');
-        toast.success("Thanh toán thành công!");
+        
+        // Redirect đến payment success page với thông tin PayPal
+        const paymentParams = new URLSearchParams({
+          method: 'PayPal',
+          transactionId: details.id || details.orderID,
+          amount: cart.totalPrice,
+          status: 'success'
+        });
+        
+        console.log('🔄 Redirecting to payment success with params:', paymentParams.toString());
+        navigate(`/payment-success?${paymentParams.toString()}`);
+        toast.success("Thanh toán PayPal thành công!");
       }
     } catch (error) {
       console.log("Lỗi thanh toán:", error);
@@ -129,7 +144,7 @@ const Checkout = () => {
     try {
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
-        { source: 'PayPalCheckout' }, // Thêm identifier
+        { source: 'GeneralCheckout' },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
@@ -140,6 +155,25 @@ const Checkout = () => {
     } catch (error) {
       console.log("Lỗi finalize checkout:", error);
       toast.error("Có lỗi xảy ra khi hoàn tất đơn hàng");
+    }
+  };
+
+  // Finalize without navigation (for PayPal)
+  const handleFinalizeCheckoutSilent = async (checkoutId) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
+        { source: 'PayPalCheckout' },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      console.log('✅ PayPal checkout finalized silently');
+    } catch (error) {
+      console.log("Lỗi finalize checkout:", error);
+      throw error; // Re-throw để handle ở level trên
     }
   };
 
@@ -350,14 +384,24 @@ const Checkout = () => {
 
               {/* Submit Button */}
               {!checkoutId ? (
-                <motion.button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Tiếp tục thanh toán
-                </motion.button>
+                <div className="space-y-3">
+                  <motion.button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Tiếp tục thanh toán
+                  </motion.button>
+                  
+                  {process.env.NODE_ENV === 'development' && (
+                    <div className="text-center">
+                      <p className="text-xs text-gray-500">
+                        💡 Debug: CheckoutId sẽ được tạo và lưu vào localStorage
+                      </p>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">

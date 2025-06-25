@@ -97,41 +97,62 @@ const PaymentSuccessPage = () => {
   useEffect(() => {
     const checkPaymentStatus = async () => {
       try {
-        // Lấy parameters từ URL (ZaloPay sẽ redirect với các params này)
+        // Lấy parameters từ URL
         const status = searchParams.get('status');
         const app_trans_id = searchParams.get('apptransid');
         const amount = searchParams.get('amount');
+        const method = searchParams.get('method');
+        const transactionId = searchParams.get('transactionId');
         
-        console.log('🔍 Payment callback params:', { status, app_trans_id, amount });
+        console.log('🔍 Payment callback params:', { status, app_trans_id, amount, method, transactionId });
+        console.log('🔍 All URL params:', Object.fromEntries(searchParams.entries()));
 
-        if (status === '1') {
-          // Thanh toán ZaloPay thành công
+        if (status === 'success' || status === '1') {
+          // Thanh toán thành công (PayPal hoặc ZaloPay)
           setPaymentStatus('success');
-          setPaymentDetails({
-            transactionId: app_trans_id || 'N/A',
-            amount: amount || '0',
-            method: 'ZaloPay'
-          });
-          toast.success('Thanh toán ZaloPay thành công!');
           
-          // Chỉ finalize cho ZaloPay (có app_trans_id)
-          if (app_trans_id) {
-            await finalizeCheckout(app_trans_id);
+          if (method === 'PayPal') {
+            // PayPal success
+            setPaymentDetails({
+              transactionId: transactionId || 'N/A',
+              amount: amount || '0',
+              method: 'PayPal'
+            });
+            toast.success('Thanh toán PayPal thành công!');
+            
+            // PayPal đã finalize rồi, chỉ cần redirect
+            setTimeout(() => {
+              navigate('/orders-confirmation');
+            }, 3000);
+            
+          } else {
+            // ZaloPay success
+            setPaymentDetails({
+              transactionId: app_trans_id || transactionId || 'N/A',
+              amount: amount || '0',
+              method: 'ZaloPay'
+            });
+            toast.success('Thanh toán ZaloPay thành công!');
+            
+            // Chỉ finalize cho ZaloPay (có app_trans_id)
+            if (app_trans_id || transactionId) {
+              await finalizeCheckout(app_trans_id || transactionId);
+            }
+            
+            // Redirect đến trang order confirmation sau 3 giây
+            setTimeout(() => {
+              navigate('/orders-confirmation');
+            }, 3000);
           }
-          
-          // Redirect đến trang order confirmation sau 3 giây
-          setTimeout(() => {
-            navigate('/orders-confirmation');
-          }, 3000);
           
         } else if (status === '0') {
           // Thanh toán thất bại
           setPaymentStatus('failed');
-          toast.error('Thanh toán ZaloPay thất bại!');
+          toast.error('Thanh toán thất bại!');
         } else {
           // Không có thông tin thanh toán hoặc đang processing
           if (!status) {
-            // Có thể là PayPal hoặc trường hợp khác
+            // Có thể đang processing
             setPaymentStatus('processing');
           } else {
             setPaymentStatus('failed');
@@ -244,6 +265,14 @@ const PaymentSuccessPage = () => {
                     <span className="text-blue-600">{paymentDetails.method}</span>
                   </div>
                 </div>
+                
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-2">
+                    <p className="text-xs text-gray-600 font-mono">
+                      Debug: {JSON.stringify(Object.fromEntries(searchParams.entries()), null, 2)}
+                    </p>
+                  </div>
+                )}
               </motion.div>
             )}
 

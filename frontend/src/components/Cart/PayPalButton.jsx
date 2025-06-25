@@ -17,8 +17,12 @@ const PayPalButton = ({amount, onSuccess , onError}) => {
             });
         }}
         onApprove={async (data, actions) => {
-            return actions.order.capture().then(onSuccess)
-            }}
+            console.log('💰 PayPal onApprove called:', data);
+            return actions.order.capture().then((details) => {
+                console.log('💰 PayPal capture success:', details);
+                onSuccess(details);
+            });
+        }}
         onError={onError}
         />
     </PayPalScriptProvider>

@@ -61,7 +61,8 @@ router.post("/zalopay/create", protect, async (req, res) => {
       res.json({
         success: true,
         paymentUrl: response.data.order_url,
-        app_trans_id: order.app_trans_id
+        app_trans_id: order.app_trans_id,
+        order_token: response.data.order_token
       });
     } else {
       throw new Error(response.data.return_message || 'Failed to create payment');
@@ -97,11 +98,64 @@ router.post("/zalopay/callback", async (req, res) => {
     const dataJson = JSON.parse(dataStr);
     console.log('✅ Verified ZaloPay callback data:', dataJson);
 
-    // TODO: Implement payment success logic here
-    // - Update checkout status in database
-    // - Create order from checkout
-    // - Clear user's cart
-    // - Send confirmation email
+    // TODO: Implement automatic finalization logic here
+    // Tìm checkout gần đây nhất có amount matching và finalize nó
+    try {
+      const Checkout = require("../models/Checkout");
+      const Order = require("../models/Order");
+      const Cart = require("../models/Cart");
+      
+      // Tìm checkout chưa finalize với amount matching
+      const checkout = await Checkout.findOne({
+        totalPrice: dataJson.amount,
+        isPaid: false,
+        isFinalized: false
+      }).sort({ createdAt: -1 });
+      
+      if (checkout) {
+        console.log('🔄 Auto finalizing checkout:', checkout._id);
+        
+        // Update checkout status
+        checkout.isPaid = true;
+        checkout.paidAt = new Date();
+        checkout.paymentStatus = 'paid';
+        checkout.paymentDetails = {
+          method: 'ZaloPay',
+          transactionId: dataJson.app_trans_id,
+          amount: dataJson.amount,
+          callbackData: dataJson
+        };
+        await checkout.save();
+        
+        // Auto finalize to order
+        checkout.isFinalized = true;
+        checkout.isFinalizedAt = new Date();
+        await checkout.save();
+        
+        const finalOrder = await Order.create({
+          user: checkout.user,
+          orderItems: checkout.checkoutItems,
+          shippingAddress: checkout.shippingAddress,
+          paymentMethod: checkout.paymentMethod,
+          totalPrice: checkout.totalPrice,
+          isPaid: true,
+          paidAt: checkout.paidAt,
+          isDelivered: false,
+          paymentStatus: "Paid",
+          paymentDetails: checkout.paymentDetails,
+        });
+        
+        // Clear cart
+        await Cart.findOneAndDelete({ user: checkout.user });
+        
+        console.log('✅ Auto finalized order:', finalOrder._id);
+      } else {
+        console.log('⚠️ No matching checkout found for auto finalization');
+      }
+    } catch (autoError) {
+      console.error('❌ Auto finalization error:', autoError);
+      // Callback vẫn trả success để ZaloPay không retry
+    }
 
     console.log('🎉 Payment successful for transaction:', dataJson.app_trans_id);
 
@@ -118,20 +172,23 @@ router.post("/zalopay/callback", async (req, res) => {
 // @access Public
 router.get("/zalopay/return", async (req, res) => {
   try {
-    console.log('🔄 ZaloPay redirect received:', req.query);
+    console.log('🔄 ZaloPay GET redirect received:', req.query);
     console.log('🔄 ZaloPay redirect headers:', req.headers);
     
-    const { status, apptransid, amount } = req.query;
+    const { status, apptransid, amount, checksum, order_token } = req.query;
 
-    // Redirect về frontend với status
-    const redirectUrl = `http://localhost:5173/payment-success?status=${status}&apptransid=${apptransid}&amount=${amount}`;
+    // Log full URL for debugging
+    console.log('🔍 Full ZaloPay return URL:', req.url);
+
+    // Redirect về frontend zalopay-return page
+    const redirectUrl = `http://localhost:5173/zalopay-return?status=${status || '1'}&apptransid=${apptransid || ''}&amount=${amount || '0'}&source=zalopay_gateway`;
     
-    console.log('🔄 Redirecting to:', redirectUrl);
+    console.log('🔄 Redirecting to zalopay-return page:', redirectUrl);
     res.redirect(redirectUrl);
 
   } catch (error) {
     console.error('❌ ZaloPay redirect error:', error);
-    res.redirect('http://localhost:5173/payment-success?status=0');
+    res.redirect('http://localhost:5173/zalopay-return?status=0&source=error');
   }
 });
 
@@ -191,6 +248,32 @@ router.post("/zalopay/query", protect, async (req, res) => {
       success: false,
       message: error.message || 'Lỗi kiểm tra trạng thái thanh toán'
     });
+  }
+});
+
+// @desc Test route để debug ZaloPay return
+// @route GET /api/payment/test-zalopay-return
+// @access Public
+router.get("/test-zalopay-return", async (req, res) => {
+  try {
+    const { amount } = req.query;
+    
+    // Simulate successful ZaloPay return
+    const testParams = new URLSearchParams({
+      status: '1',
+      apptransid: `test_${Date.now()}`,
+      amount: amount || '200000',
+      source: 'test'
+    });
+    
+    const redirectUrl = `http://localhost:5173/zalopay-return?${testParams.toString()}`;
+    
+    console.log('🧪 Test redirecting to:', redirectUrl);
+    res.redirect(redirectUrl);
+
+  } catch (error) {
+    console.error('❌ Test redirect error:', error);
+    res.redirect('http://localhost:5173/zalopay-return?status=0&source=test_error');
   }
 });
 
