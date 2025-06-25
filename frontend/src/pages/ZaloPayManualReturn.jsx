@@ -6,6 +6,7 @@ import { FaCheckCircle, FaArrowRight, FaTimesCircle, FaExclamationTriangle, FaGi
 import axios from 'axios';
 import { toast } from 'sonner';
 import { clearCart } from '../redux/slices/cartSlice';
+import { setCheckoutData } from '../redux/slices/checkoutSlice';
 
 const ZaloPayManualReturn = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const ZaloPayManualReturn = () => {
       console.log('🔄 Finalizing checkout:', checkoutId);
 
       // 1. Update checkout status thành paid
-      await axios.put(
+      const updateResponse = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
         { 
           paymentStatus: "paid", 
@@ -76,8 +77,11 @@ const ZaloPayManualReturn = () => {
         }
       );
 
-      // 2. Finalize checkout thành order
-      const response = await axios.post(
+      // 2. Set checkout data từ update response vào Redux store
+      dispatch(setCheckoutData(updateResponse.data));
+
+      // 3. Finalize checkout thành order
+      const finalizeResponse = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
         { source: 'ZaloPayManualReturn' },
         {
@@ -87,22 +91,20 @@ const ZaloPayManualReturn = () => {
         }
       );
 
-      // 3. Clear cart và localStorage
+      // 4. Clear cart
       dispatch(clearCart());
-      localStorage.removeItem('currentCheckoutId');
-
-      console.log('✅ Order created:', response.data);
+      
+      console.log('✅ Order created:', finalizeResponse.data);
       toast.dismiss();
       toast.success('🎉 Đơn hàng đã được tạo thành công!');
 
-      // Redirect đến trang order details thay vì payment success
-      const orderId = response.data.order?._id;
-      if (orderId) {
-        navigate(`/order/${orderId}`);
-      } else {
-        // Fallback: redirect to orders list
-        navigate('/my-orders');
-      }
+      // 5. Redirect đến trang orders-confirmation để hiển thị ngày giao hàng
+      navigate('/orders-confirmation');
+
+      // 6. Clear checkoutId sau 5 giây để user có thể xem confirmation
+      setTimeout(() => {
+        localStorage.removeItem('currentCheckoutId');
+      }, 5000);
 
     } catch (error) {
       console.error('❌ Error finalizing:', error);
@@ -111,8 +113,13 @@ const ZaloPayManualReturn = () => {
       if (error.response?.status === 404) {
         toast.error('Không tìm thấy checkout. Vui lòng thử lại từ trang thanh toán.');
       } else if (error.response?.status === 400) {
-        toast.error('Checkout đã được xử lý rồi. Kiểm tra danh sách đơn hàng.');
-        navigate('/my-orders');
+        if (error.response?.data?.message?.includes('already processed')) {
+          toast.success('Đơn hàng đã được xử lý! Chuyển đến danh sách đơn hàng...');
+          navigate('/my-orders');
+        } else {
+          toast.error('Checkout đã được xử lý rồi. Kiểm tra danh sách đơn hàng.');
+          navigate('/my-orders');
+        }
       } else {
         toast.error('Có lỗi khi tạo đơn hàng. Vui lòng liên hệ hỗ trợ.');
       }
@@ -163,7 +170,7 @@ const ZaloPayManualReturn = () => {
               {isProcessing ? (
                 <>Đang tạo đơn hàng cho bạn. Vui lòng chờ giây lát...</>
               ) : (
-                <>Cảm ơn bạn đã thanh toán! Hãy click nút bên dưới để hoàn tất và xem chi tiết đơn hàng.</>
+                <>Cảm ơn bạn đã thanh toán! Hãy click nút bên dưới để hoàn tất và xem thông tin đơn hàng + ngày giao hàng.</>
               )}
             </p>
             
@@ -224,7 +231,7 @@ const ZaloPayManualReturn = () => {
             ) : (
               <>
                 <FaGift />
-                <span>Hoàn tất & xem đơn hàng</span>
+                <span>Xem đơn hàng & ngày giao</span>
                 <FaArrowRight />
               </>
             )}

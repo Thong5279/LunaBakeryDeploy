@@ -14,6 +14,7 @@ export const createCheckout = createAsyncThunk("checkout/createCheckout", async 
         return rejectWithValue(error.response.data);
     }
 });
+
 const checkoutSlice = createSlice({
     name: 'checkout',
     initialState: {
@@ -21,7 +22,14 @@ const checkoutSlice = createSlice({
         loading: false,
         error: null,
     },
-    reducers: {},
+    reducers: {
+        setCheckoutData: (state, action) => {
+            state.checkoutData = action.payload;
+        },
+        clearCheckoutData: (state) => {
+            state.checkoutData = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(createCheckout.pending, (state) => {
@@ -39,4 +47,5 @@ const checkoutSlice = createSlice({
     },
 });
 
+export const { setCheckoutData, clearCheckoutData } = checkoutSlice.actions;
 export default checkoutSlice.reducer;
