@@ -53,12 +53,12 @@ const ProductGrid = ({ products ,loading, error }) => {
 
         return (
           <Link key={index} to={`/product/${product._id}`} className="block">
-            <div className="bg-white p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
-              <div className="w-full h-96 mb-4">
+            <div className="bg-white p-4 rounded-lg hover:shadow-lg transition-shadow duration-200 group">
+              <div className="w-full h-96 mb-4 overflow-hidden rounded-lg">
                 <img
                   src={imageUrl}
                   alt={imageAlt}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <h3 className="text-sm mb-2 font-medium">

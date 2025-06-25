@@ -54,14 +54,14 @@ const FeaturedCakes = () => {
 
         {/* Right image */}
         <motion.div
-          className="lg:w-1/2 overflow-hidden"
+          className="lg:w-1/2 overflow-hidden group"
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.5 }}
         >
           <img
             src={featured}
             alt="Bánh ngọt"
-            className="w-full h-full object-cover lg:rounded-l-3xl lg:rounded-r-none rounded-b-3xl lg:rounded-b-none transition-transform duration-500"
+            className="w-full h-full object-cover lg:rounded-l-3xl lg:rounded-r-none rounded-b-3xl lg:rounded-b-none transition-transform duration-500 group-hover:scale-110"
           />
         </motion.div>
       </motion.div>

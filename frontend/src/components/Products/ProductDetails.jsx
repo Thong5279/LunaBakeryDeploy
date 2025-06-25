@@ -115,22 +115,25 @@ const ProductDetails = ({ productId }) => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Hình ảnh */}
           <div className="md:w-1/2 space-y-4">
-            <img
-              src={mainImage}
-              alt="Main Product"
-              className="w-full h-auto object-cover rounded-lg shadow-lg"
-            />
+            <div className="overflow-hidden rounded-lg shadow-lg group">
+              <img
+                src={mainImage}
+                alt="Main Product"
+                className="w-full h-auto object-cover rounded-lg transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
             <div className="flex gap-3 overflow-x-auto">
               {selectedProduct.images && selectedProduct.images.length > 0 ? (
                 selectedProduct.images.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img?.url || "https://via.placeholder.com/80x80?text=No+Image"}
-                    onClick={() => setMainImage(img?.url || "https://via.placeholder.com/500x500?text=No+Image")}
-                    className={`w-20 h-20 object-cover rounded-lg border cursor-pointer ${
-                      mainImage === (img?.url || "https://via.placeholder.com/500x500?text=No+Image") ? "border-pink-500" : "border-gray-300"
-                    }`}
-                  />
+                  <div key={i} className="overflow-hidden rounded-lg group">
+                    <img
+                      src={img?.url || "https://via.placeholder.com/80x80?text=No+Image"}
+                      onClick={() => setMainImage(img?.url || "https://via.placeholder.com/500x500?text=No+Image")}
+                      className={`w-20 h-20 object-cover rounded-lg border cursor-pointer transition-transform duration-300 group-hover:scale-110 ${
+                        mainImage === (img?.url || "https://via.placeholder.com/500x500?text=No+Image") ? "border-pink-500" : "border-gray-300"
+                      }`}
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="w-20 h-20 bg-gray-200 rounded-lg border border-gray-300 flex items-center justify-center">

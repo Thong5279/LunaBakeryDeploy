@@ -48,7 +48,7 @@ const CategorySection = () => {
             <img
               src={cakeImages[cakeIndex]}
               alt="Collection Cake Category"
-              className="w-full h-[500px] object-cover transition-opacity duration-1000"
+              className="w-full h-[500px] object-cover transition-all duration-1000 group-hover:scale-110"
             />
             <div className="absolute bottom-8 left-8 bg-white bg-opacity-90 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-pink-500 transition-colors duration-300">
@@ -68,7 +68,7 @@ const CategorySection = () => {
             <img
               src={bakingImages[bakingIndex]}
               alt="Baking Ingredients Category"
-              className="w-full h-[500px] object-cover transition-opacity duration-1000"
+              className="w-full h-[500px] object-cover transition-all duration-1000 group-hover:scale-110"
             />
             <div className="absolute bottom-8 left-8 bg-white bg-opacity-90 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-pink-500 transition-colors duration-300">

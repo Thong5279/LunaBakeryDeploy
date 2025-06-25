@@ -125,11 +125,13 @@ const NewArrivals = () => {
             key={product._id}
             className="min-w-[80%] sm:min-w-[50%] lg:min-w-[30%] relative group rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
           >
-            <img
-           src={product.images?.[0]?.url || "https://via.placeholder.com/500"}
-           alt={product.images?.[0]?.altText || product.name}
-              className="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+            <div className="overflow-hidden rounded-xl">
+              <img
+                src={product.images?.[0]?.url || "https://via.placeholder.com/500"}
+                alt={product.images?.[0]?.altText || product.name}
+                className="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-5">
               <Link to={`/product/${product._id}`}>
                 <h4 className="text-xl font-semibold group-hover:text-pink-400 transition duration-300">
