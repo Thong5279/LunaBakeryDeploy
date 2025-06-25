@@ -17,6 +17,31 @@ import {
   FaChartPie,
   FaUsers,
 } from "react-icons/fa";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  LineElement,
+  PointElement,
+} from 'chart.js';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  LineElement,
+  PointElement
+);
 
 const AnalyticsPage = () => {
   const dispatch = useDispatch();
@@ -88,6 +113,268 @@ const AnalyticsPage = () => {
       Cancelled: "bg-red-100 text-red-800"
     };
     return colors[status] || "bg-gray-100 text-gray-800";
+  };
+
+  // Tạo data cho biểu đồ doanh thu
+  const createRevenueChartData = () => {
+    if (!revenue.data || revenue.data.length === 0) return null;
+
+    const labels = revenue.data.map(item => getRevenueLabel(item));
+    const revenueData = revenue.data.map(item => item.totalRevenue);
+    const orderCountData = revenue.data.map(item => item.orderCount);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Doanh thu (VND)',
+          data: revenueData,
+          backgroundColor: 'rgba(236, 72, 153, 0.8)',
+          borderColor: 'rgba(236, 72, 153, 1)',
+          borderWidth: 2,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Số đơn hàng',
+          data: orderCountData,
+          backgroundColor: 'rgba(59, 130, 246, 0.8)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 2,
+          yAxisID: 'y1',
+        },
+      ],
+    };
+  };
+
+  // Tạo data cho biểu đồ trạng thái đơn hàng
+  const createOrderStatusChartData = () => {
+    if (!orderStatus.data || orderStatus.data.length === 0) return null;
+
+    const labels = orderStatus.data.map(item => getStatusLabel(item._id));
+    const data = orderStatus.data.map(item => item.count);
+    const backgroundColors = [
+      'rgba(251, 191, 36, 0.8)',  // Processing - Yellow
+      'rgba(59, 130, 246, 0.8)',  // Shipped - Blue  
+      'rgba(34, 197, 94, 0.8)',   // Delivered - Green
+      'rgba(239, 68, 68, 0.8)',   // Cancelled - Red
+    ];
+
+    return {
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: backgroundColors,
+          borderColor: backgroundColors.map(color => color.replace('0.8', '1')),
+          borderWidth: 2,
+        },
+      ],
+    };
+  };
+
+  // Tạo data cho biểu đồ line revenue theo ngày
+  const createRevenueLineChartData = () => {
+    if (!revenue.data || revenue.data.length === 0) return null;
+
+    const labels = revenue.data.map(item => getRevenueLabel(item));
+    const data = revenue.data.map(item => item.totalRevenue);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Doanh thu',
+          data,
+          borderColor: 'rgba(236, 72, 153, 1)',
+          backgroundColor: 'rgba(236, 72, 153, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: 'rgba(236, 72, 153, 1)',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+        },
+      ],
+    };
+  };
+
+  // Chart options
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      },
+      title: {
+        display: true,
+        text: 'Doanh thu và Số đơn hàng',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: 20
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            if (context.datasetIndex === 0) {
+              return `Doanh thu: ${context.parsed.y.toLocaleString('vi-VN')} VND`;
+            } else {
+              return `Đơn hàng: ${context.parsed.y} đơn`;
+            }
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Thời gian',
+          font: {
+            weight: 'bold'
+          }
+        },
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Doanh thu (VND)',
+          font: {
+            weight: 'bold'
+          }
+        },
+        ticks: {
+          callback: function(value) {
+            return value.toLocaleString('vi-VN');
+          }
+        }
+      },
+      y1: {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Số đơn hàng',
+          font: {
+            weight: 'bold'
+          }
+        },
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+    },
+  };
+
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      },
+      title: {
+        display: true,
+        text: 'Phân bổ trạng thái đơn hàng',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: 20
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
+            const percentage = ((context.parsed * 100) / total).toFixed(1);
+            return `${context.label}: ${context.parsed} đơn (${percentage}%)`;
+          }
+        }
+      }
+    },
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      },
+      title: {
+        display: true,
+        text: 'Xu hướng doanh thu',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: 20
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return `Doanh thu: ${context.parsed.y.toLocaleString('vi-VN')} VND`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Thời gian',
+          font: {
+            weight: 'bold'
+          }
+        },
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Doanh thu (VND)',
+          font: {
+            weight: 'bold'
+          }
+        },
+        ticks: {
+          callback: function(value) {
+            return value.toLocaleString('vi-VN');
+          }
+        }
+      },
+    },
   };
 
   if (summary.loading) {
@@ -164,6 +451,69 @@ const AnalyticsPage = () => {
           </div>
         </div>
       )}
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Revenue Chart */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Biểu đồ Doanh thu & Đơn hàng</h3>
+          <div className="h-80">
+            {revenue.loading ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mb-4"></div>
+                <p className="text-gray-500">Đang tải dữ liệu...</p>
+              </div>
+            ) : createRevenueChartData() ? (
+              <Bar data={createRevenueChartData()} options={barChartOptions} />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <FaChartPie className="text-gray-300 text-6xl mb-4" />
+                <p className="text-gray-500">Không có dữ liệu để hiển thị</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Order Status Doughnut Chart */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Phân bổ Trạng thái Đơn hàng</h3>
+          <div className="h-80">
+            {orderStatus.loading ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                <p className="text-gray-500">Đang tải dữ liệu...</p>
+              </div>
+            ) : createOrderStatusChartData() ? (
+              <Doughnut data={createOrderStatusChartData()} options={doughnutOptions} />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <FaChartPie className="text-gray-300 text-6xl mb-4" />
+                <p className="text-gray-500">Không có dữ liệu để hiển thị</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Revenue Trend Line Chart */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Xu hướng Doanh thu</h3>
+        <div className="h-80">
+          {revenue.loading ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
+              <p className="text-gray-500">Đang tải dữ liệu...</p>
+            </div>
+          ) : createRevenueLineChartData() ? (
+            <Line data={createRevenueLineChartData()} options={lineChartOptions} />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full">
+              <FaChartPie className="text-gray-300 text-6xl mb-4" />
+              <p className="text-gray-500">Không có dữ liệu để hiển thị</p>
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Revenue Chart Section */}
