@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } = require('../constants/productConstants');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -31,12 +32,25 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
+    enum: PRODUCT_CATEGORIES,
   },
   sizes: {
     type: [String],
+    validate: {
+      validator: function(sizes) {
+        // Cho phép custom sizes ngoài danh sách có sẵn
+        return true;
+      }
+    }
   },
   flavors: {
     type: [String],
+    validate: {
+      validator: function(flavors) {
+        // Cho phép custom flavors ngoài danh sách có sẵn
+        return true;
+      }
+    }
   },
   images: [
     {

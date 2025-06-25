@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductDetails } from "../../redux/slices/productsSlice";
 import { updateProduct } from "../../redux/slices/adminProductSlice"; 
 import axios from "axios";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
 
 const EditProductPage = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ const EditProductPage = () => {
     if (selectedProduct) {
       setProductData({
         ...selectedProduct,
-        sizes: selectedProduct.sizes ? selectedProduct.sizes.join(", ") : "",
-        flavors: selectedProduct.flavors ? selectedProduct.flavors.join(", ") : "",
+        sizes: selectedProduct.sizes || [],
+        flavors: selectedProduct.flavors || [],
         countInStock: selectedProduct.countInStock || 0
       });
     }
@@ -37,8 +38,8 @@ const EditProductPage = () => {
     category: "",
     countInStock: 0,
     images: [],
-    sizes: "",
-    flavors: "", // hương vị
+    sizes: [],
+    flavors: [],
   });
 
   const handleChange = (e) => {
@@ -46,6 +47,16 @@ const EditProductPage = () => {
     setProductData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleCheckboxChange = (e, type) => {
+    const { value, checked } = e.target;
+    setProductData(prev => ({
+      ...prev,
+      [type]: checked 
+        ? [...prev[type], value]
+        : prev[type].filter(item => item !== value)
     }));
   };
 
@@ -98,13 +109,10 @@ const EditProductPage = () => {
       return;
     }
 
-    // Convert sizes and flavors strings back to arrays, and ensure numeric fields
     const formattedData = {
       ...productData,
       price: Number(productData.price),
       countInStock: Number(productData.countInStock),
-      sizes: productData.sizes ? productData.sizes.split(",").map(size => size.trim()).filter(size => size) : [],
-      flavors: productData.flavors ? productData.flavors.split(",").map(flavor => flavor.trim()).filter(flavor => flavor) : []
     };
     
     dispatch(updateProduct({ id, productData: formattedData }))
@@ -205,22 +213,17 @@ const EditProductPage = () => {
           </label>
           <select
             name="category"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={productData.category}
             onChange={handleChange}
             required
           >
             <option value="">Chọn danh mục</option>
-            <option value="Bánh ngọt">Bánh ngọt</option>
-            <option value="Bánh Kem">Bánh Kem</option>
-            <option value="Bánh sinh nhật">Bánh sinh nhật</option>
-            <option value="Bánh trung thu">Bánh trung thu</option>
-            <option value="Bánh quy">Bánh quy</option>
-            <option value="Bánh tart">Bánh tart</option>
-            <option value="Bánh mousse">Bánh mousse</option>
-            <option value="Bánh cupcake">Bánh cupcake</option>
-            <option value="Bánh su kem">Bánh su kem</option>
-            <option value="Bánh bông lan">Bánh bông lan</option>
+            {PRODUCT_CATEGORIES.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
         {/* countInStock */}
@@ -249,15 +252,23 @@ const EditProductPage = () => {
           >
             Kích thước
           </label>
-          <input
-            type="text"
-            name="sizes"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-            value={productData.sizes}
-            onChange={handleChange}
-            placeholder="12cm, 14cm, 16cm"
-          />
-          <p className="text-xs text-gray-500 mt-1">Phân cách các kích thước bằng dấu phẩy</p>
+          <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-md p-3">
+            {PRODUCT_SIZES.map((size) => (
+              <label key={size} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  value={size}
+                  checked={productData.sizes.includes(size)}
+                  onChange={(e) => handleCheckboxChange(e, 'sizes')}
+                  className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                />
+                <span className="text-sm text-gray-700">{size}</span>
+              </label>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Đã chọn: {productData.sizes.join(", ") || "Chưa chọn"}
+          </p>
         </div>
         {/* flavor */}
         <div className="mb-6">
@@ -267,15 +278,23 @@ const EditProductPage = () => {
           >
             Hương vị
           </label>
-          <input
-            type="text"
-            name="flavors"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-            value={productData.flavors}
-            onChange={handleChange}
-            placeholder="Socola, Dâu, Vanilla"
-          />
-          <p className="text-xs text-gray-500 mt-1">Phân cách các hương vị bằng dấu phẩy</p>
+          <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
+            {PRODUCT_FLAVORS.map((flavor) => (
+              <label key={flavor} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  value={flavor}
+                  checked={productData.flavors.includes(flavor)}
+                  onChange={(e) => handleCheckboxChange(e, 'flavors')}
+                  className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                />
+                <span className="text-sm text-gray-700">{flavor}</span>
+              </label>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Đã chọn: {productData.flavors.join(", ") || "Chưa chọn"}
+          </p>
         </div>
         {/* images */}
         <div className="mb-6">

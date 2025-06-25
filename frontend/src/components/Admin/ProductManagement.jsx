@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAdminProducts, deleteProduct, createProduct } from "../../redux/slices/adminProductSlice";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
 
 
 const ProductManagement = () => {
@@ -17,10 +18,10 @@ const ProductManagement = () => {
     description: "",
     price: "",
     sku: "",
-    category: "Bánh ngọt",
+    category: PRODUCT_CATEGORIES[0],
     images: [],
-    sizes: "",
-    flavors: "",
+    sizes: [],
+    flavors: [],
     countInStock: "10"
   });
 
@@ -46,10 +47,10 @@ const ProductManagement = () => {
       description: "",
       price: "",
       sku: "",
-      category: "Bánh ngọt",
+      category: PRODUCT_CATEGORIES[0],
       images: [],
-      sizes: "",
-      flavors: "",
+      sizes: [],
+      flavors: [],
       countInStock: "10"
     });
   };
@@ -62,16 +63,23 @@ const ProductManagement = () => {
     }));
   };
 
+  const handleCheckboxChange = (e, type) => {
+    const { value, checked } = e.target;
+    setNewProduct(prev => ({
+      ...prev,
+      [type]: checked 
+        ? [...prev[type], value]
+        : prev[type].filter(item => item !== value)
+    }));
+  };
+
   const handleSubmitNewProduct = (e) => {
     e.preventDefault();
     
-    // Convert strings to arrays for sizes and flavors
     const productData = {
       ...newProduct,
       price: Number(newProduct.price),
       countInStock: Number(newProduct.countInStock),
-      sizes: newProduct.sizes.split(",").map(size => size.trim()).filter(size => size),
-      flavors: newProduct.flavors.split(",").map(flavor => flavor.trim()).filter(flavor => flavor)
     };
 
     console.log("Sending product data:", productData);
@@ -80,7 +88,7 @@ const ProductManagement = () => {
       .then((result) => {
         if (result.type.endsWith("/fulfilled")) {
           handleCloseModal();
-          dispatch(fetchAdminProducts()); // Refresh the list
+          dispatch(fetchAdminProducts());
         } else if (result.type.endsWith("/rejected")) {
           setCreateError(result.payload?.message || "Có lỗi xảy ra khi thêm sản phẩm");
         }
@@ -257,16 +265,11 @@ const ProductManagement = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 >
-                  <option value="Bánh ngọt">Bánh ngọt</option>
-                  <option value="Bánh Kem">Bánh Kem</option>
-                  <option value="Bánh sinh nhật">Bánh sinh nhật</option>
-                  <option value="Bánh trung thu">Bánh trung thu</option>
-                  <option value="Bánh quy">Bánh quy</option>
-                  <option value="Bánh tart">Bánh tart</option>
-                  <option value="Bánh mousse">Bánh mousse</option>
-                  <option value="Bánh cupcake">Bánh cupcake</option>
-                  <option value="Bánh su kem">Bánh su kem</option>
-                  <option value="Bánh bông lan">Bánh bông lan</option>
+                  {PRODUCT_CATEGORIES.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -287,30 +290,48 @@ const ProductManagement = () => {
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Kích thước (phân cách bằng dấu phẩy)
+                  Kích thước
                 </label>
-                <input
-                  type="text"
-                  name="sizes"
-                  value={newProduct.sizes}
-                  onChange={handleInputChange}
-                  placeholder="12cm, 14cm, 16cm"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
+                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-md p-2">
+                  {PRODUCT_SIZES.map((size) => (
+                    <label key={size} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        value={size}
+                        checked={newProduct.sizes.includes(size)}
+                        onChange={(e) => handleCheckboxChange(e, 'sizes')}
+                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{size}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Đã chọn: {newProduct.sizes.join(", ") || "Chưa chọn"}
+                </p>
               </div>
 
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Hương vị (phân cách bằng dấu phẩy)
+                  Hương vị
                 </label>
-                <input
-                  type="text"
-                  name="flavors"
-                  value={newProduct.flavors}
-                  onChange={handleInputChange}
-                  placeholder="Socola, Dâu, Vanilla"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
+                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-2">
+                  {PRODUCT_FLAVORS.map((flavor) => (
+                    <label key={flavor} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        value={flavor}
+                        checked={newProduct.flavors.includes(flavor)}
+                        onChange={(e) => handleCheckboxChange(e, 'flavors')}
+                        className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{flavor}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Đã chọn: {newProduct.flavors.join(", ") || "Chưa chọn"}
+                </p>
               </div>
 
               <div className="flex justify-end space-x-4">

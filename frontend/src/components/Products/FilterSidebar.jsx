@@ -1,5 +1,6 @@
 import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
 
 const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useState({});
@@ -20,43 +21,10 @@ const FilterSidebar = () => {
 
   const [priceRange, setPriceRange] = useState([0, 1000000]);
 
-  const categories = [
-    "Bánh ngọt",
-    "Bánh Kem",
-    "Bánh sinh nhật",
-    "Bánh trung thu",
-    "Bánh quy",
-    "Bánh tart",
-    "Bánh mousse",
-    "Bánh cupcake",
-    "Bánh su kem",
-    "panacosta",
-    "Bánh bông lan",
-    "bánh cưới",
-    
-  ];
-  const flavors = [
-    "Socola",
-    "Dâu",
-    "Matcha",
-    "Vanilla",
-    "Trà xanh",
-    "bánh oreo",
-    "trái cây hỗn hợp",
-    "Hạt dẻ cười",
-    "Phô mai",
-    "Cam",
-    "Chanh dây",
-  ];
-  const sizes = [
-    "10cm",
-    "12cm",
-    "14cm",
-    "16cm",
-    "18cm",
-    "20cm",
-    "22cm",
-  ];
+  // Sử dụng constants từ file riêng
+  const categories = PRODUCT_CATEGORIES;
+  const flavors = PRODUCT_FLAVORS;
+  const sizes = PRODUCT_SIZES;
 
   useEffect(() => {
     const params = Object.fromEntries(
