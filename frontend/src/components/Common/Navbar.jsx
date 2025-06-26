@@ -46,7 +46,7 @@ const Navbar = () => {
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
+                <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
                   Nguyên liệu
                 </Link>
               </div>
@@ -133,6 +133,9 @@ const Navbar = () => {
             className="hover:text-pink-500 cursor-pointer"
           >
             Sản phẩm
+          </Link>
+          <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
+            Nguyên liệu
           </Link>
           <Link className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi

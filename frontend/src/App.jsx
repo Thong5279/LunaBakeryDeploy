@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CollectionPage from "./pages/CollectionPage";
+import IngredientsPage from "./pages/IngredientsPage";
 import ProductDetails from "./components/Products/ProductDetails";
 import Checkout from "./components/Cart/Checkout";
 import OderconfirmationPage from "./pages/OderconfirmationPage";
@@ -47,6 +48,7 @@ const App = () => {
               path="/collections/:collection"
               element={<CollectionPage />}
             />
+            <Route path="/ingredients" element={<IngredientsPage />} />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="payment-success" element={<PaymentSuccessPage />} />
