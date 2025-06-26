@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAdminProducts, deleteProduct, createProduct } from "../../redux/slices/adminProductSlice";
-import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, PRODUCT_STATUS, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
@@ -21,10 +21,10 @@ const ProductManagement = () => {
     price: "",
     sku: "",
     category: PRODUCT_CATEGORIES[0],
+    status: "active",
     images: [],
     sizes: [],
-    flavors: [],
-    countInStock: "10"
+    flavors: []
   });
 
   // Tính giá tự động cho các size
@@ -88,10 +88,10 @@ const ProductManagement = () => {
       price: "",
       sku: "",
       category: PRODUCT_CATEGORIES[0],
+      status: "active",
       images: [],
       sizes: [],
-      flavors: [],
-      countInStock: "10"
+      flavors: []
     });
   };
 
@@ -122,7 +122,6 @@ const ProductManagement = () => {
     const productData = {
       ...newProduct,
       price: Number(newProduct.price),
-      countInStock: Number(newProduct.countInStock),
       sizePricing
     };
 
@@ -199,6 +198,9 @@ const ProductManagement = () => {
                 Mã hàng
               </th>
               <th scope="col" className="px-6 py-3">
+                Trạng thái
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Hành động
               </th>
             </tr>
@@ -218,6 +220,15 @@ const ProductManagement = () => {
                   </td>
                   <td className="px-6 py-4">{product.sku}</td>
                   <td className="px-6 py-4">
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      product.status === 'active' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {product.status === 'active' ? 'Đang bán' : 'Ngừng bán'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
                     <Link
                       to={`/admin/products/${product._id}/edit`}
                       className="bg-yellow-400 text-white px-4 py-1 rounded-md mr-2 hover:bg-yellow-600"
@@ -234,8 +245,8 @@ const ProductManagement = () => {
                 </tr>
               ))
             ) : (
-              <tr colSpan={4} className="text-center py-10">
-                <td colSpan={4} className="text-center py-10">
+              <tr colSpan={5} className="text-center py-10">
+                <td colSpan={5} className="text-center py-10">
                   <p className="text-gray-500">Không có sản phẩm nào</p>
                 </td>
               </tr>
@@ -409,17 +420,27 @@ const ProductManagement = () => {
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Số lượng tồn kho
+                  Trạng thái sản phẩm
                 </label>
-                <input
-                  type="number"
-                  name="countInStock"
-                  value={newProduct.countInStock}
+                <select
+                  name="status"
+                  value={newProduct.status}
                   onChange={handleInputChange}
-                  min="0"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
-                />
+                >
+                  {PRODUCT_STATUS.map((status) => (
+                    <option key={status.value} value={status.value}>
+                      {status.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  {newProduct.status === 'active' ? 
+                    '✅ Sản phẩm sẽ được bán' : 
+                    '❌ Sản phẩm sẽ tạm ngừng bán'
+                  }
+                </p>
               </div>
 
               <div className="mb-4">

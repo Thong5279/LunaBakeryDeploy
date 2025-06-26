@@ -184,10 +184,25 @@ const ProductDetails = ({ productId }) => {
           {/* Thông tin */}
           <div className="md:w-1/2 space-y-6">
             <h1 className="text-3xl font-bold text-pink-600">{selectedProduct.name}</h1>
+            
+            {/* Trạng thái sản phẩm */}
+            {selectedProduct.status === 'inactive' && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-red-700 font-medium">Sản phẩm tạm ngừng bán</span>
+                </div>
+                <p className="text-red-600 text-sm mt-1">
+                  Sản phẩm này hiện không có sẵn. Vui lòng chọn sản phẩm khác.
+                </p>
+              </div>
+            )}
 
             {/* Hiển thị giá - chỉ 1 giá duy nhất */}
             <div className="space-y-1">
-              <p className="text-3xl text-pink-500 font-bold">
+              <p className={`text-3xl font-bold ${selectedProduct.status === 'inactive' ? 'text-gray-400' : 'text-pink-500'}`}>
                 {currentPrice.toLocaleString("vi-VN")} ₫
               </p>
               {selectedSize && selectedProduct.sizePricing && (
@@ -206,12 +221,15 @@ const ProductDetails = ({ productId }) => {
                   selectedProduct.sizes.map((s) => (
                     <button
                       key={s}
+                      disabled={selectedProduct.status === 'inactive'}
                       className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
-                        selectedSize === s 
-                          ? "bg-pink-500 text-white border-pink-500 shadow-lg" 
-                          : "bg-white text-gray-700 border-gray-300 hover:border-pink-300"
+                        selectedProduct.status === 'inactive'
+                          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : selectedSize === s 
+                            ? "bg-pink-500 text-white border-pink-500 shadow-lg" 
+                            : "bg-white text-gray-700 border-gray-300 hover:border-pink-300"
                       }`}
-                      onClick={() => handleSizeChange(s)}
+                      onClick={() => selectedProduct.status === 'active' && handleSizeChange(s)}
                     >
                       {s.includes('cm') || s.includes('Size') || s.includes('Hộp') || s.includes('Nhỏ') || s.includes('Vừa') || s.includes('Lớn') ? s : `${s} cm`}
                     </button>
@@ -229,10 +247,15 @@ const ProductDetails = ({ productId }) => {
                   selectedProduct.flavors.map((f) => (
                     <button
                       key={f}
-                      className={`px-4 py-1 rounded-full ${
-                        selectedFlavor === f ? "bg-pink-200 border-2 border-pink-500" : "bg-gray-100"
+                      disabled={selectedProduct.status === 'inactive'}
+                      className={`px-4 py-1 rounded-full transition-all duration-200 ${
+                        selectedProduct.status === 'inactive'
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : selectedFlavor === f 
+                            ? "bg-pink-200 border-2 border-pink-500" 
+                            : "bg-gray-100 hover:bg-gray-200"
                       }`}
-                      onClick={() => setSelectedFlavor(f)}
+                      onClick={() => selectedProduct.status === 'active' && setSelectedFlavor(f)}
                     >
                       {f}
                     </button>
@@ -246,14 +269,28 @@ const ProductDetails = ({ productId }) => {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => handleQuantityChange("minus")}
-                className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
+                disabled={selectedProduct.status === 'inactive'}
+                className={`px-3 py-1 rounded transition-colors ${
+                  selectedProduct.status === 'inactive' 
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                    : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               >
                 -
               </button>
-              <span className="px-4 py-1 border rounded">{quantity}</span>
+              <span className={`px-4 py-1 border rounded ${
+                selectedProduct.status === 'inactive' ? 'bg-gray-100 text-gray-400' : ''
+              }`}>
+                {quantity}
+              </span>
               <button 
                 onClick={() => handleQuantityChange("plus")}
-                className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
+                disabled={selectedProduct.status === 'inactive'}
+                className={`px-3 py-1 rounded transition-colors ${
+                  selectedProduct.status === 'inactive' 
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                    : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               >
                 +
               </button>
@@ -261,14 +298,21 @@ const ProductDetails = ({ productId }) => {
 
             <motion.button
               onClick={handleAddToCart}
-              disabled={buttonDisabled}
-              whileTap={{ scale: 0.95 }}
-              className={`bg-pink-500 text-white px-6 py-3 rounded-full w-full font-semibold transition ${
-                buttonDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-pink-600"
+              disabled={buttonDisabled || selectedProduct.status === 'inactive'}
+              whileTap={{ scale: selectedProduct.status === 'inactive' ? 1 : 0.95 }}
+              className={`px-6 py-3 rounded-full w-full font-semibold transition flex items-center justify-center ${
+                selectedProduct.status === 'inactive'
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : buttonDisabled 
+                    ? 'bg-pink-300 text-white cursor-not-allowed' 
+                    : 'bg-pink-500 text-white hover:bg-pink-600'
               }`}
             >
               <FaShoppingCart className="inline mr-2" />
-              Thêm vào giỏ hàng
+              {selectedProduct.status === 'inactive' 
+                ? 'Sản phẩm ngừng bán' 
+                : 'Thêm vào giỏ hàng'
+              }
             </motion.button>
           </div>
         </div>

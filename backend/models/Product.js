@@ -87,6 +87,11 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: PRODUCT_CATEGORIES,
   },
+  status: {
+    type: String,
+    enum: ['active', 'inactive'],
+    default: 'active'
+  },
   sizes: {
     type: [String],
     validate: {

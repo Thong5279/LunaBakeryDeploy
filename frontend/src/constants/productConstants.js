@@ -61,5 +61,11 @@ export const PRODUCT_SIZES = [
   'Hộp thiết'
 ];
 
+// Trạng thái sản phẩm
+export const PRODUCT_STATUS = [
+  { value: 'active', label: 'Đang bán' },
+  { value: 'inactive', label: 'Ngừng bán' }
+];
+
 // Cấu hình giá theo size (cách nhau 50,000 VNĐ)
 export const SIZE_PRICE_INCREMENT = 50000; 

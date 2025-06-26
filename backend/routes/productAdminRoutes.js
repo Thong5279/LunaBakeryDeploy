@@ -67,26 +67,34 @@ router.put("/:id", protect, admin, async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
+        console.log("🔄 Updating product:", req.params.id);
+        console.log("📦 Request body:", req.body);
+
         // Update product fields
         product.name = req.body.name || product.name;
         product.description = req.body.description || product.description;
         product.price = req.body.price || product.price;
         product.sku = req.body.sku || product.sku;
         product.category = req.body.category || product.category;
+        product.status = req.body.status || product.status;
         product.images = req.body.images || product.images;
         product.sizes = req.body.sizes || product.sizes;
         product.flavors = req.body.flavors || product.flavors;
 
-        // Tự động tạo sizePricing nếu có sizes và chưa có sizePricing hoặc sizePricing rỗng
-        if (product.sizes && product.sizes.length > 0 && 
-            (!product.sizePricing || product.sizePricing.length === 0)) {
+        // Cập nhật sizePricing nếu có trong request hoặc tự động tạo
+        if (req.body.sizePricing) {
+            product.sizePricing = req.body.sizePricing;
+            console.log("✅ Updated sizePricing from request");
+        } else if (product.sizes && product.sizes.length > 0 && 
+                   (!product.sizePricing || product.sizePricing.length === 0)) {
             const basePrice = req.body.discountPrice || req.body.price || product.discountPrice || product.price;
             product.sizePricing = generateSizePricing(product.sizes, basePrice);
-            console.log(`✅ Tự động tạo sizePricing cho sản phẩm: ${product.name}`);
+            console.log(`✅ Auto-generated sizePricing for: ${product.name}`);
             console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
         }
 
         const updatedProduct = await product.save();
+        console.log(`✅ Product updated successfully: ${updatedProduct.name}, Status: ${updatedProduct.status}`);
         res.json(updatedProduct);
     } catch (error) {
         console.error("Error updating product:", error);
@@ -124,10 +132,10 @@ router.post("/", protect, admin, async (req, res) => {
             price,
             sku,
             category,
+            status,
             images,
             sizes,
             flavors,
-            countInStock,
             discountPrice
         } = req.body;
 
@@ -139,10 +147,10 @@ router.post("/", protect, admin, async (req, res) => {
             price,
             sku,
             category: category || "Bánh ngọt", // Default category if not provided
+            status: status || "active", // Default status
             images: images || [],
             sizes: sizes || [],
             flavors: flavors || [],
-            countInStock: countInStock || 10, // Default stock
             user: req.user._id, // Set the admin user as creator
             isPublished: true, // Make it published by default
             discountPrice: discountPrice || price
@@ -152,11 +160,12 @@ router.post("/", protect, admin, async (req, res) => {
         if (sizes && sizes.length > 0) {
             const basePrice = discountPrice || price;
             product.sizePricing = generateSizePricing(sizes, basePrice);
-            console.log(`✅ Tự động tạo sizePricing cho sản phẩm mới: ${name}`);
+            console.log(`✅ Auto-generated sizePricing for new product: ${name}`);
             console.log(`   Prices: ${product.sizePricing.map(sp => `${sp.size}: ${sp.price.toLocaleString()}₫`).join(', ')}`);
         }
 
         const createdProduct = await product.save();
+        console.log(`✅ Product created successfully: ${createdProduct.name}, Status: ${createdProduct.status}`);
         res.status(201).json(createdProduct);
     } catch (error) {
         console.error("Error creating product:", error);

@@ -197,7 +197,13 @@ router.get("/", async (req, res) => {
       search,
       limit,
     } = req.query;
-    let query = {};
+    let query = {
+      $or: [
+        { status: 'active' }, // Sản phẩm có status active
+        { status: { $exists: false } } // Sản phẩm cũ không có status field (backward compatibility)
+      ],
+      isPublished: true // Chỉ hiển thị sản phẩm đã publish
+    };
 
     // Filter logic
     // Tìm kiếm theo tên hoặc mô tả (dạng text search đơn giản)
@@ -249,6 +255,8 @@ router.get("/", async (req, res) => {
     let products = await Product.find(query)
       .sort(sort) // Mặc định sắp xếp theo ngày tạo mới nhất
       .limit(Number(limit) || 0); // Giới hạn số lượng sản phẩm trả về
+    
+    console.log(`✅ Fetched ${products.length} active products`);
     res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -262,7 +270,14 @@ router.get("/", async (req, res) => {
 
 router.get("/best-sellers", async (req, res) => {
   try {
-    const bestSellers = await Product.findOne().sort({ rating: -1 });
+    const bestSellers = await Product.findOne({
+      $or: [
+        { status: 'active' },
+        { status: { $exists: false } }
+      ],
+      isPublished: true
+    }).sort({ rating: -1 });
+    
     if (bestSellers) {
       res.json(bestSellers);
     }else {
@@ -281,10 +296,17 @@ router.get("/best-sellers", async (req, res) => {
 //@access Public
 router.get("/new-arrivals", async (req, res) => {
   try {
-    const newArrivals = await Product.find({})
+    const newArrivals = await Product.find({
+      $or: [
+        { status: 'active' },
+        { status: { $exists: false } }
+      ],
+      isPublished: true
+    })
       .sort({ createdAt: -1 }) // Sort by creation date, newest first
       .limit(8); // Limit to 8 products
 
+    console.log(`✅ Fetched ${newArrivals.length} new arrival products`);
     res.json(newArrivals);
   } catch (error) {
     console.error("Error fetching new arrivals:", error);
@@ -313,7 +335,15 @@ router.get("/search-suggestions", async (req, res) => {
         { description: searchRegex },
         { category: searchRegex }
       ],
-      isPublished: true
+      $and: [
+        {
+          $or: [
+            { status: 'active' },
+            { status: { $exists: false } }
+          ]
+        },
+        { isPublished: true }
+      ]
     })
     .select('name category images price discountPrice')
     .limit(3);
@@ -395,9 +425,15 @@ router.get("/similar/:id", async (req, res) => {
 
     const similarProducts = await Product.find({
       category: product.category,
+      $or: [
+        { status: 'active' },
+        { status: { $exists: false } }
+      ],
+      isPublished: true,
       _id: { $ne: product._id }, // Exclude the current product
     }).limit(4);
 
+    console.log(`✅ Fetched ${similarProducts.length} similar products for category: ${product.category}`);
     res.json(similarProducts);
   } catch (error) {
     console.error("Error fetching similar products:", error);

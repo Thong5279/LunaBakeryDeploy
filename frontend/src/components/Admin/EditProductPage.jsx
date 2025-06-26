@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductDetails } from "../../redux/slices/productsSlice";
 import { updateProduct } from "../../redux/slices/adminProductSlice"; 
 import axios from "axios";
-import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
+import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, PRODUCT_STATUS, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
 
 const EditProductPage = () => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const EditProductPage = () => {
         ...selectedProduct,
         sizes: selectedProduct.sizes || [],
         flavors: selectedProduct.flavors || [],
-        countInStock: selectedProduct.countInStock || 0
+        status: selectedProduct.status || 'active'
       });
     }
   }, [selectedProduct]);
@@ -54,7 +54,7 @@ const EditProductPage = () => {
     sku: "",
     description: "",
     category: "",
-    countInStock: 0,
+    status: "active",
     images: [],
     sizes: [],
     flavors: [],
@@ -136,7 +136,6 @@ const EditProductPage = () => {
     const formattedData = {
       ...productData,
       price: Number(productData.price),
-      countInStock: Number(productData.countInStock),
       sizePricing
     };
     
@@ -251,23 +250,33 @@ const EditProductPage = () => {
             ))}
           </select>
         </div>
-        {/* countInStock */}
+        {/* status */}
         <div className="mb-6">
           <label
             htmlFor=""
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Số lượng tồn kho
+            Trạng thái sản phẩm
           </label>
-          <input
-            type="number"
-            name="countInStock"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-            value={productData.countInStock}
+          <select
+            name="status"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+            value={productData.status}
             onChange={handleChange}
-            min="0"
             required
-          />
+          >
+            {PRODUCT_STATUS.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500 mt-1">
+            {productData.status === 'active' ? 
+              '✅ Sản phẩm đang được bán' : 
+              '❌ Sản phẩm tạm ngừng bán'
+            }
+          </p>
         </div>
         {/* size */}
         <div className="mb-6">
