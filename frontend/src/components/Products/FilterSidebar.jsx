@@ -6,6 +6,7 @@ const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useState({});
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
+    search: "", // Tìm kiếm
     category: "", // Loại bánh: "bánh kem", "bánh mì", ...
     flavor: "", // Hương vị: "Socola", "Dâu", ...
     size: "", // Kích thước: "10cm", "1kg", ...
@@ -32,6 +33,7 @@ const FilterSidebar = () => {
     );
 
     setFilters({
+      search: params.search || "", // Tìm kiếm
       category: params.category || "", // Loại bánh: "bánh kem", "bánh mì", ...
       flavor: params.flavor || "", // Hương vị: "Socola", "Dâu", ...
       size: params.size ? params.size.split(",") : [], // Kích thước: "10cm", "1kg", ...
@@ -63,6 +65,13 @@ const FilterSidebar = () => {
     updateURLParams(newFilters);
   };
 
+  const handleSearchChange = (e) => {
+    const searchValue = e.target.value;
+    const newFilters = { ...filters, search: searchValue };
+    setFilters(newFilters);
+    updateURLParams(newFilters);
+  };
+
   const updateURLParams = (newFilters) => {
     const params = new URLSearchParams();
     Object.keys(newFilters).forEach((key) => {
@@ -90,6 +99,7 @@ const FilterSidebar = () => {
 
   const clearAllFilters = () => {
     setFilters({
+      search: "",
       category: "",
       flavor: "",
       size: [],
@@ -100,7 +110,7 @@ const FilterSidebar = () => {
     navigate(window.location.pathname); // Clear URL params
   };
 
-  const hasActiveFilters = filters.category || filters.flavor || filters.size.length > 0 || filters.maxPrice < 1000000 || filters.minPrice > 0;
+  const hasActiveFilters = filters.search || filters.category || filters.flavor || filters.size.length > 0 || filters.maxPrice < 1000000 || filters.minPrice > 0;
 
   return (
     <div className="p-4 h-full h-full overflow-y-auto">
@@ -118,6 +128,20 @@ const FilterSidebar = () => {
       </div>
 
       <div className="space-y-4">
+        {/* Search */}
+        <div>
+          <label className="block text-[#f472b6] font-medium mb-2">
+            Tìm kiếm
+          </label>
+          <input
+            type="text"
+            placeholder="Tìm sản phẩm..."
+            value={filters.search}
+            onChange={handleSearchChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors text-sm"
+          />
+        </div>
+
         {/* category filter */}
         <div>
           <label className="block text-[#f472b6] font-medium mb-2">
