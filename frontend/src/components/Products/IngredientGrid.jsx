@@ -20,7 +20,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
       );
     } else {
       return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
           Còn hàng
         </span>
       );
@@ -30,7 +30,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-500"></div>
       </div>
     );
   }
@@ -68,7 +68,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
       {ingredients.map((ingredient) => (
         <div
           key={ingredient._id}
-          className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200"
+          className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-pink-200"
         >
           {/* Image Container */}
           <div className="relative overflow-hidden bg-gray-50 h-48">
@@ -79,8 +79,8 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100">
-                <svg className="w-16 h-16 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 to-pink-100">
+                <svg className="w-16 h-16 text-pink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
@@ -96,13 +96,13 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
           <div className="p-4">
             {/* Category */}
             <div className="mb-2">
-              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-pink-50 text-pink-700 border border-pink-200">
                 {ingredient.category}
               </span>
             </div>
 
             {/* Name */}
-            <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors duration-200 line-clamp-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors duration-200 line-clamp-2">
               {ingredient.name}
             </h3>
 
@@ -123,7 +123,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
               <div className="flex flex-col">
                 {ingredient.discountPrice > 0 ? (
                   <>
-                    <span className="text-lg font-bold text-green-600">
+                    <span className="text-lg font-bold text-pink-600">
                       {formatPrice(ingredient.discountPrice)}
                     </span>
                     <span className="text-sm text-gray-500 line-through">
@@ -139,8 +139,8 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
               
               {/* Action placeholder - có thể thêm nút "Xem chi tiết" sau */}
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
