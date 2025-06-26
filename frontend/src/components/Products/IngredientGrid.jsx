@@ -121,7 +121,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
             {/* Price */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                {ingredient.discountPrice > 0 ? (
+                {ingredient.discountPrice > 0 && ingredient.discountPrice < ingredient.price ? (
                   <>
                     <span className="text-lg font-bold text-pink-600">
                       {formatPrice(ingredient.discountPrice)}
@@ -132,7 +132,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
                   </>
                 ) : (
                   <span className="text-lg font-bold text-gray-900">
-                    {formatPrice(ingredient.price)}
+                    {formatPrice(ingredient.discountPrice || ingredient.price)}
                   </span>
                 )}
               </div>

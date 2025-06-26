@@ -178,22 +178,22 @@ const SearchResultsPage = () => {
                           {product.name}
                         </h3>
 
-                        <div className="flex items-center justify-between">
-                          {product.discountPrice && product.discountPrice < product.price ? (
-                            <div className="flex flex-col">
-                              <span className="text-lg font-bold text-pink-600">
-                                {formatPrice(product.discountPrice)}
-                              </span>
-                              <span className="text-sm text-gray-500 line-through">
-                                {formatPrice(product.price)}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-lg font-bold text-gray-900">
-                              {formatPrice(product.price)}
-                            </span>
-                          )}
-                        </div>
+                                                 <div className="flex items-center justify-between">
+                           {product.discountPrice && product.discountPrice < product.price ? (
+                             <div className="flex flex-col">
+                               <span className="text-lg font-bold text-pink-600">
+                                 {formatPrice(product.discountPrice)}
+                               </span>
+                               <span className="text-sm text-gray-500 line-through">
+                                 {formatPrice(product.price)}
+                               </span>
+                             </div>
+                           ) : (
+                             <span className="text-lg font-bold text-gray-900">
+                               {formatPrice(product.discountPrice || product.price)}
+                             </span>
+                           )}
+                         </div>
                       </div>
                     </Link>
                   ))}
@@ -257,11 +257,22 @@ const SearchResultsPage = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold text-gray-900">
-                            {formatPrice(ingredient.price)}
-                          </span>
-                        </div>
+                                                 <div className="flex items-center justify-between">
+                           {ingredient.discountPrice && ingredient.discountPrice < ingredient.price ? (
+                             <div className="flex flex-col">
+                               <span className="text-lg font-bold text-green-600">
+                                 {formatPrice(ingredient.discountPrice)}
+                               </span>
+                               <span className="text-sm text-gray-500 line-through">
+                                 {formatPrice(ingredient.price)}
+                               </span>
+                             </div>
+                           ) : (
+                             <span className="text-lg font-bold text-gray-900">
+                               {formatPrice(ingredient.discountPrice || ingredient.price)}
+                             </span>
+                           )}
+                         </div>
                       </div>
                     </div>
                   ))}
