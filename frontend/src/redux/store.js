@@ -7,6 +7,7 @@ import orderReducer from './slices/orderSlice';
 import adminReducer from './slices/adminSlice';
 import adminProductReducer from './slices/adminProductSlice';
 import adminOrderReducer from './slices/adminOrderSlice';
+import adminIngredientReducer from './slices/adminIngredientSlice';
 import analyticsReducer from './slices/analyticsSlice';
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
         admin: adminReducer,
         adminProducts: adminProductReducer,
         adminOrders: adminOrderReducer,
+        adminIngredients: adminIngredientReducer,
         analytics: analyticsReducer,
     },
 });

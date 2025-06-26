@@ -62,6 +62,19 @@ const AdminSidebar = () => {
         </NavLink>
         {/*  */}
         <NavLink
+          to={"/admin/ingredients"}
+          className={({ isActive }) =>
+            isActive
+              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
+              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+          }
+          end
+        >
+          <FaBox className="text-pink-500"></FaBox>
+          <span className="">Nguyên liệu</span>
+        </NavLink>
+        {/*  */}
+        <NavLink
           to={"/admin/orders"}
           className={({ isActive }) =>
             isActive
