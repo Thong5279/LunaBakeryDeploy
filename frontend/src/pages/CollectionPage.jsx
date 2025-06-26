@@ -48,7 +48,7 @@ const CollectionPage = () => {
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-3xl font-bold uppercase text-pink-500 tracking-wide">
-            Toàn bộ sản phẩm
+            Bánh ngon mời bạn
           </h1>
         </div>
       </div>

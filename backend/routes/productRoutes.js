@@ -1,5 +1,6 @@
 const express = require("express");
 const Product = require("../models/Product");
+const Ingredient = require("../models/Ingredient");
 const { protect, admin } = require("../middleware/authMiddleware");
 const mongoose = require("mongoose");
 
@@ -288,6 +289,74 @@ router.get("/new-arrivals", async (req, res) => {
   } catch (error) {
     console.error("Error fetching new arrivals:", error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+// @route GET /api/products/search-suggestions
+// @desc Get search suggestions for products and ingredients
+// @access Public
+router.get("/search-suggestions", async (req, res) => {
+  try {
+    const { q } = req.query;
+    
+    if (!q || q.trim().length < 2) {
+      return res.json([]);
+    }
+    
+    const searchTerm = q.trim();
+    const searchRegex = { $regex: searchTerm, $options: "i" };
+    
+    // Search products (limit to 3)
+    const products = await Product.find({
+      $or: [
+        { name: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex }
+      ],
+      isPublished: true
+    })
+    .select('name category images price discountPrice')
+    .limit(3);
+    
+    // Search ingredients (limit to 2)
+    const ingredients = await Ingredient.find({
+      $or: [
+        { name: searchRegex },
+        { description: searchRegex },
+        { category: searchRegex }
+      ],
+      status: 'active'
+    })
+    .select('name category images price discountPrice')
+    .limit(2);
+    
+    // Format suggestions
+    const suggestions = [
+      ...products.map(product => ({
+        id: product._id,
+        name: product.name,
+        category: product.category,
+        image: product.images && product.images.length > 0 ? product.images[0].url : null,
+        price: product.discountPrice || product.price,
+        type: 'product',
+        url: `/product/${product._id}`
+      })),
+      ...ingredients.map(ingredient => ({
+        id: ingredient._id,
+        name: ingredient.name,
+        category: ingredient.category,
+        image: ingredient.images && ingredient.images.length > 0 ? ingredient.images[0] : null,
+        price: ingredient.price,
+        type: 'ingredient',
+        url: `/ingredients?search=${encodeURIComponent(ingredient.name)}`
+      }))
+    ];
+    
+    res.json(suggestions);
+    
+  } catch (error) {
+    console.error("Error fetching search suggestions:", error);
+    res.status(500).json({ message: "Lỗi server khi tải gợi ý tìm kiếm" });
   }
 });
 
