@@ -45,11 +45,13 @@ export const PRODUCT_FLAVORS = [
 // Các size phổ biến
 export const PRODUCT_SIZES = [
   '12cm',
-  '15cm',
+  '14cm',
+  '16cm',
   '18cm',
   '20cm',
   '22cm',
-  '25cm',
+  '24cm',
+  '26cm',
   'Nhỏ',
   'Vừa', 
   'Lớn',
