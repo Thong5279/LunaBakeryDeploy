@@ -9,7 +9,6 @@ import {
 } from "../../redux/slices/adminIngredientSlice";
 import { 
   INGREDIENT_CATEGORIES, 
-  INGREDIENT_UNITS,
   INGREDIENT_SORT_OPTIONS,
   STOCK_FILTER_OPTIONS,
   INGREDIENT_STATUS
@@ -42,7 +41,6 @@ const IngredientManagement = () => {
     price: "",
     discountPrice: "",
     quantity: "",
-    unit: INGREDIENT_UNITS[0],
     sku: "",
     images: [],
     supplier: "",
@@ -94,7 +92,6 @@ const IngredientManagement = () => {
       price: "",
       discountPrice: "",
       quantity: "",
-      unit: INGREDIENT_UNITS[0],
       sku: "",
       images: [],
       supplier: "",
@@ -400,7 +397,7 @@ const IngredientManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">
-                      <span>{ingredient.quantity} {ingredient.unit}</span>
+                      <span>{ingredient.quantity}</span>
                       {getStockStatus(ingredient.quantity)}
                     </div>
                   </td>
@@ -505,7 +502,7 @@ const IngredientManagement = () => {
                     SKU: {ingredientToDelete.sku}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Số lượng: {ingredientToDelete.quantity} {ingredientToDelete.unit}
+                    Số lượng: {ingredientToDelete.quantity}
                   </p>
                 </div>
               )}
@@ -600,25 +597,6 @@ const IngredientManagement = () => {
                     {INGREDIENT_CATEGORIES.map((category) => (
                       <option key={category} value={category}>
                         {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Đơn vị *
-                  </label>
-                  <select
-                    name="unit"
-                    value={newIngredient.unit}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    required
-                  >
-                    {INGREDIENT_UNITS.map((unit) => (
-                      <option key={unit} value={unit}>
-                        {unit}
                       </option>
                     ))}
                   </select>

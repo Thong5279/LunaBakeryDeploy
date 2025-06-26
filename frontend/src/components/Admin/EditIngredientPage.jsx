@@ -9,7 +9,6 @@ import {
 } from "../../redux/slices/adminIngredientSlice";
 import { 
   INGREDIENT_CATEGORIES, 
-  INGREDIENT_UNITS,
   INGREDIENT_STATUS
 } from "../../constants/ingredientConstants";
 
@@ -31,7 +30,6 @@ const EditIngredientPage = () => {
     price: "",
     discountPrice: "",
     quantity: "",
-    unit: INGREDIENT_UNITS[0],
     sku: "",
     status: "active",
     supplier: "",
@@ -64,7 +62,6 @@ const EditIngredientPage = () => {
         price: currentIngredient.price?.toString() || "",
         discountPrice: currentIngredient.discountPrice?.toString() || "",
         quantity: currentIngredient.quantity?.toString() || "",
-        unit: currentIngredient.unit || INGREDIENT_UNITS[0],
         sku: currentIngredient.sku || "",
         status: currentIngredient.status || "active",
         supplier: currentIngredient.supplier || "",
@@ -283,7 +280,7 @@ const EditIngredientPage = () => {
                 <span className="font-medium">Giá hiện tại:</span> {formatPrice(currentIngredient.price)} VNĐ
               </div>
               <div>
-                <span className="font-medium">Số lượng:</span> {currentIngredient.quantity} {currentIngredient.unit}
+                <span className="font-medium">Số lượng:</span> {currentIngredient.quantity}
               </div>
               <div>
                 <span className="font-medium">Trạng thái:</span> 
@@ -358,24 +355,6 @@ const EditIngredientPage = () => {
                 {INGREDIENT_CATEGORIES.map((category) => (
                   <option key={category} value={category}>
                     {category}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Đơn vị *
-              </label>
-              <select
-                name="unit"
-                value={formData.unit}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-              >
-                {INGREDIENT_UNITS.map((unit) => (
-                  <option key={unit} value={unit}>
-                    {unit}
                   </option>
                 ))}
               </select>

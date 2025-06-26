@@ -2,10 +2,74 @@ const express = require("express");
 const Checkout = require("../models/Checkout");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
+const Ingredient = require("../models/Ingredient");
 const Order = require("../models/Order");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
+
+// Helper function to update inventory based on item type
+const updateInventory = async (orderItems) => {
+  try {
+    for (const item of orderItems) {
+      const { productId, quantity } = item;
+      let { itemType } = item;
+      
+      // Nếu không có itemType (data cũ), hãy detect automatically
+      if (!itemType) {
+        console.log(`🔍 ItemType missing for ${productId}, detecting automatically...`);
+        
+        // Thử tìm trong Product trước
+        const product = await Product.findById(productId);
+        if (product) {
+          itemType = 'Product';
+          console.log(`✅ Detected as Product: ${productId}`);
+        } else {
+          // Nếu không tìm thấy trong Product, thử Ingredient
+          const ingredient = await Ingredient.findById(productId);
+          if (ingredient) {
+            itemType = 'Ingredient';
+            console.log(`✅ Detected as Ingredient: ${productId}`);
+          } else {
+            console.log(`❌ Item ${productId} not found in both Product and Ingredient collections`);
+            continue; // Skip item này nếu không tìm thấy
+          }
+        }
+      }
+      
+      console.log(`📦 Updating inventory for ${itemType}: ${productId}, quantity: ${quantity}`);
+      
+      if (itemType === 'Ingredient') {
+        // Update ingredient quantity
+        const result = await Ingredient.findByIdAndUpdate(
+          productId,
+          { $inc: { quantity: -quantity } },
+          { new: true }
+        );
+        if (result) {
+          console.log(`✅ Updated ingredient ${productId}: ${result.quantity + quantity} → ${result.quantity}`);
+        } else {
+          console.log(`❌ Failed to update ingredient ${productId}`);
+        }
+      } else {
+        // Default to Product (backwards compatibility)
+        const result = await Product.findByIdAndUpdate(
+          productId,
+          { $inc: { quantity: -quantity } },
+          { new: true }
+        );
+        if (result) {
+          console.log(`✅ Updated product ${productId}: ${result.quantity + quantity} → ${result.quantity}`);
+        } else {
+          console.log(`❌ Failed to update product ${productId}`);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('❌ Error updating inventory:', error);
+    throw error;
+  }
+};
 
 // @desc GET api/checkout/pending
 // @desc Get user's pending checkout
@@ -128,6 +192,29 @@ router.post("/:id/finalize", protect, async (req, res) => {
       // Debug: Log checkout items trước khi tạo order
       console.log('🔄 Finalizing checkout with items:', JSON.stringify(checkout.checkoutItems, null, 2));
       
+      // Check từng item trong checkout
+      console.log('🔍 Analyzing checkout items:');
+      checkout.checkoutItems.forEach((item, index) => {
+        console.log(`  Item ${index + 1}:`, {
+          productId: item.productId,
+          name: item.name,
+          quantity: item.quantity,
+          itemType: item.itemType || 'MISSING',
+          price: item.price
+        });
+      });
+      
+      // Update inventory trước khi tạo order
+      try {
+        console.log('🔄 Starting inventory update...');
+        await updateInventory(checkout.checkoutItems);
+        console.log('✅ Inventory updated successfully');
+      } catch (inventoryError) {
+        console.error('❌ Error updating inventory:', inventoryError);
+        // Không fail toàn bộ transaction, chỉ log error
+        // Vì order đã được paid, cần tạo order dù inventory có lỗi
+      }
+      
       // Create a new order from the checkout
       const finalOrder = await Order.create({
         user: checkout.user,
@@ -142,10 +229,12 @@ router.post("/:id/finalize", protect, async (req, res) => {
         paymentDetails: checkout.paymentDetails, // Include payment details
       });
       
-      console.log('✅ Order created with items:', JSON.stringify(finalOrder.orderItems, null, 2));
+      console.log('✅ Order created with ID:', finalOrder._id);
 
       //delete the cart associated with the user
       await Cart.findOneAndDelete({ user: checkout.user });
+      console.log('✅ Cart cleared for user:', checkout.user);
+      
       res.status(201).json(finalOrder);
     }
   } catch (error) {
