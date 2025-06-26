@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProductGrid from "./ProductGrid";
 import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slices/productsSlice";
@@ -10,6 +10,7 @@ import { addToCart } from "../../redux/slices/cartSlice";
 
 const ProductDetails = ({ productId }) => {
   const { id: routeID } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector((state) => state.products);
   const { user, guestId } = useSelector((state) => state.auth);
@@ -37,6 +38,16 @@ const ProductDetails = ({ productId }) => {
     
     // Fallback về giá gốc
     return selectedProduct.discountPrice || selectedProduct.price;
+  };
+
+  const handleGoBack = () => {
+    // Kiểm tra collection từ URL hoặc product category để navigate về đúng collection
+    if (selectedProduct?.collection) {
+      navigate(`/collections/${selectedProduct.collection.toLowerCase()}`);
+    } else {
+      // Fallback về trang home nếu không xác định được collection
+      navigate('/');
+    }
   };
 
   useEffect(() => {
@@ -107,11 +118,38 @@ const ProductDetails = ({ productId }) => {
   };
 
   if (loading) return <div className="text-center py-10">Đang tải sản phẩm...</div>;
-  if (error) return <div className="text-center text-red-500 py-10">Lỗi: {error}</div>;
+  if (error) return (
+    <div className="text-center py-10">
+      <div className="mx-auto w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-4">
+        <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">Có lỗi xảy ra</h3>
+      <p className="text-red-600">{error}</p>
+      <button
+        onClick={handleGoBack}
+        className="mt-4 bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors"
+      >
+        Quay lại danh sách sản phẩm
+      </button>
+    </div>
+  );
 
   return selectedProduct ? (
     <div className="p-6">
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
+        {/* Back button */}
+        <motion.button
+          onClick={handleGoBack}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center gap-2 text-pink-600 hover:text-pink-700 mb-6 font-medium"
+        >
+          <FaArrowLeft className="w-4 h-4" />
+          Quay lại danh sách sản phẩm
+        </motion.button>
+
         <div className="flex flex-col md:flex-row gap-8">
           {/* Hình ảnh */}
           <div className="md:w-1/2 space-y-4">
