@@ -6,15 +6,15 @@ export const PRODUCT_CATEGORIES = [
   'Bánh tart',
   'Bánh trung thu',
   'Bánh ngọt',
+  'Bánh mỳ',
   'Canelé',
   'Croissant',
-  'Bánh kem cuộn',
   'Donut',
   'Bánh crepe',
   'Macaron',
   'Cookie',
   'Éclair',
-  'Mochi kem',
+  'Mochi',
   'Cheese cake'
 ];
 
