@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import CollectionPage from "./pages/CollectionPage";
 import IngredientsPage from "./pages/IngredientsPage";
 import ProductDetails from "./components/Products/ProductDetails";
+import IngredientDetails from "./components/Products/IngredientDetails";
 import Checkout from "./components/Cart/Checkout";
 import OderconfirmationPage from "./pages/OderconfirmationPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="/ingredients" element={<IngredientsPage />} />
             <Route path="/search" element={<SearchResultsPage />} />
             <Route path="product/:id" element={<ProductDetails />} />
+            <Route path="ingredient/:id" element={<IngredientDetails />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="payment-success" element={<PaymentSuccessPage />} />
             <Route path="zalopay-return" element={<ZaloPayManualReturn />} />

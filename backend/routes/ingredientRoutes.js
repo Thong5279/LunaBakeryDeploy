@@ -131,4 +131,43 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+// @desc    Get single ingredient by ID (Public)
+// @route   GET /api/ingredients/:id
+// @access  Public
+router.get('/:id', async (req, res) => {
+  try {
+    const ingredient = await Ingredient.findOne({ 
+      _id: req.params.id, 
+      status: 'active' 
+    });
+
+    if (!ingredient) {
+      return res.status(404).json({
+        success: false,
+        message: 'Không tìm thấy nguyên liệu'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: ingredient
+    });
+  } catch (error) {
+    console.error('Error fetching ingredient details:', error);
+    
+    // Handle invalid ObjectId
+    if (error.name === 'CastError') {
+      return res.status(404).json({
+        success: false,
+        message: 'ID nguyên liệu không hợp lệ'
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi tải chi tiết nguyên liệu'
+    });
+  }
+});
+
 module.exports = router; 

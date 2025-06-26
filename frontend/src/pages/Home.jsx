@@ -47,7 +47,7 @@ const Home = () => {
       <CategorySection />
       <NewArrivals />
       {/* Best sellers */}
-      <h2 className="text-3xl text-center font-bold text-pink-500 mb-4 tracking-wide">
+      <h2 className="text-3xl text-center mt-5 font-bold text-pink-500 mb-4 tracking-wide">
         ✨ Best Sellers ✨
       </h2>
       {bestSellers?._id ? (

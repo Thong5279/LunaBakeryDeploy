@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const IngredientGrid = ({ ingredients, loading, error }) => {
+  const navigate = useNavigate();
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " ₫";
   };
@@ -25,6 +28,10 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
         </span>
       );
     }
+  };
+
+  const handleIngredientClick = (ingredientId) => {
+    navigate(`/ingredient/${ingredientId}`);
   };
 
   if (loading) {
@@ -68,7 +75,8 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
       {ingredients.map((ingredient) => (
         <div
           key={ingredient._id}
-          className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-pink-200"
+          onClick={() => handleIngredientClick(ingredient._id)}
+          className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-pink-200 cursor-pointer transform hover:scale-105"
         >
           {/* Image Container */}
           <div className="relative overflow-hidden bg-gray-50 h-48">
@@ -89,6 +97,19 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
             {/* Stock Status Badge */}
             <div className="absolute top-3 right-3">
               {getStockStatus(ingredient.quantity)}
+            </div>
+
+            {/* Hover overlay with "Xem chi tiết" button */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleIngredientClick(ingredient._id);
+                }}
+                className="bg-white text-pink-600 px-4 py-2 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-pink-50"
+              >
+                Xem chi tiết
+              </button>
             </div>
           </div>
 
@@ -137,7 +158,7 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
                 )}
               </div>
               
-              {/* Action placeholder - có thể thêm nút "Xem chi tiết" sau */}
+              {/* Action icon */}
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -4,7 +4,7 @@ const cartItemSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Product'
+    refPath: 'products.itemType' // Dynamic reference based on itemType
   },
   name: String,
   image: String,
@@ -15,7 +15,12 @@ const cartItemSchema = new mongoose.Schema({
     default: 1,
   },
   size: String,      // Nếu sản phẩm có size
-  flavor: String     // Nếu sản phẩm có hương vị
+  flavor: String,    // Nếu sản phẩm có hương vị
+  itemType: {        // Phân biệt giữa sản phẩm và nguyên liệu
+    type: String,
+    enum: ['Product', 'Ingredient'],
+    default: 'Product'
+  }
 },
     {_id: false} // Không tạo _id riêng cho từng item
 );

@@ -32,6 +32,36 @@ export const fetchIngredients = createAsyncThunk(
   }
 );
 
+export const fetchIngredientDetails = createAsyncThunk(
+  'ingredients/fetchIngredientDetails',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/ingredients/${id}`);
+      return response.data.data;
+    } catch (error) {
+      const message = error.response?.data?.message || 'Lỗi khi tải chi tiết nguyên liệu';
+      return rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchSimilarIngredients = createAsyncThunk(
+  'ingredients/fetchSimilarIngredients',
+  async ({ id, category }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/ingredients?category=${category}&limit=8`
+      );
+      // Filter out the current ingredient
+      const similarIngredients = response.data.data.filter(ing => ing._id !== id);
+      return similarIngredients.slice(0, 6); // Take only 6 similar ingredients
+    } catch (error) {
+      const message = error.response?.data?.message || 'Lỗi khi tải nguyên liệu tương tự';
+      return rejectWithValue(message);
+    }
+  }
+);
+
 export const fetchIngredientCategories = createAsyncThunk(
   'ingredients/fetchCategories',
   async (_, { rejectWithValue }) => {
@@ -61,6 +91,8 @@ export const fetchIngredientStats = createAsyncThunk(
 // Initial state
 const initialState = {
   ingredients: [],
+  selectedIngredient: null,
+  similarIngredients: [],
   categories: [],
   stats: null,
   pagination: {
@@ -97,6 +129,10 @@ const ingredientsSlice = createSlice({
         stock: 'all',
         sort: 'name-asc'
       };
+    },
+    clearSelectedIngredient: (state) => {
+      state.selectedIngredient = null;
+      state.similarIngredients = [];
     }
   },
   extraReducers: (builder) => {
@@ -114,6 +150,32 @@ const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Fetch ingredient details
+      .addCase(fetchIngredientDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchIngredientDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedIngredient = action.payload;
+      })
+      .addCase(fetchIngredientDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch similar ingredients
+      .addCase(fetchSimilarIngredients.pending, (state) => {
+        // Don't set loading for similar ingredients to avoid UI flicker
+      })
+      .addCase(fetchSimilarIngredients.fulfilled, (state, action) => {
+        state.similarIngredients = action.payload;
+      })
+      .addCase(fetchSimilarIngredients.rejected, (state, action) => {
+        // Silently fail for similar ingredients
+        console.error('Failed to fetch similar ingredients:', action.payload);
       })
 
       // Fetch categories
@@ -144,5 +206,5 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const { clearError, setFilters, resetFilters } = ingredientsSlice.actions;
+export const { clearError, setFilters, resetFilters, clearSelectedIngredient } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer; 

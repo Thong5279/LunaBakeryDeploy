@@ -1,6 +1,7 @@
 const express = require("express");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
+const Ingredient = require("../models/Ingredient");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -19,9 +20,29 @@ const getCart = async (userId, guestId) => {
   }
 };
 
+// Helper function to find product or ingredient
+const findProductOrIngredient = async (productId) => {
+  // Try to find as a product first
+  let item = await Product.findById(productId);
+  let itemType = 'Product';
+  
+  // If not found as product, try as ingredient
+  if (!item) {
+    item = await Ingredient.findById(productId);
+    itemType = 'Ingredient';
+  }
+  
+  return { item, itemType };
+};
+
 // Helper function to calculate price based on size
 const calculatePriceBySize = (product, size) => {
-  // Nếu có sizePricing và size được chọn
+  // Nguyên liệu không có size pricing, chỉ có giá cố định
+  if (!product.sizePricing) {
+    return product.discountPrice || product.price;
+  }
+  
+  // Nếu có sizePricing và size được chọn (chỉ cho sản phẩm)
   if (product.sizePricing && product.sizePricing.length > 0 && size) {
     const sizePrice = product.sizePricing.find(sp => sp.size === size);
     if (sizePrice) {
@@ -42,13 +63,14 @@ router.post("/", async (req, res) => {
   const { productId, quantity, size, flavor, guestId, userId } = req.body;
 
   try {
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    const { item, itemType } = await findProductOrIngredient(productId);
+    
+    if (!item) {
+      return res.status(404).json({ message: "Sản phẩm hoặc nguyên liệu không tìm thấy" });
     }
 
-    // Tính giá theo size đã chọn
-    const priceBySize = calculatePriceBySize(product, size);
+    // Tính giá theo size đã chọn (chỉ áp dụng cho sản phẩm)
+    const priceBySize = calculatePriceBySize(item, size);
 
     //determine if the user is logged in or a guest
     let cart = await getCart(userId, guestId);
@@ -68,13 +90,15 @@ router.post("/", async (req, res) => {
       } else {
         // If product does not exist, add it to cart
         cart.products.push({
-          productId: product._id,
-          name: product.name,
-          image: product.images[0]?.url || "",
+          productId: item._id,
+          name: item.name,
+          image: (item.images && item.images.length > 0) ? 
+                 (typeof item.images[0] === 'string' ? item.images[0] : item.images[0]?.url) : "",
           price: priceBySize, // Sử dụng giá đã tính theo size
           quantity,
-          size,
-          flavor,
+          size: size || "Mặc định",
+          flavor: flavor || "Mặc định",
+          itemType, // Thêm thông tin loại item
         });
       }
       // Recalculate total price
@@ -91,12 +115,14 @@ router.post("/", async (req, res) => {
         products: [
           {
             productId,
-            name: product.name,
-            image: product.images[0].url, // Assuming the first image is the main one
+            name: item.name,
+            image: (item.images && item.images.length > 0) ? 
+                   (typeof item.images[0] === 'string' ? item.images[0] : item.images[0]?.url) : "",
             price: priceBySize, // Sử dụng giá đã tính theo size
             quantity,
-            size,
-            flavor,
+            size: size || "Mặc định",
+            flavor: flavor || "Mặc định",
+            itemType, // Thêm thông tin loại item
           },
         ],
         totalPrice: priceBySize * quantity, // Sử dụng giá đã tính theo size
