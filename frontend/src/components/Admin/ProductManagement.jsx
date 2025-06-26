@@ -11,6 +11,9 @@ const ProductManagement = () => {
   );
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [createError, setCreateError] = useState("");
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -45,10 +48,31 @@ const ProductManagement = () => {
     dispatch(fetchAdminProducts());
   }, [dispatch]);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
-      dispatch(deleteProduct(id));
+  const handleDelete = (product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (productToDelete) {
+      dispatch(deleteProduct(productToDelete._id))
+        .then((result) => {
+          if (result.type.endsWith("/fulfilled")) {
+            setDeleteSuccess(true);
+            // Auto hide success message after 3 seconds
+            setTimeout(() => {
+              setDeleteSuccess(false);
+            }, 3000);
+          }
+        });
+      setShowDeleteModal(false);
+      setProductToDelete(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setProductToDelete(null);
   };
 
   const handleAddProduct = () => {
@@ -130,6 +154,28 @@ const ProductManagement = () => {
   }
   return (
     <div className="max-w-7xl mx-auto p-6">
+      {/* Success Message */}
+      {deleteSuccess && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out">
+          <div className="flex items-center space-x-2">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span className="font-medium">Đã xóa sản phẩm thành công!</span>
+          </div>
+        </div>
+      )}
+      
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Quản lý sản phẩm</h2>
         <button
@@ -180,7 +226,7 @@ const ProductManagement = () => {
                     </Link>
                     <button
                       className="bg-red-400 text-white px-4 py-1 rounded-md hover:bg-red-600"
-                      onClick={() => handleDelete(product._id)}
+                      onClick={() => handleDelete(product)}
                     >
                       Xóa
                     </button>
@@ -197,6 +243,71 @@ const ProductManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 ease-out">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full">
+              <svg
+                className="w-6 h-6 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </div>
+            
+            <div className="text-center">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Xác nhận xóa sản phẩm
+              </h3>
+              
+              {productToDelete && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Bạn có chắc chắn muốn xóa sản phẩm:
+                  </p>
+                  <p className="font-semibold text-gray-900">
+                    {productToDelete.name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    SKU: {productToDelete.sku}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Giá: {new Intl.NumberFormat("vi-VN").format(productToDelete.price)} VNĐ
+                  </p>
+                </div>
+              )}
+              
+              <p className="text-sm text-gray-500 mb-6">
+                Hành động này không thể hoàn tác. Tất cả dữ liệu liên quan đến sản phẩm sẽ bị xóa vĩnh viễn.
+              </p>
+              
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={cancelDelete}
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors duration-200 font-medium"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                >
+                  Xóa sản phẩm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Product Modal */}
       {showAddModal && (
