@@ -18,6 +18,7 @@ import UserManagement from "./components/Admin/UserManagement";
 import ProductManagement from "./components/Admin/ProductManagement";
 import IngredientManagement from "./components/Admin/IngredientManagement";
 import EditProductPage from "./components/Admin/EditProductPage";
+import EditIngredientPage from "./components/Admin/EditIngredientPage";
 import OderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import GoogleCallback from "./components/Auth/GoogleCallback";
@@ -73,6 +74,7 @@ const App = () => {
             <Route path="products" element={<ProductManagement />} />
             <Route path="products/:id/edit" element={<EditProductPage />} />
             <Route path="ingredients" element={<IngredientManagement />} />
+            <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
             <Route path="orders" element={<OderManagement />} />
             <Route path="analytics" element={<AnalyticsPage />} />
           </Route>
