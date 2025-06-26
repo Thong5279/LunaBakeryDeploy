@@ -50,85 +50,90 @@ const IngredientFilterSidebar = () => {
   const hasActiveFilters = filters.category !== 'all' || filters.stock !== 'all' || filters.search !== '';
 
   return (
-    <div className="p-4">
-      <h3 className="text-xl font-medium text-pink-500 mb-4">Lọc nguyên liệu</h3>
-      
-      {/* Search */}
-      <div className="mb-4">
-        <label className="block text-[#f472b6] font-medium mb-2">
-          Tìm kiếm
-        </label>
-        <input
-          type="text"
-          placeholder="Tìm nguyên liệu..."
-          value={filters.search}
-          onChange={(e) => handleFilterChange('search', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"
-        />
-      </div>
-
-      {/* Categories */}
-      <div className="mb-4">
-        <label className="block text-[#f472b6] font-medium mb-2">
-          Danh mục
-        </label>
-        <div className="flex items-center mb-1">
-          <input
-            type="radio"
-            name="category"
-            value="all"
-            checked={filters.category === 'all'}
-            onChange={(e) => handleFilterChange('category', e.target.value)}
-            className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
-          />
-          <span className="text-gray-700">Tất cả danh mục</span>
-        </div>
-        {categories.map((category) => (
-          <div key={category} className="flex items-center mb-1">
-            <input
-              type="radio"
-              name="category"
-              value={category}
-              checked={filters.category === category}
-              onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
-            />
-            <span className="text-gray-700">{category}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Stock Status */}
-      <div className="mb-4">
-        <label className="block text-[#f472b6] font-medium mb-2">
-          Tình trạng kho
-        </label>
-        {stockOptions.map((option) => (
-          <div key={option.value} className="flex items-center mb-1">
-            <input
-              type="radio"
-              name="stock"
-              value={option.value}
-              checked={filters.stock === option.value}
-              onChange={(e) => handleFilterChange('stock', e.target.value)}
-              className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
-            />
-            <span className="text-gray-700">{option.label}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Clear filters button */}
-      {hasActiveFilters && (
-        <div className="mt-6">
+    <div className="p-4 h-full overflow-y-auto">
+      {/* Header with clear button */}
+      <div className="flex items-center justify-between mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100">
+        <h3 className="text-xl font-medium text-pink-500">Lọc nguyên liệu</h3>
+        {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
-            className="w-full px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 transition-colors font-medium"
+            className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
           >
-            Xóa tất cả bộ lọc
+            Xóa lọc
           </button>
+        )}
+      </div>
+      
+      <div className="space-y-4">
+        {/* Search */}
+        <div>
+          <label className="block text-[#f472b6] font-medium mb-2">
+            Tìm kiếm
+          </label>
+          <input
+            type="text"
+            placeholder="Tìm nguyên liệu..."
+            value={filters.search}
+            onChange={(e) => handleFilterChange('search', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors text-sm"
+          />
         </div>
-      )}
+
+        {/* Categories */}
+        <div>
+          <label className="block text-[#f472b6] font-medium mb-2">
+            Danh mục
+          </label>
+          <div className="max-h-48 overflow-y-auto space-y-1 border border-gray-200 rounded-lg p-2">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                name="category"
+                value="all"
+                checked={filters.category === 'all'}
+                onChange={(e) => handleFilterChange('category', e.target.value)}
+                className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
+              />
+              <span className="text-gray-700 font-medium">Tất cả danh mục</span>
+            </div>
+            {categories.map((category) => (
+              <div key={category} className="flex items-center">
+                <input
+                  type="radio"
+                  name="category"
+                  value={category}
+                  checked={filters.category === category}
+                  onChange={(e) => handleFilterChange('category', e.target.value)}
+                  className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
+                />
+                <span className="text-gray-700 text-sm">{category}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stock Status */}
+        <div>
+          <label className="block text-[#f472b6] font-medium mb-2">
+            Tình trạng kho
+          </label>
+          <div className="space-y-1 border border-gray-200 rounded-lg p-2">
+            {stockOptions.map((option) => (
+              <div key={option.value} className="flex items-center">
+                <input
+                  type="radio"
+                  name="stock"
+                  value={option.value}
+                  checked={filters.stock === option.value}
+                  onChange={(e) => handleFilterChange('stock', e.target.value)}
+                  className="mr-2 h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
+                />
+                <span className="text-gray-700 text-sm">{option.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
