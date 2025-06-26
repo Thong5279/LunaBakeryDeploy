@@ -6,7 +6,7 @@ import { setFilters } from '../../redux/slices/ingredientsSlice';
 const IngredientSortOptions = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { filters, pagination } = useSelector((state) => state.ingredients);
+  const { filters, pagination, ingredients } = useSelector((state) => state.ingredients);
 
   const sortOptions = [
     { value: 'name-asc', label: 'Tên A-Z' },
@@ -34,18 +34,31 @@ const IngredientSortOptions = () => {
   };
 
   return (
-    <div className="flex justify-between items-center mb-4">
+    <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+      {/* Results Count */}
       <div className="text-gray-600">
-        Hiển thị {pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}-
-        {Math.min(pagination.page * pagination.limit, pagination.total)} 
-        trong số {pagination.total} nguyên liệu
+        Hiển thị{' '}
+        <span className="font-medium">
+          {pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0}
+        </span>
+        -
+        <span className="font-medium">
+          {Math.min(pagination.page * pagination.limit, pagination.total)}
+        </span>
+        {' '}trong số{' '}
+        <span className="font-medium">{pagination.total}</span>
+        {' '}nguyên liệu
       </div>
-      <div className="flex items-center">
-        <label className="text-gray-700 mr-2">Sắp xếp:</label>
+
+      {/* Sort Selection */}
+      <div className="flex items-center gap-2">
+        <label className="text-gray-700 font-medium">
+          Sắp xếp:
+        </label>
         <select
           value={filters.sort}
           onChange={(e) => handleSortChange(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white"
+          className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors min-w-[180px]"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>

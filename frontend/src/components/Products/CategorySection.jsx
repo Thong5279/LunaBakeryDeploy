@@ -50,7 +50,7 @@ const CategorySection = () => {
               alt="Collection Cake Category"
               className="w-full h-[500px] object-cover transition-all duration-1000 group-hover:scale-110"
             />
-            <div className="absolute bottom-8 left-8 bg-white bg-opacity-90 p-4 rounded-lg">
+            <div className="absolute bottom-8 left-8 bg-white/90 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-pink-500 transition-colors duration-300">
                 Bánh ngọt
               </h2>
@@ -70,7 +70,7 @@ const CategorySection = () => {
               alt="Baking Ingredients Category"
               className="w-full h-[500px] object-cover transition-all duration-1000 group-hover:scale-110"
             />
-            <div className="absolute bottom-8 left-8 bg-white bg-opacity-90 p-4 rounded-lg">
+            <div className="absolute bottom-8 left-8 bg-white/90 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-pink-500 transition-colors duration-300">
                 Nguyên liệu làm bánh
               </h2>
