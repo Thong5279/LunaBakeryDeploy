@@ -1,40 +1,94 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.jpg";
-import { loginUser } from "../redux/slices/authSlice"; // Import the login action
+import { loginUser, clearError } from "../redux/slices/authSlice"; // Import the login action
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch from react-redux
 import { mergeCart } from "../redux/slices/cartSlice";
 import { FaGoogle } from "react-icons/fa";
 
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const dispatch = useDispatch(); // Import useDispatch from react-redux
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId, loading } = useSelector((state) => state.auth);
+  const { user, guestId, loading, error } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
   //lay tham so chuyen huong va kiem tra
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
   const isCheckoutRedirect = redirect.includes("checkout");
 
+  // Generate success message based on user role
+  const getSuccessMessage = (userRole) => {
+    const messages = {
+      admin: "🎉 Chào mừng Admin! Đăng nhập thành công vào hệ thống quản trị",
+      customer: "🍰 Chào mừng bạn trở lại Luna Bakery! Đăng nhập thành công",
+      manager: "👨‍💼 Chào mừng Manager! Đăng nhập thành công vào hệ thống quản lý",
+      baker: "👨‍🍳 Chào mừng Baker! Đăng nhập thành công vào hệ thống sản xuất",
+      shipper: "🚚 Chào mừng Shipper! Đăng nhập thành công vào hệ thống giao hàng"
+    };
+    return messages[userRole] || "🎉 Đăng nhập thành công!";
+  };
+
   useEffect(() => {
     if (user) {
+      // Show success message based on user role
+      const message = getSuccessMessage(user.role);
+      setSuccessMessage(message);
+      setLoginSuccess(true);
+      
+      // Auto hide success message after 4 seconds
+      setTimeout(() => {
+        setLoginSuccess(false);
+      }, 4000);
+
+      // Handle cart merge and navigation
       if (cart?.products.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
-          navigate(isCheckoutRedirect ? "/checkout" : "/");
+          setTimeout(() => {
+            navigate(isCheckoutRedirect ? "/checkout" : "/");
+          }, 1500); // Delay navigation to show success message
         });
       } else {
-        navigate(isCheckoutRedirect ? "/checkout" : "/");
+        setTimeout(() => {
+          navigate(isCheckoutRedirect ? "/checkout" : "/");
+        }, 1500); // Delay navigation to show success message
       }
     }
   }, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
+
+  // Auto hide error message after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        dispatch(clearError());
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [error, dispatch]);
 
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser({ email, password })); // Dispatch the login action
+  };
+
+  // Clear error when user starts typing
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (error) {
+      dispatch(clearError());
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (error) {
+      dispatch(clearError());
+    }
   };
 
   // Function to handle Google login
@@ -45,6 +99,73 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      {/* Success Toast */}
+      {loginSuccess && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out max-w-md">
+          <div className="flex items-start space-x-3">
+            <svg
+              className="w-6 h-6 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <div>
+              <div className="font-medium text-sm">Đăng nhập thành công!</div>
+              <div className="text-xs mt-1 text-green-100">{successMessage}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Toast */}
+      {error && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out max-w-md">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-3">
+              <svg
+                className="w-6 h-6 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              <div>
+                <div className="font-medium text-sm">Đăng nhập thất bại!</div>
+                <div className="text-xs mt-1 text-red-100">
+                  {error.includes("password") || error.includes("mật khẩu") 
+                    ? "❌ Mật khẩu không chính xác. Vui lòng thử lại!"
+                    : error.includes("email") || error.includes("User") 
+                    ? "❌ Email không tồn tại trong hệ thống!"
+                    : `❌ ${error}`
+                  }
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => dispatch(clearError())}
+              className="text-red-200 hover:text-white ml-4 flex-shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Left: Form */}
       <div className="w-full md:w-1/2 flex justify-center items-center p-8 md:p-16 bg-white shadow-xl relative z-10">
         <form
@@ -67,7 +188,7 @@ const Login = () => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
               placeholder="Nhập email của bạn"
             />
@@ -79,7 +200,7 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#db2777]"
               placeholder="Nhập mật khẩu"
             />
