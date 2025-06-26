@@ -35,11 +35,14 @@ const EditIngredientPage = () => {
     sku: "",
     status: "active",
     supplier: "",
-    notes: ""
+    notes: "",
+    images: []
   });
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -65,7 +68,8 @@ const EditIngredientPage = () => {
         sku: currentIngredient.sku || "",
         status: currentIngredient.status || "active",
         supplier: currentIngredient.supplier || "",
-        notes: currentIngredient.notes || ""
+        notes: currentIngredient.notes || "",
+        images: currentIngredient.images || []
       });
     }
   }, [currentIngredient]);
@@ -84,6 +88,68 @@ const EditIngredientPage = () => {
         [name]: ""
       }));
     }
+  };
+
+  // Xử lý upload ảnh
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Kiểm tra định dạng file
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Chỉ hỗ trợ file ảnh (JPG, PNG, WebP)");
+      return;
+    }
+
+    // Kiểm tra kích thước file (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Kích thước file không được vượt quá 5MB");
+      return;
+    }
+
+    setUploadingImage(true);
+    setUploadError("");
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const token = localStorage.getItem('userToken');
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      
+      // Thêm ảnh vào danh sách
+      setFormData(prev => ({
+        ...prev,
+        images: [...(prev.images || []), data.imageUrl]
+      }));
+
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadError("Lỗi khi upload ảnh. Vui lòng thử lại.");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Xóa ảnh khỏi danh sách
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      images: (prev.images || []).filter((_, index) => index !== indexToRemove)
+    }));
   };
 
   const validateForm = () => {
@@ -426,6 +492,60 @@ const EditIngredientPage = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                 placeholder="Nhập tên nhà cung cấp"
               />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hình ảnh sản phẩm
+              </label>
+              
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Hỗ trợ: JPG, PNG, WebP. Tối đa 5MB
+                </p>
+                
+                {uploadError && (
+                  <p className="text-xs text-red-600 mt-2">{uploadError}</p>
+                )}
+                
+                {uploadingImage && (
+                  <p className="text-xs text-blue-600 mt-2">Đang upload...</p>
+                )}
+              </div>
+
+              {/* Hiển thị ảnh đã upload */}
+              {formData.images && formData.images.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">
+                    Ảnh hiện tại ({formData.images.length})
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {formData.images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Nguyên liệu ${index + 1}`}
+                          className="w-full h-20 object-cover rounded-md border"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="md:col-span-2">
