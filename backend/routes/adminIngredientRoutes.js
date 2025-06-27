@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Ingredient = require('../models/Ingredient');
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protect, adminOrManager } = require('../middleware/authMiddleware');
 
-// @desc    Get all ingredients (Admin only)
+// @desc    Get all ingredients (Admin/Manager only)
 // @route   GET /api/admin/ingredients
-// @access  Private/Admin
-router.get('/', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get('/', protect, adminOrManager, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -85,10 +85,10 @@ router.get('/', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Get ingredient categories and stats (Admin only)
+// @desc    Get ingredient categories and stats (Admin/Manager only)
 // @route   GET /api/admin/ingredients/stats/overview
-// @access  Private/Admin
-router.get('/stats/overview', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get('/stats/overview', protect, adminOrManager, async (req, res) => {
   try {
     const stats = await Ingredient.aggregate([
       {
@@ -131,10 +131,10 @@ router.get('/stats/overview', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Get ingredient by ID (Admin only)
+// @desc    Get ingredient by ID (Admin/Manager only)
 // @route   GET /api/admin/ingredients/:id
-// @access  Private/Admin
-router.get('/:id', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get('/:id', protect, adminOrManager, async (req, res) => {
   try {
     const ingredient = await Ingredient.findById(req.params.id);
     
@@ -158,10 +158,10 @@ router.get('/:id', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Create new ingredient (Admin only)
+// @desc    Create new ingredient (Admin/Manager only)
 // @route   POST /api/admin/ingredients
-// @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.post('/', protect, adminOrManager, async (req, res) => {
   try {
     const {
       name,
@@ -235,10 +235,10 @@ router.post('/', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Update ingredient (Admin only)
+// @desc    Update ingredient (Admin/Manager only)
 // @route   PUT /api/admin/ingredients/:id
-// @access  Private/Admin
-router.put('/:id', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.put('/:id', protect, adminOrManager, async (req, res) => {
   try {
     const ingredient = await Ingredient.findById(req.params.id);
     
@@ -301,10 +301,10 @@ router.put('/:id', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Delete ingredient (Admin only)
+// @desc    Delete ingredient (Admin/Manager only)
 // @route   DELETE /api/admin/ingredients/:id
-// @access  Private/Admin
-router.delete('/:id', protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.delete('/:id', protect, adminOrManager, async (req, res) => {
   try {
     const ingredient = await Ingredient.findById(req.params.id);
     

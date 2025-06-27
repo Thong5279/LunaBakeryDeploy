@@ -44,16 +44,24 @@ const Login = () => {
         setLoginSuccess(false);
       }, 4000);
 
+      // Determine redirect path based on user role
+      const getRedirectPath = () => {
+        if (isCheckoutRedirect) return "/checkout";
+        if (user.role === "admin") return "/admin";
+        if (user.role === "manager") return "/manager";
+        return "/";
+      };
+
       // Handle cart merge and navigation
       if (cart?.products.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
           setTimeout(() => {
-            navigate(isCheckoutRedirect ? "/checkout" : "/");
+            navigate(getRedirectPath());
           }, 1500); // Delay navigation to show success message
         });
       } else {
         setTimeout(() => {
-          navigate(isCheckoutRedirect ? "/checkout" : "/");
+          navigate(getRedirectPath());
         }, 1500); // Delay navigation to show success message
       }
     }

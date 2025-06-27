@@ -1,6 +1,6 @@
 const express = require("express");
 const Product = require("../models/Product");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { protect, adminOrManager } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -44,9 +44,9 @@ const generateSizePricing = (sizes, basePrice) => {
 };
 
 //@route GET /api/admin/products
-//@desc Get all products for admin
-//@access Private/Admin
-router.get("/", protect, admin, async (req, res) => {
+//@desc Get all products for admin/manager
+//@access Private/Admin or Manager
+router.get("/", protect, adminOrManager, async (req, res) => {
     try {
         const products = await Product.find({});
         res.json(products);
@@ -58,8 +58,8 @@ router.get("/", protect, admin, async (req, res) => {
 
 //@route PUT /api/admin/products/:id
 //@desc Update a product
-//@access Private/Admin
-router.put("/:id", protect, admin, async (req, res) => {
+//@access Private/Admin or Manager
+router.put("/:id", protect, adminOrManager, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         
@@ -104,8 +104,8 @@ router.put("/:id", protect, admin, async (req, res) => {
 
 //@route DELETE /api/admin/products/:id
 //@desc Delete a product
-//@access Private/Admin
-router.delete("/:id", protect, admin, async (req, res) => {
+//@access Private/Admin or Manager
+router.delete("/:id", protect, adminOrManager, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         
@@ -123,8 +123,8 @@ router.delete("/:id", protect, admin, async (req, res) => {
 
 //@route POST /api/admin/products
 //@desc Create a new product
-//@access Private/Admin
-router.post("/", protect, admin, async (req, res) => {
+//@access Private/Admin or Manager
+router.post("/", protect, adminOrManager, async (req, res) => {
     try {
         const {
             name,

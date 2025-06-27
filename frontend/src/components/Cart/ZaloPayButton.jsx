@@ -147,7 +147,7 @@ const ZaloPayButton = ({ amount, orderInfo, onSuccess, onError }) => {
             </div>
           </div>
           
-          {process.env.NODE_ENV === 'development' && (
+          {import.meta.env.DEV && (
             <p className="text-xs text-orange-600">
               🧪 Test flow: 
               <a 

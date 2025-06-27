@@ -27,11 +27,20 @@ const protect = async (req, res, next) => {
 
 //middleware kiểm tra quyền truy cập admin
 const admin = (req, res, next) => {
-  if (req.user && req.user.role ==="admin") {
+  if (req.user && req.user.role === "admin") {
     next();
   } else {
     res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
 
-module.exports = { protect , admin};
+//middleware kiểm tra quyền truy cập admin hoặc manager
+const adminOrManager = (req, res, next) => {
+  if (req.user && (req.user.role === "admin" || req.user.role === "manager")) {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as an admin or manager" });
+  }
+};
+
+module.exports = { protect, admin, adminOrManager};

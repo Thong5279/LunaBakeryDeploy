@@ -73,6 +73,14 @@ const Navbar = () => {
                 Admin
               </Link>
             )}
+            {user && user.role === "manager" && (
+              <Link
+                to={"/manager"}
+                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
+              >
+                Quản lý
+              </Link>
+            )}
 
             <Link to={"/profile"}>
               <FiUser

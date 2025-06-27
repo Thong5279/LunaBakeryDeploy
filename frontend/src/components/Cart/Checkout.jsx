@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { motion } from "framer-motion";
 import { FaPaypal, FaCreditCard, FaWallet, FaShieldAlt } from "react-icons/fa";
 import PayPalButton from "./PayPalButton";
 import ZaloPayButton from "./ZaloPayButton";
@@ -140,24 +139,6 @@ const Checkout = () => {
     toast.error(`Lỗi thanh toán: ${error}`);
   };
 
-  const handleFinalizeCheckout = async (checkoutId) => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
-        { source: 'GeneralCheckout' },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        }
-      );
-      navigate("/orders-confirmation");
-    } catch (error) {
-      console.log("Lỗi finalize checkout:", error);
-      toast.error("Có lỗi xảy ra khi hoàn tất đơn hàng");
-    }
-  };
-
   // Finalize without navigation (for PayPal)
   const handleFinalizeCheckoutSilent = async (checkoutId) => {
     try {
@@ -202,22 +183,13 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <motion.h1 
-          className="text-3xl font-bold text-center text-gray-800 mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
           💳 Thanh toán đơn hàng
-        </motion.h1>
+        </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Section - Shipping & Payment */}
-          <motion.div 
-            className="bg-white rounded-2xl shadow-xl p-8"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-2xl font-bold text-pink-600 mb-6 flex items-center">
               <FaShieldAlt className="mr-3" />
               Thông tin thanh toán
@@ -333,15 +305,13 @@ const Checkout = () => {
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">Chọn phương thức thanh toán</h3>
                   <div className="space-y-3">
                     {paymentMethods.map((method) => (
-                      <motion.label
+                      <label
                         key={method.id}
                         className={`block p-4 border-2 rounded-xl cursor-pointer transition-all ${
                           selectedPaymentMethod === method.id
                             ? 'border-pink-500 bg-pink-50'
                             : 'border-gray-200 hover:border-pink-300'
                         }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                       >
                         <input
                           type="radio"
@@ -376,7 +346,7 @@ const Checkout = () => {
                             </span>
                           ))}
                         </div>
-                      </motion.label>
+                      </label>
                     ))}
                   </div>
                 </div>
@@ -385,16 +355,14 @@ const Checkout = () => {
               {/* Submit Button */}
               {!checkoutId ? (
                 <div className="space-y-3">
-                  <motion.button
+                  <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     Tiếp tục thanh toán
-                  </motion.button>
+                  </button>
                   
-                  {process.env.NODE_ENV === 'development' && (
+                  {import.meta.env.DEV && (
                     <div className="text-center">
                       <p className="text-xs text-gray-500">
                         💡 Debug: CheckoutId sẽ được tạo và lưu vào localStorage
@@ -443,25 +411,17 @@ const Checkout = () => {
                 </div>
               )}
             </form>
-          </motion.div>
+          </div>
 
           {/* Right Section - Order Summary */}
-          <motion.div 
-            className="bg-white rounded-2xl shadow-xl p-8"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <div className="bg-white rounded-2xl shadow-xl p-8">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Tóm tắt đơn hàng</h3>
             
             <div className="space-y-4 mb-6">
               {cart.products.map((product, index) => (
-                <motion.div
+                <div
                   key={index}
                   className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   <img
                     src={product.image}
@@ -479,7 +439,7 @@ const Checkout = () => {
                       {product.price?.toLocaleString("vi-VN")} ₫
                     </p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
@@ -513,7 +473,7 @@ const Checkout = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

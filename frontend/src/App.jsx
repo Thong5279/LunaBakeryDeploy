@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "./redux/slices/authSlice";
 import UserLayout from "./components/Layout/UserLayout";
 import Home from "./pages/Home";
 import { Toaster } from "sonner";
@@ -23,6 +25,8 @@ import EditProductPage from "./components/Admin/EditProductPage";
 import EditIngredientPage from "./components/Admin/EditIngredientPage";
 import OderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
+import ManagerLayout from "./components/Manager/ManagerLayout";
+import ManagerHomePage from "./pages/ManagerHomePage";
 import GoogleCallback from "./components/Auth/GoogleCallback";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
@@ -34,59 +38,101 @@ import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
 import ProtectedRoute from "./components/ProtectedRoute";
 
+const AppContent = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Khôi phục user từ localStorage khi app khởi động
+    const userInfo = localStorage.getItem('userInfo');
+    const userToken = localStorage.getItem('userToken');
+    
+    if (userInfo && userToken) {
+      try {
+        const user = JSON.parse(userInfo);
+        dispatch(setUser(user));
+        console.log('✅ User restored from localStorage:', user.name);
+      } catch (error) {
+        console.error('❌ Error parsing user from localStorage:', error);
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('userToken');
+      }
+    }
+  }, [dispatch]);
+
+  return (
+    <BrowserRouter>
+      <Toaster position="top-right" />
+      <Routes>
+        <Route path="/" element={<UserLayout />}>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/auth/callback" element={<GoogleCallback />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/collections/:collection"
+            element={<CollectionPage />}
+          />
+          <Route path="/ingredients" element={<IngredientsPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="ingredient/:id" element={<IngredientDetails />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="payment-success" element={<PaymentSuccessPage />} />
+          <Route path="zalopay-return" element={<ZaloPayManualReturn />} />
+          <Route path="zalopay-instructions" element={<ZaloPayInstructions />} />
+          <Route path="payment-helper" element={<PaymentReturnHelper />} />
+          <Route
+            path="orders-confirmation"
+            element={<OderconfirmationPage />}
+          />
+          <Route path="order/:id" element={<OrderDetailsPage />} />
+          <Route path="my-orders" element={<MyOrdersPage />} />
+        </Route>
+        {/* admin */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminHomePage />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="products/:id/edit" element={<EditProductPage />} />
+          <Route path="ingredients" element={<IngredientManagement />} />
+          <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
+          <Route path="orders" element={<OderManagement />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+        </Route>
+
+        {/* manager */}
+        <Route
+          path="/manager"
+          element={
+            <ProtectedRoute role="manager">
+              <ManagerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ManagerHomePage />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="products/:id/edit" element={<EditProductPage />} />
+          <Route path="ingredients" element={<IngredientManagement />} />
+          <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
+        </Route>
+        {/*  */}
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Toaster position="top-right" />
-        <Routes>
-          <Route path="/" element={<UserLayout />}>
-            <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/auth/callback" element={<GoogleCallback />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route
-              path="/collections/:collection"
-              element={<CollectionPage />}
-            />
-            <Route path="/ingredients" element={<IngredientsPage />} />
-            <Route path="/search" element={<SearchResultsPage />} />
-            <Route path="product/:id" element={<ProductDetails />} />
-            <Route path="ingredient/:id" element={<IngredientDetails />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="payment-success" element={<PaymentSuccessPage />} />
-            <Route path="zalopay-return" element={<ZaloPayManualReturn />} />
-            <Route path="zalopay-instructions" element={<ZaloPayInstructions />} />
-            <Route path="payment-helper" element={<PaymentReturnHelper />} />
-            <Route
-              path="orders-confirmation"
-              element={<OderconfirmationPage />}
-            />
-            <Route path="order/:id" element={<OrderDetailsPage />} />
-            <Route path="my-orders" element={<MyOrdersPage />} />
-          </Route>
-          {/* admin */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<AdminHomePage />} />
-            <Route path="users" element={<UserManagement />} />
-            <Route path="products" element={<ProductManagement />} />
-            <Route path="products/:id/edit" element={<EditProductPage />} />
-            <Route path="ingredients" element={<IngredientManagement />} />
-            <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
-            <Route path="orders" element={<OderManagement />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-          </Route>
-          {/*  */}
-        </Routes>
-      </BrowserRouter>
+      <AppContent />
     </Provider>
   );
 };

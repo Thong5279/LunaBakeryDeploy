@@ -266,7 +266,7 @@ const PaymentSuccessPage = () => {
                   </div>
                 </div>
                 
-                {process.env.NODE_ENV === 'development' && (
+                {import.meta.env.DEV && (
                   <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-2">
                     <p className="text-xs text-gray-600 font-mono">
                       Debug: {JSON.stringify(Object.fromEntries(searchParams.entries()), null, 2)}
