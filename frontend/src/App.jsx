@@ -27,6 +27,10 @@ import OderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
+import BakerLayout from "./components/Baker/BakerLayout";
+import BakerHomePage from "./pages/BakerHomePage";
+import DeliveryLayout from "./components/Delivery/DeliveryLayout";
+import DeliveryHomePage from "./pages/DeliveryHomePage";
 import GoogleCallback from "./components/Auth/GoogleCallback";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
@@ -89,6 +93,7 @@ const AppContent = () => {
           <Route path="order/:id" element={<OrderDetailsPage />} />
           <Route path="my-orders" element={<MyOrdersPage />} />
         </Route>
+        
         {/* admin */}
         <Route
           path="/admin"
@@ -123,7 +128,30 @@ const AppContent = () => {
           <Route path="ingredients" element={<IngredientManagement />} />
           <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
         </Route>
-        {/*  */}
+
+        {/* baker */}
+        <Route
+          path="/baker"
+          element={
+            <ProtectedRoute role="baker">
+              <BakerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<BakerHomePage />} />
+        </Route>
+
+        {/* delivery */}
+        <Route
+          path="/delivery"
+          element={
+            <ProtectedRoute role="shipper">
+              <DeliveryLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DeliveryHomePage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

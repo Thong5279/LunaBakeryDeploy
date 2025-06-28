@@ -38,8 +38,24 @@ const ProtectedRoute = ({ children, role }) => {
     }
   }
 
+  // For baker routes, allow only baker
+  if (role === 'baker' && location.pathname.startsWith('/baker')) {
+    if (user.role !== 'baker') {
+      console.log("🔥 ProtectedRoute - User role mismatch for baker route. User role:", user.role);
+      return <Navigate to="/" replace />;
+    }
+  }
+
+  // For delivery routes, allow only shipper
+  if (role === 'shipper' && location.pathname.startsWith('/delivery')) {
+    if (user.role !== 'shipper') {
+      console.log("🔥 ProtectedRoute - User role mismatch for delivery route. User role:", user.role);
+      return <Navigate to="/" replace />;
+    }
+  }
+
   // Standard role check for other routes
-  if (role && !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/manager')) {
+  if (role && !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/manager') && !location.pathname.startsWith('/baker') && !location.pathname.startsWith('/delivery')) {
     if (user.role !== role) {
       console.log("🔥 ProtectedRoute - User role mismatch. User role:", user.role, "Required:", role);
       return <Navigate to="/" replace />;
