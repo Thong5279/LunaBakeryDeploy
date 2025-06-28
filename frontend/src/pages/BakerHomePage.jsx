@@ -8,14 +8,14 @@ const BakerHomePage = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-lg shadow-lg">
+      <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-lg shadow-lg">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 bg-white bg-white/20 rounded-full flex items-center justify-center">
             <FaBirthdayCake className="text-2xl text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Chào mừng, {user?.name}!</h1>
-            <p className="text-orange-100">Trang làm việc dành cho thợ làm bánh</p>
+            <p className="text-pink-100">Trang làm việc dành cho thợ làm bánh</p>
           </div>
         </div>
       </div>
@@ -25,40 +25,40 @@ const BakerHomePage = () => {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-600 text-sm font-medium">Đơn hàng hôm nay</p>
+              <p className="text-pink-600 text-sm font-medium">Đơn hàng hôm nay</p>
               <p className="text-2xl font-bold text-gray-900">0</p>
             </div>
-            <FaCalendar className="text-orange-500 text-2xl" />
+            <FaCalendar className="text-pink-500 text-2xl" />
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-600 text-sm font-medium">Đang làm</p>
+              <p className="text-pink-600 text-sm font-medium">Đang làm</p>
               <p className="text-2xl font-bold text-gray-900">0</p>
             </div>
-            <FaClock className="text-orange-500 text-2xl" />
+            <FaClock className="text-pink-500 text-2xl" />
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-600 text-sm font-medium">Hoàn thành</p>
+              <p className="text-pink-600 text-sm font-medium">Hoàn thành</p>
               <p className="text-2xl font-bold text-gray-900">0</p>
             </div>
-            <FaBirthdayCake className="text-orange-500 text-2xl" />
+            <FaBirthdayCake className="text-pink-500 text-2xl" />
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-600 text-sm font-medium">Tỷ lệ hoàn thành</p>
+              <p className="text-pink-600 text-sm font-medium">Tỷ lệ hoàn thành</p>
               <p className="text-2xl font-bold text-gray-900">100%</p>
             </div>
-            <FaChartLine className="text-orange-500 text-2xl" />
+            <FaChartLine className="text-pink-500 text-2xl" />
           </div>
         </div>
       </div>
@@ -87,9 +87,9 @@ const BakerHomePage = () => {
       </div>
 
       {/* Info Section */}
-      <div className="bg-orange-50 border border-orange-200 p-6 rounded-lg">
-        <h3 className="text-lg font-semibold text-orange-800 mb-2">Thông tin cho thợ làm bánh</h3>
-        <div className="text-orange-700 space-y-2">
+      <div className="bg-pink-50 border border-pink-200 p-6 rounded-lg">
+        <h3 className="text-lg font-semibold text-pink-800 mb-2">Thông tin cho thợ làm bánh</h3>
+        <div className="text-pink-700 space-y-2">
           <p>• Kiểm tra đơn hàng cần làm trong hàng đợi</p>
           <p>• Cập nhật trạng thái làm bánh theo quy trình</p>
           <p>• Liên hệ quản lý khi có vấn đề về nguyên liệu</p>

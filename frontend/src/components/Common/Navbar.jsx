@@ -84,7 +84,7 @@ const Navbar = () => {
             {user && user.role === "baker" && (
               <Link
                 to={"/baker"}
-                className="bg-orange-400 px-2 rounded-2xl hover:bg-orange-500 text-sm text-white"
+                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
               >
                 Thợ làm bánh
               </Link>
@@ -92,7 +92,7 @@ const Navbar = () => {
             {user && user.role === "shipper" && (
               <Link
                 to={"/delivery"}
-                className="bg-green-400 px-2 rounded-2xl hover:bg-green-500 text-sm text-white"
+                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
               >
                 Giao hàng
               </Link>
