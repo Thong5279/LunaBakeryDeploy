@@ -17,6 +17,8 @@ const EditIngredientPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
+  console.log("🔥 EditIngredientPage rendered with ID:", id);
+  
   const { 
     currentIngredient, 
     actionLoading, 
@@ -43,7 +45,9 @@ const EditIngredientPage = () => {
   const [uploadError, setUploadError] = useState("");
 
   useEffect(() => {
+    console.log("🔥 EditIngredientPage useEffect - ID:", id);
     if (id) {
+      console.log("🔥 Dispatching fetchIngredientById for ID:", id);
       dispatch(fetchIngredientById(id));
     }
     
@@ -54,6 +58,7 @@ const EditIngredientPage = () => {
   }, [id, dispatch]);
 
   useEffect(() => {
+    console.log("🔥 Current ingredient changed:", currentIngredient);
     if (currentIngredient) {
       setFormData({
         name: currentIngredient.name || "",
@@ -207,14 +212,20 @@ const EditIngredientPage = () => {
           setUpdateSuccess(true);
           setTimeout(() => {
             setUpdateSuccess(false);
-            navigate("/admin/ingredients");
+            const currentPath = window.location.pathname;
+            const basePath = currentPath.includes('/admin/') ? '/admin' : '/manager';
+            navigate(`${basePath}/ingredients`);
           }, 2000);
         }
       });
   };
 
   const handleCancel = () => {
-    navigate("/admin/ingredients");
+    // Determine where to navigate back based on current path
+    const currentPath = window.location.pathname;
+    const basePath = currentPath.includes('/admin/') ? '/admin' : '/manager';
+    console.log("🔥 EditIngredientPage - Navigating back to:", `${basePath}/ingredients`);
+    navigate(`${basePath}/ingredients`);
   };
 
   const formatPrice = (price) => {
@@ -235,7 +246,11 @@ const EditIngredientPage = () => {
         <div className="text-center py-10">
           <p className="text-red-500 mb-4">Lỗi: {actionError}</p>
           <button 
-            onClick={() => navigate("/admin/ingredients")}
+            onClick={() => {
+              const currentPath = window.location.pathname;
+              const basePath = currentPath.includes('/admin/') ? '/admin' : '/manager';
+              navigate(`${basePath}/ingredients`);
+            }}
             className="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600"
           >
             Quay lại danh sách
@@ -246,7 +261,7 @@ const EditIngredientPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div>
       {/* Success Message */}
       {updateSuccess && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out">

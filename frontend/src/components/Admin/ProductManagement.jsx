@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdminProducts, deleteProduct, createProduct } from "../../redux/slices/adminProductSlice";
-import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES, PRODUCT_STATUS, SIZE_PRICE_INCREMENT } from "../../constants/productConstants";
+import { 
+  fetchAdminProducts, 
+  deleteProduct, 
+  createProduct
+} from "../../redux/slices/adminProductSlice";
+import { 
+  PRODUCT_CATEGORIES, 
+  PRODUCT_FLAVORS,
+  PRODUCT_STATUS,
+  PRODUCT_SIZES,
+  SIZE_PRICE_INCREMENT
+} from "../../constants/productConstants";
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { user } = useSelector((state) => state.auth);
+  
+  // Determine base path based on current location
+  const basePath = location.pathname.startsWith('/admin') ? '/admin' : '/manager';
+
+  console.log("🔥 ProductManagement - User:", user, "Base path:", basePath);
+
   const { products, loading, error } = useSelector(
     (state) => state.adminProducts
   );
@@ -152,7 +170,7 @@ const ProductManagement = () => {
     return <p>Lỗi khi tải dữ liệu: {error}</p>
   }
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div>
       {/* Success Message */}
       {deleteSuccess && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out">
@@ -230,7 +248,7 @@ const ProductManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <Link
-                      to={`/admin/products/${product._id}/edit`}
+                      to={`${basePath}/products/${product._id}/edit`}
                       className="bg-yellow-400 text-white px-4 py-1 rounded-md mr-2 hover:bg-yellow-600"
                     >
                       Sửa

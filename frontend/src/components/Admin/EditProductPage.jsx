@@ -143,7 +143,9 @@ const EditProductPage = () => {
       .then((result) => {
         console.log("Update result:", result);
         if (result.type.endsWith("/fulfilled")) {
-          navigate("/admin/products");
+          const currentPath = window.location.pathname;
+          const basePath = currentPath.includes('/admin/') ? '/admin' : '/manager';
+          navigate(`${basePath}/products`);
         }
       })
       .catch((error) => {
@@ -158,7 +160,7 @@ const EditProductPage = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
+    <div className="p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Chỉnh sửa sản phẩm</h2>
       <form onSubmit={handleSubmit}>
         {/* name */}

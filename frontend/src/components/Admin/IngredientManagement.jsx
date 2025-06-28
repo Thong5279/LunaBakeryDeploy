@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { 
   fetchAdminIngredients, 
@@ -16,6 +16,8 @@ import {
 
 const IngredientManagement = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { user } = useSelector((state) => state.auth);
   const { 
     ingredients, 
     pagination,
@@ -24,6 +26,11 @@ const IngredientManagement = () => {
     error,
     actionLoading 
   } = useSelector((state) => state.adminIngredients);
+
+  // Determine base path based on current location
+  const basePath = location.pathname.startsWith('/admin') ? '/admin' : '/manager';
+
+  console.log("🔥 IngredientManagement - User:", user, "Base path:", basePath);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -245,7 +252,7 @@ const IngredientManagement = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div>
       {/* Success Message */}
       {deleteSuccess && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 ease-in-out">
@@ -413,8 +420,9 @@ const IngredientManagement = () => {
                   <td className="px-6 py-4 font-mono text-sm">{ingredient.sku}</td>
                   <td className="px-6 py-4">
                     <Link
-                      to={`/admin/ingredients/${ingredient._id}/edit`}
+                      to={`${basePath}/ingredients/${ingredient._id}/edit`}
                       className="bg-yellow-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-600 text-sm"
+                      onClick={() => console.log("🔥 Clicking edit link for ingredient:", ingredient._id, "Path:", `${basePath}/ingredients/${ingredient._id}/edit`, "User:", user)}
                     >
                       Sửa
                     </Link>
