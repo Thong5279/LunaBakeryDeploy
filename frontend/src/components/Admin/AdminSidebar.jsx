@@ -8,6 +8,7 @@ import {
   FaStore,
   FaUser,
   FaChartBar,
+  FaWarehouse,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -72,6 +73,19 @@ const AdminSidebar = () => {
         >
           <FaBox className="text-pink-500"></FaBox>
           <span className="">Nguyên liệu</span>
+        </NavLink>
+        {/*  */}
+        <NavLink
+          to={"/admin/inventory"}
+          className={({ isActive }) =>
+            isActive
+              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
+              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+          }
+          end
+        >
+          <FaWarehouse className="text-pink-500"></FaWarehouse>
+          <span className="">Quản lý kho</span>
         </NavLink>
         {/*  */}
         <NavLink

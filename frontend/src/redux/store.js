@@ -10,6 +10,7 @@ import adminProductReducer from './slices/adminProductSlice';
 import adminOrderReducer from './slices/adminOrderSlice';
 import adminIngredientReducer from './slices/adminIngredientSlice';
 import analyticsReducer from './slices/analyticsSlice';
+import inventoryReducer from './slices/inventorySlice';
 
 const store = configureStore({
     reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
         adminOrders: adminOrderReducer,
         adminIngredients: adminIngredientReducer,
         analytics: analyticsReducer,
+        inventory: inventoryReducer,
     },
 });
 

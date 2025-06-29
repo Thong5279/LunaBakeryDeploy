@@ -23,6 +23,7 @@ const adminIngredientRoute = require("./routes/adminIngredientRoutes");
 const analyticsRoute = require("./routes/analyticsRoutes");
 const authRoute = require("./routes/authRoutes");
 const paymentRoute = require("./routes/paymentRoutes");
+const inventoryRoute = require("./routes/inventoryRoutes");
 
 
 const app = express();
@@ -70,6 +71,7 @@ app.use("/api/admin/ingredients", adminIngredientRoute);
 app.use("/api/analytics", analyticsRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/inventory", inventoryRoute);
 
 
 
