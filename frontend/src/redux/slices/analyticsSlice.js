@@ -101,6 +101,68 @@ export const fetchOrderStatus = createAsyncThunk(
   }
 );
 
+export const fetchProductSales = createAsyncThunk(
+  'analytics/fetchProductSales',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('userToken');
+
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const response = await fetch(`${backendURL}/api/analytics/product-sales`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch product sales data');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchIngredientInventory = createAsyncThunk(
+  'analytics/fetchIngredientInventory',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('userToken');
+
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const response = await fetch(`${backendURL}/api/analytics/ingredient-inventory`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch ingredient inventory data');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const initialState = {
   revenue: {
     data: [],
@@ -118,6 +180,16 @@ const initialState = {
     loading: false,
     error: null,
   },
+  productSales: {
+    data: null,
+    loading: false,
+    error: null,
+  },
+  ingredientInventory: {
+    data: null,
+    loading: false,
+    error: null,
+  },
 };
 
 const analyticsSlice = createSlice({
@@ -128,6 +200,8 @@ const analyticsSlice = createSlice({
       state.revenue.error = null;
       state.summary.error = null;
       state.orderStatus.error = null;
+      state.productSales.error = null;
+      state.ingredientInventory.error = null;
     },
     setPeriod: (state, action) => {
       state.revenue.period = action.payload;
@@ -174,6 +248,32 @@ const analyticsSlice = createSlice({
       .addCase(fetchOrderStatus.rejected, (state, action) => {
         state.orderStatus.loading = false;
         state.orderStatus.error = action.payload;
+      })
+      // Product Sales
+      .addCase(fetchProductSales.pending, (state) => {
+        state.productSales.loading = true;
+        state.productSales.error = null;
+      })
+      .addCase(fetchProductSales.fulfilled, (state, action) => {
+        state.productSales.loading = false;
+        state.productSales.data = action.payload.data;
+      })
+      .addCase(fetchProductSales.rejected, (state, action) => {
+        state.productSales.loading = false;
+        state.productSales.error = action.payload;
+      })
+      // Ingredient Inventory
+      .addCase(fetchIngredientInventory.pending, (state) => {
+        state.ingredientInventory.loading = true;
+        state.ingredientInventory.error = null;
+      })
+      .addCase(fetchIngredientInventory.fulfilled, (state, action) => {
+        state.ingredientInventory.loading = false;
+        state.ingredientInventory.data = action.payload.data;
+      })
+      .addCase(fetchIngredientInventory.rejected, (state, action) => {
+        state.ingredientInventory.loading = false;
+        state.ingredientInventory.error = action.payload;
       });
   },
 });

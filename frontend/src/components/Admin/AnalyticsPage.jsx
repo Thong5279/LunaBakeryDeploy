@@ -8,14 +8,10 @@ import {
   clearAnalyticsError,
 } from "../../redux/slices/analyticsSlice";
 import {
-  FaDollarSign,
-  FaShoppingCart,
   FaCalendarDay,
-  FaCalendarWeek,
   FaCalendarAlt,
   FaArrowUp,
   FaChartPie,
-  FaUsers,
 } from "react-icons/fa";
 import {
   Chart as ChartJS,
@@ -172,33 +168,6 @@ const AnalyticsPage = () => {
     };
   };
 
-  // Tạo data cho biểu đồ line revenue theo ngày
-  const createRevenueLineChartData = () => {
-    if (!revenue.data || revenue.data.length === 0) return null;
-
-    const labels = revenue.data.map(item => getRevenueLabel(item));
-    const data = revenue.data.map(item => item.totalRevenue);
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: 'Doanh thu',
-          data,
-          borderColor: 'rgba(236, 72, 153, 1)',
-          backgroundColor: 'rgba(236, 72, 153, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: 'rgba(236, 72, 153, 1)',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 6,
-        },
-      ],
-    };
-  };
-
   // Chart options
   const barChartOptions = {
     responsive: true,
@@ -317,66 +286,6 @@ const AnalyticsPage = () => {
     },
   };
 
-  const lineChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          padding: 20,
-          usePointStyle: true,
-        }
-      },
-      title: {
-        display: true,
-        text: 'Xu hướng doanh thu',
-        font: {
-          size: 16,
-          weight: 'bold'
-        },
-        padding: 20
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            return `Doanh thu: ${context.parsed.y.toLocaleString('vi-VN')} VND`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Thời gian',
-          font: {
-            weight: 'bold'
-          }
-        },
-        grid: {
-          display: false
-        }
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Doanh thu (VND)',
-          font: {
-            weight: 'bold'
-          }
-        },
-        ticks: {
-          callback: function(value) {
-            return value.toLocaleString('vi-VN');
-          }
-        }
-      },
-    },
-  };
-
   if (summary.loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -389,7 +298,7 @@ const AnalyticsPage = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Bảng điều khiển thống kê
+          📊 Bảng điều khiển thống kê
         </h1>
         <p className="text-gray-600">
           Theo dõi doanh thu và hiệu suất kinh doanh của Luna Bakery
@@ -495,32 +404,13 @@ const AnalyticsPage = () => {
         </div>
       </div>
 
-      {/* Revenue Trend Line Chart */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Xu hướng Doanh thu</h3>
-        <div className="h-80">
-          {revenue.loading ? (
-            <div className="flex flex-col items-center justify-center h-full">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
-              <p className="text-gray-500">Đang tải dữ liệu...</p>
-            </div>
-          ) : createRevenueLineChartData() ? (
-            <Line data={createRevenueLineChartData()} options={lineChartOptions} />
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full">
-              <FaChartPie className="text-gray-300 text-6xl mb-4" />
-              <p className="text-gray-500">Không có dữ liệu để hiển thị</p>
-            </div>
-          )}
-        </div>
-      </div>
-
+      {/* Revenue Detail Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Revenue Chart Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900">
-              Biểu đồ doanh thu
+              Chi tiết doanh thu
             </h2>
             <div className="flex gap-2">
               {["day", "week", "month", "quarter", "year"].map((period) => (
@@ -582,7 +472,7 @@ const AnalyticsPage = () => {
         {/* Order Status Distribution */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Phân bổ trạng thái đơn hàng
+            Chi tiết trạng thái đơn hàng
           </h2>
           
           {orderStatus.loading ? (
@@ -617,51 +507,68 @@ const AnalyticsPage = () => {
           {/* Top Products */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Sản phẩm bán chạy
+              🏆 Top sản phẩm bán chạy
             </h2>
             <div className="space-y-3">
-              {summary.data.topProducts.map((product, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{product._id}</p>
-                    <p className="text-sm text-gray-600">
-                      Đã bán: {product.totalSold} sản phẩm
-                    </p>
+              {summary.data.topProducts && summary.data.topProducts.length > 0 ? (
+                summary.data.topProducts.map((product, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center justify-center w-8 h-8 bg-pink-500 text-white rounded-full text-sm font-bold">
+                        {index + 1}
+                      </span>
+                      <div>
+                        <p className="font-medium text-gray-900">{product._id}</p>
+                        <p className="text-sm text-gray-600">
+                          Đã bán: {product.totalSold} sản phẩm
+                        </p>
+                      </div>
+                    </div>
+                    <span className="font-semibold text-green-600">
+                      {formatCurrency(product.revenue)}
+                    </span>
                   </div>
-                  <span className="font-semibold text-green-600">
-                    {formatCurrency(product.revenue)}
-                  </span>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  Chưa có dữ liệu sản phẩm
+                </p>
+              )}
             </div>
           </div>
 
           {/* Recent Orders */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Đơn hàng gần đây
+              📋 Đơn hàng gần đây
             </h2>
             <div className="space-y-3">
-              {summary.data.recentOrders.map((order) => (
-                <div key={order._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {order.user?.name || 'Khách vãng lai'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {formatDate(order.createdAt)}
-                    </p>
+              {summary.data.recentOrders && summary.data.recentOrders.length > 0 ? (
+                summary.data.recentOrders.map((order) => (
+                  <div key={order._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        {order.user?.name || 'Khách vãng lai'}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {formatDate(order.createdAt)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        {formatCurrency(order.totalPrice)}
+                      </p>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                        {getStatusLabel(order.status)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900">
-                      {formatCurrency(order.totalPrice)}
-                    </p>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  Chưa có đơn hàng nào
+                </p>
+              )}
             </div>
           </div>
         </div>

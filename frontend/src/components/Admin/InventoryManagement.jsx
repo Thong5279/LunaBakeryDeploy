@@ -1,80 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaBox, FaExclamationTriangle, FaWarehouse, FaChartBar, FaArrowUp, FaArrowDown, FaClock, FaCalendarAlt } from "react-icons/fa";
 import { 
-  fetchInventoryStatistics,
-  fetchAlerts
-} from "../../redux/slices/inventorySlice";
+  FaBox, 
+  FaExclamationTriangle, 
+  FaWarehouse, 
+  FaChartBar, 
+  FaArrowUp, 
+  FaArrowDown, 
+  FaClock, 
+  FaCalendarAlt,
+  FaTrophy,
+  FaBan,
+  FaBoxOpen
+} from "react-icons/fa";
+import { 
+  fetchProductSales,
+  fetchIngredientInventory
+} from "../../redux/slices/analyticsSlice";
 
 const InventoryManagement = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const {
-    statistics = {},
-    alerts = [],
-    loading = false,
-    error = null
-  } = useSelector((state) => state.inventory) || {};
+    productSales,
+    ingredientInventory
+  } = useSelector((state) => state.analytics);
 
   // Time filter state
-  const [timeFilter, setTimeFilter] = useState({
-    period: "month", // month, quarter, year
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
-    quarter: Math.ceil((new Date().getMonth() + 1) / 3)
-  });
+  const [activeTab, setActiveTab] = useState("products"); // products hoặc ingredients
 
-  // Fetch data khi component mount hoặc time filter thay đổi
+  // Fetch data khi component mount
   useEffect(() => {
     if (user && (user.role === "admin" || user.role === "manager")) {
-      dispatch(fetchInventoryStatistics(timeFilter));
-      dispatch(fetchAlerts());
+      dispatch(fetchProductSales());
+      dispatch(fetchIngredientInventory());
     }
-  }, [user, dispatch, timeFilter]);
-
-  // Handle time filter changes
-  const handleTimeFilterChange = (filterType, value) => {
-    setTimeFilter(prev => ({ ...prev, [filterType]: value }));
-  };
+  }, [user, dispatch]);
 
   // Utility functions
   const formatNumber = (number) => {
     return new Intl.NumberFormat("vi-VN").format(number || 0);
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN").format(price || 0) + " đ";
-  };
-
-  const getTimePeriodText = () => {
-    switch (timeFilter.period) {
-      case "month":
-        return `Tháng ${timeFilter.month}/${timeFilter.year}`;
-      case "quarter":
-        return `Quý ${timeFilter.quarter}/${timeFilter.year}`;
-      case "year":
-        return `Năm ${timeFilter.year}`;
-      default:
-        return "";
-    }
-  };
-
-  // Mock data for demo (trong thực tế sẽ từ API)
-  const mockAnalytics = {
-    ingredientsImported: 1250,
-    ingredientsSold: 980,
-    newCakeTypes: 8,
-    cakesSold: 2340,
-    slowMovingIngredients: [
-      { name: "Bột mì đặc biệt", daysOld: 45, quantity: 20 },
-      { name: "Tinh dầu vani", daysOld: 38, quantity: 15 },
-      { name: "Socola đen 85%", daysOld: 32, quantity: 8 }
-    ],
-    slowMovingCakes: [
-      { name: "Bánh Red Velvet", daysOld: 25, quantity: 5 },
-      { name: "Bánh Matcha Tiramisu", daysOld: 18, quantity: 3 },
-      { name: "Bánh Lavender", daysOld: 15, quantity: 7 }
-    ]
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount || 0);
   };
 
   // Kiểm tra quyền truy cập
@@ -94,7 +66,9 @@ const InventoryManagement = () => {
     );
   }
 
-  if (loading) {
+  const isLoading = productSales.loading || ingredientInventory.loading;
+
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-pink-500"></div>
@@ -106,286 +80,396 @@ const InventoryManagement = () => {
     <div className="p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Báo cáo kho hàng
+        <h1 className="text-3xl font-bold text-gray-900">
+          📦 Quản lý Kho hàng
         </h1>
         <div className="flex items-center space-x-4">
-          <FaCalendarAlt className="text-pink-500" />
+          <FaWarehouse className="text-pink-500 text-2xl" />
           <span className="text-lg font-medium text-gray-700">
-            {getTimePeriodText()}
+            Thống kê tồn kho và bán hàng
           </span>
         </div>
       </div>
 
-      {/* Time Filter Controls */}
-      <div className="bg-white p-4 rounded-lg shadow mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Period Selector */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Kỳ báo cáo
-            </label>
-            <select
-              value={timeFilter.period}
-              onChange={(e) => handleTimeFilterChange('period', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+      {/* Tab Navigation */}
+      <div className="bg-white rounded-lg shadow mb-6">
+        <div className="border-b border-gray-200">
+          <nav className="flex">
+            <button
+              onClick={() => setActiveTab("products")}
+              className={`px-6 py-4 text-sm font-medium border-b-2 ${
+                activeTab === "products"
+                  ? "border-pink-500 text-pink-600 bg-pink-50"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
             >
-              <option value="month">Theo tháng</option>
-              <option value="quarter">Theo quý</option>
-              <option value="year">Theo năm</option>
-            </select>
-          </div>
-
-          {/* Year Selector */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Năm
-            </label>
-            <select
-              value={timeFilter.year}
-              onChange={(e) => handleTimeFilterChange('year', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+              🍰 Sản phẩm Bánh
+            </button>
+            <button
+              onClick={() => setActiveTab("ingredients")}
+              className={`px-6 py-4 text-sm font-medium border-b-2 ${
+                activeTab === "ingredients"
+                  ? "border-blue-500 text-blue-600 bg-blue-50"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
             >
-              {[2024, 2023, 2022].map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Month Selector (if period is month) */}
-          {timeFilter.period === "month" && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tháng
-              </label>
-              <select
-                value={timeFilter.month}
-                onChange={(e) => handleTimeFilterChange('month', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-              >
-                {Array.from({length: 12}, (_, i) => i + 1).map(month => (
-                  <option key={month} value={month}>Tháng {month}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Quarter Selector (if period is quarter) */}
-          {timeFilter.period === "quarter" && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Quý
-              </label>
-              <select
-                value={timeFilter.quarter}
-                onChange={(e) => handleTimeFilterChange('quarter', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-              >
-                <option value={1}>Quý 1</option>
-                <option value={2}>Quý 2</option>
-                <option value={3}>Quý 3</option>
-                <option value={4}>Quý 4</option>
-              </select>
-            </div>
-          )}
+              🥄 Nguyên liệu
+            </button>
+          </nav>
         </div>
       </div>
+
+      {/* Product Sales Tab */}
+      {activeTab === "products" && (
+        <div className="space-y-6">
+          {/* Product Summary Cards */}
+          {productSales.data && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <FaBox className="text-blue-500 text-3xl mr-4" />
+                  <div>
+                    <p className="text-sm text-gray-600">Tổng sản phẩm</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {productSales.data.totalProducts}
+                    </p>
+                    <p className="text-xs text-gray-500">loại bánh</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <FaTrophy className="text-green-500 text-3xl mr-4" />
+                  <div>
+                    <p className="text-sm text-gray-600">Đã có bán</p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {productSales.data.totalProductsSold}
+                    </p>
+                    <p className="text-xs text-gray-500">loại bánh</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <FaBan className="text-red-500 text-3xl mr-4" />
+                  <div>
+                    <p className="text-sm text-gray-600">Chưa bán được</p>
+                    <p className="text-2xl font-bold text-red-600">
+                      {productSales.data.totalProductsNotSold}
+                    </p>
+                    <p className="text-xs text-gray-500">loại bánh</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <FaChartBar className="text-purple-500 text-3xl mr-4" />
+                  <div>
+                    <p className="text-sm text-gray-600">Tỷ lệ bán được</p>
+                    <p className="text-2xl font-bold text-purple-600">
+                      {productSales.data.totalProducts > 0 
+                        ? Math.round((productSales.data.totalProductsSold / productSales.data.totalProducts) * 100)
+                        : 0}%
+                    </p>
+                    <p className="text-xs text-gray-500">hiệu suất</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Product Analytics */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Best Sellers */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaTrophy className="text-green-500 mr-2" />
+                  Bán chạy nhất
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Sản phẩm có doanh số cao</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {productSales.data?.bestSellers?.length > 0 ? (
+                    productSales.data.bestSellers.map((product, index) => (
+                      <div key={product._id} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full text-sm font-bold">
+                            {index + 1}
+                          </span>
+                          <div>
+                            <p className="font-medium text-gray-900">{product.name}</p>
+                            <p className="text-sm text-gray-600">{product.category}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-green-600">{product.totalQuantitySold} cái</p>
+                          <p className="text-sm text-gray-600">{formatCurrency(product.totalRevenue)}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaTrophy className="text-gray-300 text-4xl mb-4 mx-auto" />
+                      <p className="text-gray-500">Chưa có sản phẩm nào được bán</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Worst Sellers */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaExclamationTriangle className="text-orange-500 mr-2" />
+                  Bán ít nhất
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Cần cải thiện marketing</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {productSales.data?.worstSellers?.length > 0 ? (
+                    productSales.data.worstSellers.map((product, index) => (
+                      <div key={product._id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                        <div>
+                          <p className="font-medium text-gray-900">{product.name}</p>
+                          <p className="text-sm text-gray-600">{product.category}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-orange-600">{product.totalQuantitySold} cái</p>
+                          <p className="text-sm text-gray-600">{formatCurrency(product.totalRevenue)}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaExclamationTriangle className="text-gray-300 text-4xl mb-4 mx-auto" />
+                      <p className="text-gray-500">Tất cả sản phẩm đều bán tốt!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Zero Sellers */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaBan className="text-red-500 mr-2" />
+                  Chưa bán được
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Cần xem xét lại</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {productSales.data?.zeroSellers?.length > 0 ? (
+                    productSales.data.zeroSellers.map((product) => (
+                      <div key={product._id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
+                        <div>
+                          <p className="font-medium text-gray-900">{product.name}</p>
+                          <p className="text-sm text-gray-600">{product.category}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-red-600">0 cái</p>
+                          <p className="text-xs text-gray-500">Cần xem xét</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaTrophy className="text-green-400 text-4xl mb-4 mx-auto" />
+                      <p className="text-green-600 font-medium">Tuyệt vời!</p>
+                      <p className="text-gray-500">Tất cả sản phẩm đều có bán</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Ingredients Tab */}
+      {activeTab === "ingredients" && (
+        <div className="space-y-6">
+          {/* Ingredient Summary Cards */}
+          {ingredientInventory.data && (
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+              <div className="bg-white p-4 rounded-lg shadow-md text-center">
+                <FaBox className="text-blue-500 text-2xl mb-2 mx-auto" />
+                <div className="text-2xl font-bold text-blue-600">
+                  {ingredientInventory.data.summary.totalIngredients}
+                </div>
+                <div className="text-sm text-gray-600">Tổng nguyên liệu</div>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-md text-center">
+                <FaArrowUp className="text-green-500 text-2xl mb-2 mx-auto" />
+                <div className="text-2xl font-bold text-green-600">
+                  {formatNumber(ingredientInventory.data.summary.totalInboundQuantity)}
+                </div>
+                <div className="text-sm text-gray-600">Tổng nhập</div>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-md text-center">
+                <FaArrowDown className="text-orange-500 text-2xl mb-2 mx-auto" />
+                <div className="text-2xl font-bold text-orange-600">
+                  {formatNumber(ingredientInventory.data.summary.totalOutboundQuantity)}
+                </div>
+                <div className="text-sm text-gray-600">Tổng bán</div>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-md text-center">
+                <FaWarehouse className="text-purple-500 text-2xl mb-2 mx-auto" />
+                <div className="text-2xl font-bold text-purple-600">
+                  {formatNumber(ingredientInventory.data.summary.totalCurrentStock)}
+                </div>
+                <div className="text-sm text-gray-600">Tồn kho hiện tại</div>
+              </div>
+
+              <div className="bg-white p-4 rounded-lg shadow-md text-center">
+                <FaExclamationTriangle className="text-red-500 text-2xl mb-2 mx-auto" />
+                <div className="text-2xl font-bold text-red-600">
+                  {ingredientInventory.data.summary.lowStockCount}
+                </div>
+                <div className="text-sm text-gray-600">Sắp hết hàng</div>
+              </div>
+            </div>
+          )}
+
+          {/* Ingredient Analytics */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Top Input */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaArrowUp className="text-blue-500 mr-2" />
+                  Nhập nhiều nhất
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Top nguyên liệu nhập kho</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {ingredientInventory.data?.topInput?.length > 0 ? (
+                    ingredientInventory.data.topInput.map((ingredient, index) => (
+                      <div key={ingredient._id} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full text-sm font-bold">
+                            {index + 1}
+                          </span>
+                          <div>
+                            <p className="font-medium text-gray-900">{ingredient.name}</p>
+                            <p className="text-sm text-gray-600">{ingredient.supplier || 'Nhà cung cấp chưa rõ'}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-blue-600">{formatNumber(ingredient.totalQuantityIn)}</p>
+                          <p className="text-sm text-gray-600">{ingredient.inboundTransactions} lần nhập</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaBoxOpen className="text-gray-300 text-4xl mb-4 mx-auto" />
+                      <p className="text-gray-500">Chưa có lịch sử nhập kho</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Top Output */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaArrowDown className="text-green-500 mr-2" />
+                  Bán nhiều nhất
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Nguyên liệu hot</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {ingredientInventory.data?.topOutput?.length > 0 ? (
+                    ingredientInventory.data.topOutput.map((ingredient, index) => (
+                      <div key={ingredient._id} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center justify-center w-8 h-8 bg-green-500 text-white rounded-full text-sm font-bold">
+                            {index + 1}
+                          </span>
+                          <div>
+                            <p className="font-medium text-gray-900">{ingredient.name}</p>
+                            <p className="text-sm text-gray-600">{ingredient.category}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-green-600">{formatNumber(ingredient.totalQuantitySold)}</p>
+                          <p className="text-sm text-gray-600">{formatCurrency(ingredient.totalRevenue)}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaBoxOpen className="text-gray-300 text-4xl mb-4 mx-auto" />
+                      <p className="text-gray-500">Chưa có nguyên liệu nào được bán</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Low Stock */}
+            <div className="bg-white rounded-lg shadow-md">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <FaExclamationTriangle className="text-red-500 mr-2" />
+                  Sắp hết hàng
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Cần nhập thêm ngay</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {ingredientInventory.data?.lowStock?.length > 0 ? (
+                    ingredientInventory.data.lowStock.map((ingredient) => (
+                      <div key={ingredient._id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
+                        <div>
+                          <p className="font-medium text-gray-900">{ingredient.name}</p>
+                          <p className="text-sm text-gray-600">{ingredient.supplier || 'Chưa có nhà cung cấp'}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-red-600">{formatNumber(ingredient.currentStock)}</p>
+                          <p className="text-xs text-red-500">Cần nhập thêm!</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <FaTrophy className="text-green-400 text-4xl mb-4 mx-auto" />
+                      <p className="text-green-600 font-medium">Tuyệt vời!</p>
+                      <p className="text-gray-500">Tất cả nguyên liệu đều đủ</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Error Display */}
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+      {(productSales.error || ingredientInventory.error) && (
+        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+          <p className="font-medium">Lỗi:</p>
+          <ul className="list-disc list-inside mt-2">
+            {productSales.error && <li>{productSales.error}</li>}
+            {ingredientInventory.error && <li>{ingredientInventory.error}</li>}
+          </ul>
         </div>
       )}
-
-      {/* Main Analytics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaArrowUp className="text-green-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Nguyên liệu nhập</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {formatNumber(mockAnalytics.ingredientsImported)}
-              </p>
-              <p className="text-xs text-gray-500">kg/lít</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaArrowDown className="text-blue-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Nguyên liệu xuất</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {formatNumber(mockAnalytics.ingredientsSold)}
-              </p>
-              <p className="text-xs text-gray-500">kg/lít</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaBox className="text-purple-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Loại bánh mới</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {formatNumber(mockAnalytics.newCakeTypes)}
-              </p>
-              <p className="text-xs text-gray-500">loại</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaChartBar className="text-pink-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Bánh đã bán</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {formatNumber(mockAnalytics.cakesSold)}
-              </p>
-              <p className="text-xs text-gray-500">cái</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Inventory Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaWarehouse className="text-pink-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Tổng sản phẩm</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {typeof statistics.totalItems === 'number' ? statistics.totalItems : 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaExclamationTriangle className="text-yellow-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Sắp hết hàng</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {typeof statistics.lowStockItems === 'number' ? statistics.lowStockItems : 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaClock className="text-red-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Tồn kho lâu</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {typeof statistics.slowMovingItems === 'number' ? statistics.slowMovingItems : 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <FaBox className="text-green-500 text-3xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-600">Tổng giá trị</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {typeof statistics.totalValue === 'number' 
-                  ? statistics.totalValue.toLocaleString('vi-VN') + ' đ'
-                  : '0 đ'
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Alerts */}
-      {Array.isArray(alerts) && alerts.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <h3 className="text-lg font-medium text-red-800 mb-3">
-            🚨 Cảnh báo ({alerts.length})
-          </h3>
-          <div className="space-y-2">
-            {alerts.slice(0, 5).map((alert, index) => (
-              <div key={`alert-${index}`} className="text-sm text-red-700">
-                • {typeof alert === 'string' ? alert : 
-                   typeof alert === 'object' && alert?.message ? alert.message : 
-                   `Alert ${index + 1}`}
-              </div>
-            ))}
-            {alerts.length > 5 && (
-              <div className="text-sm text-red-600">
-                ... và {alerts.length - 5} cảnh báo khác
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Slow Moving Items Analysis */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Slow Moving Ingredients */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
-              <FaClock className="text-orange-500 mr-2" />
-              Nguyên liệu tồn kho lâu
-            </h3>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {mockAnalytics.slowMovingIngredients.map((item, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-500">Số lượng: {item.quantity}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
-                      {item.daysOld} ngày
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Slow Moving Cakes */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
-              <FaClock className="text-red-500 mr-2" />
-              Bánh tồn kho lâu
-            </h3>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {mockAnalytics.slowMovingCakes.map((item, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-500">Số lượng: {item.quantity}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                      {item.daysOld} ngày
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

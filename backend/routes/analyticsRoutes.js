@@ -269,4 +269,207 @@ router.get("/order-status", protect, admin, async (req, res) => {
   }
 });
 
+// @desc    Get product sales analytics (best/worst/zero sellers)
+// @route   GET /api/analytics/product-sales
+// @access  Private/Admin
+router.get("/product-sales", protect, admin, async (req, res) => {
+  try {
+    const Product = require("../models/Product");
+
+    // Lấy tất cả sản phẩm
+    const allProducts = await Product.find({}, { name: 1, category: 1 });
+
+    // Thống kê sản phẩm đã bán (chỉ tính đơn hàng thành công)
+    const productSales = await Order.aggregate([
+      {
+        $match: {
+          $or: [
+            { status: "Delivered" },
+            { isPaid: true },
+            { isDelivered: true }
+          ]
+        }
+      },
+      { $unwind: "$orderItems" },
+      {
+        $match: {
+          "orderItems.itemType": { $in: ["Product", null] } // Product hoặc null (backward compatibility)
+        }
+      },
+      {
+        $group: {
+          _id: "$orderItems.product",
+          productName: { $first: "$orderItems.name" },
+          totalQuantitySold: { $sum: "$orderItems.quantity" },
+          totalRevenue: { 
+            $sum: { $multiply: ["$orderItems.price", "$orderItems.quantity"] } 
+          },
+          orderCount: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Tạo map để tra cứu nhanh
+    const salesMap = {};
+    productSales.forEach(item => {
+      salesMap[item._id.toString()] = item;
+    });
+
+    // Phân loại sản phẩm
+    const productStats = allProducts.map(product => {
+      const sales = salesMap[product._id.toString()];
+      return {
+        _id: product._id,
+        name: product.name,
+        category: product.category,
+        totalQuantitySold: sales?.totalQuantitySold || 0,
+        totalRevenue: sales?.totalRevenue || 0,
+        orderCount: sales?.orderCount || 0
+      };
+    });
+
+    // Sắp xếp và phân loại
+    const sortedByQuantity = [...productStats].sort((a, b) => b.totalQuantitySold - a.totalQuantitySold);
+    
+    const bestSellers = sortedByQuantity.slice(0, 10); // Top 10 bán chạy
+    const worstSellers = sortedByQuantity.filter(p => p.totalQuantitySold > 0).slice(-10); // 10 sản phẩm bán ít nhất (nhưng vẫn có bán)
+    const zeroSellers = sortedByQuantity.filter(p => p.totalQuantitySold === 0); // Sản phẩm chưa bán được
+
+    res.json({
+      success: true,
+      data: {
+        bestSellers,
+        worstSellers,
+        zeroSellers,
+        totalProducts: allProducts.length,
+        totalProductsSold: productStats.filter(p => p.totalQuantitySold > 0).length,
+        totalProductsNotSold: zeroSellers.length
+      }
+    });
+  } catch (error) {
+    console.error("Product sales analytics error:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
+// @desc    Get ingredient inventory analytics (in/out)
+// @route   GET /api/analytics/ingredient-inventory
+// @access  Private/Admin
+router.get("/ingredient-inventory", protect, admin, async (req, res) => {
+  try {
+    const Ingredient = require("../models/Ingredient");
+    const Inventory = require("../models/Inventory");
+
+    // Lấy tất cả nguyên liệu
+    const allIngredients = await Ingredient.find({}, { 
+      name: 1, 
+      category: 1, 
+      quantityInStock: 1,
+      supplier: 1
+    });
+
+    // Thống kê nguyên liệu đã bán
+    const ingredientSales = await Order.aggregate([
+      {
+        $match: {
+          $or: [
+            { status: "Delivered" },
+            { isPaid: true },
+            { isDelivered: true }
+          ]
+        }
+      },
+      { $unwind: "$orderItems" },
+      {
+        $match: {
+          "orderItems.itemType": "Ingredient"
+        }
+      },
+      {
+        $group: {
+          _id: "$orderItems.product", // Trong cart, ingredient cũng lưu vào field product
+          ingredientName: { $first: "$orderItems.name" },
+          totalQuantitySold: { $sum: "$orderItems.quantity" },
+          totalRevenue: { 
+            $sum: { $multiply: ["$orderItems.price", "$orderItems.quantity"] } 
+          },
+          orderCount: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Lấy lịch sử nhập kho (nếu có)
+    const inventoryHistory = await Inventory.find({
+      type: "inbound"
+    }).populate("ingredient", "name");
+
+    // Tạo map để tra cứu nhanh
+    const salesMap = {};
+    ingredientSales.forEach(item => {
+      salesMap[item._id.toString()] = item;
+    });
+
+    const inventoryMap = {};
+    inventoryHistory.forEach(item => {
+      if (item.ingredient) {
+        const ingredientId = item.ingredient._id.toString();
+        if (!inventoryMap[ingredientId]) {
+          inventoryMap[ingredientId] = { totalIn: 0, transactionCount: 0 };
+        }
+        inventoryMap[ingredientId].totalIn += item.quantity;
+        inventoryMap[ingredientId].transactionCount += 1;
+      }
+    });
+
+    // Thống kê tổng hợp
+    const ingredientStats = allIngredients.map(ingredient => {
+      const sales = salesMap[ingredient._id.toString()];
+      const inventory = inventoryMap[ingredient._id.toString()];
+      
+      return {
+        _id: ingredient._id,
+        name: ingredient.name,
+        category: ingredient.category,
+        supplier: ingredient.supplier,
+        currentStock: ingredient.quantityInStock,
+        totalQuantityIn: inventory?.totalIn || 0,
+        totalQuantitySold: sales?.totalQuantitySold || 0,
+        totalRevenue: sales?.totalRevenue || 0,
+        inboundTransactions: inventory?.transactionCount || 0,
+        outboundOrders: sales?.orderCount || 0,
+        stockMovement: (inventory?.totalIn || 0) - (sales?.totalQuantitySold || 0) // Nhập - Xuất
+      };
+    });
+
+    // Sắp xếp theo các tiêu chí khác nhau
+    const sortedByInput = [...ingredientStats].sort((a, b) => b.totalQuantityIn - a.totalQuantityIn);
+    const sortedByOutput = [...ingredientStats].sort((a, b) => b.totalQuantitySold - a.totalQuantitySold);
+    const sortedByMovement = [...ingredientStats].sort((a, b) => b.stockMovement - a.stockMovement);
+
+    const topInput = sortedByInput.slice(0, 10); // Top 10 nhập nhiều nhất
+    const topOutput = sortedByOutput.slice(0, 10); // Top 10 bán nhiều nhất
+    const lowStock = ingredientStats.filter(i => i.currentStock < 10).sort((a, b) => a.currentStock - b.currentStock); // Sắp hết hàng
+
+    res.json({
+      success: true,
+      data: {
+        topInput,
+        topOutput,
+        lowStock,
+        allIngredients: ingredientStats,
+        summary: {
+          totalIngredients: allIngredients.length,
+          totalInboundQuantity: ingredientStats.reduce((sum, i) => sum + i.totalQuantityIn, 0),
+          totalOutboundQuantity: ingredientStats.reduce((sum, i) => sum + i.totalQuantitySold, 0),
+          totalCurrentStock: ingredientStats.reduce((sum, i) => sum + i.currentStock, 0),
+          lowStockCount: lowStock.length
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Ingredient inventory analytics error:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
 module.exports = router; 
