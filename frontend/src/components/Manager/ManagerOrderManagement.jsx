@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchManagerOrders, approveOrder, cancelOrder } from '../../redux/slices/managerOrderSlice';
 import { toast } from 'sonner';
+import ConfirmModal from '../Common/ConfirmModal';
 
 const ManagerOrderManagement = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector(state => state.managerOrders);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchManagerOrders());
@@ -21,15 +24,21 @@ const ManagerOrderManagement = () => {
     }
   };
 
-  const handleCancel = async (orderId) => {
-    if (window.confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-      try {
-        await dispatch(cancelOrder(orderId)).unwrap();
-        toast.success('Đơn hàng đã được hủy thành công!');
-        dispatch(fetchManagerOrders()); // Refresh orders
-      } catch (error) {
-        toast.error(error || 'Có lỗi xảy ra khi hủy đơn hàng');
-      }
+  const handleCancelClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowCancelModal(true);
+  };
+
+  const handleCancelConfirm = async () => {
+    try {
+      await dispatch(cancelOrder(selectedOrderId)).unwrap();
+      toast.success('Đơn hàng đã được hủy thành công!');
+      dispatch(fetchManagerOrders()); // Refresh orders
+    } catch (error) {
+      toast.error(error || 'Có lỗi xảy ra khi hủy đơn hàng');
+    } finally {
+      setShowCancelModal(false);
+      setSelectedOrderId(null);
     }
   };
 
@@ -176,7 +185,7 @@ const ManagerOrderManagement = () => {
                           Duyệt
                         </button>
                         <button
-                          onClick={() => handleCancel(order._id)}
+                          onClick={() => handleCancelClick(order._id)}
                           className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                           Hủy
@@ -201,6 +210,18 @@ const ManagerOrderManagement = () => {
           )}
         </div>
       </div>
+
+      {/* Confirm Cancel Modal */}
+      <ConfirmModal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancelConfirm}
+        title="Xác nhận hủy đơn hàng"
+        message="Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác."
+        type="danger"
+        confirmText="Hủy đơn hàng"
+        cancelText="Giữ lại"
+      />
     </div>
   );
 };

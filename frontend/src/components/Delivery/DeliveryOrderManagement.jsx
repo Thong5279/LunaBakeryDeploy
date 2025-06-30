@@ -1,37 +1,53 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDeliveryOrders, markCannotDeliver, markDelivered } from '../../redux/slices/deliveryOrderSlice';
 import { toast } from 'sonner';
+import ConfirmModal from '../Common/ConfirmModal';
 
 const DeliveryOrderManagement = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector(state => state.deliveryOrders);
+  const [showCannotDeliverModal, setShowCannotDeliverModal] = useState(false);
+  const [showDeliveredModal, setShowDeliveredModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchDeliveryOrders());
   }, [dispatch]);
 
-  const handleCannotDeliver = async (orderId) => {
-    if (window.confirm('Bạn có chắc chắn không thể giao đơn hàng này?')) {
-      try {
-        await dispatch(markCannotDeliver(orderId)).unwrap();
-        toast.success('Đã đánh dấu không thể giao hàng!');
-        dispatch(fetchDeliveryOrders()); // Refresh orders
-      } catch (error) {
-        toast.error(error || 'Có lỗi xảy ra khi đánh dấu không thể giao hàng');
-      }
+  const handleCannotDeliverClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowCannotDeliverModal(true);
+  };
+
+  const handleCannotDeliverConfirm = async () => {
+    try {
+      await dispatch(markCannotDeliver(selectedOrderId)).unwrap();
+      toast.success('Đã đánh dấu không thể giao hàng!');
+      dispatch(fetchDeliveryOrders()); // Refresh orders
+    } catch (error) {
+      toast.error(error || 'Có lỗi xảy ra khi đánh dấu không thể giao hàng');
+    } finally {
+      setShowCannotDeliverModal(false);
+      setSelectedOrderId(null);
     }
   };
 
-  const handleMarkDelivered = async (orderId) => {
-    if (window.confirm('Bạn có chắc chắn đã giao hàng thành công?')) {
-      try {
-        await dispatch(markDelivered(orderId)).unwrap();
-        toast.success('Đã giao hàng thành công!');
-        dispatch(fetchDeliveryOrders()); // Refresh orders
-      } catch (error) {
-        toast.error(error || 'Có lỗi xảy ra khi đánh dấu giao hàng thành công');
-      }
+  const handleMarkDeliveredClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowDeliveredModal(true);
+  };
+
+  const handleMarkDeliveredConfirm = async () => {
+    try {
+      await dispatch(markDelivered(selectedOrderId)).unwrap();
+      toast.success('Đã giao hàng thành công!');
+      dispatch(fetchDeliveryOrders()); // Refresh orders
+    } catch (error) {
+      toast.error(error || 'Có lỗi xảy ra khi đánh dấu giao hàng thành công');
+    } finally {
+      setShowDeliveredModal(false);
+      setSelectedOrderId(null);
     }
   };
 
@@ -179,13 +195,13 @@ const DeliveryOrderManagement = () => {
                     {order.status === 'Ready' && (
                       <>
                         <button
-                          onClick={() => handleMarkDelivered(order._id)}
+                          onClick={() => handleMarkDeliveredClick(order._id)}
                           className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                           Đã giao hàng
                         </button>
                         <button
-                          onClick={() => handleCannotDeliver(order._id)}
+                          onClick={() => handleCannotDeliverClick(order._id)}
                           className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                           Không thể giao
@@ -215,6 +231,30 @@ const DeliveryOrderManagement = () => {
           )}
         </div>
       </div>
+
+      {/* Cannot Deliver Modal */}
+      <ConfirmModal
+        isOpen={showCannotDeliverModal}
+        onClose={() => setShowCannotDeliverModal(false)}
+        onConfirm={handleCannotDeliverConfirm}
+        title="Không thể giao hàng"
+        message="Bạn có chắc chắn không thể giao đơn hàng này? Vui lòng đảm bảo đã thử mọi cách liên hệ với khách hàng."
+        type="danger"
+        confirmText="Không thể giao"
+        cancelText="Thử lại"
+      />
+
+      {/* Delivered Modal */}
+      <ConfirmModal
+        isOpen={showDeliveredModal}
+        onClose={() => setShowDeliveredModal(false)}
+        onConfirm={handleMarkDeliveredConfirm}
+        title="Xác nhận giao hàng thành công"
+        message="Bạn có chắc chắn đã giao hàng thành công? Khách hàng đã nhận được đơn hàng và hài lòng với sản phẩm?"
+        type="success"
+        confirmText="Đã giao thành công"
+        cancelText="Kiểm tra lại"
+      />
     </div>
   );
 };

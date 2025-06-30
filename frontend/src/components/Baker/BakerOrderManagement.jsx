@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBakerOrders, startBaking, completeBaking } from '../../redux/slices/bakerOrderSlice';
 import { toast } from 'sonner';
+import ConfirmModal from '../Common/ConfirmModal';
 
 const BakerOrderManagement = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector(state => state.bakerOrders);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchBakerOrders());
@@ -21,15 +24,21 @@ const BakerOrderManagement = () => {
     }
   };
 
-  const handleCompleteBaking = async (orderId) => {
-    if (window.confirm('Bạn có chắc chắn đã hoàn thành làm bánh cho đơn hàng này?')) {
-      try {
-        await dispatch(completeBaking(orderId)).unwrap();
-        toast.success('Đã hoàn thành làm bánh!');
-        dispatch(fetchBakerOrders()); // Refresh orders
-      } catch (error) {
-        toast.error(error || 'Có lỗi xảy ra khi hoàn thành làm bánh');
-      }
+  const handleCompleteClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowCompleteModal(true);
+  };
+
+  const handleCompleteConfirm = async () => {
+    try {
+      await dispatch(completeBaking(selectedOrderId)).unwrap();
+      toast.success('Đã hoàn thành làm bánh!');
+      dispatch(fetchBakerOrders()); // Refresh orders
+    } catch (error) {
+      toast.error(error || 'Có lỗi xảy ra khi hoàn thành làm bánh');
+    } finally {
+      setShowCompleteModal(false);
+      setSelectedOrderId(null);
     }
   };
 
@@ -188,7 +197,7 @@ const BakerOrderManagement = () => {
                     )}
                     {order.status === 'Baking' && (
                       <button
-                        onClick={() => handleCompleteBaking(order._id)}
+                        onClick={() => handleCompleteClick(order._id)}
                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
                         Hoàn thành
@@ -212,6 +221,18 @@ const BakerOrderManagement = () => {
           )}
         </div>
       </div>
+
+      {/* Confirm Complete Modal */}
+      <ConfirmModal
+        isOpen={showCompleteModal}
+        onClose={() => setShowCompleteModal(false)}
+        onConfirm={handleCompleteConfirm}
+        title="Xác nhận hoàn thành"
+        message="Bạn có chắc chắn đã hoàn thành làm bánh cho đơn hàng này? Sau khi xác nhận, đơn hàng sẽ được chuyển sang phòng giao hàng."
+        type="success"
+        confirmText="Hoàn thành"
+        cancelText="Tiếp tục làm"
+      />
     </div>
   );
 };
