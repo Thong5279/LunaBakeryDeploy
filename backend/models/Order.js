@@ -82,7 +82,15 @@ const orderSchema = new mongoose.Schema({
     },
     status : {
         type: String,
-        enum: [ 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+        enum: [ 
+            'Processing',       // Đang xử lý (mặc định)
+            'Approved',         // Đã duyệt (manager duyệt)
+            'Cancelled',        // Đã hủy (manager hủy)
+            'Baking',          // Đang làm bánh (baker cập nhật)
+            'Ready',           // Đã làm xong (baker hoàn thành)
+            'CannotDeliver',   // Không thể giao hàng (delivery)
+            'Delivered'        // Đã giao hàng thành công (delivery)
+        ],
         default: 'Processing',
     }
 }, { timestamps: true });

@@ -79,6 +79,10 @@ app.use("/api/inventory", inventoryRoute);
 app.use("/api/manager/orders", managerOrderRoute);
 app.use("/api/baker/orders", bakerOrderRoute);
 app.use("/api/delivery/orders", deliveryOrderRoute);
+//role-based order routes
+app.use("/api/manager/orders", managerOrderRoute);
+app.use("/api/baker/orders", bakerOrderRoute);
+app.use("/api/delivery/orders", deliveryOrderRoute);
 
 app.listen(PORT, () => {
     console.log(`Server chay tren http://localhost:${PORT}`);

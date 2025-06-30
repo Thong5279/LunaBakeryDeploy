@@ -6,6 +6,8 @@ const userFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+const tokenFromStorage = localStorage.getItem("userToken") || null;
+
 //check for an existing guest ID in the localStorage or generate a new one
 const initialGuestId =
   localStorage.getItem("guestId") || `guest_${new Date().getTime()}`;
@@ -14,6 +16,7 @@ localStorage.setItem("guestId", initialGuestId);
 //Initial state
 const initialState = {
   user: userFromStorage,
+  token: tokenFromStorage,
   guestId: initialGuestId,
   loading: false,
   error: null,
@@ -31,7 +34,10 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("userInfo", JSON.stringify(response.data.user));
       localStorage.setItem("userToken", response.data.token);
 
-      return response.data.user;
+      return {
+        user: response.data.user,
+        token: response.data.token
+      };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -49,7 +55,10 @@ export const registerUser = createAsyncThunk(
       localStorage.setItem("userInfo", JSON.stringify(response.data.user));
       localStorage.setItem("userToken", response.data.token);
 
-      return response.data.user;
+      return {
+        user: response.data.user,
+        token: response.data.token
+      };
     } catch (error) {
       return rejectWithValue(error.response.data );
     }
@@ -64,6 +73,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.token = null;
       state.guestId = `guest_${new Date().getTime()}`;
       localStorage.removeItem("userInfo");
       localStorage.removeItem("userToken");
@@ -78,6 +88,7 @@ const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
+      state.token = localStorage.getItem("userToken");
       state.loading = false;
       state.error = null;
     },
@@ -90,7 +101,8 @@ const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
-      state.user = action.payload;
+      state.user = action.payload.user || action.payload;
+      state.token = action.payload.token || localStorage.getItem("userToken");
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
@@ -104,7 +116,8 @@ const authSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
-      state.user = action.payload;
+      state.user = action.payload.user || action.payload;
+      state.token = action.payload.token || localStorage.getItem("userToken");
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;

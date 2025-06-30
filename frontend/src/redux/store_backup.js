@@ -15,6 +15,11 @@ import managerOrderReducer from './slices/managerOrderSlice';
 import bakerOrderReducer from './slices/bakerOrderSlice';
 import deliveryOrderReducer from './slices/deliveryOrderSlice';
 
+import inventoryReducer from './slices/inventorySlice';
+import managerOrderReducer from './slices/managerOrderSlice';
+import bakerOrderReducer from './slices/bakerOrderSlice';
+import deliveryOrderReducer from './slices/deliveryOrderSlice';
+
 const store = configureStore({
     reducer: {
         auth: authReducer,

@@ -43,4 +43,31 @@ const adminOrManager = (req, res, next) => {
   }
 };
 
-module.exports = { protect, admin, adminOrManager};
+//middleware kiểm tra quyền truy cập manager
+const manager = (req, res, next) => {
+  if (req.user && req.user.role === "manager") {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as a manager" });
+  }
+};
+
+//middleware kiểm tra quyền truy cập baker
+const baker = (req, res, next) => {
+  if (req.user && req.user.role === "baker") {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as a baker" });
+  }
+};
+
+//middleware kiểm tra quyền truy cập delivery
+const delivery = (req, res, next) => {
+  if (req.user && req.user.role === "shipper") {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as a delivery" });
+  }
+};
+
+module.exports = { protect, admin, adminOrManager, manager, baker, delivery};

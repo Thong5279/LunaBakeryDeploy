@@ -28,10 +28,13 @@ import OderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
+import ManagerOrderManagement from "./components/Manager/ManagerOrderManagement";
 import BakerLayout from "./components/Baker/BakerLayout";
 import BakerHomePage from "./pages/BakerHomePage";
+import BakerOrderManagement from "./components/Baker/BakerOrderManagement";
 import DeliveryLayout from "./components/Delivery/DeliveryLayout";
 import DeliveryHomePage from "./pages/DeliveryHomePage";
+import DeliveryOrderManagement from "./components/Delivery/DeliveryOrderManagement";
 import GoogleCallback from "./components/Auth/GoogleCallback";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
@@ -125,6 +128,7 @@ const AppContent = () => {
           }
         >
           <Route index element={<ManagerHomePage />} />
+          <Route path="orders" element={<ManagerOrderManagement />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="products/:id/edit" element={<EditProductPage />} />
           <Route path="ingredients" element={<IngredientManagement />} />
@@ -142,6 +146,7 @@ const AppContent = () => {
           }
         >
           <Route index element={<BakerHomePage />} />
+          <Route path="orders" element={<BakerOrderManagement />} />
         </Route>
 
         {/* delivery */}
@@ -154,6 +159,7 @@ const AppContent = () => {
           }
         >
           <Route index element={<DeliveryHomePage />} />
+          <Route path="orders" element={<DeliveryOrderManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>
