@@ -6,7 +6,7 @@ import {
   fetchOrderStatus,
   setPeriod,
   clearAnalyticsError,
-} from "../../redux/slices/analyticsSlice";
+} from "../redux/slices/analyticsSlice";
 import {
   FaCalendarDay,
   FaCalendarAlt,
@@ -22,10 +22,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  LineElement,
-  PointElement,
 } from 'chart.js';
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -34,32 +32,25 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement,
-  LineElement,
-  PointElement
+  ArcElement
 );
 
 const AnalyticsPage = () => {
   const dispatch = useDispatch();
   const [selectedPeriod, setSelectedPeriod] = useState("month");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  const {
-    revenue,
-    summary,
-    orderStatus,
-  } = useSelector((state) => state.analytics);
+  const { revenue, summary, orderStatus } = useSelector((state) => state.analytics);
 
   useEffect(() => {
     dispatch(fetchSummary());
-    dispatch(fetchRevenue({ period: selectedPeriod, year: selectedYear }));
+    dispatch(fetchRevenue({ period: selectedPeriod }));
     dispatch(fetchOrderStatus());
-  }, [dispatch, selectedPeriod, selectedYear]);
+  }, [dispatch, selectedPeriod]);
 
   const handlePeriodChange = (period) => {
     setSelectedPeriod(period);
     dispatch(setPeriod(period));
-    dispatch(fetchRevenue({ period, year: selectedYear }));
+    dispatch(fetchRevenue({ period }));
   };
 
   const formatCurrency = (amount) => {
@@ -100,8 +91,6 @@ const AnalyticsPage = () => {
       Ready: "Sẵn sàng giao hàng",
       CannotDeliver: "Không thể giao hàng",
       Delivered: "Đã giao hàng thành công",
-      // Legacy support
-      Shipped: "Đã vận chuyển"
     };
     return statusLabels[status] || status;
   };
@@ -115,16 +104,12 @@ const AnalyticsPage = () => {
       Ready: "bg-purple-100 text-purple-800",
       CannotDeliver: "bg-red-100 text-red-800",
       Delivered: "bg-green-100 text-green-800",
-      // Legacy support
-      Shipped: "bg-indigo-100 text-indigo-800"
     };
     return colors[status] || "bg-gray-100 text-gray-800";
   };
 
-  // Tạo data cho biểu đồ doanh thu
   const createRevenueChartData = () => {
     if (!revenue.data || revenue.data.length === 0) return null;
-
     const labels = revenue.data.map(item => getRevenueLabel(item));
     const revenueData = revenue.data.map(item => item.totalRevenue);
     const orderCountData = revenue.data.map(item => item.orderCount);
@@ -152,19 +137,17 @@ const AnalyticsPage = () => {
     };
   };
 
-  // Tạo data cho biểu đồ trạng thái đơn hàng
   const createOrderStatusChartData = () => {
     if (!orderStatus.data || orderStatus.data.length === 0) return null;
-
     const labels = orderStatus.data.map(item => getStatusLabel(item._id));
     const data = orderStatus.data.map(item => item.count);
     const backgroundColors = [
-      'rgba(251, 191, 36, 0.8)',  // Processing - Yellow
-      'rgba(59, 130, 246, 0.8)',  // Approved - Blue  
-      'rgba(249, 115, 22, 0.8)',  // Baking - Orange
-      'rgba(147, 51, 234, 0.8)',  // Ready - Purple
-      'rgba(34, 197, 94, 0.8)',   // Delivered - Green
-      'rgba(239, 68, 68, 0.8)',   // Cancelled/CannotDeliver - Red
+      'rgba(251, 191, 36, 0.8)',
+      'rgba(59, 130, 246, 0.8)',
+      'rgba(249, 115, 22, 0.8)',
+      'rgba(147, 51, 234, 0.8)',
+      'rgba(34, 197, 94, 0.8)',
+      'rgba(239, 68, 68, 0.8)',
     ];
 
     return {
@@ -180,89 +163,16 @@ const AnalyticsPage = () => {
     };
   };
 
-  // Chart options
   const barChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
     plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          padding: 20,
-          usePointStyle: true,
-        }
-      },
-      title: {
-        display: true,
-        text: 'Doanh thu và Số đơn hàng',
-        font: {
-          size: 16,
-          weight: 'bold'
-        },
-        padding: 20
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            if (context.datasetIndex === 0) {
-              return `Doanh thu: ${context.parsed.y.toLocaleString('vi-VN')} VND`;
-            } else {
-              return `Đơn hàng: ${context.parsed.y} đơn`;
-            }
-          }
-        }
-      }
+      legend: { position: 'top' },
+      title: { display: true, text: 'Doanh thu và Số đơn hàng' },
     },
     scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Thời gian',
-          font: {
-            weight: 'bold'
-          }
-        },
-        grid: {
-          display: false
-        }
-      },
-      y: {
-        type: 'linear',
-        display: true,
-        position: 'left',
-        title: {
-          display: true,
-          text: 'Doanh thu (VND)',
-          font: {
-            weight: 'bold'
-          }
-        },
-        ticks: {
-          callback: function(value) {
-            return value.toLocaleString('vi-VN');
-          }
-        }
-      },
-      y1: {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        title: {
-          display: true,
-          text: 'Số đơn hàng',
-          font: {
-            weight: 'bold'
-          }
-        },
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
+      y: { type: 'linear', display: true, position: 'left' },
+      y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } },
     },
   };
 
@@ -270,31 +180,8 @@ const AnalyticsPage = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          padding: 20,
-          usePointStyle: true,
-        }
-      },
-      title: {
-        display: true,
-        text: 'Phân bổ trạng thái đơn hàng',
-        font: {
-          size: 16,
-          weight: 'bold'
-        },
-        padding: 20
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
-            const percentage = ((context.parsed * 100) / total).toFixed(1);
-            return `${context.label}: ${context.parsed} đơn (${percentage}%)`;
-          }
-        }
-      }
+      legend: { position: 'bottom' },
+      title: { display: true, text: 'Phân bổ trạng thái đơn hàng' },
     },
   };
 
@@ -375,7 +262,6 @@ const AnalyticsPage = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Revenue Chart */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Biểu đồ Doanh thu & Đơn hàng</h3>
           <div className="h-80">
@@ -395,7 +281,6 @@ const AnalyticsPage = () => {
           </div>
         </div>
 
-        {/* Order Status Doughnut Chart */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Phân bổ Trạng thái Đơn hàng</h3>
           <div className="h-80">
@@ -418,12 +303,9 @@ const AnalyticsPage = () => {
 
       {/* Revenue Detail Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Revenue Chart Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Chi tiết doanh thu
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900">Chi tiết doanh thu</h2>
             <div className="flex gap-2">
               {["day", "week", "month", "quarter", "year"].map((period) => (
                 <button
@@ -455,12 +337,8 @@ const AnalyticsPage = () => {
                 revenue.data.map((item, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900">
-                        {getRevenueLabel(item)}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {item.orderCount} đơn hàng
-                      </p>
+                      <p className="font-medium text-gray-900">{getRevenueLabel(item)}</p>
+                      <p className="text-sm text-gray-600">{item.orderCount} đơn hàng</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-green-600">
@@ -481,12 +359,8 @@ const AnalyticsPage = () => {
           )}
         </div>
 
-        {/* Order Status Distribution */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Chi tiết trạng thái đơn hàng
-          </h2>
-          
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Chi tiết trạng thái đơn hàng</h2>
           {orderStatus.loading ? (
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
@@ -499,9 +373,7 @@ const AnalyticsPage = () => {
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status._id)}`}>
                       {getStatusLabel(status._id)}
                     </span>
-                    <span className="font-medium text-gray-900">
-                      {status.count} đơn
-                    </span>
+                    <span className="font-medium text-gray-900">{status.count} đơn</span>
                   </div>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(status.totalValue)}
@@ -516,11 +388,8 @@ const AnalyticsPage = () => {
       {/* Top Products and Recent Orders */}
       {summary.data && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-          {/* Top Products */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              🏆 Top sản phẩm bán chạy
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">🏆 Top sản phẩm bán chạy</h2>
             <div className="space-y-3">
               {summary.data.topProducts && summary.data.topProducts.length > 0 ? (
                 summary.data.topProducts.map((product, index) => (
@@ -531,9 +400,7 @@ const AnalyticsPage = () => {
                       </span>
                       <div>
                         <p className="font-medium text-gray-900">{product._id}</p>
-                        <p className="text-sm text-gray-600">
-                          Đã bán: {product.totalSold} sản phẩm
-                        </p>
+                        <p className="text-sm text-gray-600">Đã bán: {product.totalSold} sản phẩm</p>
                       </div>
                     </div>
                     <span className="font-semibold text-green-600">
@@ -542,18 +409,13 @@ const AnalyticsPage = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-gray-500 py-8">
-                  Chưa có dữ liệu sản phẩm
-                </p>
+                <p className="text-center text-gray-500 py-8">Chưa có dữ liệu sản phẩm</p>
               )}
             </div>
           </div>
 
-          {/* Recent Orders */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              📋 Đơn hàng gần đây
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">📋 Đơn hàng gần đây</h2>
             <div className="space-y-3">
               {summary.data.recentOrders && summary.data.recentOrders.length > 0 ? (
                 summary.data.recentOrders.map((order) => (
@@ -562,9 +424,7 @@ const AnalyticsPage = () => {
                       <p className="font-medium text-gray-900">
                         {order.user?.name || 'Khách vãng lai'}
                       </p>
-                      <p className="text-sm text-gray-600">
-                        {formatDate(order.createdAt)}
-                      </p>
+                      <p className="text-sm text-gray-600">{formatDate(order.createdAt)}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-semibold text-gray-900">
@@ -577,9 +437,7 @@ const AnalyticsPage = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-gray-500 py-8">
-                  Chưa có đơn hàng nào
-                </p>
+                <p className="text-center text-gray-500 py-8">Chưa có đơn hàng nào</p>
               )}
             </div>
           </div>
