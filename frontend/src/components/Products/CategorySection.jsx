@@ -62,7 +62,7 @@ const CategorySection = () => {
 
           {/* Baking Category */}
           <Link
-            to="/collections/all?ingredient"
+            to="/ingredients"
             className="relative flex-1 group cursor-pointer overflow-hidden rounded-xl shadow-md"
           >
             <img

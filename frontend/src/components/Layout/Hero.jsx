@@ -64,7 +64,7 @@ const HeroSlider = () => {
             transition={{ delay: 2.3 }}
           >
             <Link
-              to="/products"
+              to="/collections/all"
               className="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold text-lg px-6 py-3 rounded-full transition duration-300 shadow-md"
             >
               Khám phá ngay 🎂
