@@ -24,7 +24,7 @@ import IngredientManagement from "./components/Admin/IngredientManagement";
 import InventoryManagement from "./components/Admin/InventoryManagement";
 import EditProductPage from "./components/Admin/EditProductPage";
 import EditIngredientPage from "./components/Admin/EditIngredientPage";
-import OderManagement from "./components/Admin/OrderManagement";
+import OrderManagement from "./components/Admin/OrderManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
@@ -114,7 +114,7 @@ const AppContent = () => {
           <Route path="ingredients" element={<IngredientManagement />} />
           <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
           <Route path="inventory" element={<InventoryManagement />} />
-          <Route path="orders" element={<OderManagement />} />
+          <Route path="orders" element={<OrderManagement />} />
           <Route path="analytics" element={<AnalyticsPage />} />
         </Route>
 
