@@ -1,11 +1,19 @@
-// Recipe categories - Removed as requested
-
-// Recipe difficulties
-export const RECIPE_DIFFICULTIES = [
-  { value: 'Dễ', label: 'Dễ', color: 'text-green-600 bg-green-100' },
-  { value: 'Trung bình', label: 'Trung bình', color: 'text-yellow-600 bg-yellow-100' },
-  { value: 'Khó', label: 'Khó', color: 'text-red-600 bg-red-100' }
+// Recipe categories
+export const RECIPE_CATEGORIES = [
+  'Bánh ngọt',
+  'Bánh mặn', 
+  'Bánh kem',
+  'Bánh cupcake',
+  'Bánh tart',
+  'Bánh cookies',
+  'Bánh muffin',
+  'Bánh tiramisu',
+  'Bánh cheesecake',
+  'Khác'
 ];
+
+// Recipe difficulties (simplified for Baker view)
+export const RECIPE_DIFFICULTIES = ['Dễ', 'Trung bình', 'Khó'];
 
 // Recipe status
 export const RECIPE_STATUS = [
@@ -31,4 +39,10 @@ export const SERVING_OPTIONS = [
   1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 24, 30, 50, 100
 ];
 
-// Recipe tags - Removed as requested 
+// Recipe tags
+export const RECIPE_TAGS = [
+  'sinh nhật', 'tiệc', 'gia đình', 'dễ làm', 'nhanh', 'ngon',
+  'chocolate', 'vanilla', 'dâu tây', 'cam', 'chanh', 'cà phê',
+  'kem tươi', 'bơ', 'phô mai', 'hạnh nhân', 'dừa', 'matcha',
+  'tráng miệng', 'bữa sáng', 'trà chiều', 'cuối tuần', 'đặc biệt'
+]; 

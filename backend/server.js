@@ -27,6 +27,7 @@ const paymentRoute = require("./routes/paymentRoutes");
 const inventoryRoute = require("./routes/inventoryRoutes");
 const managerOrderRoute = require("./routes/managerOrderRoutes");
 const bakerOrderRoute = require("./routes/bakerOrderRoutes");
+const bakerRecipeRoute = require("./routes/bakerRecipeRoutes");
 const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
 
 
@@ -80,6 +81,7 @@ app.use("/api/inventory", inventoryRoute);
 //role-based order routes
 app.use("/api/manager/orders", managerOrderRoute);
 app.use("/api/baker/orders", bakerOrderRoute);
+app.use("/api/baker/recipes", bakerRecipeRoute);
 app.use("/api/delivery/orders", deliveryOrderRoute);
 
 app.listen(PORT, () => {

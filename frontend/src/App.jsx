@@ -33,6 +33,7 @@ import ManagerOrderManagement from "./components/Manager/ManagerOrderManagement"
 import BakerLayout from "./components/Baker/BakerLayout";
 import BakerHomePage from "./pages/BakerHomePage";
 import BakerOrderManagement from "./components/Baker/BakerOrderManagement";
+import BakerRecipeManagement from "./components/Baker/BakerRecipeManagement";
 import DeliveryLayout from "./components/Delivery/DeliveryLayout";
 import DeliveryHomePage from "./pages/DeliveryHomePage";
 import DeliveryOrderManagement from "./components/Delivery/DeliveryOrderManagement";
@@ -149,6 +150,7 @@ const AppContent = () => {
         >
           <Route index element={<BakerHomePage />} />
           <Route path="orders" element={<BakerOrderManagement />} />
+          <Route path="recipes" element={<BakerRecipeManagement />} />
         </Route>
 
         {/* delivery */}

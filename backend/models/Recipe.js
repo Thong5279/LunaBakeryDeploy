@@ -28,18 +28,37 @@ const recipeSchema = new mongoose.Schema({
       default: ''
     }
   },
-  // category removed as requested
+  category: {
+    type: String,
+    required: [true, 'Danh mục công thức là bắt buộc'],
+    enum: [
+      'Bánh ngọt',
+      'Bánh mặn', 
+      'Bánh kem',
+      'Bánh cupcake',
+      'Bánh tart',
+      'Bánh cookies',
+      'Bánh muffin',
+      'Bánh tiramisu',
+      'Bánh cheesecake',
+      'Khác'
+    ]
+  },
   difficulty: {
     type: String,
     required: [true, 'Độ khó là bắt buộc'],
     enum: ['Dễ', 'Trung bình', 'Khó'],
     default: 'Trung bình'
   },
-  // preparationTime removed as requested
+  preparationTime: {
+    type: Number,
+    required: [true, 'Thời gian chuẩn bị là bắt buộc'],
+    min: [1, 'Thời gian chuẩn bị phải ít nhất 1 phút']
+  },
   cookingTime: {
     type: Number,
-    required: [true, 'Thời gian làm bánh là bắt buộc'],
-    min: [1, 'Thời gian làm bánh phải ít nhất 1 phút']
+    required: [true, 'Thời gian nướng là bắt buộc'],
+    min: [1, 'Thời gian nướng phải ít nhất 1 phút']
   },
   servings: {
     type: Number,
@@ -63,7 +82,10 @@ const recipeSchema = new mongoose.Schema({
       trim: true
     }
   }],
-  // tags removed as requested
+  tags: [{
+    type: String,
+    trim: true
+  }],
   status: {
     type: String,
     enum: ['active', 'inactive'],
@@ -107,13 +129,14 @@ const recipeSchema = new mongoose.Schema({
 
 // Index để tối ưu truy vấn
 recipeSchema.index({ name: 1 });
+recipeSchema.index({ category: 1 });
 recipeSchema.index({ status: 1 });
 recipeSchema.index({ createdBy: 1 });
 recipeSchema.index({ createdAt: -1 });
 
-// Virtual để tính tổng thời gian - updated since preparationTime removed
+// Virtual để tính tổng thời gian
 recipeSchema.virtual('totalTime').get(function() {
-  return this.cookingTime;
+  return this.preparationTime + this.cookingTime;
 });
 
 // Middleware để cập nhật publishedAt khi isPublished thay đổi

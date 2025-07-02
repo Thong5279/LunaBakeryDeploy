@@ -14,6 +14,7 @@ import analyticsReducer from './slices/analyticsSlice';
 import inventoryReducer from './slices/inventorySlice';
 import managerOrderReducer from './slices/managerOrderSlice';
 import bakerOrderReducer from './slices/bakerOrderSlice';
+import bakerRecipeReducer from './slices/bakerRecipeSlice';
 import deliveryOrderReducer from './slices/deliveryOrderSlice';
 
 const store = configureStore({
@@ -33,6 +34,7 @@ const store = configureStore({
         inventory: inventoryReducer,
         managerOrders: managerOrderReducer,
         bakerOrders: bakerOrderReducer,
+        bakerRecipes: bakerRecipeReducer,
         deliveryOrders: deliveryOrderReducer,
     },
 });
