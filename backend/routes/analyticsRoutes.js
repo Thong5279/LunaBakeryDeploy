@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { protect, admin, adminOrManager } = require("../middleware/authMiddleware");
 
 // @desc    Get revenue analytics
 // @route   GET /api/analytics/revenue
@@ -271,8 +271,8 @@ router.get("/order-status", protect, admin, async (req, res) => {
 
 // @desc    Get product sales analytics (best/worst/zero sellers)
 // @route   GET /api/analytics/product-sales
-// @access  Private/Admin
-router.get("/product-sales", protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get("/product-sales", protect, adminOrManager, async (req, res) => {
   try {
     console.log("🔍 [Analytics] Starting product-sales route...");
     
@@ -365,8 +365,8 @@ router.get("/product-sales", protect, admin, async (req, res) => {
 
 // @desc    Get ingredient inventory analytics (in/out)
 // @route   GET /api/analytics/ingredient-inventory
-// @access  Private/Admin
-router.get("/ingredient-inventory", protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get("/ingredient-inventory", protect, adminOrManager, async (req, res) => {
   try {
     console.log("🔍 [Analytics] Starting ingredient-inventory route...");
     
