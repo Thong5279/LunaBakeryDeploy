@@ -176,8 +176,8 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
                   <div className="flex items-center justify-center text-pink-500 mb-1">
                     <FaUsers className="mr-1" />
                   </div>
-                  <p className="text-sm text-gray-600">Phục vụ</p>
-                  <p className="font-semibold">{selectedRecipe.servings || 0} người</p>
+                  <p className="text-sm text-gray-600">Số lượng</p>
+                  <p className="font-semibold">1 mẻ bánh {selectedRecipe.servings || 0} cái</p>
                 </div>
                 <div className="text-center">
                   <div className="flex items-center justify-center text-pink-500 mb-1">
@@ -195,6 +195,8 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
                 <span className={`px-3 py-1 rounded-full text-sm ${getDifficultyColor(selectedRecipe.difficulty)}`}>
                   {selectedRecipe.difficulty}
                 </span>
+                {/* Ẩn tag */}
+                {/*
                 {selectedRecipe.tags && selectedRecipe.tags.length > 0 && (
                   <>
                     {selectedRecipe.tags.slice(0, 3).map((tag, index) => (
@@ -204,6 +206,7 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
                     ))}
                   </>
                 )}
+                */}
               </div>
 
               {selectedRecipe.description && (
