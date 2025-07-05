@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FaHome, FaUser, FaBirthdayCake, FaSignOutAlt, FaArrowLeft, FaClipboardList, FaBook } from "react-icons/fa";
+import { FaHome, FaUser, FaBirthdayCake, FaSignOutAlt, FaArrowLeft, FaClipboardList } from "react-icons/fa";
 import { logout } from "../../redux/slices/authSlice";
 import { clearCart } from "../../redux/slices/cartSlice";
 
@@ -64,20 +64,6 @@ const BakerSidebar = () => {
             >
               <FaClipboardList className="text-lg" />
               <span>Quản lý đơn hàng</span>
-            </Link>
-          </li>
-          
-          <li>
-            <Link
-              to="/baker/recipes"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                isActive("/baker/recipes")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
-              }`}
-            >
-              <FaBook className="text-lg" />
-              <span>Sổ tay công thức</span>
             </Link>
           </li>
           

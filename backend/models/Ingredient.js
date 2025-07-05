@@ -56,8 +56,9 @@ const ingredientSchema = new mongoose.Schema(
     },
     unit: {
       type: String,
-      required: [true, 'Đơn vị đo lường là bắt buộc'],
-      enum: ['kg', 'g', 'lít', 'ml', 'hộp', 'túi', 'chai', 'chiếc', 'bộ', 'gói', 'thùng', 'tá']
+      required: false,
+      enum: ['kg', 'g', 'lít', 'ml', 'hộp', 'túi', 'chai', 'chiếc', 'bộ', 'gói', 'thùng', 'tá'],
+      default: 'kg'
     },
     sku: {
       type: String,
