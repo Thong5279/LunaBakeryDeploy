@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProductGrid from "./ProductGrid";
 import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slices/productsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
 
+const PREVIOUS_PATH_KEY = 'luna_bakery_previous_path';
+
 const ProductDetails = ({ productId }) => {
   const { id: routeID } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector((state) => state.products);
   const { user, guestId } = useSelector((state) => state.auth);
@@ -23,6 +26,16 @@ const ProductDetails = ({ productId }) => {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   const idToFetch = productId || routeID;
+
+  // Lưu đường dẫn trước khi vào trang chi tiết
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    // Chỉ lưu path mới nếu không phải là trang chi tiết sản phẩm
+    if (!currentPath.includes('/product/')) {
+      localStorage.setItem(PREVIOUS_PATH_KEY, currentPath);
+    }
+  }, [location]);
 
   // Tính giá theo size đã chọn
   const calculateCurrentPrice = () => {
@@ -41,13 +54,8 @@ const ProductDetails = ({ productId }) => {
   };
 
   const handleGoBack = () => {
-    // Kiểm tra collection từ URL hoặc product category để navigate về đúng collection
-    if (selectedProduct?.collection) {
-      navigate(`/collections/${selectedProduct.collection.toLowerCase()}`);
-    } else {
-      // Fallback về trang home nếu không xác định được collection
-      navigate('/');
-    }
+    const previousPath = localStorage.getItem(PREVIOUS_PATH_KEY) || '/collections/all';
+    navigate(previousPath);
   };
 
   useEffect(() => {
