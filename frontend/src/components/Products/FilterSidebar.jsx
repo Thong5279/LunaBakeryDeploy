@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { PRODUCT_CATEGORIES, PRODUCT_FLAVORS, PRODUCT_SIZES } from "../../constants/productConstants";
+import { fetchPriceRange } from "../../redux/slices/productsSlice";
+import PriceRangeSlider from "./PriceRangeSlider";
 
 const FilterSidebar = () => {
   const [searchParams, setSearchParams] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { priceRange } = useSelector((state) => state.products);
   const [filters, setFilters] = useState({
     search: "", // Tìm kiếm
     category: "", // Loại bánh: "bánh kem", "bánh mì", ...
     flavor: "", // Hương vị: "Socola", "Dâu", ...
     size: "", // Kích thước: "10cm", "1kg", ...
-    maxPrice: 1000000, // Giá tối đa, đơn vị VND
-    minPrice: 0, // Giá tối thiểu, đơn vị VND
+    maxPrice: priceRange.maxPrice, // Giá tối đa, đơn vị VND
+    minPrice: priceRange.minPrice, // Giá tối thiểu, đơn vị VND
     // rating: 0,                 Tối thiểu sao (1-5)
     // shape: '',                 Hình dáng: "tròn", "vuông", ...
     // diet: '',                  Chế độ ăn: "chay", "gluten-free", ...
@@ -20,12 +25,27 @@ const FilterSidebar = () => {
     // bestSeller: false,         Lọc bánh bán chạy
   });
 
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [currentPriceRange, setCurrentPriceRange] = useState([priceRange.minPrice, priceRange.maxPrice]);
 
   // Sử dụng constants từ file riêng
   const categories = PRODUCT_CATEGORIES;
   const flavors = PRODUCT_FLAVORS;
   const sizes = PRODUCT_SIZES;
+
+  // Fetch price range when component mounts
+  useEffect(() => {
+    dispatch(fetchPriceRange());
+  }, [dispatch]);
+
+  // Update local price range when global price range changes
+  useEffect(() => {
+    setCurrentPriceRange([priceRange.minPrice, priceRange.maxPrice]);
+    setFilters(prev => ({
+      ...prev,
+      minPrice: priceRange.minPrice,
+      maxPrice: priceRange.maxPrice
+    }));
+  }, [priceRange]);
 
   useEffect(() => {
     const params = Object.fromEntries(
@@ -37,14 +57,14 @@ const FilterSidebar = () => {
       category: params.category || "", // Loại bánh: "bánh kem", "bánh mì", ...
       flavor: params.flavor || "", // Hương vị: "Socola", "Dâu", ...
       size: params.size ? params.size.split(",") : [], // Kích thước: "10cm", "1kg", ...
-      minPrice: params.minPrice ? parseInt(params.minPrice) : 0, // Giá tối thiểu, đơn vị VND
-      maxPrice: params.maxPrice ? parseInt(params.maxPrice) : 1000000, // Giá tối đa, đơn vị VND
+      minPrice: params.minPrice ? parseInt(params.minPrice) : priceRange.minPrice, // Giá tối thiểu, đơn vị VND
+      maxPrice: params.maxPrice ? parseInt(params.maxPrice) : priceRange.maxPrice, // Giá tối đa, đơn vị VND
     });
-    setPriceRange([
-      params.minPrice ? parseInt(params.minPrice) : 0,
-      params.maxPrice ? parseInt(params.maxPrice) : 1000000,
+    setCurrentPriceRange([
+      params.minPrice ? parseInt(params.minPrice) : priceRange.minPrice,
+      params.maxPrice ? parseInt(params.maxPrice) : priceRange.maxPrice,
     ]);
-  }, [searchParams]);
+      }, [searchParams, priceRange]);
 
   const handleFilterChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -85,15 +105,14 @@ const FilterSidebar = () => {
     navigate(`?${params.toString()}`); // Cập nhật URL với các tham số mới
   };
 
-  const handlePriceChange = (e) => {
-    const newPrice = e.target.value;
-    setPriceRange([0, newPrice]);
+  const handlePriceChange = (minPrice, maxPrice) => {
+    setCurrentPriceRange([minPrice, maxPrice]);
     const newFilters = {
       ...filters,
-      minPrice: 0,
-      maxPrice: newPrice,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
     };
-    setFilters(filters);
+    setFilters(newFilters);
     updateURLParams(newFilters);
   };
 
@@ -103,17 +122,17 @@ const FilterSidebar = () => {
       category: "",
       flavor: "",
       size: [],
-      maxPrice: 1000000,
-      minPrice: 0,
+      maxPrice: priceRange.maxPrice,
+      minPrice: priceRange.minPrice,
     });
-    setPriceRange([0, 1000000]);
+    setCurrentPriceRange([priceRange.minPrice, priceRange.maxPrice]);
     navigate(window.location.pathname); // Clear URL params
   };
 
-  const hasActiveFilters = filters.search || filters.category || filters.flavor || filters.size.length > 0 || filters.maxPrice < 1000000 || filters.minPrice > 0;
+  const hasActiveFilters = filters.search || filters.category || filters.flavor || filters.size.length > 0 || filters.maxPrice < priceRange.maxPrice || filters.minPrice > priceRange.minPrice;
 
   return (
-    <div className="p-4 h-full h-full overflow-y-auto">
+    <div className="p-4 h-full overflow-y-auto">  {/* Container for filter content */}
       {/* Header with clear button */}
       <div className="flex items-center justify-between mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100">
         <h3 className="text-xl font-medium text-pink-500">Lọc sản phẩm</h3>
@@ -230,24 +249,16 @@ const FilterSidebar = () => {
 
         {/* Price filter */}
         <div>
-          <label className="block text-[#f472b6] font-medium mb-2">
+          <label className="block text-[#f472b6] font-medium mb-3">
             Khoảng giá
           </label>
-          <div className="px-2">
-            <input
-              type="range"
-              name="priceRange"
-              min={0}
-              max={1000000}
-              value={priceRange[1]}
-              onChange={handlePriceChange}
-              className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
-              <span>0 ₫</span>
-              <span className="font-medium">{new Intl.NumberFormat("vi-VN").format(priceRange[1])} ₫</span>
-            </div>
-          </div>
+          <PriceRangeSlider
+            minPrice={priceRange.minPrice}
+            maxPrice={priceRange.maxPrice}
+            currentMin={currentPriceRange[0]}
+            currentMax={currentPriceRange[1]}
+            onChange={handlePriceChange}
+          />
         </div>
       </div>
     </div>

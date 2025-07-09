@@ -314,6 +314,69 @@ router.get("/new-arrivals", async (req, res) => {
   }
 });
 
+// @route GET /api/products/price-range
+// @desc Get price range (min/max) from all active products
+// @access Public
+router.get("/price-range", async (req, res) => {
+  try {
+    // Get min and max prices from products using aggregation
+    const priceStats = await Product.aggregate([
+      {
+        $match: {
+          $or: [
+            { status: 'active' },
+            { status: { $exists: false } }
+          ],
+          isPublished: true,
+          price: { $exists: true, $gt: 0 }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" },
+          minDiscountPrice: { $min: "$discountPrice" },
+          maxDiscountPrice: { $max: "$discountPrice" }
+        }
+      }
+    ]);
+
+    if (priceStats.length === 0) {
+      return res.json({
+        minPrice: 0,
+        maxPrice: 1000000
+      });
+    }
+
+    const stats = priceStats[0];
+    
+    // Use the absolute minimum and maximum between price and discountPrice
+    const absoluteMin = Math.min(
+      stats.minPrice || 0,
+      stats.minDiscountPrice || 0
+    );
+    
+    const absoluteMax = Math.max(
+      stats.maxPrice || 1000000,
+      stats.maxDiscountPrice || 1000000
+    );
+
+    res.json({
+      minPrice: Math.floor(absoluteMin / 1000) * 1000, // Round down to nearest thousand
+      maxPrice: Math.ceil(absoluteMax / 1000) * 1000   // Round up to nearest thousand
+    });
+
+  } catch (error) {
+    console.error("Error fetching price range:", error);
+    res.status(500).json({ 
+      message: "Lỗi server khi tải khoảng giá",
+      minPrice: 0,
+      maxPrice: 1000000
+    });
+  }
+});
+
 // @route GET /api/products/search-suggestions
 // @desc Get search suggestions for products and ingredients
 // @access Public

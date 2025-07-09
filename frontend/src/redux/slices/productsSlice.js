@@ -59,20 +59,31 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-//async thunk to delete a products
+//async thunk to fetch similar products
 export const fetchSimilarProducts = createAsyncThunk("products/fetchSimilarProducts", async ({id}) => {
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
     );
     return response.data;
-}
-);
+});
+
+//async thunk to fetch price range
+export const fetchPriceRange = createAsyncThunk("products/fetchPriceRange", async () => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/products/price-range`
+    );
+    return response.data;
+});
 const productsSlice = createSlice({
      name : "products",
     initialState: {
         products: [],
         selectedProduct: null,
         similarProducts: [],
+        priceRange: {
+            minPrice: 0,
+            maxPrice: 1000000
+        },
         loading: false,
         error: null,
         filters: {
@@ -157,6 +168,19 @@ const productsSlice = createSlice({
               state.similarProducts = action.payload;
           })
           .addCase(fetchSimilarProducts.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message;
+          })
+          // Handle fetching price range
+          .addCase(fetchPriceRange.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+          })
+          .addCase(fetchPriceRange.fulfilled, (state, action) => {
+              state.loading = false;
+              state.priceRange = action.payload;
+          })
+          .addCase(fetchPriceRange.rejected, (state, action) => {
               state.loading = false;
               state.error = action.error.message;
           });

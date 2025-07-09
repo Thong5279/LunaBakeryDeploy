@@ -43,7 +43,7 @@ const CollectionPage = () => {
   },[])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-32">  {/* Add padding bottom for footer */}
       {/* Page Title - Full Width */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -54,7 +54,7 @@ const CollectionPage = () => {
       </div>
 
       {/* Main Content Container - Full Width */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 relative">
         {/* Mobile filter button */}
         <button 
           onClick={toggleSidebar} 
@@ -71,7 +71,7 @@ const CollectionPage = () => {
             ref={sidebarRef} 
             className={`${
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } fixed inset-y-0 z-50 left-0 w-80 bg-white shadow-lg transition-transform duration-300 lg:translate-x-0 lg:static lg:w-1/4 lg:shadow-none lg:bg-transparent`}
+            } fixed inset-0 z-50 w-80 bg-white shadow-lg transition-transform duration-300 lg:translate-x-0 lg:static lg:w-1/4 lg:shadow-none lg:bg-transparent overflow-auto pb-32`}
           >
             {/* Mobile close button */}
             <div className="lg:hidden flex justify-between items-center p-4 border-b bg-white">
@@ -87,7 +87,7 @@ const CollectionPage = () => {
             </div>
             
             {/* Filter Content */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 lg:max-h-[calc(100vh-200px)]">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-4">
               <FilterSidebar/>
             </div>
           </div>
