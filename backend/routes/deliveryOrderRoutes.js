@@ -67,6 +67,12 @@ router.put("/:id/start-shipping", protect, delivery, async (req, res) => {
 //@access Private/Delivery
 router.put("/:id/cannot-deliver", protect, delivery, async (req, res) => {
     try {
+        const { reason } = req.body;
+        
+        if (!reason || reason.trim() === '') {
+            return res.status(400).json({ message: "Vui lòng nhập lý do không thể giao hàng" });
+        }
+
         const order = await Order.findById(req.params.id).populate("user", "name");
         
         if (!order) {
@@ -78,10 +84,11 @@ router.put("/:id/cannot-deliver", protect, delivery, async (req, res) => {
         }
 
         order.status = 'cannot_deliver';
+        order.cannotDeliverReason = reason;
         order.statusHistory.push({
             status: 'cannot_deliver',
             updatedBy: req.user._id,
-            note: 'Không thể giao hàng',
+            note: `Không thể giao hàng - Lý do: ${reason}`,
             updatedAt: Date.now()
         });
 
@@ -93,7 +100,8 @@ router.put("/:id/cannot-deliver", protect, delivery, async (req, res) => {
             orderId: order._id,
             status: order.status,
             updatedAt: order.updatedAt,
-            statusHistory: order.statusHistory
+            statusHistory: order.statusHistory,
+            cannotDeliverReason: order.cannotDeliverReason
         });
         
         res.json(updatedOrder);

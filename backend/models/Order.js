@@ -109,6 +109,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    cannotDeliverReason: {
+        type: String,
+        default: null
+    },
     statusHistory: [statusHistorySchema]
 }, { timestamps: true });
 

@@ -4,6 +4,65 @@ import { fetchDeliveryOrders, startShipping, markCannotDeliver, markDelivered } 
 import { toast } from 'sonner';
 import ConfirmModal from '../Common/ConfirmModal';
 
+const CannotDeliverModal = ({ isOpen, onClose, onConfirm }) => {
+  const [reason, setReason] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = () => {
+    if (!reason.trim()) {
+      setError('Vui lòng nhập lý do không thể giao hàng');
+      return;
+    }
+    onConfirm(reason);
+    setReason('');
+    setError('');
+  };
+
+  return (
+    <div className={`fixed inset-0 z-50 ${isOpen ? '' : 'hidden'}`}>
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+          <h2 className="text-xl font-bold mb-4 text-gray-900">Không thể giao hàng</h2>
+          <p className="text-gray-600 mb-4">
+            Vui lòng nhập lý do không thể giao hàng để thông báo cho quản lý và khách hàng.
+          </p>
+          <textarea
+            value={reason}
+            onChange={(e) => {
+              setReason(e.target.value);
+              setError('');
+            }}
+            placeholder="Nhập lý do không thể giao hàng..."
+            className={`w-full p-2 border rounded-lg mb-2 h-32 resize-none ${
+              error ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => {
+                onClose();
+                setReason('');
+                setError('');
+              }}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DeliveryOrderManagement = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector(state => state.deliveryOrders);
@@ -30,13 +89,13 @@ const DeliveryOrderManagement = () => {
     setShowCannotDeliverModal(true);
   };
 
-  const handleCannotDeliverConfirm = async () => {
+  const handleCannotDeliverConfirm = async (reason) => {
     try {
-      await dispatch(markCannotDeliver(selectedOrderId)).unwrap();
-      toast.success('Đã đánh dấu không thể giao hàng!');
+      await dispatch(markCannotDeliver({ id: selectedOrderId, reason })).unwrap();
+      toast.success('Đã cập nhật trạng thái không thể giao hàng!');
       dispatch(fetchDeliveryOrders());
     } catch (error) {
-      toast.error(error || 'Có lỗi xảy ra khi đánh dấu không thể giao hàng');
+      toast.error(error || 'Có lỗi xảy ra khi cập nhật trạng thái');
     } finally {
       setShowCannotDeliverModal(false);
       setSelectedOrderId(null);
@@ -255,15 +314,13 @@ const DeliveryOrderManagement = () => {
       </div>
 
       {/* Cannot Deliver Modal */}
-      <ConfirmModal
+      <CannotDeliverModal
         isOpen={showCannotDeliverModal}
-        onClose={() => setShowCannotDeliverModal(false)}
+        onClose={() => {
+          setShowCannotDeliverModal(false);
+          setSelectedOrderId(null);
+        }}
         onConfirm={handleCannotDeliverConfirm}
-        title="Không thể giao hàng"
-        message="Bạn có chắc chắn không thể giao đơn hàng này? Vui lòng đảm bảo đã thử mọi cách liên hệ với khách hàng."
-        type="danger"
-        confirmText="Không thể giao"
-        cancelText="Thử lại"
       />
 
       {/* Delivered Modal */}

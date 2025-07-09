@@ -52,25 +52,30 @@ export const startShipping = createAsyncThunk(
 
 export const markCannotDeliver = createAsyncThunk(
   'deliveryOrders/markCannotDeliver',
-  async (orderId, { getState, rejectWithValue }) => {
+  async ({ id, reason }, { getState, rejectWithValue }) => {
     try {
+      console.log('Marking order as cannot deliver:', { id, reason }); // Debug log
       const { auth } = getState();
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/delivery/orders/${orderId}/cannot-deliver`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/delivery/orders/${id}/cannot-deliver`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${auth.token}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ reason })
       });
 
       if (!response.ok) {
-        throw new Error('Failed to mark as cannot deliver');
+        const error = await response.json();
+        throw new Error(error.message || 'Không thể cập nhật trạng thái');
       }
 
       const data = await response.json();
+      console.log('Order marked as cannot deliver:', data); // Debug log
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error('Error marking order as cannot deliver:', error);
+      return rejectWithValue(error.message || 'Có lỗi xảy ra khi cập nhật trạng thái');
     }
   }
 );
