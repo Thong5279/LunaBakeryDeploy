@@ -13,7 +13,11 @@ export const RECIPE_CATEGORIES = [
 ];
 
 // Recipe difficulties (simplified for Baker view)
-export const RECIPE_DIFFICULTIES = ['Dễ', 'Trung bình', 'Khó'];
+export const RECIPE_DIFFICULTIES = [
+  { value: 'Dễ', label: 'Dễ', color: 'text-green-600 bg-green-100' },
+  { value: 'Trung bình', label: 'Trung bình', color: 'text-yellow-600 bg-yellow-100' },
+  { value: 'Khó', label: 'Khó', color: 'text-red-600 bg-red-100' }
+];
 
 // Recipe status
 export const RECIPE_STATUS = [

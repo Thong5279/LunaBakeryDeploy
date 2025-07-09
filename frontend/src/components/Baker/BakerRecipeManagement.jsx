@@ -21,7 +21,7 @@ import {
   FaChevronRight
 } from 'react-icons/fa';
 import BakerRecipeModal from './BakerRecipeModal';
-import { RECIPE_CATEGORIES, RECIPE_DIFFICULTIES } from '../../constants/recipeConstants';
+import { RECIPE_DIFFICULTIES } from '../../constants/recipeConstants';
 
 const BakerRecipeManagement = () => {
   const dispatch = useDispatch();
@@ -94,16 +94,8 @@ const BakerRecipeManagement = () => {
   };
 
   const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'Dễ':
-        return 'text-green-600 bg-green-100';
-      case 'Trung bình':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'Khó':
-        return 'text-red-600 bg-red-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
-    }
+    const difficultyObj = RECIPE_DIFFICULTIES.find(d => d.value === difficulty);
+    return difficultyObj?.color || 'text-gray-600 bg-gray-100';
   };
 
   const formatTime = (minutes) => {
@@ -180,11 +172,9 @@ const BakerRecipeManagement = () => {
                       <div className="flex-1">
                         <h4 className="font-medium text-gray-900">{recipe.name}</h4>
                         <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <span>{recipe.category}</span>
-                          <span>•</span>
                           <span>{recipe.difficulty}</span>
                           <span>•</span>
-                          <span>{formatTime((recipe.preparationTime || 0) + (recipe.cookingTime || 0))}</span>
+                          <span>{formatTime(recipe.cookingTime || 0)}</span>
                         </div>
                       </div>
                     </div>
@@ -211,25 +201,8 @@ const BakerRecipeManagement = () => {
         {/* Filters Panel */}
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Category Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Danh mục
-                </label>
-                <select
-                  value={filters.category}
-                  onChange={(e) => handleFilterChange('category', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                >
-                  <option value="all">Tất cả danh mục</option>
-                  {RECIPE_CATEGORIES.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
 
               {/* Difficulty Filter */}
               <div>
@@ -243,8 +216,8 @@ const BakerRecipeManagement = () => {
                 >
                   <option value="all">Tất cả mức độ</option>
                   {RECIPE_DIFFICULTIES.map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>
-                      {difficulty}
+                    <option key={difficulty.value} value={difficulty.value}>
+                      {difficulty.label}
                     </option>
                   ))}
                 </select>
@@ -297,9 +270,9 @@ const BakerRecipeManagement = () => {
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-pink-600 text-sm font-medium">Bánh ngọt</p>
+              <p className="text-pink-600 text-sm font-medium">Trung bình</p>
               <p className="text-2xl font-bold text-gray-900">
-                {recipes.filter(r => r.category === 'Bánh ngọt').length}
+                {recipes.filter(r => r.difficulty === 'Trung bình').length}
               </p>
             </div>
             <FaUtensils className="text-pink-500 text-2xl" />
@@ -309,9 +282,9 @@ const BakerRecipeManagement = () => {
         <div className="bg-white p-6 rounded-lg shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-pink-600 text-sm font-medium">Bánh kem</p>
+              <p className="text-pink-600 text-sm font-medium">Khó</p>
               <p className="text-2xl font-bold text-gray-900">
-                {recipes.filter(r => r.category === 'Bánh kem').length}
+                {recipes.filter(r => r.difficulty === 'Khó').length}
               </p>
             </div>
             <FaUtensils className="text-pink-500 text-2xl" />
@@ -385,9 +358,6 @@ const BakerRecipeManagement = () => {
 
                     {/* Recipe Meta */}
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                      <span className="bg-pink-100 text-pink-800 px-2 py-1 rounded-full">
-                        {recipe.category}
-                      </span>
                       <span className={`px-2 py-1 rounded-full ${getDifficultyColor(recipe.difficulty)}`}>
                         {recipe.difficulty}
                       </span>
@@ -397,7 +367,7 @@ const BakerRecipeManagement = () => {
                     <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                       <div className="flex items-center space-x-1">
                         <FaClock />
-                        <span>Chuẩn bị: {formatTime(recipe.preparationTime || 0)}</span>
+                        <span>Làm bánh: {formatTime(recipe.cookingTime || 0)}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <FaClock />

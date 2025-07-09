@@ -26,9 +26,7 @@ router.get('/', protect, baker, async (req, res) => {
       ];
     }
 
-    if (req.query.category && req.query.category !== 'all') {
-      filters.category = req.query.category;
-    }
+
 
     if (req.query.difficulty && req.query.difficulty !== 'all') {
       filters.difficulty = req.query.difficulty;
@@ -45,7 +43,7 @@ router.get('/', protect, baker, async (req, res) => {
           sortBy = { difficulty: 1 };
           break;
         case 'totalTime':
-          sortBy = { preparationTime: 1, cookingTime: 1 };
+          sortBy = { cookingTime: 1 };
           break;
         case 'newest':
           sortBy = { createdAt: -1 };
@@ -115,25 +113,6 @@ router.get('/:id', protect, baker, async (req, res) => {
   }
 });
 
-// @desc    Get recipe categories for baker
-// @route   GET /api/baker/recipes/categories/list
-// @access  Private/Baker
-router.get('/categories/list', protect, baker, async (req, res) => {
-  try {
-    const categories = await Recipe.distinct('category', { 
-      isPublished: true, 
-      status: 'active' 
-    });
-    
-    res.json({ categories });
-  } catch (error) {
-    console.error('Error fetching recipe categories:', error);
-    res.status(500).json({ 
-      message: 'Lỗi server khi lấy danh mục công thức',
-      error: error.message 
-    });
-  }
-});
 
 // @desc    Search recipes for baker
 // @route   GET /api/baker/recipes/search/quick
@@ -154,7 +133,7 @@ router.get('/search/quick', protect, baker, async (req, res) => {
         { tags: { $in: [new RegExp(q, 'i')] } }
       ]
     })
-    .select('name category difficulty preparationTime cookingTime image')
+    .select('name difficulty cookingTime image')
     .limit(10)
     .lean();
 

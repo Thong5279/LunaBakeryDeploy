@@ -13,13 +13,12 @@ const getAuthConfig = () => ({
 // Fetch all recipes with pagination and filters
 export const fetchAdminRecipes = createAsyncThunk(
   "adminRecipe/fetchRecipes",
-  async ({ page = 1, limit = 10, search = "", category = "", status = "" } = {}, { rejectWithValue }) => {
+  async ({ page = 1, limit = 10, search = "", status = "" } = {}, { rejectWithValue }) => {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
         limit: limit.toString(),
         ...(search && { search }),
-        ...(category && { category }),
         ...(status && { status }),
       });
 
@@ -156,11 +155,9 @@ const adminRecipeSlice = createSlice({
       publishedRecipes: 0,
       inactiveRecipes: 0,
       unpublishedRecipes: 0,
-      categoryStats: [],
     },
     filters: {
       search: "",
-      category: "",
       status: "",
       page: 1,
       limit: 10,
@@ -183,7 +180,6 @@ const adminRecipeSlice = createSlice({
     resetFilters: (state) => {
       state.filters = {
         search: "",
-        category: "",
         status: "",
         page: 1,
         limit: 10,

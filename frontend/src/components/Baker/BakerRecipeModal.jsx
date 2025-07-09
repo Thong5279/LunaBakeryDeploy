@@ -163,7 +163,7 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
                     <FaClock className="mr-1" />
                   </div>
                   <p className="text-sm text-gray-600">Chuẩn bị</p>
-                  <p className="font-semibold">{formatTime(selectedRecipe.preparationTime)}</p>
+                  <p className="font-semibold">-</p>
                 </div>
                 <div className="text-center">
                   <div className="flex items-center justify-center text-pink-500 mb-1">
@@ -189,9 +189,6 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
               </div>
 
               <div className="flex items-center space-x-4">
-                <span className="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">
-                  {selectedRecipe.category}
-                </span>
                 <span className={`px-3 py-1 rounded-full text-sm ${getDifficultyColor(selectedRecipe.difficulty)}`}>
                   {selectedRecipe.difficulty}
                 </span>
@@ -333,9 +330,9 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
           <div className="recipe-header">
             <div className="recipe-title">{selectedRecipe.name}</div>
             <div className="recipe-meta">
-              <span>Danh mục: {selectedRecipe.category}</span>
+              
               <span>Độ khó: {selectedRecipe.difficulty}</span>
-              <span>Thời gian chuẩn bị: {formatTime(selectedRecipe.preparationTime)}</span>
+                              <span>Chỉ cần thời gian làm bánh</span>
               <span>Thời gian nướng: {formatTime(selectedRecipe.cookingTime)}</span>
               <span>Phục vụ: {selectedRecipe.servings} người</span>
             </div>

@@ -345,7 +345,7 @@ const RecipeManagement = () => {
                     </p>
                   </div>
 
-                  {/* Category removed as requested */}
+
 
                   {/* Time and servings */}
                   <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
