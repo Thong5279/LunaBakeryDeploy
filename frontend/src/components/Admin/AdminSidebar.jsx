@@ -137,7 +137,7 @@ const AdminSidebar = () => {
           end
         >
           <FaStore className="text-pink-500"></FaStore>
-          <span className="">trang chủ</span>
+          <span className="">Trang chủ</span>
         </NavLink>
         {/*  */}
       </nav>
