@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDeliveryOrders, markCannotDeliver, markDelivered } from '../../redux/slices/deliveryOrderSlice';
+import { fetchDeliveryOrders, startShipping, markCannotDeliver, markDelivered } from '../../redux/slices/deliveryOrderSlice';
 import { toast } from 'sonner';
 import ConfirmModal from '../Common/ConfirmModal';
 
@@ -15,6 +15,16 @@ const DeliveryOrderManagement = () => {
     dispatch(fetchDeliveryOrders());
   }, [dispatch]);
 
+  const handleStartShipping = async (orderId) => {
+    try {
+      await dispatch(startShipping(orderId)).unwrap();
+      toast.success('Đã bắt đầu giao hàng!');
+      dispatch(fetchDeliveryOrders());
+    } catch (error) {
+      toast.error(error || 'Có lỗi xảy ra khi bắt đầu giao hàng');
+    }
+  };
+
   const handleCannotDeliverClick = (orderId) => {
     setSelectedOrderId(orderId);
     setShowCannotDeliverModal(true);
@@ -24,7 +34,7 @@ const DeliveryOrderManagement = () => {
     try {
       await dispatch(markCannotDeliver(selectedOrderId)).unwrap();
       toast.success('Đã đánh dấu không thể giao hàng!');
-      dispatch(fetchDeliveryOrders()); // Refresh orders
+      dispatch(fetchDeliveryOrders());
     } catch (error) {
       toast.error(error || 'Có lỗi xảy ra khi đánh dấu không thể giao hàng');
     } finally {
@@ -42,7 +52,7 @@ const DeliveryOrderManagement = () => {
     try {
       await dispatch(markDelivered(selectedOrderId)).unwrap();
       toast.success('Đã giao hàng thành công!');
-      dispatch(fetchDeliveryOrders()); // Refresh orders
+      dispatch(fetchDeliveryOrders());
     } catch (error) {
       toast.error(error || 'Có lỗi xảy ra khi đánh dấu giao hàng thành công');
     } finally {
@@ -52,25 +62,29 @@ const DeliveryOrderManagement = () => {
   };
 
   const getStatusText = (status) => {
-    switch (status) {
-      case 'Ready':
+    switch (status?.toLowerCase()) {
+      case 'ready':
         return 'Sẵn sàng giao hàng';
-      case 'CannotDeliver':
+      case 'shipping':
+        return 'Đang giao hàng';
+      case 'cannot_deliver':
         return 'Không thể giao hàng';
-      case 'Delivered':
+      case 'delivered':
         return 'Đã giao hàng';
       default:
-        return status;
+        return 'Không xác định';
     }
   };
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'Ready':
+    switch (status?.toLowerCase()) {
+      case 'ready':
         return 'text-blue-600 bg-blue-100';
-      case 'CannotDeliver':
+      case 'shipping':
+        return 'text-purple-600 bg-purple-100';
+      case 'cannot_deliver':
         return 'text-red-600 bg-red-100';
-      case 'Delivered':
+      case 'delivered':
         return 'text-green-600 bg-green-100';
       default:
         return 'text-gray-600 bg-gray-100';
@@ -117,19 +131,19 @@ const DeliveryOrderManagement = () => {
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Chờ giao hàng</h3>
           <p className="text-3xl font-bold text-blue-600">
-            {orders.filter(order => order.status === 'Ready').length}
+            {orders.filter(order => order.status === 'ready').length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-700">Không thể giao</h3>
-          <p className="text-3xl font-bold text-red-600">
-            {orders.filter(order => order.status === 'CannotDeliver').length}
+          <h3 className="text-lg font-semibold text-gray-700">Đang giao hàng</h3>
+          <p className="text-3xl font-bold text-purple-600">
+            {orders.filter(order => order.status === 'shipping').length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Đã giao hàng</h3>
           <p className="text-3xl font-bold text-green-600">
-            {orders.filter(order => order.status === 'Delivered').length}
+            {orders.filter(order => order.status === 'delivered').length}
           </p>
         </div>
       </div>
@@ -192,7 +206,15 @@ const DeliveryOrderManagement = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                    {order.status === 'Ready' && (
+                    {order.status === 'ready' && (
+                      <button
+                        onClick={() => handleStartShipping(order._id)}
+                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                      >
+                        Bắt đầu giao hàng
+                      </button>
+                    )}
+                    {order.status === 'shipping' && (
                       <>
                         <button
                           onClick={() => handleMarkDeliveredClick(order._id)}
@@ -208,12 +230,12 @@ const DeliveryOrderManagement = () => {
                         </button>
                       </>
                     )}
-                    {order.status === 'CannotDeliver' && (
+                    {order.status === 'cannot_deliver' && (
                       <span className="text-xs text-red-500">
                         Giao hàng thất bại
                       </span>
                     )}
-                    {order.status === 'Delivered' && (
+                    {order.status === 'delivered' && (
                       <span className="text-xs text-green-500">
                         Hoàn thành giao hàng
                       </span>

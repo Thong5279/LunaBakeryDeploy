@@ -13,32 +13,73 @@ router.get("/", protect, admin, async (req, res) => {
         res.json(orders);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Lỗi server" });
     }
 });
 
-//@route PUT /api/admin/orders/:id
-//@desc update order status
-//@access Private/Admin
-router.put("/:id", protect, admin, async (req, res) => {
+// @route PUT /api/admin/orders/:id/status
+// @desc Update order status
+// @access Private/Admin
+router.put("/:id/status", protect, admin, async (req, res) => {
+  try {
     const { status } = req.body;
+    const order = await Order.findById(req.params.id);
 
-    try {
-        const order = await Order.findById(req.params.id).populate("user", "name");
-       if (order){
-            order.status = req.body.status || order.status;
-            order.isDelivered = 
-            req.body.status === "Delivered" ? true : order.isDelivered;
-            order.deliveredAt = req.body.status === "Delivered" ? new Date() : order.deliveredAt;
-            const updatedOrder = await order.save();
-            res.json(updatedOrder);
-        }else {
-            res.status(404).json({ message: "Order not found" });
-       }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+    if (!order) {
+      return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
     }
+
+    // Validate status
+    const validStatuses = [
+      'pending', 'approved', 'baking', 'ready', 
+      'shipping', 'delivered', 'cancelled', 'cannot_deliver'
+    ];
+    
+    if (!validStatuses.includes(status?.toLowerCase())) {
+      return res.status(400).json({ 
+        message: `Trạng thái không hợp lệ. Trạng thái hợp lệ: ${validStatuses.join(', ')}`
+      });
+    }
+
+    const newStatus = status.toLowerCase();
+
+    // Cập nhật trạng thái
+    order.status = newStatus;
+    order.updatedAt = Date.now();
+
+    // Cập nhật các trường liên quan
+    if (newStatus === 'delivered') {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+    }
+    
+    // Thêm vào lịch sử trạng thái
+    order.statusHistory.push({
+      status: newStatus,
+      updatedBy: req.user._id,
+      note: getStatusNote(newStatus),
+      updatedAt: Date.now()
+    });
+
+    const updatedOrder = await order.save();
+
+    // Emit event thông qua Socket.IO
+    const io = req.app.get('io');
+    io.emit('orderStatusUpdated', {
+      orderId: order._id,
+      status: order.status,
+      updatedAt: order.updatedAt,
+      statusHistory: order.statusHistory
+    });
+
+    res.json({
+      message: "Cập nhật trạng thái đơn hàng thành công",
+      order: updatedOrder
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Lỗi server khi cập nhật trạng thái" });
+  }
 });
 
 //@route DELETE /api/admin/orders/:id
@@ -49,15 +90,38 @@ router.delete("/:id", protect, admin, async (req, res) => {
         const order = await Order.findById(req.params.id);
         if (order) {
             await order.deleteOne();
-            res.json({ message: "Order removed" });
+            res.json({ message: "Đã xóa đơn hàng" });
         } else {
-            res.status(404).json({ message: "Order not found" });
+            res.status(404).json({ message: "Không tìm thấy đơn hàng" });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Lỗi server" });
     }
 });
 
+// Helper function to get status note
+function getStatusNote(status) {
+  switch (status) {
+    case 'pending':
+      return 'Đơn hàng mới, chờ xử lý';
+    case 'approved':
+      return 'Đơn hàng đã được duyệt';
+    case 'baking':
+      return 'Đang trong quá trình làm bánh';
+    case 'ready':
+      return 'Bánh đã làm xong, sẵn sàng giao hàng';
+    case 'shipping':
+      return 'Đang giao hàng';
+    case 'delivered':
+      return 'Đã giao hàng thành công';
+    case 'cancelled':
+      return 'Đơn hàng đã bị hủy';
+    case 'cannot_deliver':
+      return 'Không thể giao hàng';
+    default:
+      return '';
+  }
+}
 
 module.exports = router;

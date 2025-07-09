@@ -29,6 +29,26 @@ const orderItemSchema = new mongoose.Schema({
 { _id: false } // Không tạo _id riêng cho từng item
 );
 
+const statusHistorySchema = new mongoose.Schema({
+    status: {
+        type: String,
+        required: true,
+        enum: ['pending', 'approved', 'baking', 'ready', 'shipping', 'delivered', 'cancelled', 'cannot_deliver']
+    },
+    updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    note: {
+        type: String
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 const orderSchema = new mongoose.Schema({
 
     user: {
@@ -78,21 +98,14 @@ const orderSchema = new mongoose.Schema({
     },
     paymentStatus: {
         type: String,
-        default: 'Pending'
+        default: 'pending'
     },
-    status : {
+    status: {
         type: String,
-        enum: [ 
-            'Processing',       // Đang xử lý (mặc định)
-            'Approved',         // Đã duyệt (manager duyệt)
-            'Cancelled',        // Đã hủy (manager hủy)
-            'Baking',          // Đang làm bánh (baker cập nhật)
-            'Ready',           // Đã làm xong (baker hoàn thành)
-            'CannotDeliver',   // Không thể giao hàng (delivery)
-            'Delivered'        // Đã giao hàng thành công (delivery)
-        ],
-        default: 'Processing',
-    }
+        enum: ['pending', 'approved', 'baking', 'ready', 'shipping', 'delivered', 'cancelled', 'cannot_deliver'],
+        default: 'pending',
+    },
+    statusHistory: [statusHistorySchema]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

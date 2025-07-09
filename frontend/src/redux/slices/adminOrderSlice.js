@@ -16,27 +16,37 @@ export const fetchAllOrders = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Error fetching orders:', error.response?.data || error.message);
+      return rejectWithValue(
+        error.response?.data?.message || 'Có lỗi xảy ra khi tải danh sách đơn hàng'
+      );
     }
   }
 );
+
 //update order delivery status
 export const updateOrderStatus = createAsyncThunk(
   "adminOrders/updateOrderDeliveryStatus",
   async ({ id, status }, { rejectWithValue }) => {
     try {
+      console.log('Updating order status:', { id, status }); // Debug log
       const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}/status`,
         { status },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            'Content-Type': 'application/json',
           },
         }
       );
-      return response.data;
+      console.log('Update response:', response.data); // Debug log
+      return response.data.order;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Error updating order status:', error.response?.data || error.message);
+      return rejectWithValue(
+        error.response?.data?.message || 'Có lỗi xảy ra khi cập nhật trạng thái'
+      );
     }
   }
 );
@@ -56,10 +66,14 @@ export const deleteOrder = createAsyncThunk(
       );
       return id;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error('Error deleting order:', error.response?.data || error.message);
+      return rejectWithValue(
+        error.response?.data?.message || 'Có lỗi xảy ra khi xóa đơn hàng'
+      );
     }
   }
 );
+
 const adminOrderSlice = createSlice({
   name: "adminOrders",
   initialState: {
@@ -69,7 +83,11 @@ const adminOrderSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Fetch all orders
@@ -89,9 +107,12 @@ const adminOrderSlice = createSlice({
       })
       .addCase(fetchAllOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = action.payload;
       })
       // Update order status
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.error = null;
+      })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         const updatedOrder = action.payload;
         const orderIndex = state.orders.findIndex(
@@ -101,12 +122,23 @@ const adminOrderSlice = createSlice({
           state.orders[orderIndex] = updatedOrder;
         }
       })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.error = action.payload;
+      })
       // Delete order
+      .addCase(deleteOrder.pending, (state) => {
+        state.error = null;
+      })
       .addCase(deleteOrder.fulfilled, (state, action) => {
         state.orders = state.orders.filter(
           (order) => order._id !== action.payload
         );
+      })
+      .addCase(deleteOrder.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
+
+export const { clearError } = adminOrderSlice.actions;
 export default adminOrderSlice.reducer;

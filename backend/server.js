@@ -1,4 +1,7 @@
 const express = require("express");
+const http = require('http');
+const socketIO = require('socket.io');
+const mongoose = require('mongoose');
 const cors = require("cors");
 const dotenv = require("dotenv");
 
@@ -32,6 +35,32 @@ const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
 
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  // Join room for order updates
+  socket.on('joinOrderRoom', (orderId) => {
+    socket.join(`order_${orderId}`);
+    console.log(`Client ${socket.id} joined room: order_${orderId}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
+});
+
+// Make io accessible to our router
+app.set('io', io);
+
 app.use(express.json());
 app.use(cors());
 
@@ -84,6 +113,6 @@ app.use("/api/baker/orders", bakerOrderRoute);
 app.use("/api/baker/recipes", bakerRecipeRoute);
 app.use("/api/delivery/orders", deliveryOrderRoute);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server chay tren http://localhost:${PORT}`);
 });

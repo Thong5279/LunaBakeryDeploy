@@ -25,6 +25,31 @@ export const fetchDeliveryOrders = createAsyncThunk(
   }
 );
 
+export const startShipping = createAsyncThunk(
+  'deliveryOrders/startShipping',
+  async (orderId, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/delivery/orders/${orderId}/start-shipping`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${auth.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to start shipping');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const markCannotDeliver = createAsyncThunk(
   'deliveryOrders/markCannotDeliver',
   async (orderId, { getState, rejectWithValue }) => {
@@ -95,6 +120,21 @@ const deliveryOrderSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(fetchDeliveryOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Start shipping
+      .addCase(startShipping.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(startShipping.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.orders.findIndex(order => order._id === action.payload._id);
+        if (index !== -1) {
+          state.orders[index] = action.payload;
+        }
+      })
+      .addCase(startShipping.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

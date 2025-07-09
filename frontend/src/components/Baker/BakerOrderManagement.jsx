@@ -18,7 +18,7 @@ const BakerOrderManagement = () => {
     try {
       await dispatch(startBaking(orderId)).unwrap();
       toast.success('Đã bắt đầu làm bánh!');
-      dispatch(fetchBakerOrders()); // Refresh orders
+      dispatch(fetchBakerOrders());
     } catch (error) {
       toast.error(error || 'Có lỗi xảy ra khi bắt đầu làm bánh');
     }
@@ -33,7 +33,7 @@ const BakerOrderManagement = () => {
     try {
       await dispatch(completeBaking(selectedOrderId)).unwrap();
       toast.success('Đã hoàn thành làm bánh!');
-      dispatch(fetchBakerOrders()); // Refresh orders
+      dispatch(fetchBakerOrders());
     } catch (error) {
       toast.error(error || 'Có lỗi xảy ra khi hoàn thành làm bánh');
     } finally {
@@ -43,25 +43,25 @@ const BakerOrderManagement = () => {
   };
 
   const getStatusText = (status) => {
-    switch (status) {
-      case 'Approved':
+    switch (status?.toLowerCase()) {
+      case 'approved':
         return 'Chờ làm bánh';
-      case 'Baking':
+      case 'baking':
         return 'Đang làm bánh';
-      case 'Ready':
+      case 'ready':
         return 'Đã làm xong';
       default:
-        return status;
+        return 'Không xác định';
     }
   };
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'Approved':
+    switch (status?.toLowerCase()) {
+      case 'approved':
         return 'text-blue-600 bg-blue-100';
-      case 'Baking':
+      case 'baking':
         return 'text-orange-600 bg-orange-100';
-      case 'Ready':
+      case 'ready':
         return 'text-green-600 bg-green-100';
       default:
         return 'text-gray-600 bg-gray-100';
@@ -108,19 +108,19 @@ const BakerOrderManagement = () => {
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Chờ làm bánh</h3>
           <p className="text-3xl font-bold text-blue-600">
-            {orders.filter(order => order.status === 'Approved').length}
+            {orders.filter(order => order.status === 'approved').length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Đang làm bánh</h3>
           <p className="text-3xl font-bold text-orange-600">
-            {orders.filter(order => order.status === 'Baking').length}
+            {orders.filter(order => order.status === 'baking').length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-gray-700">Đã làm xong</h3>
           <p className="text-3xl font-bold text-green-600">
-            {orders.filter(order => order.status === 'Ready').length}
+            {orders.filter(order => order.status === 'ready').length}
           </p>
         </div>
       </div>
@@ -187,7 +187,7 @@ const BakerOrderManagement = () => {
                     {new Date(order.createdAt).toLocaleDateString('vi-VN')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                    {order.status === 'Approved' && (
+                    {order.status === 'approved' && (
                       <button
                         onClick={() => handleStartBaking(order._id)}
                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
@@ -195,7 +195,7 @@ const BakerOrderManagement = () => {
                         Bắt đầu làm bánh
                       </button>
                     )}
-                    {order.status === 'Baking' && (
+                    {order.status === 'baking' && (
                       <button
                         onClick={() => handleCompleteClick(order._id)}
                         className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
@@ -203,7 +203,7 @@ const BakerOrderManagement = () => {
                         Hoàn thành
                       </button>
                     )}
-                    {order.status === 'Ready' && (
+                    {order.status === 'ready' && (
                       <span className="text-xs text-gray-500">
                         Chờ giao hàng
                       </span>

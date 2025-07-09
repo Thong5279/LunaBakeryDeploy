@@ -14,13 +14,15 @@ export const fetchManagerOrders = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch orders');
+        const error = await response.json();
+        throw new Error(error.message || 'Không thể tải danh sách đơn hàng');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error('Error fetching orders:', error);
+      return rejectWithValue(error.message || 'Có lỗi xảy ra khi tải danh sách đơn hàng');
     }
   }
 );
@@ -29,6 +31,7 @@ export const approveOrder = createAsyncThunk(
   'managerOrders/approveOrder',
   async (orderId, { getState, rejectWithValue }) => {
     try {
+      console.log('Approving order:', orderId); // Debug log
       const { auth } = getState();
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/orders/${orderId}/approve`, {
         method: 'PUT',
@@ -39,13 +42,16 @@ export const approveOrder = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error('Failed to approve order');
+        const error = await response.json();
+        throw new Error(error.message || 'Không thể duyệt đơn hàng');
       }
 
       const data = await response.json();
+      console.log('Order approved:', data); // Debug log
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error('Error approving order:', error);
+      return rejectWithValue(error.message || 'Có lỗi xảy ra khi duyệt đơn hàng');
     }
   }
 );
@@ -54,6 +60,7 @@ export const cancelOrder = createAsyncThunk(
   'managerOrders/cancelOrder',
   async (orderId, { getState, rejectWithValue }) => {
     try {
+      console.log('Cancelling order:', orderId); // Debug log
       const { auth } = getState();
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/orders/${orderId}/cancel`, {
         method: 'PUT',
@@ -64,13 +71,16 @@ export const cancelOrder = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error('Failed to cancel order');
+        const error = await response.json();
+        throw new Error(error.message || 'Không thể hủy đơn hàng');
       }
 
       const data = await response.json();
+      console.log('Order cancelled:', data); // Debug log
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error('Error cancelling order:', error);
+      return rejectWithValue(error.message || 'Có lỗi xảy ra khi hủy đơn hàng');
     }
   }
 );
@@ -82,7 +92,11 @@ const managerOrderSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Fetch orders
@@ -101,6 +115,7 @@ const managerOrderSlice = createSlice({
       // Approve order
       .addCase(approveOrder.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(approveOrder.fulfilled, (state, action) => {
         state.loading = false;
@@ -116,6 +131,7 @@ const managerOrderSlice = createSlice({
       // Cancel order
       .addCase(cancelOrder.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(cancelOrder.fulfilled, (state, action) => {
         state.loading = false;
@@ -131,4 +147,5 @@ const managerOrderSlice = createSlice({
   },
 });
 
+export const { clearError } = managerOrderSlice.actions;
 export default managerOrderSlice.reducer; 
