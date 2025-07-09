@@ -6,7 +6,6 @@ import ProductDetails from "../components/Products/ProductDetails";
 import FeaturedCakes from "../components/Products/FeaturedCakes";
 import FeaturedColection from "../components/Products/featuredCollection";
 import QuickNavigation from "../components/Common/QuickNavigation";
-import TopRatedProducts from "../components/Products/TopRatedProducts";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 import axios from "axios";
@@ -101,16 +100,6 @@ const Home = () => {
                             </div>
                         )}
                     </div>
-                </div>
-            </section>
-
-            {/* Top Rated Products Section */}
-            <section className="py-8 px-4 bg-gray-50">
-                <div className="container mx-auto">
-                    <h2 className="text-3xl text-center font-bold mb-8 text-pink-600">
-                        ⭐ Bánh Ngọt Được Đánh Giá Cao Nhất ⭐
-                    </h2>
-                    <TopRatedProducts />
                 </div>
             </section>
 
