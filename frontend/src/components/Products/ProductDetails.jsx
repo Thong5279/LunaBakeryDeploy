@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductGrid from "./ProductGrid";
 import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slices/productsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
+import ProductReviews from './ProductReviews';
 
 const PREVIOUS_PATH_KEY = 'luna_bakery_previous_path';
 
@@ -325,11 +326,25 @@ const ProductDetails = ({ productId }) => {
           </div>
         </div>
 
-        {/* Sản phẩm tương tự */}
+        {/* Phần đánh giá sản phẩm */}
         <div className="mt-12">
-          <h2 className="text-xl font-bold text-pink-500 mb-6 text-center">🌟 Bạn có thể thích 🌟</h2>
-          <ProductGrid products={similarProducts} loading={loading} error={error} />
+          <h2 className="text-2xl font-semibold mb-6">Đánh giá từ khách hàng</h2>
+          <ProductReviews productId={idToFetch} />
         </div>
+
+        {/* Phần sản phẩm tương tự */}
+        {selectedProduct.category && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-6 text-center">🌟 Có thể bạn sẽ thích 🌟</h2>
+            <ProductGrid 
+              products={similarProducts} 
+              loading={loading} 
+              error={error} 
+              category={selectedProduct.category} 
+              currentProductId={idToFetch} 
+            />
+          </div>
+        )}
       </div>
     </div>
   ) : null;

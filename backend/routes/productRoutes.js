@@ -3,6 +3,7 @@ const Product = require("../models/Product");
 const Ingredient = require("../models/Ingredient");
 const { protect, admin } = require("../middleware/authMiddleware");
 const mongoose = require("mongoose");
+const Review = require('../models/Review');
 
 const router = express.Router();
 
@@ -533,6 +534,41 @@ router.put("/:id/add-size-pricing", protect, admin, async (req, res) => {
     console.error("Error adding sizePricing:", error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+// @desc    Lấy tất cả đánh giá của một sản phẩm
+// @route   GET /api/products/:productId/reviews
+// @access  Public
+router.get('/:productId/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find({ product: req.params.productId })
+            .populate('user', 'name')
+            .sort('-createdAt');
+
+        res.json(reviews);
+    } catch (error) {
+        console.error('Lỗi khi lấy đánh giá:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy đánh giá' });
+    }
+});
+
+// @desc    Lấy sản phẩm có đánh giá cao nhất
+// @route   GET /api/products/top-rated
+// @access  Public
+router.get('/top-rated', async (req, res) => {
+    try {
+        const products = await Product.find({
+            status: 'active',
+            rating: { $gt: 0 }  // Chỉ lấy sản phẩm có rating > 0
+        })
+        .sort({ rating: -1, numReviews: -1 })  // Sắp xếp theo rating và số lượng đánh giá
+        .limit(8);  // Giới hạn 8 sản phẩm
+
+        res.json(products);
+    } catch (error) {
+        console.error('Lỗi khi lấy sản phẩm đánh giá cao:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy sản phẩm' });
+    }
 });
 
 module.exports = router;

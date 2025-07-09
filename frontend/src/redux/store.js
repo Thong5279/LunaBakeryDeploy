@@ -16,6 +16,7 @@ import managerOrderReducer from './slices/managerOrderSlice';
 import bakerOrderReducer from './slices/bakerOrderSlice';
 import bakerRecipeReducer from './slices/bakerRecipeSlice';
 import deliveryOrderReducer from './slices/deliveryOrderSlice';
+import reviewReducer from './slices/reviewSlice';
 
 const store = configureStore({
     reducer: {
@@ -36,6 +37,7 @@ const store = configureStore({
         bakerOrders: bakerOrderReducer,
         bakerRecipes: bakerRecipeReducer,
         deliveryOrders: deliveryOrderReducer,
+        reviews: reviewReducer,
     },
 });
 
