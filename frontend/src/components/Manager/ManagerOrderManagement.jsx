@@ -5,6 +5,65 @@ import { toast } from 'sonner';
 import ConfirmModal from '../Common/ConfirmModal';
 import { FaSearch, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 
+const CancelOrderModal = ({ isOpen, onClose, onConfirm }) => {
+  const [reason, setReason] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = () => {
+    if (!reason.trim()) {
+      setError('Vui lòng nhập lý do hủy đơn hàng');
+      return;
+    }
+    onConfirm(reason);
+    setReason('');
+    setError('');
+  };
+
+  return (
+    <div className={`fixed inset-0 z-50 ${isOpen ? '' : 'hidden'}`}>
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+          <h2 className="text-xl font-bold mb-4 text-gray-900">Xác nhận hủy đơn hàng</h2>
+          <p className="text-gray-600 mb-4">
+            Vui lòng nhập lý do hủy đơn hàng để thông báo cho khách hàng.
+          </p>
+          <textarea
+            value={reason}
+            onChange={(e) => {
+              setReason(e.target.value);
+              setError('');
+            }}
+            placeholder="Nhập lý do hủy đơn hàng..."
+            className={`w-full p-2 border rounded-lg mb-2 h-32 resize-none ${
+              error ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => {
+                onClose();
+                setReason('');
+                setError('');
+              }}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Xác nhận hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ManagerOrderManagement = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector(state => state.managerOrders);
@@ -36,9 +95,9 @@ const ManagerOrderManagement = () => {
     setShowCancelModal(true);
   };
 
-  const handleCancelConfirm = async () => {
+  const handleCancelConfirm = async (reason) => {
     try {
-      await dispatch(cancelOrder(selectedOrderId)).unwrap();
+      await dispatch(cancelOrder({ id: selectedOrderId, cancelReason: reason })).unwrap();
       toast.success('Đơn hàng đã được hủy thành công!');
       dispatch(fetchManagerOrders());
     } catch (error) {
@@ -363,15 +422,13 @@ const ManagerOrderManagement = () => {
       </div>
 
       {/* Confirm Cancel Modal */}
-      <ConfirmModal
+      <CancelOrderModal
         isOpen={showCancelModal}
-        onClose={() => setShowCancelModal(false)}
+        onClose={() => {
+          setShowCancelModal(false);
+          setSelectedOrderId(null);
+        }}
         onConfirm={handleCancelConfirm}
-        title="Xác nhận hủy đơn hàng"
-        message="Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác."
-        type="danger"
-        confirmText="Hủy đơn hàng"
-        cancelText="Giữ lại"
       />
     </div>
   );

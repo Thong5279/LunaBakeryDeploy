@@ -58,16 +58,17 @@ export const approveOrder = createAsyncThunk(
 
 export const cancelOrder = createAsyncThunk(
   'managerOrders/cancelOrder',
-  async (orderId, { getState, rejectWithValue }) => {
+  async ({ id, cancelReason }, { getState, rejectWithValue }) => {
     try {
-      console.log('Cancelling order:', orderId); // Debug log
+      console.log('Cancelling order:', { id, cancelReason }); // Debug log
       const { auth } = getState();
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/orders/${orderId}/cancel`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/orders/${id}/cancel`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${auth.token}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ cancelReason })
       });
 
       if (!response.ok) {

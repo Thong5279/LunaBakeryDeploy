@@ -65,6 +65,12 @@ router.put("/:id/approve", protect, manager, async (req, res) => {
 //@access Private/Manager
 router.put("/:id/cancel", protect, manager, async (req, res) => {
     try {
+        const { cancelReason } = req.body;
+        
+        if (!cancelReason || cancelReason.trim() === '') {
+            return res.status(400).json({ message: "Vui lòng nhập lý do hủy đơn hàng" });
+        }
+
         const order = await Order.findById(req.params.id).populate("user", "name");
         
         if (!order) {
@@ -76,10 +82,11 @@ router.put("/:id/cancel", protect, manager, async (req, res) => {
         }
 
         order.status = 'cancelled';
+        order.cancelReason = cancelReason;
         order.statusHistory.push({
             status: 'cancelled',
             updatedBy: req.user._id,
-            note: 'Đơn hàng đã bị hủy',
+            note: `Đơn hàng đã bị hủy - Lý do: ${cancelReason}`,
             updatedAt: Date.now()
         });
 
@@ -91,7 +98,8 @@ router.put("/:id/cancel", protect, manager, async (req, res) => {
             orderId: order._id,
             status: order.status,
             updatedAt: order.updatedAt,
-            statusHistory: order.statusHistory
+            statusHistory: order.statusHistory,
+            cancelReason: order.cancelReason
         });
         
         res.json(updatedOrder);

@@ -105,6 +105,10 @@ const orderSchema = new mongoose.Schema({
         enum: ['pending', 'approved', 'baking', 'ready', 'shipping', 'delivered', 'cancelled', 'cannot_deliver'],
         default: 'pending',
     },
+    cancelReason: {
+        type: String,
+        default: null
+    },
     statusHistory: [statusHistorySchema]
 }, { timestamps: true });
 
