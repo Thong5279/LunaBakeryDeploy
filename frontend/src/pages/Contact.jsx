@@ -43,71 +43,81 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Liên Hệ Với Chúng Tôi</h1>
-        <p className="text-lg text-gray-600">
+      <div className="max-w-7xl mx-auto text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Liên Hệ Với Chúng Tôi</h1>
+        <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
           Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn
         </p>
       </div>
 
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Contact Information */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Thông Tin Liên Hệ</h2>
+          <div className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-8">Thông Tin Liên Hệ</h2>
             
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <FaMapMarkerAlt className="text-pink-500 text-xl mt-1 mr-4" />
+            <div className="space-y-8">
+              <div className="flex items-start group">
+                <FaMapMarkerAlt className="text-pink-500 text-2xl mt-1 mr-4 group-hover:scale-110 transition-transform duration-300" />
                 <div>
-                  <h3 className="font-medium text-gray-900">Địa Chỉ</h3>
-                  <p className="text-gray-600 mt-1">
+                  <h3 className="font-medium text-gray-900 text-lg mb-2">Địa Chỉ</h3>
+                  <p className="text-gray-600">
                     số 69 đường B2 khu dân cư hưng phú Q.Cái Răng<br />
                     TP. Cần thơ, Việt Nam
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <FaPhone className="text-pink-500 text-xl mt-1 mr-4" />
+              <div className="flex items-start group">
+                <FaPhone className="text-pink-500 text-2xl mt-1 mr-4 group-hover:scale-110 transition-transform duration-300" />
                 <div>
-                  <h3 className="font-medium text-gray-900">Điện Thoại</h3>
-                  <p className="text-gray-600 mt-1">
+                  <h3 className="font-medium text-gray-900 text-lg mb-2">Điện Thoại</h3>
+                  <p className="text-gray-600">
                     Hotline: (84) 919 164 967<br />
                     Đặt bánh: (84) 337 615 279
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <FaEnvelope className="text-pink-500 text-xl mt-1 mr-4" />
+              <div className="flex items-start group">
+                <FaEnvelope className="text-pink-500 text-2xl mt-1 mr-4 group-hover:scale-110 transition-transform duration-300" />
                 <div>
-                  <h3 className="font-medium text-gray-900">Email</h3>
-                  <p className="text-gray-600 mt-1">
+                  <h3 className="font-medium text-gray-900 text-lg mb-2">Email</h3>
+                  <p className="text-gray-600">
                     info@lunabakery.com<br />
                     phamhuynhthong192@gmail.com
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <FaClock className="text-pink-500 text-xl mt-1 mr-4" />
+              <div className="flex items-start group">
+                <FaClock className="text-pink-500 text-2xl mt-1 mr-4 group-hover:scale-110 transition-transform duration-300" />
                 <div>
-                  <h3 className="font-medium text-gray-900">Giờ Làm Việc</h3>
-                  <p className="text-gray-600 mt-1">
+                  <h3 className="font-medium text-gray-900 text-lg mb-2">Giờ Làm Việc</h3>
+                  <p className="text-gray-600">
                     Thứ 2 - Thứ 7: 7:00 - 21:00<br />
                     Chủ nhật: 8:00 - 20:00
                   </p>
                 </div>
               </div>
 
-              <div className="pt-6">
-                <h3 className="font-medium text-gray-900 mb-3">Theo dõi chúng tôi</h3>
-                <div className="flex space-x-4">
-                  <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="text-pink-500 hover:text-pink-600 text-2xl">
+              <div className="pt-8 border-t border-gray-200">
+                <h3 className="font-medium text-gray-900 text-lg mb-4">Theo dõi chúng tôi</h3>
+                <div className="flex space-x-6">
+                  <a 
+                    href="https://www.facebook.com/pham.huynh.thong.2025/" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-pink-500 hover:text-pink-600 text-3xl transform hover:scale-110 transition-transform duration-300"
+                  >
                     <FaFacebook />
                   </a>
-                  <a href="https://www.instagram.com/thongpham.huynh/" className="text-pink-500 hover:text-pink-600 text-2xl">
+                  <a 
+                    href="https://www.instagram.com/thongpham.huynh/"
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="text-pink-500 hover:text-pink-600 text-3xl transform hover:scale-110 transition-transform duration-300"
+                  >
                     <FaInstagram />
                   </a>
                 </div>
@@ -116,13 +126,13 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Gửi Tin Nhắn</h2>
+          <div className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-8">Gửi Tin Nhắn</h2>
             
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Họ và tên
+              <div className="form-group">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  Họ và tên <span className="text-pink-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -131,14 +141,15 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300"
+                  placeholder="Nhập họ và tên của bạn"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
+                <div className="form-group">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -147,13 +158,14 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300"
+                    placeholder="example@email.com"
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                    Số điện thoại
+                <div className="form-group">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    Số điện thoại <span className="text-pink-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -162,14 +174,15 @@ const Contact = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300"
+                    placeholder="0919 xxx xxx"
                   />
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                  Chủ đề
+              <div className="form-group">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  Chủ đề <span className="text-pink-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -178,22 +191,24 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300"
+                  placeholder="Nhập chủ đề"
                 />
               </div>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                  Nội dung
+              <div className="form-group">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  Nội dung <span className="text-pink-500">*</span>
                 </label>
                 <textarea
                   name="message"
                   id="message"
-                  rows="4"
+                  rows="5"
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300 resize-none"
+                  placeholder="Nhập nội dung tin nhắn của bạn"
                 ></textarea>
               </div>
 
@@ -201,9 +216,19 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
+                  className="w-full py-3 px-6 text-white bg-pink-500 rounded-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-lg"
                 >
-                  {loading ? 'Đang gửi...' : 'Gửi tin nhắn'}
+                  {loading ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Đang gửi...
+                    </span>
+                  ) : (
+                    'Gửi tin nhắn'
+                  )}
                 </button>
               </div>
             </form>
@@ -211,10 +236,10 @@ const Contact = () => {
         </div>
 
         {/* Map Section */}
-        <div className="mt-12">
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Vị Trí Của Chúng Tôi</h2>
-            <div className="aspect-w-16 aspect-h-9">
+        <div className="mt-16">
+          <div className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-105 transition-transform duration-300">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-8">Vị Trí Của Chúng Tôi</h2>
+            <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.9362289084293!2d105.78411337588592!3d10.022121372651931!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0629cb70e5707%3A0xbd4b585c67938484!2zNjktYmkgxJDGsOG7nW5nIEIyLCBIxrBuZyBQaMO6LCBDw6FpIFLEg25nLCBD4bqnbiBUaMahLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1752115585161!5m2!1svi!2s"
                 width="100%"
@@ -223,7 +248,7 @@ const Contact = () => {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="rounded-lg"
+                className="rounded-xl"
               ></iframe>
             </div>
           </div>
