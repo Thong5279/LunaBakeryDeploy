@@ -2,6 +2,34 @@ const express = require('express');
 const router = express.Router();
 const Recipe = require('../models/Recipe');
 const { protect, admin, baker } = require('../middleware/authMiddleware');
+const { RECIPE_CATEGORIES } = require('../constants/recipeConstants');
+
+// @desc    Get recipe categories for baker
+// @route   GET /api/baker/recipes/categories/list
+// @access  Private/Baker
+router.get('/categories/list', protect, baker, async (req, res) => {
+  try {
+    // Lấy danh sách categories từ các công thức đã publish
+    const categories = await Recipe.distinct('category', {
+      isPublished: true,
+      status: 'active'
+    });
+
+    // Sắp xếp categories theo thứ tự alphabet
+    const sortedCategories = categories.sort();
+
+    res.json({
+      categories: sortedCategories,
+      success: true
+    });
+  } catch (error) {
+    console.error('Error fetching recipe categories:', error);
+    res.status(500).json({ 
+      message: 'Lỗi server khi lấy danh mục công thức',
+      error: error.message 
+    });
+  }
+});
 
 // @desc    Get all published recipes for baker
 // @route   GET /api/baker/recipes
