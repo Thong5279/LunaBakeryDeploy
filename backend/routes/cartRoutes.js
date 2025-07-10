@@ -56,9 +56,8 @@ const calculatePriceBySize = (product, size) => {
 };
 
 // @route POST /api/cart
-// @desc Add product to cart for a guest or logged-in user  .  Thêm sản phẩm vào giỏ hàng cho khách hoặc người dùng đã đăng nhập
+// @desc Add product to cart for a guest or logged-in user
 // @access Public
-
 router.post("/", async (req, res) => {
   const { productId, quantity, size, flavor, guestId, userId } = req.body;
 
@@ -69,13 +68,18 @@ router.post("/", async (req, res) => {
       return res.status(404).json({ message: "Sản phẩm hoặc nguyên liệu không tìm thấy" });
     }
 
-    // Tính giá theo size đã chọn (chỉ áp dụng cho sản phẩm)
+    // Kiểm tra số lượng tồn kho
+    if (quantity > item.quantity) {
+      return res.status(400).json({ 
+        message: `Số lượng yêu cầu (${quantity}) vượt quá số lượng tồn kho (${item.quantity})` 
+      });
+    }
+
+    // Tính giá theo size đã chọn
     const priceBySize = calculatePriceBySize(item, size);
 
-    //determine if the user is logged in or a guest
     let cart = await getCart(userId, guestId);
 
-    //if the cart exists, update it
     if (cart) {
       const productIndex = cart.products.findIndex(
         (e) =>
@@ -85,23 +89,29 @@ router.post("/", async (req, res) => {
       );
 
       if (productIndex > -1) {
-        // If product already exists in cart, update quantity
-        cart.products[productIndex].quantity += quantity;
+        // Kiểm tra tổng số lượng sau khi cộng thêm
+        const newQuantity = cart.products[productIndex].quantity + quantity;
+        if (newQuantity > item.quantity) {
+          return res.status(400).json({ 
+            message: `Tổng số lượng trong giỏ hàng (${newQuantity}) vượt quá số lượng tồn kho (${item.quantity})` 
+          });
+        }
+        cart.products[productIndex].quantity = newQuantity;
       } else {
-        // If product does not exist, add it to cart
         cart.products.push({
           productId: item._id,
           name: item.name,
           image: (item.images && item.images.length > 0) ? 
                  (typeof item.images[0] === 'string' ? item.images[0] : item.images[0]?.url) : "",
-          price: priceBySize, // Sử dụng giá đã tính theo size
+          price: priceBySize,
           quantity,
           size: size || "Mặc định",
           flavor: flavor || "Mặc định",
-          itemType, // Thêm thông tin loại item
+          itemType,
+          stockQuantity: item.quantity // Thêm thông tin số lượng tồn kho
         });
       }
-      // Recalculate total price
+
       cart.totalPrice = cart.products.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
@@ -111,21 +121,22 @@ router.post("/", async (req, res) => {
     } else {
       const newCart = await Cart.create({
         user: userId ? userId : undefined,
-        guestId: guestId ? guestId : "guest_" + new Date().getTime(), // Generate a unique guest ID
+        guestId: guestId ? guestId : "guest_" + new Date().getTime(),
         products: [
           {
             productId,
             name: item.name,
             image: (item.images && item.images.length > 0) ? 
                    (typeof item.images[0] === 'string' ? item.images[0] : item.images[0]?.url) : "",
-            price: priceBySize, // Sử dụng giá đã tính theo size
+            price: priceBySize,
             quantity,
             size: size || "Mặc định",
             flavor: flavor || "Mặc định",
-            itemType, // Thêm thông tin loại item
-          },
+            itemType,
+            stockQuantity: item.quantity // Thêm thông tin số lượng tồn kho
+          }
         ],
-        totalPrice: priceBySize * quantity, // Sử dụng giá đã tính theo size
+        totalPrice: priceBySize * quantity
       });
       return res.status(201).json(newCart);
     }
@@ -135,16 +146,28 @@ router.post("/", async (req, res) => {
   }
 });
 
-//@route PUT /api/cart
-//@desc update product quantity in cart for a logged-in user or guest
+// @route PUT /api/cart
+// @desc Update product quantity in cart
 // @access Private
 router.put("/", async (req, res) => {
   const { productId, quantity, size, flavor, guestId, userId } = req.body;
 
   try {
+    // Kiểm tra số lượng tồn kho
+    const { item } = await findProductOrIngredient(productId);
+    if (!item) {
+      return res.status(404).json({ message: "Sản phẩm không tìm thấy" });
+    }
+
+    if (quantity > item.quantity) {
+      return res.status(400).json({ 
+        message: `Số lượng yêu cầu (${quantity}) vượt quá số lượng tồn kho (${item.quantity})` 
+      });
+    }
+
     const cart = await getCart(userId, guestId);
     if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res.status(404).json({ message: "Không tìm thấy giỏ hàng" });
     }
 
     const productIndex = cart.products.findIndex(
@@ -156,10 +179,10 @@ router.put("/", async (req, res) => {
 
     if (productIndex > -1) {
       if (quantity > 0) {
-        // If product exists in cart, update quantity
         cart.products[productIndex].quantity = quantity;
+        cart.products[productIndex].stockQuantity = item.quantity; // Cập nhật số lượng tồn kho
       } else {
-        cart.products.splice(productIndex, 1); // Remove product if quantity is 0
+        cart.products.splice(productIndex, 1);
       }
       cart.totalPrice = cart.products.reduce(
         (acc, item) => acc + item.price * item.quantity,
@@ -168,7 +191,7 @@ router.put("/", async (req, res) => {
       await cart.save();
       return res.status(200).json(cart);
     } else {
-      return res.status(404).json({ message: "Product not found in cart" });
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm trong giỏ hàng" });
     }
   } catch (error) {
     console.error("Error updating product quantity:", error);
@@ -221,7 +244,22 @@ router.get("/", protect, async (req, res) => {
   try {
     const cart = await getCart(userId, guestId);
     if (cart) {
-      return res.status(200).json(cart);
+      // Lấy thông tin số lượng tồn kho cho từng sản phẩm
+      const updatedProducts = await Promise.all(cart.products.map(async (product) => {
+        const { item } = await findProductOrIngredient(product.productId);
+        return {
+          ...product.toObject(),
+          stockQuantity: item ? item.quantity || 0 : 0
+        };
+      }));
+
+      // Cập nhật lại cart với thông tin số lượng tồn kho
+      const cartResponse = {
+        ...cart.toObject(),
+        products: updatedProducts
+      };
+
+      return res.status(200).json(cartResponse);
     } else {
       return res.status(404).json({ message: "Cart not found" });
     }

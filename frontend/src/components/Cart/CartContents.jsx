@@ -1,25 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { updateCartItemQuantity, removeFromCart } from "../../redux/slices/cartSlice";
+import { toast } from "sonner";
 
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddToCart = (productId, delta, quantity, size, flavor) => {
+  const handleAddToCart = (productId, delta, quantity, size, flavor, maxQuantity) => {
     const newQuantity = quantity + delta;
-    if (newQuantity >= 1) {
-      dispatch(
-        updateCartItemQuantity({
-          productId,
-          quantity: newQuantity,
-          size,
-          flavor,
-          userId,
-          guestId,
-        })
-      );
+    
+    // Kiểm tra số lượng tối thiểu
+    if (newQuantity < 1) {
+      return;
     }
+
+    // Kiểm tra số lượng tối đa
+    if (newQuantity > maxQuantity) {
+      toast.error(`Số lượng không thể vượt quá ${maxQuantity} sản phẩm`);
+      return;
+    }
+
+    dispatch(
+      updateCartItemQuantity({
+        productId,
+        quantity: newQuantity,
+        size,
+        flavor,
+        userId,
+        guestId,
+      })
+    );
   };
 
   const handleRemoveFromCart = (productId, size, flavor) => {
@@ -32,6 +44,7 @@ const CartContents = ({ cart, userId, guestId }) => {
         guestId,
       })
     );
+    toast.success("Đã xóa sản phẩm khỏi giỏ hàng");
   };
 
   return (
@@ -61,6 +74,10 @@ const CartContents = ({ cart, userId, guestId }) => {
                   size: <span className="text-pink-500">{product.size}</span> | 
                   vị: <span className="text-pink-500">{product.flavor}</span>
                 </p>
+                {/* Hiển thị số lượng tồn kho */}
+                <p className="text-xs text-gray-400 mt-1">
+                  (Còn {product.stockQuantity || 0} sản phẩm)
+                </p>
               </div>
               <button
                 className="text-gray-400 hover:text-pink-500 transition-colors"
@@ -87,7 +104,8 @@ const CartContents = ({ cart, userId, guestId }) => {
                       -1,
                       product.quantity,
                       product.size,
-                      product.flavor
+                      product.flavor,
+                      product.stockQuantity
                     )
                   }
                   className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-full text-pink-500 hover:bg-pink-50 transition-colors"
@@ -104,10 +122,15 @@ const CartContents = ({ cart, userId, guestId }) => {
                       1,
                       product.quantity,
                       product.size,
-                      product.flavor
+                      product.flavor,
+                      product.stockQuantity
                     )
                   }
-                  className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-full text-pink-500 hover:bg-pink-50 transition-colors"
+                  disabled={product.quantity >= product.stockQuantity}
+                  className={`w-8 h-8 flex items-center justify-center border border-gray-200 rounded-full transition-colors
+                    ${product.quantity >= product.stockQuantity 
+                      ? 'text-gray-300 cursor-not-allowed' 
+                      : 'text-pink-500 hover:bg-pink-50'}`}
                 >
                   +
                 </button>

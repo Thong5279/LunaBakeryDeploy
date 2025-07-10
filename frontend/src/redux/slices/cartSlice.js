@@ -34,16 +34,15 @@ export const fetchCart = createAsyncThunk("cart/fetchCart",async ({userId , gues
 //And an item to the cart for a user or guest
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ productId, quantity, userId, guestId , size, flavor}, { rejectWithValue }) => {
+  async ({ productId, quantity, userId, guestId, size, flavor }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        { productId, quantity, size, flavor , userId, guestId }
+        { productId, quantity, size, flavor, userId, guestId }
       );
       return response.data;
     } catch (error) {
-      console.error("Error adding to cart:", error);
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || "Lỗi khi thêm vào giỏ hàng");
     }
   }
 ); 
@@ -51,16 +50,15 @@ export const addToCart = createAsyncThunk(
 //Update the quantity of an item in the cart
 export const updateCartItemQuantity = createAsyncThunk(
     "cart/updateCartItemQuantity",
-    async ({ productId,size,flavor, quantity, userId, guestId }, { rejectWithValue }) => {
+    async ({ productId, size, flavor, quantity, userId, guestId }, { rejectWithValue }) => {
         try {
         const response = await axios.put(
             `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-            { productId,quantity, userId, guestId , size, flavor } // Include size and flavor if needed
+            { productId, quantity, userId, guestId, size, flavor }
         );
         return response.data;
         } catch (error) {
-        console.error("Error updating cart item quantity:", error);
-        return rejectWithValue(error.response?.data);
+        return rejectWithValue(error.response?.data?.message || "Lỗi khi cập nhật số lượng");
         }
     }
 );

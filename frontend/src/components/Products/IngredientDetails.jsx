@@ -82,7 +82,16 @@ const IngredientDetails = ({ ingredientId }) => {
   }, [selectedIngredient, dispatch]);
 
   const handleQuantityChange = (action) => {
-    setQuantity((prev) => (action === "plus" ? prev + 1 : Math.max(1, prev - 1)));
+    if (action === "plus") {
+      // Kiểm tra số lượng tồn kho khi tăng
+      if (quantity >= selectedIngredient.quantity) {
+        toast.error(`Số lượng không thể vượt quá ${selectedIngredient.quantity}`);
+        return;
+      }
+      setQuantity(prev => prev + 1);
+    } else {
+      setQuantity(prev => Math.max(1, prev - 1));
+    }
   };
 
   const handleAddToCart = () => {
@@ -91,19 +100,29 @@ const IngredientDetails = ({ ingredientId }) => {
       return;
     }
 
+    // Kiểm tra số lượng tồn kho
+    if (quantity > selectedIngredient.quantity) {
+      toast.error(`Số lượng yêu cầu (${quantity}) vượt quá số lượng tồn kho (${selectedIngredient.quantity})`);
+      return;
+    }
+
     setButtonDisabled(true);
     dispatch(
       addToCart({
         productId: idToFetch,
         quantity,
-        size: "Mặc định", // Ingredients don't have sizes
-        flavor: "Mặc định", // Ingredients don't have flavors
+        size: "Mặc định",
+        flavor: "Mặc định",
         guestId,
         userId: user?._id,
       })
     )
+      .unwrap()
       .then(() => {
         toast.success("Đã thêm vào giỏ hàng!");
+      })
+      .catch((error) => {
+        toast.error(error.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
       })
       .finally(() => setButtonDisabled(false));
   };
@@ -254,10 +273,18 @@ const IngredientDetails = ({ ingredientId }) => {
               <span className="px-4 py-1 border rounded">{quantity}</span>
               <button 
                 onClick={() => handleQuantityChange("plus")}
-                className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition-colors"
+                disabled={quantity >= selectedIngredient.quantity}
+                className={`px-3 py-1 rounded transition-colors ${
+                  quantity >= selectedIngredient.quantity
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-200 hover:bg-gray-300'
+                }`}
               >
                 +
               </button>
+              <span className="text-sm text-gray-500">
+                (Còn {selectedIngredient.quantity} sản phẩm)
+              </span>
             </div>
 
             {/* Add to cart button */}
