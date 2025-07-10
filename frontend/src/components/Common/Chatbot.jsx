@@ -66,7 +66,7 @@ const Chatbot = () => {
       {/* Nút mở chatbot */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-pink-500 text-white p-4 rounded-full shadow-lg hover:bg-pink-600 transition-all z-50"
+        className="fixed bottom-20 left-4 md:bottom-24 lg:bottom-28 bg-pink-500 text-white p-4 rounded-full shadow-lg hover:bg-pink-600 transition-all z-40"
         style={{ display: isOpen ? 'none' : 'block' }}
       >
         <FaRobot size={24} />
@@ -74,7 +74,7 @@ const Chatbot = () => {
 
       {/* Cửa sổ chat */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-xl flex flex-col z-50">
+        <div className="fixed bottom-20 left-4 md:bottom-24 lg:bottom-28 w-[calc(100%-2rem)] md:w-96 h-[60vh] md:h-[70vh] max-h-[500px] bg-white rounded-lg shadow-xl flex flex-col z-40">
           {/* Header */}
           <div className="bg-pink-500 text-white p-4 rounded-t-lg flex justify-between items-center">
             <div className="flex items-center">
@@ -115,7 +115,7 @@ const Chatbot = () => {
                       {message.sender === 'user' ? 'Bạn' : 'Luna Assistant'}
                     </span>
                   </div>
-                  <p className="text-sm">{message.content}</p>
+                  <p className="text-sm whitespace-pre-line">{message.content}</p>
                 </div>
               </div>
             ))}
