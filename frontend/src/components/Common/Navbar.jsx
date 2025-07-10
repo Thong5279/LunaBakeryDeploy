@@ -56,8 +56,8 @@ const Navbar = () => {
                 </Link>
               </div>
               <div>
-                <Link to={"#"} className="hover:text-pink-500 cursor-pointer">
-                  Tin tức
+                <Link to={"/about"} className="hover:text-pink-500 cursor-pointer">
+                  Giới Thiệu
                 </Link>
               </div>
             </ul>
