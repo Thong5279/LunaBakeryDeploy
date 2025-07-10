@@ -8,6 +8,10 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
     return new Intl.NumberFormat("vi-VN").format(price) + " ₫";
   };
 
+  const formatQuantity = (quantity, unit) => {
+    return `${quantity}`;
+  };
+
   const getStockStatus = (quantity) => {
     if (quantity === 0) {
       return (
@@ -132,10 +136,10 @@ const IngredientGrid = ({ ingredients, loading, error }) => {
               {ingredient.description}
             </p>
 
-            {/* Quantity & Unit */}
+            {/* Quantity */}
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm text-gray-500">
-                <span className="font-medium">Số lượng:</span> {ingredient.quantity} {ingredient.unit}
+                <span className="font-medium">Số lượng:</span> {formatQuantity(ingredient.quantity)}
               </div>
             </div>
 
