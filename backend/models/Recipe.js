@@ -30,7 +30,6 @@ const recipeSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: [true, 'Danh mục công thức là bắt buộc'],
     enum: [
       'Bánh ngọt',
       'Bánh mặn', 
@@ -42,7 +41,8 @@ const recipeSchema = new mongoose.Schema({
       'Bánh tiramisu',
       'Bánh cheesecake',
       'Khác'
-    ]
+    ],
+    default: 'Khác'
   },
   difficulty: {
     type: String,
@@ -52,8 +52,8 @@ const recipeSchema = new mongoose.Schema({
   },
   preparationTime: {
     type: Number,
-    required: [true, 'Thời gian chuẩn bị là bắt buộc'],
-    min: [1, 'Thời gian chuẩn bị phải ít nhất 1 phút']
+    min: [1, 'Thời gian chuẩn bị phải ít nhất 1 phút'],
+    default: 30
   },
   cookingTime: {
     type: Number,
@@ -136,7 +136,7 @@ recipeSchema.index({ createdAt: -1 });
 
 // Virtual để tính tổng thời gian
 recipeSchema.virtual('totalTime').get(function() {
-  return this.preparationTime + this.cookingTime;
+  return (this.preparationTime || 0) + this.cookingTime;
 });
 
 // Middleware để cập nhật publishedAt khi isPublished thay đổi

@@ -43,6 +43,8 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
     ingredients: [{ name: "", quantity: "", unit: "g" }],
     status: "active",
     isPublished: false,
+    category: "Khác", // Set default category
+    preparationTime: 30, // Set default preparationTime
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -64,6 +66,8 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
           : [{ name: "", quantity: "", unit: "g" }],
         status: recipe.status || "active",
         isPublished: recipe.isPublished || false,
+        category: recipe.category || "Khác",
+        preparationTime: recipe.preparationTime || 30,
       });
       setImagePreview(recipe.image?.url || "");
     } else {
@@ -79,6 +83,8 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
         ingredients: [{ name: "", quantity: "", unit: "g" }],
         status: "active",
         isPublished: false,
+        category: "Khác",
+        preparationTime: 30,
       });
       setImagePreview("");
     }
@@ -145,6 +151,8 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
     if (!formData.description.trim()) errors.description = "Mô tả là bắt buộc";
     if (!formData.instructions.trim()) errors.instructions = "Hướng dẫn làm bánh là bắt buộc";
     if (!formData.image.url.trim()) errors.imageUrl = "URL hình ảnh là bắt buộc";
+    if (!formData.cookingTime) errors.cookingTime = "Thời gian nướng là bắt buộc";
+    if (!formData.servings) errors.servings = "Số phần ăn là bắt buộc";
     
     // Validate ingredients
     const hasEmptyIngredients = formData.ingredients.some(
@@ -348,7 +356,7 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Thời gian làm bánh (phút)
+                      Thời gian nướng (phút) *
                     </label>
                     <select
                       name="cookingTime"
@@ -366,7 +374,7 @@ const RecipeModal = ({ isOpen, onClose, recipe = null }) => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Số phần ăn
+                      Số phần ăn *
                     </label>
                     <select
                       name="servings"

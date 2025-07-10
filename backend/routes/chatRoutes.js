@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Chat = require('../models/Chat');
+const chatbotData = require('../data/chatbotData');
 
 // Khởi tạo session chat mới
 router.post('/start', async (req, res) => {
@@ -14,6 +15,7 @@ router.post('/start', async (req, res) => {
     await chat.save();
     res.json({ sessionId });
   } catch (error) {
+    console.error('Lỗi khởi tạo chat:', error);
     res.status(500).json({ message: 'Lỗi khởi tạo chat' });
   }
 });
@@ -46,6 +48,7 @@ router.post('/message', async (req, res) => {
     await chat.save();
     res.json({ response: botResponse });
   } catch (error) {
+    console.error('Lỗi xử lý tin nhắn:', error);
     res.status(500).json({ message: 'Lỗi xử lý tin nhắn' });
   }
 });
@@ -59,29 +62,65 @@ router.get('/history/:sessionId', async (req, res) => {
     }
     res.json(chat.messages);
   } catch (error) {
+    console.error('Lỗi lấy lịch sử chat:', error);
     res.status(500).json({ message: 'Lỗi lấy lịch sử chat' });
   }
 });
 
 // Hàm xử lý tin nhắn và tạo câu trả lời
 async function generateBotResponse(message) {
-  // Các câu trả lời mẫu dựa trên từ khóa
-  const responses = {
-    'giá': 'Bạn có thể xem giá các sản phẩm của chúng tôi trong mục Sản Phẩm. Bánh của chúng tôi có giá từ 200,000đ đến 2,000,000đ tùy loại và kích thước.',
-    'đặt hàng': 'Để đặt hàng, bạn có thể chọn sản phẩm và thêm vào giỏ hàng. Sau đó tiến hành thanh toán qua các hình thức như PayPal hoặc ZaloPay.',
-    'thời gian': 'Chúng tôi cần khoảng 2-3 ngày để hoàn thành đơn đặt hàng bánh thông thường. Với bánh đặc biệt có thể cần 3-5 ngày.',
-    'liên hệ': 'Bạn có thể liên hệ với chúng tôi qua số điện thoại hoặc email được hiển thị ở phần Footer của website.',
-    'default': 'Xin chào! Tôi là Luna Assistant. Tôi có thể giúp bạn tư vấn về các sản phẩm bánh, quy trình đặt hàng và các thông tin khác về Luna Bakery.'
-  };
-
-  // Tìm câu trả lời phù hợp
   const lowercaseMessage = message.toLowerCase();
-  for (const [keyword, response] of Object.entries(responses)) {
-    if (lowercaseMessage.includes(keyword)) {
-      return response;
+
+  // Kiểm tra từ khóa trong tin nhắn
+  for (const [category, keywords] of Object.entries(chatbotData.keywords)) {
+    for (const keyword of keywords) {
+      if (lowercaseMessage.includes(keyword)) {
+        // Tìm câu trả lời phù hợp từ các danh mục
+        if (category === 'giá' && lowercaseMessage.includes('bánh')) {
+          return chatbotData.products['bánh kem'];
+        }
+        if (category === 'đặt hàng') {
+          return chatbotData.ordering['cách đặt hàng'];
+        }
+        if (category === 'giao hàng') {
+          return chatbotData.ordering['giao hàng'];
+        }
+        if (category === 'thanh toán') {
+          return chatbotData.ordering['thanh toán'];
+        }
+        if (category === 'liên hệ') {
+          return chatbotData.general['liên hệ'];
+        }
+        if (category === 'thời gian') {
+          return chatbotData.general['giờ làm việc'];
+        }
+      }
     }
   }
-  return responses.default;
+
+  // Kiểm tra các từ khóa cụ thể về sản phẩm
+  for (const [product, info] of Object.entries(chatbotData.products)) {
+    if (lowercaseMessage.includes(product)) {
+      return info;
+    }
+  }
+
+  // Kiểm tra các từ khóa về dịch vụ đặc biệt
+  for (const [service, info] of Object.entries(chatbotData.special)) {
+    if (lowercaseMessage.includes(service)) {
+      return info;
+    }
+  }
+
+  // Kiểm tra các từ khóa chung
+  for (const [topic, info] of Object.entries(chatbotData.general)) {
+    if (lowercaseMessage.includes(topic)) {
+      return info;
+    }
+  }
+
+  // Trả về câu mặc định nếu không tìm thấy câu trả lời phù hợp
+  return chatbotData.greetings.default;
 }
 
 module.exports = router; 
