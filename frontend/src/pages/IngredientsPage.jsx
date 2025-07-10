@@ -6,11 +6,12 @@ import { fetchIngredients } from '../redux/slices/ingredientsSlice';
 import IngredientFilterSidebar from '../components/Products/IngredientFilterSidebar';
 import IngredientSortOptions from '../components/Products/IngredientSortOptions';
 import IngredientGrid from '../components/Products/IngredientGrid';
+import Pagination from '../components/Common/Pagination';
 
 const IngredientsPage = () => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
-  const { ingredients, loading, error } = useSelector((state) => state.ingredients);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { ingredients, loading, error, pagination } = useSelector((state) => state.ingredients);
   
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -37,6 +38,12 @@ const IngredientsPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handlePageChange = (page) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', page.toString());
+    setSearchParams(newParams);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -101,6 +108,15 @@ const IngredientsPage = () => {
               loading={loading} 
               error={error} 
             />
+
+            {/* Pagination */}
+            {!loading && !error && ingredients?.length > 0 && (
+              <Pagination
+                currentPage={pagination.page}
+                totalPages={pagination.pages}
+                onPageChange={handlePageChange}
+              />
+            )}
           </div>
         </div>
       </div>
