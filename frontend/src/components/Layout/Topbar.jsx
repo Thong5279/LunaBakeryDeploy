@@ -23,11 +23,11 @@ const Topbar = () => {
             <FaFacebookF />
           </a>
           <Divider />
-          <a href="#" className="hover:text-[#814d81] transition-colors duration-200" title="Zalo">
+          <a href="https://chat.zalo.me/" className="hover:text-[#814d81] transition-colors duration-200" title="Zalo">
             <SiZalo />
           </a>
           <Divider />
-          <a href="#" className="hover:text-[#814d81] transition-colors duration-200" title="Instagram">
+          <a href="https://www.instagram.com/thongpham.huynh/" className="hover:text-[#814d81] transition-colors duration-200" title="Instagram">
             <FaInstagram />
           </a>
         </div>

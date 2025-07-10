@@ -17,27 +17,27 @@ export const Footer = () => {
         <h3 className="text-lg font-semibold mb-2">Liên kết</h3>
         <ul className="space-y-1 text-sm">
           <li><a href="#" className="hover:text-pink-500">Trang chủ</a></li>
-          <li><a href="#" className="hover:text-pink-500">Sản phẩm</a></li>
+          <li><a href="/collections/all" className="hover:text-pink-500">Sản phẩm</a></li>
           <li><a href="#" className="hover:text-pink-500">Về chúng tôi</a></li>
-          <li><a href="#" className="hover:text-pink-500">Liên hệ</a></li>
+          <li><a href="/contact" className="hover:text-pink-500">Liên hệ</a></li>
         </ul>
       </div>
   
       {/* Thông tin liên hệ */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Liên hệ</h3>
-        <p className="text-sm">📍 123 Đường Bánh Ngọt, Quận Kem, TP. Ngọt Ngào</p>
-        <p className="text-sm">📞 0123 456 789</p>
-        <p className="text-sm">✉️ hello@lunabakery.vn</p>
+        <p className="text-sm">📍 Số 69 đường B2 khu dân cư hưng phú Q.Cái Răng</p>
+        <p className="text-sm">📞 0919 164 967</p>
+        <p className="text-sm">✉️ thyenthong@gmail.com</p>
       </div>
   
       {/* Mạng xã hội */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Kết nối</h3>
         <div className="flex space-x-3 mt-1">
-          <a href="#" className="text-xl hover:text-pink-500">🌐</a>
-          <a href="#" className="text-xl hover:text-pink-500">📸</a>
-          <a href="#" className="text-xl hover:text-pink-500">📘</a>
+          <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="text-xl hover:text-pink-500">🌐</a>
+          <a href="https://www.instagram.com/thongpham.huynh/" className="text-xl hover:text-pink-500">📸</a>
+          <a href="https://www.zalo.me/thongpham.huynh" className="text-xl hover:text-pink-500">📘</a>
         </div>
         <p className="text-xs mt-4">Made with ❤️ by Luna Team</p>
       </div>

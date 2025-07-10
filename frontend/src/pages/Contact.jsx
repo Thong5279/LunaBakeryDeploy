@@ -85,7 +85,7 @@ const Contact = () => {
                   <h3 className="font-medium text-gray-900">Email</h3>
                   <p className="text-gray-600 mt-1">
                     info@lunabakery.com<br />
-                    support@lunabakery.com
+                    phamhuynhthong192@gmail.com
                   </p>
                 </div>
               </div>
@@ -104,10 +104,10 @@ const Contact = () => {
               <div className="pt-6">
                 <h3 className="font-medium text-gray-900 mb-3">Theo dõi chúng tôi</h3>
                 <div className="flex space-x-4">
-                  <a href="#" className="text-pink-500 hover:text-pink-600 text-2xl">
+                  <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="text-pink-500 hover:text-pink-600 text-2xl">
                     <FaFacebook />
                   </a>
-                  <a href="#" className="text-pink-500 hover:text-pink-600 text-2xl">
+                  <a href="https://www.instagram.com/thongpham.huynh/" className="text-pink-500 hover:text-pink-600 text-2xl">
                     <FaInstagram />
                   </a>
                 </div>
