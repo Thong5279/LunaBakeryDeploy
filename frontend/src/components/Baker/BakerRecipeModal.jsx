@@ -177,7 +177,7 @@ const BakerRecipeModal = ({ recipeId, onClose }) => {
                     <FaUsers className="mr-1" />
                   </div>
                   <p className="text-sm text-gray-600">Số lượng</p>
-                  <p className="font-semibold">1 mẻ bánh {selectedRecipe.servings || 0} cái</p>
+                  <p className="font-semibold">{selectedRecipe.servings || 0} cái</p>
                 </div>
                 <div className="text-center">
                   <div className="flex items-center justify-center text-pink-500 mb-1">
