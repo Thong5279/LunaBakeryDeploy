@@ -18,11 +18,64 @@ import { clearCart } from "../../redux/slices/cartSlice";
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart());
     navigate("/");
   };
+
+  const menuItems = [
+    { 
+      path: "/admin/users", 
+      icon: FaUser, 
+      label: "Người dùng",
+      iconColor: "text-blue-500"
+    },
+    { 
+      path: "/admin/products", 
+      icon: FaBoxOpen, 
+      label: "Sản phẩm",
+      iconColor: "text-purple-500"
+    },
+    { 
+      path: "/admin/ingredients", 
+      icon: FaBox, 
+      label: "Nguyên liệu",
+      iconColor: "text-green-500"
+    },
+    { 
+      path: "/admin/recipes", 
+      icon: FaClipboard, 
+      label: "Công thức",
+      iconColor: "text-yellow-600"
+    },
+    { 
+      path: "/admin/inventory", 
+      icon: FaWarehouse, 
+      label: "Quản lý kho",
+      iconColor: "text-indigo-500"
+    },
+    { 
+      path: "/admin/orders", 
+      icon: FaClipboardList, 
+      label: "Đơn hàng",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/admin/analytics", 
+      icon: FaChartBar, 
+      label: "Thống kê",
+      iconColor: "text-orange-500"
+    },
+    { 
+      path: "/", 
+      icon: FaStore, 
+      label: "Trang chủ",
+      iconColor: "text-teal-500"
+    },
+  ];
+
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -31,122 +84,33 @@ const AdminSidebar = () => {
         </Link>
       </div>
       <h2 className="text-xl font-medium mb-6 text-center">
-        {" "}
         Bảng quản trị viên
       </h2>
 
       <nav className="flex flex-col space-y-2">
-        <NavLink
-          to={"/admin/users"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaUser className="text-pink-500"></FaUser>
-          <span className="">Người dùng</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/products"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaBoxOpen className="text-pink-500"></FaBoxOpen>
-          <span className="">Sản phẩm</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/ingredients"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaBox className="text-pink-500"></FaBox>
-          <span className="">Nguyên liệu</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/recipes"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaClipboard className="text-pink-500"></FaClipboard>
-          <span className="">Công thức</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/inventory"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaWarehouse className="text-pink-500"></FaWarehouse>
-          <span className="">Quản lý kho</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/orders"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaClipboardList className="text-pink-500"></FaClipboardList>
-          <span className="">Đơn hàng</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/admin/analytics"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaChartBar className="text-pink-500"></FaChartBar>
-          <span className="">Thống kê</span>
-        </NavLink>
-        {/*  */}
-        <NavLink
-          to={"/"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 "
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaStore className="text-pink-500"></FaStore>
-          <span className="">Trang chủ</span>
-        </NavLink>
-        {/*  */}
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              isActive
+                ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2"
+                : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+            }
+            end
+          >
+            <item.icon className={`${item.iconColor} transition-colors duration-200`} />
+            <span>{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
+
       <div className="mt-4">
         <button
           onClick={handleLogout}
           className="w-full bg-pink-400 hover:bg-pink-500 py-2 rounded-3xl flex items-center justify-center space-x-2"
         >
-          <FaSignOutAlt />
+          <FaSignOutAlt className="text-white" />
           <span className="text-white">Đăng xuất</span>
         </button>
       </div>
