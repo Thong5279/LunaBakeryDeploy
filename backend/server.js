@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 
 // Load environment variables FIRST
 dotenv.config();
@@ -32,6 +34,25 @@ const chatRoutes = require('./routes/chatRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
+    credentials: true
+  }
+});
+
+// Lưu instance của Socket.IO vào app để có thể sử dụng trong routes
+app.set('io', io);
+
+// Socket.IO events
+io.on('connection', (socket) => {
+  console.log('Client connected');
+  
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
 
 // Middleware
 app.use(express.json());
@@ -76,6 +97,6 @@ app.use("/api/delivery/orders", deliveryOrderRoute);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server chay tren http://localhost:${PORT}`);
 });

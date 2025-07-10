@@ -63,14 +63,20 @@ router.put("/:id/status", protect, admin, async (req, res) => {
 
     const updatedOrder = await order.save();
 
-    // Emit event thông qua Socket.IO
-    const io = req.app.get('io');
-    io.emit('orderStatusUpdated', {
-      orderId: order._id,
-      status: order.status,
-      updatedAt: order.updatedAt,
-      statusHistory: order.statusHistory
-    });
+    // Emit event thông qua Socket.IO nếu có
+    try {
+      const io = req.app.get('io');
+      if (io) {
+        io.emit('orderStatusUpdated', {
+          orderId: order._id,
+          status: order.status,
+          updatedAt: order.updatedAt,
+          statusHistory: order.statusHistory
+        });
+      }
+    } catch (error) {
+      console.warn('Socket.IO không khả dụng:', error.message);
+    }
 
     res.json({
       message: "Cập nhật trạng thái đơn hàng thành công",
