@@ -32,6 +32,7 @@ const managerOrderRoute = require("./routes/managerOrderRoutes");
 const bakerOrderRoute = require("./routes/bakerOrderRoutes");
 const bakerRecipeRoute = require("./routes/bakerRecipeRoutes");
 const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
+const chatRoutes = require('./routes/chatRoutes');
 
 
 const app = express();
@@ -112,6 +113,7 @@ app.use("/api/manager/orders", managerOrderRoute);
 app.use("/api/baker/orders", bakerOrderRoute);
 app.use("/api/baker/recipes", bakerRecipeRoute);
 app.use("/api/delivery/orders", deliveryOrderRoute);
+app.use('/api/chat', chatRoutes);
 
 server.listen(PORT, () => {
     console.log(`Server chay tren http://localhost:${PORT}`);

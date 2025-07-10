@@ -6,7 +6,8 @@ import ProductDetails from "../components/Products/ProductDetails";
 import FeaturedCakes from "../components/Products/FeaturedCakes";
 import FeaturedColection from "../components/Products/featuredCollection";
 import QuickNavigation from "../components/Common/QuickNavigation";
-import { useDispatch, useSelector } from "react-redux";
+import Chatbot from "../components/Common/Chatbot";
+import { useDispatch } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 import axios from "axios";
 
@@ -111,6 +112,9 @@ const Home = () => {
 
             {/* Quick Navigation */}
             <QuickNavigation />
+
+            {/* Chatbot */}
+            <Chatbot />
         </div>
     );
 };
