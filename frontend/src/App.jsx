@@ -43,6 +43,7 @@ import ZaloPayManualReturn from "./pages/ZaloPayManualReturn";
 import PaymentReturnHelper from "./pages/PaymentReturnHelper";
 import ZaloPayInstructions from "./pages/ZaloPayInstructions";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import Contact from "./pages/Contact";
 
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
@@ -98,6 +99,7 @@ const AppContent = () => {
           />
           <Route path="order/:id" element={<OrderDetailsPage />} />
           <Route path="my-orders" element={<MyOrdersPage />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
         
         {/* admin */}
