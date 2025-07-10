@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { FaRobot, FaUser, FaPaperPlane, FaTimes, FaSpinner } from 'react-icons/fa';
+import { FaRobot, FaUser, FaPaperPlane, FaTimes, FaSpinner, FaShoppingCart } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/slices/cartSlice';
 
 // CSS Keyframes
 const pulseAnimation = {
@@ -36,7 +39,11 @@ const Chatbot = () => {
   const [sessionId, setSessionId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [quickActions, setQuickActions] = useState([]);
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,9 +70,10 @@ const Chatbot = () => {
       console.log('Chat session started:', response.data);
       
       setSessionId(response.data.sessionId);
+      setQuickActions(response.data.quickActions || []);
       setMessages([{
         sender: 'bot',
-        content: 'Xin chào! Tôi là Luna Assistant. Tôi có thể giúp gì cho bạn?'
+        content: 'Xin chào! Tôi là Luna Assistant 🤖. Tôi có thể giúp bạn:\n\n• 🛍️ Tìm hiểu về sản phẩm\n• 🛒 Hướng dẫn đặt hàng\n• 💰 Thông tin giá cả\n• 🎉 Khuyến mãi hiện tại\n• 🥗 Tư vấn dinh dưỡng\n• 💡 Gợi ý sản phẩm phù hợp\n\nBạn cần tôi hỗ trợ gì?'
       }]);
     } catch (error) {
       console.error('Lỗi khởi tạo chat:', error.response?.data || error.message);
@@ -108,6 +116,14 @@ const Chatbot = () => {
           sender: 'bot', 
           content: response.data.response 
         }]);
+        
+        // Cập nhật quick actions và suggested products
+        if (response.data.quickActions) {
+          setQuickActions(response.data.quickActions);
+        }
+        if (response.data.suggestedProducts) {
+          setSuggestedProducts(response.data.suggestedProducts);
+        }
       } else {
         throw new Error('Invalid response format');
       }
@@ -121,6 +137,68 @@ const Chatbot = () => {
       setIsLoading(false);
       setIsTyping(false);
     }
+  };
+
+  const handleQuickAction = async (action) => {
+    const actionMessages = {
+      'view_menu': 'Tôi muốn xem menu',
+      'how_to_order': 'Làm sao để đặt hàng?',
+      'promotions': 'Có khuyến mãi gì không?',
+      'contact': 'Thông tin liên hệ',
+      'birthday_cake': 'Bánh sinh nhật',
+      'desserts': 'Bánh ngọt',
+      'view_prices': 'Xem bảng giá',
+      'order_now': 'Tôi muốn đặt hàng',
+      'payment_methods': 'Phương thức thanh toán',
+      'delivery_fee': 'Phí giao hàng',
+      'return_policy': 'Chính sách đổi trả',
+      'support': 'Tôi cần hỗ trợ',
+      'cake_prices': 'Giá bánh kem',
+      'cupcake_prices': 'Giá cupcake',
+      'combo_deals': 'Combo tiết kiệm',
+      'full_price_list': 'Bảng giá đầy đủ',
+      'calories_info': 'Thông tin calories',
+      'allergy_info': 'Thông tin dị ứng',
+      'ingredients': 'Nguyên liệu',
+      'storage_guide': 'Hướng dẫn bảo quản',
+      'current_deals': 'Ưu đãi hiện tại',
+      'membership': 'Thẻ thành viên',
+      'shop_now': 'Mua ngay',
+      'birthday_suggestion': 'Gợi ý cho sinh nhật',
+      'couple_suggestion': 'Gợi ý cho cặp đôi',
+      'group_suggestion': 'Gợi ý cho nhóm bạn',
+      'corporate_suggestion': 'Gợi ý cho công ty'
+    };
+
+    const message = actionMessages[action] || action;
+    setInput(message);
+    
+    // Tự động gửi tin nhắn
+    const form = document.getElementById('chat-form');
+    if (form) {
+      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    }
+  };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    }));
+    alert('Đã thêm vào giỏ hàng!');
+  };
+
+  const renderMessage = (content) => {
+    // Convert markdown-style formatting to HTML
+    let formattedContent = content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br/>')
+      .replace(/• /g, '• ');
+
+    return <div dangerouslySetInnerHTML={{ __html: formattedContent }} />;
   };
 
   const chatbotButtonClass = `
@@ -238,6 +316,9 @@ const Chatbot = () => {
             className={chatbotButtonClass}
           >
             <FaRobot size={24} className="relative z-10" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+              !
+            </span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -250,7 +331,7 @@ const Chatbot = () => {
             animate="visible"
             exit="exit"
             variants={chatbotVariants}
-            className="fixed bottom-20 left-4 md:bottom-24 lg:bottom-28 w-[calc(100%-2rem)] md:w-96 h-[60vh] md:h-[70vh] max-h-[500px] bg-white rounded-lg shadow-xl flex flex-col z-40"
+            className="fixed bottom-20 left-4 md:bottom-24 lg:bottom-28 w-[calc(100%-2rem)] md:w-96 h-[60vh] md:h-[70vh] max-h-[600px] bg-white rounded-lg shadow-2xl flex flex-col z-40"
           >
             {/* Header với gradient và animation */}
             <div className="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-500 bg-[length:200%_100%] animate-[gradient_3s_ease-in-out_infinite] text-white p-4 rounded-t-lg flex justify-between items-center">
@@ -263,7 +344,10 @@ const Chatbot = () => {
                 >
                   <FaRobot className="mr-2" />
                 </motion.div>
-                <h3 className="font-semibold">Luna Assistant</h3>
+                <div>
+                  <h3 className="font-semibold">Luna Assistant</h3>
+                  <p className="text-xs opacity-90">Trợ lý AI thông minh</p>
+                </div>
               </div>
               <motion.button
                 onClick={() => setIsOpen(false)}
@@ -276,7 +360,7 @@ const Chatbot = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
               <AnimatePresence>
                 {messages.map((message, index) => (
                   <motion.div
@@ -290,38 +374,95 @@ const Chatbot = () => {
                     }`}
                   >
                     <div
-                      className={`max-w-[70%] p-3 rounded-lg shadow-sm ${
+                      className={`max-w-[85%] p-4 rounded-2xl shadow-sm ${
                         message.sender === 'user'
-                          ? 'bg-pink-500 text-white'
-                          : 'bg-white text-gray-800'
-                      } transform transition-all duration-200 hover:scale-105`}
+                          ? 'bg-gradient-to-r from-pink-500 to-pink-600 text-white'
+                          : 'bg-white text-gray-800 border border-gray-100'
+                      } transform transition-all duration-200 hover:scale-[1.02]`}
                     >
-                      <div className="flex items-center mb-1">
+                      <div className="flex items-center mb-2">
                         {message.sender === 'user' ? (
                           <FaUser className="mr-2" size={12} />
                         ) : (
-                          <FaRobot className="mr-2" size={12} />
+                          <FaRobot className="mr-2 text-pink-500" size={12} />
                         )}
-                        <span className="text-xs font-medium">
+                        <span className="text-xs font-medium opacity-80">
                           {message.sender === 'user' ? 'Bạn' : 'Luna Assistant'}
                         </span>
                       </div>
-                      <p className="text-sm whitespace-pre-line">{message.content}</p>
+                      <div className="text-sm leading-relaxed">
+                        {renderMessage(message.content)}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
+
+              {/* Suggested Products */}
+              {suggestedProducts.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4"
+                >
+                  <p className="text-sm font-medium text-gray-700 mb-2">💡 Sản phẩm gợi ý:</p>
+                  <div className="space-y-2">
+                    {suggestedProducts.map((product) => (
+                      <div key={product._id} className="bg-white border border-gray-200 rounded-lg p-3 flex items-center justify-between hover:shadow-md transition-shadow">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                            {product.image ? (
+                              <img 
+                                src={product.image}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = '/images/about-hero.jpg';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-pink-100 flex items-center justify-center">
+                                <FaShoppingCart className="text-pink-300" size={20} />
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium">{product.name}</h4>
+                            <p className="text-xs text-gray-600">{product.price.toLocaleString()}đ</p>
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => navigate(`/product/${product._id}`)}
+                            className="text-xs text-pink-600 hover:text-pink-700"
+                          >
+                            Xem
+                          </button>
+                          <button
+                            onClick={() => handleAddToCart(product)}
+                            className="text-xs bg-pink-500 text-white px-2 py-1 rounded hover:bg-pink-600"
+                          >
+                            <FaShoppingCart size={10} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
               {isTyping && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-gray-200 px-4 py-2 rounded-full">
+                  <div className="bg-gray-100 px-4 py-3 rounded-2xl">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></div>
-                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></div>
                     </div>
                   </div>
                 </motion.div>
@@ -329,8 +470,28 @@ const Chatbot = () => {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* Quick Actions */}
+            {quickActions.length > 0 && (
+              <div className="px-4 py-2 bg-gray-50 border-t">
+                <div className="flex flex-wrap gap-2">
+                  {quickActions.map((action, index) => (
+                    <motion.button
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.05 }}
+                      onClick={() => handleQuickAction(action.action)}
+                      className="text-xs bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full hover:bg-pink-50 hover:border-pink-300 hover:text-pink-600 transition-all duration-200"
+                    >
+                      {action.label}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t bg-white rounded-b-lg">
+            <form id="chat-form" onSubmit={handleSubmit} className="p-4 border-t bg-white rounded-b-lg">
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -338,19 +499,19 @@ const Chatbot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Nhập tin nhắn..."
                   disabled={isLoading}
-                  className="flex-1 p-2 border rounded-lg focus:outline-none focus:border-pink-500 disabled:bg-gray-100 transition-colors"
+                  className="flex-1 p-3 border border-gray-200 rounded-full focus:outline-none focus:border-pink-500 disabled:bg-gray-100 transition-all duration-200 text-sm"
                 />
                 <motion.button
                   type="submit"
-                  disabled={isLoading}
-                  className="bg-pink-500 text-white p-2 rounded-lg hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isLoading || !input.trim()}
+                  className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-3 rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   {isLoading ? (
-                    <FaSpinner className="animate-spin" />
+                    <FaSpinner className="animate-spin" size={18} />
                   ) : (
-                    <FaPaperPlane />
+                    <FaPaperPlane size={18} />
                   )}
                 </motion.button>
               </div>

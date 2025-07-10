@@ -25,6 +25,20 @@ const chatSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  context: {
+    lastTopic: {
+      type: String,
+      default: null
+    },
+    userPreferences: [{
+      type: String
+    }],
+    conversationFlow: [{
+      timestamp: Date,
+      userIntent: String,
+      responded: Boolean
+    }]
+  },
   createdAt: {
     type: Date,
     default: Date.now
