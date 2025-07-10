@@ -1,6 +1,4 @@
 const express = require("express");
-const http = require('http');
-const socketIO = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -8,8 +6,6 @@ const dotenv = require("dotenv");
 // Load environment variables FIRST
 dotenv.config();
 
-const session = require("express-session");
-const passport = require("./config/passport");
 const connectDB = require("./config/db")
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoutes");
@@ -35,59 +31,22 @@ const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
-
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
-    methods: ["GET", "POST"]
-  }
-});
 
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
-
-  // Join room for order updates
-  socket.on('joinOrderRoom', (orderId) => {
-    socket.join(`order_${orderId}`);
-    console.log(`Client ${socket.id} joined room: order_${orderId}`);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
-  });
-});
-
-// Make io accessible to our router
-app.set('io', io);
-
+// Middleware
 app.use(express.json());
-app.use(cors());
-
-// Session configuration for passport
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-session-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
+app.use(cors({
+  origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
+  credentials: true
 }));
 
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 
 //kết nối với MongoDB 
 connectDB();
 
-app.get("/",(req, res) => {
-    res.send("XIN CHAO Api Lunabakery!");
+app.get("/", (req, res) => {
+  res.send("XIN CHAO Api Lunabakery!");
 });
 
 //API Routes
@@ -117,6 +76,6 @@ app.use("/api/delivery/orders", deliveryOrderRoute);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
 
-server.listen(PORT, () => {
-    console.log(`Server chay tren http://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server chay tren http://localhost:${PORT}`);
 });
