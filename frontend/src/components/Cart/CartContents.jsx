@@ -5,7 +5,7 @@ import { updateCartItemQuantity, removeFromCart } from "../../redux/slices/cartS
 
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
-  //Handle adding or substracting to cart
+
   const handleAddToCart = (productId, delta, quantity, size, flavor) => {
     const newQuantity = quantity + delta;
     if (newQuantity >= 1) {
@@ -35,67 +35,35 @@ const CartContents = ({ cart, userId, guestId }) => {
   };
 
   return (
-    <div>
+    <div className="space-y-4">
       {cart.products.map((product, index) => (
         <div
           key={index}
-          className="flex items-start justify-between py-4 border-b"
+          className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm border border-gray-100"
         >
-          <div className="flex items-start">
+          {/* Hình ảnh sản phẩm */}
+          <div className="w-24 h-24 flex-shrink-0">
             <img
               src={product.image}
               alt={product.name}
-              className="w-20 h-24 object-cover mr-4 rounded"
+              className="w-full h-full object-cover rounded-md"
             />
           </div>
-          <div>
-            <h3 className="text-[#3c3c3c] font-semibold text-lg">
-              {product.name}
-            </h3>
 
-            <p className="text-sm text-purple-400">
-              size: {product.size}cm | vị: {product.flavor}
-            </p>
-
-            <div className="flex items-center mt-2">
+          {/* Thông tin sản phẩm */}
+          <div className="flex-grow">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-gray-800 font-semibold text-lg">
+                  {product.name}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  size: <span className="text-pink-500">{product.size}</span> | 
+                  vị: <span className="text-pink-500">{product.flavor}</span>
+                </p>
+              </div>
               <button
-                onClick={() =>
-                  handleAddToCart(
-                    product.productId,
-                    -1,
-                    product.quantity,
-                    product.size,
-                    product.flavor
-                  )
-                }
-                className="border border-purple-300 text-purple-600 hover:bg-purple-100 transition px-2 py-1 rounded-md text-xl font-medium"
-              >
-                -
-              </button>
-              <span className="mx-4 text-gray-800 font-medium">
-                {product.quantity}
-              </span>
-              <button 
-              onClick={() =>
-                handleAddToCart(
-                  product.productId,
-                  1,
-                  product.quantity,
-                  product.size,
-                  product.flavor
-                )
-              }
-              className="border border-purple-300 text-purple-600 hover:bg-purple-100 transition px-2 py-1 rounded-md text-xl font-medium">
-                +
-              </button>
-            </div>
-
-            <div className="mt-2 flex items-center justify-between">
-              <p className="text-lg font-semibold text-pink-500">
-                {product.price.toLocaleString("vi-VN")} ₫
-              </p>
-              <button
-                className="text-[#814d81] hover:text-[#a37ba3] transition"
+                className="text-gray-400 hover:text-pink-500 transition-colors"
                 title="Xoá sản phẩm"
                 onClick={() =>
                   handleRemoveFromCart(
@@ -105,8 +73,48 @@ const CartContents = ({ cart, userId, guestId }) => {
                   )
                 }
               >
-                <RiDeleteBin6Line className="h-6 w-6" />
+                <RiDeleteBin6Line className="h-5 w-5" />
               </button>
+            </div>
+
+            {/* Số lượng và giá */}
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    handleAddToCart(
+                      product.productId,
+                      -1,
+                      product.quantity,
+                      product.size,
+                      product.flavor
+                    )
+                  }
+                  className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-full text-pink-500 hover:bg-pink-50 transition-colors"
+                >
+                  -
+                </button>
+                <span className="w-10 text-center font-medium text-gray-700">
+                  {product.quantity}
+                </span>
+                <button
+                  onClick={() =>
+                    handleAddToCart(
+                      product.productId,
+                      1,
+                      product.quantity,
+                      product.size,
+                      product.flavor
+                    )
+                  }
+                  className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-full text-pink-500 hover:bg-pink-50 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+              <p className="text-lg font-semibold text-pink-500">
+                {product.price.toLocaleString("vi-VN")} ₫
+              </p>
             </div>
           </div>
         </div>
