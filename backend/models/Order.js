@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema({
-
     productId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Product'
+        refPath: 'itemType'  // Sử dụng refPath để tham chiếu động
+    },
+    itemType: {
+        type: String,
+        required: true,
+        enum: ['Product', 'Ingredient'],
+        default: 'Product'
     },
     name: {
         type: String,
@@ -23,7 +28,7 @@ const orderItemSchema = new mongoose.Schema({
     flavor : String,    // Nếu sản phẩm có hương vị
     quantity: {
         type: Number,
-       required: true
+        required: true
     }
 },
 { _id: false } // Không tạo _id riêng cho từng item

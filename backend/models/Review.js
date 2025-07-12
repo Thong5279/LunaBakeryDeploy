@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+// Đảm bảo các model được load
+require('./Product');
+require('./Ingredient');
+
 const reviewSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -9,7 +13,13 @@ const reviewSchema = new mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Product'
+        refPath: 'itemType'
+    },
+    itemType: {
+        type: String,
+        required: true,
+        enum: ['Product', 'Ingredient'],
+        default: 'Product'
     },
     order: {
         type: mongoose.Schema.Types.ObjectId,
@@ -37,16 +47,27 @@ const reviewSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['pending', 'approved', 'rejected'],
-        default: 'pending'
+        default: 'approved'
     },
     createdAt: {
         type: Date,
         default: Date.now
     }
+}, {
+    // Thêm options để đảm bảo populate hoạt động đúng
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
-// Đảm bảo mỗi user chỉ đánh giá một sản phẩm một lần trong một đơn hàng
-reviewSchema.index({ user: 1, product: 1, order: 1 }, { unique: true });
+// Tạo index cho việc tìm kiếm review
+reviewSchema.index({ product: 1, itemType: 1, status: 1 });
+reviewSchema.index({ order: 1 });
+
+// Tạo index unique để đảm bảo mỗi sản phẩm chỉ được đánh giá một lần trong một đơn hàng
+reviewSchema.index({ user: 1, product: 1, order: 1, itemType: 1 }, { 
+    unique: true,
+    name: 'unique_review_per_order'
+});
 
 // Middleware để validate đơn hàng trước khi cho phép đánh giá
 reviewSchema.pre('save', async function(next) {
@@ -60,19 +81,22 @@ reviewSchema.pre('save', async function(next) {
             throw new Error('Chỉ được đánh giá sau khi đơn hàng đã giao thành công');
         }
 
-        // Kiểm tra sản phẩm có trong đơn hàng
-        const productInOrder = order.orderItems.some(item => 
-            item.productId.toString() === this.product.toString()
-        );
-        if (!productInOrder) {
-            throw new Error('Sản phẩm không có trong đơn hàng này');
+        // Kiểm tra sản phẩm có trong đơn hàng, xét cả productId và itemType
+        const orderItem = order.orderItems.find(item => {
+            const itemType = item.itemType || 'Product';
+            return item.productId.toString() === this.product.toString() && 
+                   itemType === this.itemType;
+        });
+
+        if (!orderItem) {
+            throw new Error(`${this.itemType === 'Product' ? 'Sản phẩm' : 'Nguyên liệu'} không có trong đơn hàng này`);
         }
 
-        // Kiểm tra thời gian đánh giá (trong vòng 30 ngày sau khi giao hàng)
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        if (order.deliveredAt < thirtyDaysAgo) {
-            throw new Error('Thời gian đánh giá đã hết hạn (30 ngày sau khi giao hàng)');
+        // Kiểm tra sản phẩm/nguyên liệu tồn tại
+        const Model = mongoose.model(this.itemType);
+        const product = await Model.findById(this.product);
+        if (!product) {
+            throw new Error(`${this.itemType === 'Product' ? 'Sản phẩm' : 'Nguyên liệu'} không tồn tại`);
         }
 
         next();
@@ -81,15 +105,19 @@ reviewSchema.pre('save', async function(next) {
     }
 });
 
-// Middleware để cập nhật rating trung bình của sản phẩm
+// Middleware để cập nhật rating trung bình của sản phẩm/nguyên liệu
 reviewSchema.post('save', async function() {
     try {
-        const Product = mongoose.model('Product');
+        const Model = mongoose.model(this.itemType);
         
         // Tính rating trung bình mới
         const stats = await this.constructor.aggregate([
             {
-                $match: { product: this.product, status: 'approved' }
+                $match: { 
+                    product: this.product, 
+                    status: 'approved',
+                    itemType: this.itemType
+                }
             },
             {
                 $group: {
@@ -101,12 +129,12 @@ reviewSchema.post('save', async function() {
         ]);
 
         if (stats.length > 0) {
-            await Product.findByIdAndUpdate(this.product, {
-                rating: Math.round(stats[0].avgRating * 10) / 10, // Làm tròn 1 chữ số thập phân
+            await Model.findByIdAndUpdate(this.product, {
+                rating: Math.round(stats[0].avgRating * 10) / 10,
                 numReviews: stats[0].numReviews
             });
         } else {
-            await Product.findByIdAndUpdate(this.product, {
+            await Model.findByIdAndUpdate(this.product, {
                 rating: 0,
                 numReviews: 0
             });
@@ -125,4 +153,6 @@ reviewSchema.post('remove', async function() {
     }
 });
 
-module.exports = mongoose.model('Review', reviewSchema); 
+const Review = mongoose.model('Review', reviewSchema);
+
+module.exports = Review; 

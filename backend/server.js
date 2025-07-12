@@ -32,14 +32,25 @@ const bakerRecipeRoute = require("./routes/bakerRecipeRoutes");
 const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 const httpServer = createServer(app);
+
+// Cấu hình Socket.IO
 const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
-    credentials: true
-  }
+    cors: {
+        origin: [
+            process.env.VITE_FRONTEND_URL || "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
+            "http://localhost:5176"
+        ],
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    transports: ['websocket', 'polling'],
+    allowEIO3: true
 });
 
 // Lưu instance của Socket.IO vào app để có thể sử dụng trong routes
@@ -47,19 +58,52 @@ app.set('io', io);
 
 // Socket.IO events
 io.on('connection', (socket) => {
-  console.log('Client connected');
-  
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
+    console.log('Client connected:', socket.id);
+    
+    // Join room cho từng đơn hàng
+    socket.on('joinOrderRoom', (orderId) => {
+        socket.join(`order_${orderId}`);
+        console.log(`Socket ${socket.id} joined room: order_${orderId}`);
+    });
+
+    // Leave room khi rời trang
+    socket.on('leaveOrderRoom', (orderId) => {
+        socket.leave(`order_${orderId}`);
+        console.log(`Socket ${socket.id} left room: order_${orderId}`);
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('Client disconnected:', socket.id);
+    });
+
+    // Xử lý lỗi
+    socket.on('error', (error) => {
+        console.error('Socket error:', error);
+    });
 });
 
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: process.env.VITE_FRONTEND_URL || "http://localhost:5173",
-  credentials: true
+    origin: [
+        process.env.VITE_FRONTEND_URL || "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:5176"
+    ],
+    credentials: true
 }));
+
+// Middleware log request
+app.use((req, res, next) => {
+    if (req.path.includes('/api/reviews')) {
+        console.log(`\n🌐 REQUEST: ${req.method} ${req.path}`);
+        console.log('📊 Query:', req.query);
+        console.log('📦 Body:', req.body);
+        console.log('⏰ Time:', new Date().toISOString());
+    }
+    next();
+});
 
 const PORT = process.env.PORT || 9000;
 
@@ -67,7 +111,7 @@ const PORT = process.env.PORT || 9000;
 connectDB();
 
 app.get("/", (req, res) => {
-  res.send("XIN CHAO Api Lunabakery!");
+    res.send("XIN CHAO Api Lunabakery!");
 });
 
 //API Routes
@@ -96,7 +140,17 @@ app.use("/api/baker/recipes", bakerRecipeRoute);
 app.use("/api/delivery/orders", deliveryOrderRoute);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        message: err.message || 'Có lỗi xảy ra',
+        error: process.env.NODE_ENV === 'development' ? err : {}
+    });
+});
 
 httpServer.listen(PORT, () => {
-  console.log(`Server chay tren http://localhost:${PORT}`);
+    console.log(`Server chay tren http://localhost:${PORT}`);
 });

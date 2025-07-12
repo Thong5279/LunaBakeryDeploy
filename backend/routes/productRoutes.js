@@ -536,22 +536,6 @@ router.put("/:id/add-size-pricing", protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Lấy tất cả đánh giá của một sản phẩm
-// @route   GET /api/products/:productId/reviews
-// @access  Public
-router.get('/:productId/reviews', async (req, res) => {
-    try {
-        const reviews = await Review.find({ product: req.params.productId })
-            .populate('user', 'name')
-            .sort('-createdAt');
-
-        res.json(reviews);
-    } catch (error) {
-        console.error('Lỗi khi lấy đánh giá:', error);
-        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy đánh giá' });
-    }
-});
-
 // @desc    Lấy sản phẩm có đánh giá cao nhất
 // @route   GET /api/products/top-rated
 // @access  Public

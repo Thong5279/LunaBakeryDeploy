@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createReview, resetReviewState } from '../../redux/slices/reviewSlice';
+import { createReview, resetReviewState, getProductReviews } from '../../redux/slices/reviewSlice';
 import Rating from '../Common/Rating';
 import { toast } from 'sonner';
 
-const ReviewForm = ({ orderId, productId, productName, onReviewSubmitted }) => {
+const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onReviewSubmitted }) => {
     const dispatch = useDispatch();
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
-    const { loading, error, success } = useSelector((state) => state.reviews);
+    const { loading, error, success, lastCreatedReview } = useSelector((state) => state.reviews);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,9 +22,30 @@ const ReviewForm = ({ orderId, productId, productName, onReviewSubmitted }) => {
 
         try {
             setIsSubmitting(true);
-            await dispatch(createReview({ orderId, productId, rating, comment })).unwrap();
+            console.log('Gửi đánh giá với:', { orderId, productId, rating, comment, itemType });
+            const resultAction = await dispatch(createReview({ 
+                orderId, 
+                productId, 
+                rating, 
+                comment,
+                itemType 
+            })).unwrap();
+
+            // Nếu tạo review thành công
+            if (resultAction) {
+                setIsSubmitted(true);
+                // Refresh đánh giá
+                dispatch(getProductReviews({ 
+                    productId,
+                    itemType
+                }));
+                if (onReviewSubmitted) {
+                    onReviewSubmitted();
+                }
+            }
         } catch (err) {
             console.error('Lỗi khi gửi đánh giá:', err);
+            toast.error(err.message || 'Có lỗi xảy ra khi gửi đánh giá');
         } finally {
             setIsSubmitting(false);
         }
@@ -31,19 +53,44 @@ const ReviewForm = ({ orderId, productId, productName, onReviewSubmitted }) => {
 
     useEffect(() => {
         if (success) {
-            toast.success('Đánh giá sản phẩm thành công');
+            toast.success('Đánh giá thành công');
             setComment('');
             setRating(5);
-            if (onReviewSubmitted) {
-                onReviewSubmitted();
-            }
             dispatch(resetReviewState());
         }
         if (error) {
             toast.error(error);
             dispatch(resetReviewState());
         }
-    }, [success, error, dispatch, onReviewSubmitted]);
+    }, [success, error, dispatch]);
+
+    if (isSubmitted) {
+        return (
+            <div className="bg-green-50 p-4 rounded-lg shadow mb-4">
+                <div className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-green-700">
+                        Cảm ơn bạn đã đánh giá {itemType === 'Product' ? 'sản phẩm' : 'nguyên liệu'} {productName}
+                    </p>
+                </div>
+                {lastCreatedReview && (
+                    <div className="mt-4 bg-white p-4 rounded-lg">
+                        <div className="flex items-center">
+                            <Rating value={lastCreatedReview.rating} readOnly />
+                            <span className="ml-2 text-gray-600">
+                                ({lastCreatedReview.rating} sao)
+                            </span>
+                        </div>
+                        {lastCreatedReview.comment && (
+                            <p className="mt-2 text-gray-700">{lastCreatedReview.comment}</p>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     if (loading || isSubmitting) {
         return (
@@ -60,7 +107,9 @@ const ReviewForm = ({ orderId, productId, productName, onReviewSubmitted }) => {
 
     return (
         <div className="bg-white p-4 rounded-lg shadow mb-4">
-            <h3 className="text-lg font-semibold mb-3">Đánh giá sản phẩm: {productName}</h3>
+            <h3 className="text-lg font-semibold mb-3">
+                Đánh giá {itemType === 'Product' ? 'sản phẩm' : 'nguyên liệu'}: {productName}
+            </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -84,7 +133,7 @@ const ReviewForm = ({ orderId, productId, productName, onReviewSubmitted }) => {
                         onChange={(e) => setComment(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         rows="3"
-                        placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..."
+                        placeholder="Chia sẻ trải nghiệm của bạn..."
                     />
                 </div>
                 <button

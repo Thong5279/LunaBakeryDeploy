@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { FaTruck, FaBox, FaCheckCircle, FaClock, FaTimesCircle, FaArrowLeft } from 'react-icons/fa';
 import { fetchOrderDetails } from '../redux/slices/orderSlice';
-import { getOrderReviews } from '../redux/slices/reviewSlice';
+import { getOrderReviews, getProductReviews } from '../redux/slices/reviewSlice';
 import ReviewForm from '../components/Products/ReviewForm';
 import Rating from '../components/Common/Rating';
 
@@ -26,15 +26,23 @@ const OrderDetailsPage = () => {
         const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
             transports: ['websocket'],
             reconnection: true,
-            reconnectionAttempts: 5
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
         });
 
         newSocket.on('connect', () => {
             console.log('Socket connected');
+            if (id) {
+                newSocket.emit('joinOrderRoom', id);
+            }
         });
 
         newSocket.on('connect_error', (error) => {
             console.error('Socket connection error:', error);
+            // Thử kết nối lại sau 5 giây
+            setTimeout(() => {
+                newSocket.connect();
+            }, 5000);
         });
 
         newSocket.on('orderStatusUpdated', (data) => {
@@ -53,16 +61,22 @@ const OrderDetailsPage = () => {
 
         return () => {
             if (newSocket) {
+                if (id) {
+                    newSocket.emit('leaveOrderRoom', id);
+                }
                 newSocket.disconnect();
             }
         };
     }, [dispatch, id]);
 
     // Kiểm tra xem sản phẩm đã được đánh giá chưa
-    const isProductReviewed = (productId) => {
+    const isProductReviewed = (productId, itemType = 'Product') => {
         if (!reviews || !Array.isArray(reviews)) return false;
         return reviews.some(review => 
-            review && review.product && review.product._id === productId
+            review && 
+            review.product && 
+            review.product._id === productId &&
+            review.itemType === itemType
         );
     };
 
@@ -295,19 +309,26 @@ const OrderDetailsPage = () => {
                     <div className="mt-8 border-t pt-6">
                         <h2 className="text-2xl font-semibold mb-4">Đánh giá sản phẩm</h2>
                         <div className="space-y-4">
-                            {order.orderItems?.map((item) => (
-                                !isProductReviewed(item.productId) && (
+                            {order.orderItems?.map((item) => {
+                                const itemType = item.itemType || 'Product';
+                                return !isProductReviewed(item.productId, itemType) && (
                                     <ReviewForm
                                         key={item.productId}
                                         orderId={id}
                                         productId={item.productId}
                                         productName={item.name}
+                                        itemType={itemType}
                                         onReviewSubmitted={() => {
+                                            // Refresh đánh giá
                                             dispatch(getOrderReviews(id));
+                                            dispatch(getProductReviews({ 
+                                                productId: item.productId,
+                                                itemType
+                                            }));
                                         }}
                                     />
-                                )
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* Hiển thị các đánh giá đã gửi */}
@@ -320,6 +341,9 @@ const OrderDetailsPage = () => {
                                             <div key={review._id} className="bg-gray-50 p-4 rounded-lg">
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-medium">{review.product.name}</span>
+                                                    <span className="text-sm text-gray-500">
+                                                        ({review.itemType === 'Product' ? 'Sản phẩm' : 'Nguyên liệu'})
+                                                    </span>
                                                     <Rating value={review.rating} />
                                                 </div>
                                                 {review.comment && (

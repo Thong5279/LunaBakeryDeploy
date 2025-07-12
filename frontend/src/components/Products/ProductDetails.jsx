@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProductGrid from "./ProductGrid";
-import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slices/productsSlice";
+import { fetchProductDetails, fetchSimilarProducts, clearSelectedProduct } from "../../redux/slices/productsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
-import ProductReviews from './ProductReviews';
+import { getProductReviews, clearReviews } from '../../redux/slices/reviewSlice';
+import Rating from '../Common/Rating';
 
 const PREVIOUS_PATH_KEY = 'luna_bakery_previous_path';
+const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
 
 const ProductDetails = ({ productId }) => {
   const { id: routeID } = useParams();
@@ -17,6 +19,7 @@ const ProductDetails = ({ productId }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector((state) => state.products);
+  const { reviews, loading: reviewsLoading } = useSelector((state) => state.reviews);
   const { user, guestId } = useSelector((state) => state.auth);
 
   const [mainImage, setMainImage] = useState("");
@@ -61,10 +64,20 @@ const ProductDetails = ({ productId }) => {
 
   useEffect(() => {
     if (idToFetch && idToFetch !== "undefined") {
-      console.log("✅ Đang fetch bằng ID:", idToFetch);
+      console.log("✅ Đang fetch sản phẩm bằng ID:", idToFetch);
       dispatch(fetchProductDetails(idToFetch));
-      dispatch(fetchSimilarProducts({ id: idToFetch }));
+      // Fetch đánh giá khi component mount
+      dispatch(getProductReviews({ 
+          productId: idToFetch,
+          itemType: 'Product'
+      }));
     }
+
+    // Cleanup when component unmounts
+    return () => {
+      dispatch(clearSelectedProduct());
+      dispatch(clearReviews());
+    };
   }, [idToFetch, dispatch]);
 
   useEffect(() => {
@@ -328,8 +341,65 @@ const ProductDetails = ({ productId }) => {
 
         {/* Phần đánh giá sản phẩm */}
         <div className="mt-12">
-          <h2 className="text-2xl font-semibold mb-6">Đánh giá từ khách hàng</h2>
-          <ProductReviews productId={idToFetch} />
+            <h2 className="text-2xl font-semibold mb-6">
+                Đánh giá từ khách hàng ({reviews?.length || 0})
+            </h2>
+            
+            {/* Loading state */}
+            {reviewsLoading && (
+                <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500 mx-auto"></div>
+                </div>
+            )}
+
+            {/* No reviews */}
+            {!reviewsLoading && (!reviews || reviews.length === 0) && (
+                <div className="text-center py-4">
+                    <p className="text-gray-500">
+                        Chưa có đánh giá nào cho sản phẩm này
+                    </p>
+                </div>
+            )}
+
+            {/* Reviews list */}
+            {!reviewsLoading && reviews && reviews.length > 0 && (
+                <div className="space-y-6">
+                    {reviews.map((review) => (
+                        <div key={review._id} className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                            <div className="flex items-start space-x-4">
+                                <img 
+                                    src={review.user?.avatar || DEFAULT_IMAGE} 
+                                    alt={review.user?.name || 'Người dùng'}
+                                    className="w-10 h-10 rounded-full object-cover"
+                                    onError={(e) => {
+                                        e.target.src = DEFAULT_IMAGE;
+                                    }}
+                                />
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h4 className="font-medium text-gray-900">
+                                            {review.user?.name || 'Người dùng ẩn danh'}
+                                        </h4>
+                                        <span className="text-sm text-gray-500">
+                                            {new Date(review.createdAt).toLocaleDateString('vi-VN')}
+                                        </span>
+                                    </div>
+                                    
+                                    <div className="flex items-center mt-1">
+                                        <Rating value={review.rating} />
+                                    </div>
+
+                                    {review.comment && (
+                                        <p className="mt-3 text-gray-700">
+                                            {review.comment}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
 
         {/* Phần sản phẩm tương tự */}

@@ -111,6 +111,11 @@ const productsSlice = createSlice({
                 search: "",
             };
         },
+        clearSelectedProduct: (state) => {
+            state.selectedProduct = null;
+            state.similarProducts = [];
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -187,5 +192,5 @@ const productsSlice = createSlice({
     }
 })
 
-export const { setFilters, clearFilters } = productsSlice.actions;
+export const { setFilters, clearFilters, clearSelectedProduct } = productsSlice.actions;
 export default productsSlice.reducer;
