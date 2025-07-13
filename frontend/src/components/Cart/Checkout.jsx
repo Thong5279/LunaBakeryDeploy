@@ -23,9 +23,41 @@ const Checkout = () => {
     phonenumber: "",
     email: "",
     address: "",
-    city: "",
+    city: "Cần Thơ", // Cố định thành phố
     description: "",
   });
+
+  // Hàm tách tên thành họ và tên
+  const splitFullName = (fullName) => {
+    if (!fullName) return { firstname: "", lastname: "" };
+    
+    const nameParts = fullName.trim().split(" ");
+    if (nameParts.length === 1) {
+      return { firstname: nameParts[0], lastname: "" };
+    }
+    
+    // Lấy từ cuối làm tên, phần còn lại làm họ
+    const firstname = nameParts[nameParts.length - 1];
+    const lastname = nameParts.slice(0, -1).join(" ");
+    
+    return { firstname, lastname };
+  };
+
+  // Tự động điền thông tin từ user profile
+  useEffect(() => {
+    if (user) {
+      const { firstname, lastname } = splitFullName(user.name);
+      
+      setShippingAddress(prev => ({
+        ...prev,
+        firstname: firstname || "",
+        lastname: lastname || "",
+        phonenumber: user.phonenumber || "",
+        email: user.email || "",
+        city: "Cần Thơ", // Luôn cố định
+      }));
+    }
+  }, [user]);
 
   // Payment methods configuration
   const paymentMethods = [
@@ -208,11 +240,25 @@ const Checkout = () => {
                   />
                   <span className="absolute right-4 top-4 text-green-500">✓</span>
                 </div>
+                <p className="text-xs text-gray-500 mt-1">Email được lấy từ tài khoản của bạn</p>
               </div>
 
               {/* Shipping Info */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Thông tin giao hàng</h3>
+                
+                {/* Thông báo tự động điền */}
+                {user && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                    <div className="flex items-start gap-2">
+                      <span className="text-green-500 text-sm">✓</span>
+                      <p className="text-sm text-green-700">
+                        Thông tin đã được tự động điền từ hồ sơ của bạn. Bạn có thể chỉnh sửa nếu cần.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <input
                     type="text"
@@ -270,20 +316,17 @@ const Checkout = () => {
                     className="p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
-                  <input
-                    type="text"
-                    placeholder="Thành phố"
-                    value={shippingAddress.city}
-                    onChange={(e) =>
-                      setShippingAddress({
-                        ...shippingAddress,
-                        city: e.target.value,
-                      })
-                    }
-                    className="p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value="Cần Thơ"
+                      className="w-full p-4 border border-gray-300 rounded-xl bg-gray-100 text-gray-600 cursor-not-allowed"
+                      disabled
+                    />
+                    <span className="absolute right-4 top-4 text-gray-400">🔒</span>
+                  </div>
                 </div>
+                <p className="text-xs text-gray-500 mb-4">Thành phố được cố định là Cần Thơ</p>
 
                 <textarea
                   placeholder="Ghi chú đặc biệt (tùy chọn)"
