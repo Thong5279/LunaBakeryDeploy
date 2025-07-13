@@ -6,6 +6,7 @@ import {
   FaStore,
   FaWarehouse,
   FaClipboardList,
+  FaStar,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -88,6 +89,20 @@ const ManagerSidebar = () => {
         >
           <FaWarehouse className="text-pink-500"></FaWarehouse>
           <span className="">Quản lý kho</span>
+        </NavLink>
+
+        {/* Quản lý đánh giá */}
+        <NavLink
+          to={"/manager/reviews"}
+          className={({ isActive }) =>
+            isActive
+              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
+              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+          }
+          end
+        >
+          <FaStar className="text-pink-500"></FaStar>
+          <span className="">Đánh giá</span>
         </NavLink>
 
         {/* Trở về trang chủ */}

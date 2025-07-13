@@ -216,7 +216,7 @@ const OrderDetailsPage = () => {
                 <div className="mb-8">
                     <h2 className="text-lg font-semibold mb-4">Trạng thái đơn hàng</h2>
                     <div className="flex items-start space-x-4">
-                        <div className={`${getStatusColor(order.status)} p-3 rounded-full bg-opacity-10`}>
+                        <div className={`${getStatusColor(order.status)} p-3 rounded-full acity-10`}>
                             {getStatusIcon(order.status)}
                         </div>
                         <div>

@@ -33,6 +33,7 @@ const deliveryOrderRoute = require("./routes/deliveryOrderRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const adminReviewRoutes = require('./routes/adminReviewRoutes');
 
 const app = express();
 const httpServer = createServer(app);
@@ -141,6 +142,7 @@ app.use("/api/delivery/orders", deliveryOrderRoute);
 app.use('/api/chat', chatRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/admin/reviews', adminReviewRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

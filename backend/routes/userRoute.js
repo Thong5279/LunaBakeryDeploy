@@ -5,6 +5,13 @@ const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const router = express.Router();
 
 //@route POST /api/users/register
@@ -200,10 +207,25 @@ const upload = multer({
 
 router.post("/upload-avatar", protect, upload.single('avatar'), async (req, res) => {
   try {
+    console.log("Upload avatar route hit by user:", req.user?.name);
+    console.log("File received:", req.file ? "Yes" : "No");
+    
     if (!req.file) {
       return res.status(400).json({ message: "Vui lòng chọn file ảnh" });
     }
 
+    // Validate file type
+    if (!req.file.mimetype.startsWith('image/')) {
+      return res.status(400).json({ message: "Chỉ hỗ trợ file ảnh" });
+    }
+
+    // Validate file size (5MB)
+    if (req.file.size > 5 * 1024 * 1024) {
+      return res.status(400).json({ message: "File ảnh không được vượt quá 5MB" });
+    }
+
+    console.log("Starting Cloudinary upload...");
+    
     // Convert buffer to base64
     const fileStr = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
     
@@ -217,10 +239,18 @@ router.post("/upload-avatar", protect, upload.single('avatar'), async (req, res)
       ]
     });
 
+    console.log("Cloudinary upload successful:", uploadResponse.secure_url);
+
     // Update user avatar
     const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    }
+    
     user.avatar = uploadResponse.secure_url;
     await user.save();
+
+    console.log("User avatar updated successfully");
 
     res.json({
       message: "Avatar uploaded successfully",
@@ -229,6 +259,16 @@ router.post("/upload-avatar", protect, upload.single('avatar'), async (req, res)
 
   } catch (error) {
     console.error("Upload avatar error:", error);
+    
+    // Provide more specific error messages
+    if (error.message.includes('upload_preset')) {
+      return res.status(500).json({ message: "Lỗi cấu hình Cloudinary. Vui lòng liên hệ admin." });
+    }
+    
+    if (error.message.includes('network')) {
+      return res.status(500).json({ message: "Lỗi kết nối mạng. Vui lòng thử lại." });
+    }
+    
     res.status(500).json({ message: "Lỗi server khi upload ảnh đại diện" });
   }
 });

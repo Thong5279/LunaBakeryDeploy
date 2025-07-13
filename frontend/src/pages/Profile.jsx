@@ -121,7 +121,7 @@ const Profile = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Vui lòng chọn file ảnh hợp lệ');
+      alert('Vui lòng chọn file ảnh hợp lệ (JPG, PNG, WebP)');
       return;
     }
 
@@ -135,10 +135,17 @@ const Profile = () => {
     
     try {
       const token = localStorage.getItem('userToken');
+      if (!token) {
+        alert('Vui lòng đăng nhập lại');
+        return;
+      }
+      
       const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:9000';
       
       const formData = new FormData();
       formData.append('avatar', file);
+
+      console.log('Uploading avatar to:', `${backendURL}/api/users/upload-avatar`);
 
       const response = await fetch(`${backendURL}/api/users/upload-avatar`, {
         method: 'POST',
@@ -148,21 +155,30 @@ const Profile = () => {
         body: formData
       });
 
+      console.log('Upload response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Upload successful:', data);
+        
         // Update user in localStorage
         const currentUser = JSON.parse(localStorage.getItem('userInfo'));
         currentUser.avatar = data.avatar;
         localStorage.setItem('userInfo', JSON.stringify(currentUser));
+        
+        // Show success message
+        alert('Cập nhật ảnh đại diện thành công!');
+        
         // Refresh page to update UI
         window.location.reload();
       } else {
         const error = await response.json();
+        console.error('Upload error response:', error);
         alert(error.message || 'Có lỗi xảy ra khi upload ảnh');
       }
     } catch (error) {
       console.error('Upload avatar error:', error);
-      alert('Có lỗi xảy ra khi upload ảnh');
+      alert('Có lỗi kết nối mạng. Vui lòng thử lại.');
     } finally {
       setAvatarLoading(false);
     }

@@ -13,8 +13,9 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       // Verify the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      // Get user from the token
-      req.user = await User.findById(decoded.user.id).select("-password");
+      // Get user from the token (handle both id and _id)
+      const userId = decoded.user.id || decoded.user._id;
+      req.user = await User.findById(userId).select("-password");
       next();
     } catch (error) {
       console.error("Token verification error:", error);

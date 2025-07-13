@@ -27,6 +27,7 @@ import EditIngredientPage from "./components/Admin/EditIngredientPage";
 import OrderManagement from "./components/Admin/OrderManagement";
 import RecipeManagement from "./components/Admin/RecipeManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
+import ReviewManagement from "./components/Admin/ReviewManagement";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
 import ManagerOrderManagement from "./components/Manager/ManagerOrderManagement";
@@ -123,6 +124,7 @@ const AppContent = () => {
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="orders" element={<OrderManagement />} />
           <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="reviews" element={<ReviewManagement />} />
         </Route>
 
         {/* manager */}
@@ -141,6 +143,7 @@ const AppContent = () => {
           <Route path="ingredients" element={<IngredientManagement />} />
           <Route path="ingredients/:id/edit" element={<EditIngredientPage />} />
           <Route path="inventory" element={<InventoryManagement />} />
+          <Route path="reviews" element={<ReviewManagement />} />
         </Route>
 
         {/* baker */}
