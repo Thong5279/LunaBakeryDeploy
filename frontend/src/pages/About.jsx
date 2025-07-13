@@ -157,18 +157,45 @@ const About = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="grid grid-cols-2 gap-4"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              <img
-                src="/images/kitchen-1.jpg"
-                alt="Kitchen"
-                className="rounded-lg shadow-lg"
-              />
-              <img
-                src="/images/kitchen-2.jpg"
-                alt="Team"
-                className="rounded-lg shadow-lg mt-8"
-              />
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                className="relative overflow-hidden rounded-xl shadow-2xl"
+              >
+                <img
+                  src="https://iqlpro.com/mediacenter/media/1175/files/ef793bc32beadde99c7fd7ee2a094b77(1).jpg"
+                  alt="Kitchen"
+                  className="w-full h-64 md:h-80 object-cover transition-transform duration-500 hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-black/80 backdrop-blur-sm rounded-lg p-3">
+                    <h3 className="text-lg font-bold text-white">Không Gian Bếp</h3>
+                    <p className="text-sm text-gray-200">Thiết bị hiện đại, không gian rộng rãi</p>
+                  </div>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                className="relative overflow-hidden rounded-xl shadow-2xl mt-8 md:mt-0"
+              >
+                <img
+                  src="https://aztraining.vn/wp-content/uploads/2023/07/nghe-dau-bep.jpg"
+                  alt="Team"
+                  className="w-full h-64 md:h-80 object-cover transition-transform duration-500 hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-black/80 backdrop-blur-sm rounded-lg p-3">
+                    <h3 className="text-lg font-bold text-white">Đội Ngũ Chuyên Nghiệp</h3>
+                    <p className="text-sm text-gray-200">Thợ bánh tay nghề cao, giàu kinh nghiệm</p>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
