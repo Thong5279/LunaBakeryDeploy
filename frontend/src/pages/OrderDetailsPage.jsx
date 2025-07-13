@@ -15,6 +15,11 @@ const OrderDetailsPage = () => {
     const { orderDetails: order, loading } = useSelector((state) => state.orders);
     const { reviews } = useSelector((state) => state.reviews);
 
+    // Kiểm tra xem sản phẩm có phải là nguyên liệu không
+    const isIngredient = (item) => {
+        return item.itemType === 'Ingredient' || item.category === 'ingredient' || item.type === 'ingredient';
+    };
+
     // Format currency helper
     const formatCurrency = (amount) => {
         if (amount === undefined || amount === null) return '0₫';
@@ -283,10 +288,13 @@ const OrderDetailsPage = () => {
                                     />
                                     <div className="flex-1">
                                         <h3 className="font-medium">{item.name}</h3>
-                                        <p className="text-sm text-gray-600">
-                                            {item.size && `Size: ${item.size}`}
-                                            {item.flavor && ` | Hương vị: ${item.flavor}`}
-                                        </p>
+                                        {!isIngredient(item) && (
+                                            <p className="text-sm text-gray-600">
+                                                {item.size && item.size !== "Mặc định" && `Size: ${item.size}`}
+                                                {item.size && item.size !== "Mặc định" && item.flavor && item.flavor !== "Mặc định" && " | "}
+                                                {item.flavor && item.flavor !== "Mặc định" && `Hương vị: ${item.flavor}`}
+                                            </p>
+                                        )}
                                         <p className="text-sm text-gray-600">
                                             {item.quantity} x {formatCurrency(item.price)}
                                         </p>
