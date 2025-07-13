@@ -16,9 +16,9 @@ export const Footer = () => {
       <div>
         <h3 className="text-lg font-semibold mb-2">Liên kết</h3>
         <ul className="space-y-1 text-sm">
-          <li><a href="#" className="hover:text-pink-500">Trang chủ</a></li>
+          <li><a href="/" className="hover:text-pink-500">Trang chủ</a></li>
           <li><a href="/collections/all" className="hover:text-pink-500">Sản phẩm</a></li>
-          <li><a href="#" className="hover:text-pink-500">Về chúng tôi</a></li>
+          <li><a href="/about" className="hover:text-pink-500">Về chúng tôi</a></li>
           <li><a href="/contact" className="hover:text-pink-500">Liên hệ</a></li>
         </ul>
       </div>

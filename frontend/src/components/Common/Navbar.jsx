@@ -161,11 +161,10 @@ const Navbar = () => {
           <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
             Nguyên liệu
           </Link>
-          <Link className="hover:text-pink-500 cursor-pointer">
+          <Link to={"/about"} className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi
           </Link>
-          <Link className="hover:text-pink-500 cursor-pointer">Liên hệ</Link>
-          <Link className="hover:text-pink-500 cursor-pointer">Tin tức</Link>
+          <Link to={"/contact"} className="hover:text-pink-500 cursor-pointer">Liên hệ</Link>
         </ul>
       </div>
 
