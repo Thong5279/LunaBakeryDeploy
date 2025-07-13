@@ -18,6 +18,7 @@ import bakerRecipeReducer from './slices/bakerRecipeSlice';
 import deliveryOrderReducer from './slices/deliveryOrderSlice';
 import reviewReducer from './slices/reviewSlice';
 import adminReviewReducer from './slices/adminReviewSlice';
+import wishlistReducer from './slices/wishlistSlice';
 
 const store = configureStore({
     reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
         deliveryOrders: deliveryOrderReducer,
         reviews: reviewReducer,
         adminReviews: adminReviewReducer,
+        wishlist: wishlistReducer,
     },
 });
 

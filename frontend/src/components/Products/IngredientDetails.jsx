@@ -12,6 +12,7 @@ import {
 } from "../../redux/slices/ingredientsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
 import { getProductReviews, clearReviews } from "../../redux/slices/reviewSlice";
+import WishlistButton from "../Common/WishlistButton";
 
 const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
 
@@ -226,12 +227,15 @@ const IngredientDetails = ({ ingredientId }) => {
 
                     {/* Thông tin */}
                     <div className="md:w-1/2 space-y-6">
-                        <div>
-                            <h1 className="text-3xl font-bold text-pink-600 mb-2">{selectedIngredient.name}</h1>
-                            {/* Category badge */}
-                            <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-pink-50 text-pink-700 border border-pink-200">
-                                {selectedIngredient.category}
-                            </span>
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h1 className="text-3xl font-bold text-pink-600 mb-2">{selectedIngredient.name}</h1>
+                                {/* Category badge */}
+                                <span className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-pink-50 text-pink-700 border border-pink-200">
+                                    {selectedIngredient.category}
+                                </span>
+                            </div>
+                            <WishlistButton productId={idToFetch} itemType="Ingredient" />
                         </div>
 
                         {/* SKU */}

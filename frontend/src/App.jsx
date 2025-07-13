@@ -46,6 +46,7 @@ import ZaloPayInstructions from "./pages/ZaloPayInstructions";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import WishlistPage from "./pages/WishlistPage";
 
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
@@ -103,6 +104,7 @@ const AppContent = () => {
           <Route path="my-orders" element={<MyOrdersPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
         
         {/* admin */}

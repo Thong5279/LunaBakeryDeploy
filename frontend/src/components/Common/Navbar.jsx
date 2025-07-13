@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiX } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
+import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 import CartDrawer from "../Layout/CartDrawer";
@@ -104,6 +105,12 @@ const Navbar = () => {
                 title="Tài khoản"
               />
             </Link>
+            <Link to={"/wishlist"}>
+              <FaHeart
+                className="text-xl hover:text-[#a37ba3] cursor-pointer"
+                title="Danh sách yêu thích"
+              />
+            </Link>
             <button onClick={toggleCartDrawer}>
               <FiShoppingCart className="text-xl hover:text-[#a37ba3] cursor-pointer" />
               {cartItemCount > 0 && (
@@ -160,6 +167,9 @@ const Navbar = () => {
           </Link>
           <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
             Nguyên liệu
+          </Link>
+          <Link to={"/wishlist"} className="hover:text-pink-500 cursor-pointer">
+            Yêu thích
           </Link>
           <Link to={"/about"} className="hover:text-pink-500 cursor-pointer">
             Về chúng tôi

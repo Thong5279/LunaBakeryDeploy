@@ -9,6 +9,7 @@ import { fetchProductDetails, fetchSimilarProducts, clearSelectedProduct } from 
 import { addToCart } from "../../redux/slices/cartSlice";
 import { getProductReviews, clearReviews } from '../../redux/slices/reviewSlice';
 import Rating from '../Common/Rating';
+import WishlistButton from '../Common/WishlistButton';
 
 const PREVIOUS_PATH_KEY = 'luna_bakery_previous_path';
 const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
@@ -207,7 +208,10 @@ const ProductDetails = ({ productId }) => {
 
           {/* Thông tin */}
           <div className="md:w-1/2 space-y-6">
-            <h1 className="text-3xl font-bold text-pink-600">{selectedProduct.name}</h1>
+            <div className="flex items-start justify-between">
+              <h1 className="text-3xl font-bold text-pink-600">{selectedProduct.name}</h1>
+              <WishlistButton productId={idToFetch} itemType="Product" />
+            </div>
             
             {/* Trạng thái sản phẩm */}
             {selectedProduct.status === 'inactive' && (
