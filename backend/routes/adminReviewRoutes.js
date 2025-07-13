@@ -167,7 +167,7 @@ router.put('/:id/status', protect, adminOrManager, async (req, res) => {
   try {
     const { status } = req.body;
     
-    if (!['pending', 'approved', 'rejected'].includes(status)) {
+    if (!['pending', 'approved', 'rejected', 'hidden'].includes(status)) {
       return res.status(400).json({ 
         success: false,
         message: 'Trạng thái không hợp lệ'
@@ -203,6 +203,82 @@ router.put('/:id/status', protect, adminOrManager, async (req, res) => {
     res.status(500).json({ 
       success: false,
       message: 'Lỗi server khi cập nhật trạng thái đánh giá'
+    });
+  }
+});
+
+// @desc    Ẩn review (Admin/Manager only)
+// @route   PUT /api/admin/reviews/:id/hide
+// @access  Private/Admin or Manager
+router.put('/:id/hide', protect, adminOrManager, async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    
+    if (!review) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Không tìm thấy đánh giá'
+      });
+    }
+    
+    review.status = 'hidden';
+    await review.save();
+    
+    // Populate thông tin trước khi trả về
+    await review.populate([
+      { path: 'user', select: 'name email avatar' },
+      { path: 'product', select: 'name images' },
+      { path: 'order', select: 'orderNumber totalPrice status' }
+    ]);
+    
+    res.json({
+      success: true,
+      message: 'Đã ẩn đánh giá thành công',
+      data: review
+    });
+  } catch (error) {
+    console.error('Error hiding review:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Lỗi server khi ẩn đánh giá'
+    });
+  }
+});
+
+// @desc    Hiện lại review (Admin/Manager only)
+// @route   PUT /api/admin/reviews/:id/show
+// @access  Private/Admin or Manager
+router.put('/:id/show', protect, adminOrManager, async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    
+    if (!review) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Không tìm thấy đánh giá'
+      });
+    }
+    
+    review.status = 'approved';
+    await review.save();
+    
+    // Populate thông tin trước khi trả về
+    await review.populate([
+      { path: 'user', select: 'name email avatar' },
+      { path: 'product', select: 'name images' },
+      { path: 'order', select: 'orderNumber totalPrice status' }
+    ]);
+    
+    res.json({
+      success: true,
+      message: 'Đã hiện lại đánh giá thành công',
+      data: review
+    });
+  } catch (error) {
+    console.error('Error showing review:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Lỗi server khi hiện lại đánh giá'
     });
   }
 });
@@ -277,6 +353,7 @@ router.get('/stats/overview', protect, adminOrManager, async (req, res) => {
           pendingReviews: { $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] } },
           approvedReviews: { $sum: { $cond: [{ $eq: ['$status', 'approved'] }, 1, 0] } },
           rejectedReviews: { $sum: { $cond: [{ $eq: ['$status', 'rejected'] }, 1, 0] } },
+          hiddenReviews: { $sum: { $cond: [{ $eq: ['$status', 'hidden'] }, 1, 0] } },
           productReviews: { $sum: { $cond: [{ $eq: ['$itemType', 'Product'] }, 1, 0] } },
           ingredientReviews: { $sum: { $cond: [{ $eq: ['$itemType', 'Ingredient'] }, 1, 0] } },
           rating1: { $sum: { $cond: [{ $eq: ['$rating', 1] }, 1, 0] } },
@@ -296,6 +373,7 @@ router.get('/stats/overview', protect, adminOrManager, async (req, res) => {
         pendingReviews: 0,
         approvedReviews: 0,
         rejectedReviews: 0,
+        hiddenReviews: 0,
         productReviews: 0,
         ingredientReviews: 0,
         rating1: 0,

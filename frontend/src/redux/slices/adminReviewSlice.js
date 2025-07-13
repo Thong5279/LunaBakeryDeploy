@@ -107,6 +107,72 @@ export const updateReviewStatus = createAsyncThunk(
   }
 );
 
+// Thunk action để ẩn review
+export const hideReview = createAsyncThunk(
+  'adminReviews/hideReview',
+  async (reviewId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      if (!token) {
+        throw new Error('Vui lòng đăng nhập');
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/reviews/${reviewId}/hide`,
+        {},
+        config
+      );
+
+      return data.data;
+    } catch (error) {
+      console.error('Error hiding review:', error);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Lỗi khi ẩn đánh giá'
+      );
+    }
+  }
+);
+
+// Thunk action để hiện lại review
+export const showReview = createAsyncThunk(
+  'adminReviews/showReview',
+  async (reviewId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      if (!token) {
+        throw new Error('Vui lòng đăng nhập');
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/reviews/${reviewId}/show`,
+        {},
+        config
+      );
+
+      return data.data;
+    } catch (error) {
+      console.error('Error showing review:', error);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Lỗi khi hiện lại đánh giá'
+      );
+    }
+  }
+);
+
 // Thunk action để xóa review
 export const deleteReview = createAsyncThunk(
   'adminReviews/deleteReview',
@@ -291,6 +357,52 @@ const adminReviewSlice = createSlice({
         state.successMessage = 'Cập nhật trạng thái đánh giá thành công';
       })
       .addCase(updateReviewStatus.rejected, (state, action) => {
+        state.actionLoading = false;
+        state.actionError = action.payload;
+      })
+
+      // Hide review
+      .addCase(hideReview.pending, (state) => {
+        state.actionLoading = true;
+        state.actionError = null;
+      })
+      .addCase(hideReview.fulfilled, (state, action) => {
+        state.actionLoading = false;
+        // Update review in the list
+        const index = state.reviews.findIndex(review => review._id === action.payload._id);
+        if (index !== -1) {
+          state.reviews[index] = action.payload;
+        }
+        // Update current review if it's the same
+        if (state.currentReview && state.currentReview._id === action.payload._id) {
+          state.currentReview = action.payload;
+        }
+        state.successMessage = 'Đã ẩn đánh giá thành công';
+      })
+      .addCase(hideReview.rejected, (state, action) => {
+        state.actionLoading = false;
+        state.actionError = action.payload;
+      })
+
+      // Show review
+      .addCase(showReview.pending, (state) => {
+        state.actionLoading = true;
+        state.actionError = null;
+      })
+      .addCase(showReview.fulfilled, (state, action) => {
+        state.actionLoading = false;
+        // Update review in the list
+        const index = state.reviews.findIndex(review => review._id === action.payload._id);
+        if (index !== -1) {
+          state.reviews[index] = action.payload;
+        }
+        // Update current review if it's the same
+        if (state.currentReview && state.currentReview._id === action.payload._id) {
+          state.currentReview = action.payload;
+        }
+        state.successMessage = 'Đã hiện lại đánh giá thành công';
+      })
+      .addCase(showReview.rejected, (state, action) => {
         state.actionLoading = false;
         state.actionError = action.payload;
       })

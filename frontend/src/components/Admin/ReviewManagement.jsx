@@ -26,6 +26,8 @@ import {
   fetchAdminReviews,
   updateReviewStatus,
   deleteReview,
+  hideReview,
+  showReview,
   fetchReviewStats,
   clearError,
   clearSuccessMessage,
@@ -122,6 +124,14 @@ const ReviewManagement = () => {
     dispatch(updateReviewStatus({ reviewId, status: newStatus }));
   };
 
+  const handleHideReview = (reviewId) => {
+    dispatch(hideReview(reviewId));
+  };
+
+  const handleShowReview = (reviewId) => {
+    dispatch(showReview(reviewId));
+  };
+
   const handleViewDetail = (review) => {
     setSelectedReview(review);
     setShowDetailModal(true);
@@ -135,6 +145,8 @@ const ReviewManagement = () => {
         return 'text-yellow-600 bg-yellow-100';
       case 'rejected':
         return 'text-red-600 bg-red-100';
+      case 'hidden':
+        return 'text-gray-600 bg-gray-100';
       default:
         return 'text-gray-600 bg-gray-100';
     }
@@ -148,6 +160,8 @@ const ReviewManagement = () => {
         return <FaClock className="text-yellow-600" />;
       case 'rejected':
         return <FaBan className="text-red-600" />;
+      case 'hidden':
+        return <FaEye className="text-gray-600" />;
       default:
         return <FaClock className="text-gray-600" />;
     }
@@ -262,6 +276,15 @@ const ReviewManagement = () => {
               <FaCheckCircle className="text-green-500 text-2xl" />
             </div>
           </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Đã ẩn</p>
+                <p className="text-2xl font-bold text-gray-600">{stats.hiddenReviews || 0}</p>
+              </div>
+              <FaEye className="text-gray-500 text-2xl" />
+            </div>
+          </div>
         </div>
       )}
 
@@ -296,6 +319,7 @@ const ReviewManagement = () => {
                 <option value="pending">Chờ duyệt</option>
                 <option value="approved">Đã duyệt</option>
                 <option value="rejected">Từ chối</option>
+                <option value="hidden">Đã ẩn</option>
               </select>
             </div>
             <div>
@@ -462,6 +486,7 @@ const ReviewManagement = () => {
                         {review.status === 'approved' && 'Đã duyệt'}
                         {review.status === 'pending' && 'Chờ duyệt'}
                         {review.status === 'rejected' && 'Từ chối'}
+                        {review.status === 'hidden' && 'Đã ẩn'}
                       </span>
                     </span>
                   </td>
@@ -496,6 +521,25 @@ const ReviewManagement = () => {
                             <FaTimes />
                           </button>
                         </>
+                      )}
+                      {review.status !== 'hidden' ? (
+                        <button
+                          onClick={() => handleHideReview(review._id)}
+                          className="text-gray-600 hover:text-gray-900"
+                          title="Ẩn đánh giá"
+                          disabled={actionLoading}
+                        >
+                          <FaEye />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleShowReview(review._id)}
+                          className="text-blue-600 hover:text-blue-900"
+                          title="Hiện lại đánh giá"
+                          disabled={actionLoading}
+                        >
+                          <FaEye />
+                        </button>
                       )}
                       <button
                         onClick={() => handleDeleteReview(review)}
@@ -583,6 +627,7 @@ const ReviewManagement = () => {
                     {selectedReview.status === 'approved' && 'Đã duyệt'}
                     {selectedReview.status === 'pending' && 'Chờ duyệt'}
                     {selectedReview.status === 'rejected' && 'Từ chối'}
+                    {selectedReview.status === 'hidden' && 'Đã ẩn'}
                   </span>
                 </div>
               </div>
@@ -614,6 +659,31 @@ const ReviewManagement = () => {
                     <span>Từ chối</span>
                   </button>
                 </>
+              )}
+              {selectedReview.status !== 'hidden' ? (
+                <button
+                  onClick={() => {
+                    handleHideReview(selectedReview._id);
+                    setShowDetailModal(false);
+                  }}
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+                  disabled={actionLoading}
+                >
+                  <FaEye />
+                  <span>Ẩn đánh giá</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleShowReview(selectedReview._id);
+                    setShowDetailModal(false);
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
+                  disabled={actionLoading}
+                >
+                  <FaEye />
+                  <span>Hiện lại</span>
+                </button>
               )}
               <button
                 onClick={() => setShowDetailModal(false)}
