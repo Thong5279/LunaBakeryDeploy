@@ -236,6 +236,26 @@ const ProductDetails = ({ productId }) => {
               )}
             </div>
 
+            {/* Thông báo về thời gian giao hàng */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0">
+                  <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-blue-800 mb-1">
+                    ⏰ Thông tin giao hàng
+                  </h4>
+                  <p className="text-sm text-blue-700 leading-relaxed">
+                    Bánh không có sẵn để bán. Quý khách đặt bánh mất khoảng <strong>2 ngày</strong> để giao tới cho quý khách. 
+                    Tùy vào loại bánh sẽ giao muộn hơn. Ngoài ra quý khách có thể đặt số lượng lớn.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <p className="text-gray-600">{selectedProduct.description}</p>
 
             <div>
