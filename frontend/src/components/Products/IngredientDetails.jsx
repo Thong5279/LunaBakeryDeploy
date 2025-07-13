@@ -13,6 +13,7 @@ import {
 import { addToCart } from "../../redux/slices/cartSlice";
 import { getProductReviews, clearReviews } from "../../redux/slices/reviewSlice";
 import WishlistButton from "../Common/WishlistButton";
+import Rating from "../Common/Rating";
 
 const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
 
@@ -377,6 +378,17 @@ const IngredientDetails = ({ ingredientId }) => {
                                                     {new Date(review.createdAt).toLocaleDateString('vi-VN')}
                                                 </span>
                                             </div>
+                                            
+                                            {/* Hiển thị số sao */}
+                                            {review.rating && (
+                                                <div className="mt-2">
+                                                    <Rating 
+                                                        value={review.rating} 
+                                                        size="small"
+                                                        color="#fbbf24"
+                                                    />
+                                                </div>
+                                            )}
                                             
                                             {review.comment && (
                                                 <p className="mt-3 text-gray-700">
