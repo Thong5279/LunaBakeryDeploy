@@ -28,6 +28,13 @@ const ProductManagement = () => {
     (state) => state.adminProducts
   );
 
+  // State cho tìm kiếm, lọc và sắp xếp
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -61,6 +68,66 @@ const ProductManagement = () => {
       discountPrice: 0
     }));
   };
+
+  // Lọc và sắp xếp sản phẩm
+  const filteredAndSortedProducts = React.useMemo(() => {
+    if (!products) return [];
+
+    let filtered = products.filter(product => {
+      // Lọc theo từ khóa tìm kiếm
+      const matchesSearch = searchTerm === "" || 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Lọc theo danh mục
+      const matchesCategory = categoryFilter === "" || product.category === categoryFilter;
+
+      // Lọc theo trạng thái
+      const matchesStatus = statusFilter === "" || product.status === statusFilter;
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    // Sắp xếp
+    filtered.sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortBy) {
+        case "name":
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case "price":
+          aValue = a.price;
+          bValue = b.price;
+          break;
+        case "sku":
+          aValue = a.sku.toLowerCase();
+          bValue = b.sku.toLowerCase();
+          break;
+        case "category":
+          aValue = a.category.toLowerCase();
+          bValue = b.category.toLowerCase();
+          break;
+        case "status":
+          aValue = a.status.toLowerCase();
+          bValue = b.status.toLowerCase();
+          break;
+        default:
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+      }
+
+      if (sortOrder === "asc") {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+
+    return filtered;
+  }, [products, searchTerm, categoryFilter, statusFilter, sortBy, sortOrder]);
 
   useEffect(() => {
     dispatch(fetchAdminProducts());
@@ -163,6 +230,15 @@ const ProductManagement = () => {
   // Tính preview giá cho các size đã chọn
   const sizePricingPreview = calculateSizePricing(newProduct.price, newProduct.sizes);
 
+  // Reset filters
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setCategoryFilter("");
+    setStatusFilter("");
+    setSortBy("name");
+    setSortOrder("asc");
+  };
+
   if(loading) {
     return <p>Đang tải dữ liệu...</p>
   }
@@ -202,6 +278,104 @@ const ProductManagement = () => {
           + Thêm sản phẩm
         </button>
       </div>
+
+      {/* Filters and Search Section */}
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {/* Search */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tìm kiếm
+            </label>
+            <input
+              type="text"
+              placeholder="Tên, SKU, mô tả..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Category Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Danh mục
+            </label>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Tất cả danh mục</option>
+              {PRODUCT_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Trạng thái
+            </label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Tất cả trạng thái</option>
+              {PRODUCT_STATUS.map((status) => (
+                <option key={status.value} value={status.value}>
+                  {status.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sort */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Sắp xếp theo
+            </label>
+            <select
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(e) => {
+                const [field, order] = e.target.value.split('-');
+                setSortBy(field);
+                setSortOrder(order);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="name-asc">Tên A-Z</option>
+              <option value="name-desc">Tên Z-A</option>
+              <option value="price-asc">Giá thấp-cao</option>
+              <option value="price-desc">Giá cao-thấp</option>
+              <option value="sku-asc">SKU A-Z</option>
+              <option value="sku-desc">SKU Z-A</option>
+              <option value="category-asc">Danh mục A-Z</option>
+              <option value="category-desc">Danh mục Z-A</option>
+              <option value="status-asc">Trạng thái A-Z</option>
+              <option value="status-desc">Trạng thái Z-A</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Results Summary and Reset */}
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-600">
+            Hiển thị {filteredAndSortedProducts.length} / {products?.length || 0} sản phẩm
+          </div>
+          <button
+            onClick={handleResetFilters}
+            className="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
+          >
+            Đặt lại bộ lọc
+          </button>
+        </div>
+      </div>
+
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -216,6 +390,9 @@ const ProductManagement = () => {
                 Mã hàng
               </th>
               <th scope="col" className="px-6 py-3">
+                Danh mục
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Trạng thái
               </th>
               <th scope="col" className="px-6 py-3">
@@ -224,11 +401,11 @@ const ProductManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {products && products.length > 0 ? (
-              products.map((product) => (
+            {filteredAndSortedProducts && filteredAndSortedProducts.length > 0 ? (
+              filteredAndSortedProducts.map((product) => (
                 <tr
                   key={product._id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-50"
                 >
                   <td className="px-6 py-4 font-semibold text-gray-800 whitespace-nowrap">
                     {product.name}
@@ -237,6 +414,11 @@ const ProductManagement = () => {
                     {new Intl.NumberFormat("vi-VN").format(product.price)} vnđ
                   </td>
                   <td className="px-6 py-4">{product.sku}</td>
+                  <td className="px-6 py-4">
+                    <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                      {product.category}
+                    </span>
+                  </td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 text-xs rounded-full ${
                       product.status === 'active' 
@@ -263,9 +445,14 @@ const ProductManagement = () => {
                 </tr>
               ))
             ) : (
-              <tr colSpan={5} className="text-center py-10">
-                <td colSpan={5} className="text-center py-10">
-                  <p className="text-gray-500">Không có sản phẩm nào</p>
+              <tr colSpan={6} className="text-center py-10">
+                <td colSpan={6} className="text-center py-10">
+                  <p className="text-gray-500">
+                    {searchTerm || categoryFilter || statusFilter 
+                      ? "Không tìm thấy sản phẩm nào phù hợp với bộ lọc"
+                      : "Không có sản phẩm nào"
+                    }
+                  </p>
                 </td>
               </tr>
             )}
