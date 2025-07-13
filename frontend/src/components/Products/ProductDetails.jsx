@@ -71,6 +71,8 @@ const ProductDetails = ({ productId }) => {
           productId: idToFetch,
           itemType: 'Product'
       }));
+      // Fetch sản phẩm tương tự
+      dispatch(fetchSimilarProducts({ id: idToFetch }));
     }
 
     // Cleanup when component unmounts

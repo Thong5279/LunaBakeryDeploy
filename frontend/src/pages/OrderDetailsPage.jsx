@@ -10,7 +10,7 @@ import Rating from '../components/Common/Rating';
 
 const OrderDetailsPage = () => {
     const { id } = useParams();
-    const [socket, setSocket] = useState(null);
+    const [_socket, setSocket] = useState(null);
     const dispatch = useDispatch();
     const { orderDetails: order, loading } = useSelector((state) => state.orders);
     const { reviews } = useSelector((state) => state.reviews);
@@ -72,12 +72,22 @@ const OrderDetailsPage = () => {
     // Kiểm tra xem sản phẩm đã được đánh giá chưa
     const isProductReviewed = (productId, itemType = 'Product') => {
         if (!reviews || !Array.isArray(reviews)) return false;
-        return reviews.some(review => 
-            review && 
-            review.product && 
-            review.product._id === productId &&
-            review.itemType === itemType
-        );
+        
+        return reviews.some(review => {
+            if (!review) return false;
+            
+            // Kiểm tra theo product._id nếu có populate
+            if (review.product && review.product._id) {
+                return review.product._id === productId && review.itemType === itemType;
+            }
+            
+            // Kiểm tra theo product (ObjectId string) nếu không có populate
+            if (review.product) {
+                return review.product.toString() === productId && review.itemType === itemType;
+            }
+            
+            return false;
+        });
     };
 
     const getStatusColor = (status) => {
@@ -311,13 +321,17 @@ const OrderDetailsPage = () => {
                         <div className="space-y-4">
                             {order.orderItems?.map((item) => {
                                 const itemType = item.itemType || 'Product';
-                                return !isProductReviewed(item.productId, itemType) && (
+                                const isReviewed = isProductReviewed(item.productId, itemType);
+                                
+                                // Luôn hiển thị ReviewForm, để nó tự quyết định hiển thị form hay thông báo đã đánh giá
+                                return (
                                     <ReviewForm
-                                        key={item.productId}
+                                        key={`${item.productId}-${itemType}`}
                                         orderId={id}
                                         productId={item.productId}
                                         productName={item.name}
                                         itemType={itemType}
+                                        isAlreadyReviewed={isReviewed}
                                         onReviewSubmitted={() => {
                                             // Refresh đánh giá
                                             dispatch(getOrderReviews(id));
@@ -334,22 +348,25 @@ const OrderDetailsPage = () => {
                         {/* Hiển thị các đánh giá đã gửi */}
                         {Array.isArray(reviews) && reviews.length > 0 && (
                             <div className="mt-8">
-                                <h3 className="text-xl font-semibold mb-4">Đánh giá của bạn</h3>
-                                <div className="space-y-4">
+                                <h3 className="text-xl font-semibold mb-4">Tóm tắt đánh giá của bạn</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {reviews.map((review) => (
                                         review && review.product && (
                                             <div key={review._id} className="bg-gray-50 p-4 rounded-lg">
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 mb-2">
                                                     <span className="font-medium">{review.product.name}</span>
                                                     <span className="text-sm text-gray-500">
                                                         ({review.itemType === 'Product' ? 'Sản phẩm' : 'Nguyên liệu'})
                                                     </span>
+                                                </div>
+                                                <div className="flex items-center gap-2 mb-2">
                                                     <Rating value={review.rating} />
+                                                    <span className="text-sm text-gray-600">({review.rating} sao)</span>
                                                 </div>
                                                 {review.comment && (
-                                                    <p className="mt-2 text-gray-600">{review.comment}</p>
+                                                    <p className="text-gray-600 text-sm">{review.comment}</p>
                                                 )}
-                                                <p className="text-sm text-gray-500 mt-2">
+                                                <p className="text-xs text-gray-500 mt-2">
                                                     {new Date(review.createdAt).toLocaleDateString('vi-VN')}
                                                 </p>
                                             </div>

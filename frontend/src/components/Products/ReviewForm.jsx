@@ -4,13 +4,35 @@ import { createReview, resetReviewState, getProductReviews } from '../../redux/s
 import Rating from '../Common/Rating';
 import { toast } from 'sonner';
 
-const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onReviewSubmitted }) => {
+const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onReviewSubmitted, isAlreadyReviewed = false }) => {
     const dispatch = useDispatch();
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
-    const { loading, error, success, lastCreatedReview } = useSelector((state) => state.reviews);
+    const { loading, error, success, lastCreatedReview, reviews } = useSelector((state) => state.reviews);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    // Kiểm tra xem đã đánh giá chưa dựa trên reviews trong Redux store
+    const checkIfReviewed = () => {
+        if (!reviews || !Array.isArray(reviews)) return false;
+        
+        return reviews.some(review => {
+            if (!review) return false;
+            
+            // Kiểm tra theo product._id nếu có populate
+            if (review.product && review.product._id) {
+                return review.product._id === productId && review.itemType === itemType;
+            }
+            
+            // Kiểm tra theo product (ObjectId string) nếu không có populate
+            if (review.product) {
+                return review.product.toString() === productId && review.itemType === itemType;
+            }
+            
+            return false;
+        });
+    };
+
+    const isReviewed = isAlreadyReviewed || checkIfReviewed();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,7 +55,6 @@ const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onR
 
             // Nếu tạo review thành công
             if (resultAction) {
-                setIsSubmitted(true);
                 // Refresh đánh giá
                 dispatch(getProductReviews({ 
                     productId,
@@ -64,7 +85,23 @@ const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onR
         }
     }, [success, error, dispatch]);
 
-    if (isSubmitted) {
+    // Nếu đã đánh giá, hiển thị thông báo thay vì form
+    if (isReviewed) {
+        // Tìm review đã tạo để hiển thị
+        const existingReview = reviews?.find(review => {
+            if (!review) return false;
+            
+            if (review.product && review.product._id) {
+                return review.product._id === productId && review.itemType === itemType;
+            }
+            
+            if (review.product) {
+                return review.product.toString() === productId && review.itemType === itemType;
+            }
+            
+            return false;
+        });
+
         return (
             <div className="bg-green-50 p-4 rounded-lg shadow mb-4">
                 <div className="flex items-center">
@@ -72,20 +109,23 @@ const ReviewForm = ({ orderId, productId, productName, itemType = 'Product', onR
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <p className="text-green-700">
-                        Cảm ơn bạn đã đánh giá {itemType === 'Product' ? 'sản phẩm' : 'nguyên liệu'} {productName}
+                        Bạn đã đánh giá {itemType === 'Product' ? 'sản phẩm' : 'nguyên liệu'} {productName}
                     </p>
                 </div>
-                {lastCreatedReview && (
+                {existingReview && (
                     <div className="mt-4 bg-white p-4 rounded-lg">
                         <div className="flex items-center">
-                            <Rating value={lastCreatedReview.rating} readOnly />
+                            <Rating value={existingReview.rating} readOnly />
                             <span className="ml-2 text-gray-600">
-                                ({lastCreatedReview.rating} sao)
+                                ({existingReview.rating} sao)
                             </span>
                         </div>
-                        {lastCreatedReview.comment && (
-                            <p className="mt-2 text-gray-700">{lastCreatedReview.comment}</p>
+                        {existingReview.comment && (
+                            <p className="mt-2 text-gray-700">{existingReview.comment}</p>
                         )}
+                        <p className="text-sm text-gray-500 mt-2">
+                            {new Date(existingReview.createdAt).toLocaleDateString('vi-VN')}
+                        </p>
                     </div>
                 )}
             </div>
