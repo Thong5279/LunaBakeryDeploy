@@ -35,6 +35,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const adminReviewRoutes = require('./routes/adminReviewRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
+const flashSaleRoutes = require('./routes/flashSaleRoutes');
 
 const app = express();
 const httpServer = createServer(app);
@@ -145,6 +146,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin/reviews', adminReviewRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/flash-sales', flashSaleRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

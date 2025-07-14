@@ -536,6 +536,18 @@ router.put("/:id/add-size-pricing", protect, admin, async (req, res) => {
   }
 });
 
+// API lấy nhiều sản phẩm theo mảng id
+router.post('/batch', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) return res.status(400).json({ message: 'Thiếu ids' });
+    const products = await Product.find({ _id: { $in: ids } }, '_id price name');
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi server' });
+  }
+});
+
 // @desc    Lấy sản phẩm có đánh giá cao nhất
 // @route   GET /api/products/top-rated
 // @access  Public

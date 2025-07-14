@@ -7,6 +7,7 @@ import FeaturedCakes from "../components/Products/FeaturedCakes";
 import FeaturedColection from "../components/Products/featuredCollection";
 import QuickNavigation from "../components/Common/QuickNavigation";
 import Chatbot from "../components/Common/Chatbot";
+import FlashSaleBanner from "../components/Common/FlashSaleBanner";
 import { useDispatch } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 import axios from "axios";
@@ -45,6 +46,9 @@ const Home = () => {
             <section id="hero">
                 <Hero />
             </section>
+
+            {/* Flash Sale Banner */}
+            <FlashSaleBanner />
 
             {/* Categories Section */}
             <section id="categories">

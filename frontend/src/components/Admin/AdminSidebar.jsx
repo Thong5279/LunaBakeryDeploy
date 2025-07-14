@@ -10,6 +10,7 @@ import {
   FaChartBar,
   FaWarehouse,
   FaStar,
+  FaFire,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -74,6 +75,12 @@ const AdminSidebar = () => {
       icon: FaStar, 
       label: "Đánh giá",
       iconColor: "text-yellow-500"
+    },
+    { 
+      path: "/admin/flash-sales", 
+      icon: FaFire, 
+      label: "Flash Sale",
+      iconColor: "text-red-500"
     },
     { 
       path: "/", 

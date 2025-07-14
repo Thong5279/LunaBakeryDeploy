@@ -19,6 +19,7 @@ import deliveryOrderReducer from './slices/deliveryOrderSlice';
 import reviewReducer from './slices/reviewSlice';
 import adminReviewReducer from './slices/adminReviewSlice';
 import wishlistReducer from './slices/wishlistSlice';
+import flashSaleReducer from './slices/flashSaleSlice';
 
 const store = configureStore({
     reducer: {
@@ -42,6 +43,7 @@ const store = configureStore({
         reviews: reviewReducer,
         adminReviews: adminReviewReducer,
         wishlist: wishlistReducer,
+        flashSale: flashSaleReducer,
     },
 });
 

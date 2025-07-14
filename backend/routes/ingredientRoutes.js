@@ -170,4 +170,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// API lấy nhiều nguyên liệu theo mảng id
+router.post('/batch', async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) return res.status(400).json({ message: 'Thiếu ids' });
+    const ingredients = await Ingredient.find({ _id: { $in: ids } }, '_id price name');
+    res.json(ingredients);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi server' });
+  }
+});
+
 module.exports = router; 
