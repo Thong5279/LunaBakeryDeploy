@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { FaFire, FaClock, FaTag, FaChevronLeft, FaChevronRight, FaArrowLeft } from 'react-icons/fa';
+import { FaFire, FaClock, FaTag, FaChevronLeft, FaChevronRight, FaArrowLeft, FaStar, FaMoon } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveFlashSales } from '../redux/slices/flashSaleSlice';
 
@@ -56,6 +56,23 @@ const FlashSalePage = () => {
     }
     return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=';
   };
+
+  // Tạo các ngôi sao và mặt trăng rơi
+  const createFallingElements = () => {
+    const elements = [];
+    for (let i = 0; i < 20; i++) {
+      elements.push({
+        id: i,
+        type: Math.random() > 0.5 ? 'star' : 'moon',
+        left: Math.random() * 100,
+        animationDelay: Math.random() * 10,
+        animationDuration: 3 + Math.random() * 4
+      });
+    }
+    return elements;
+  };
+
+  const fallingElements = createFallingElements();
 
   // Tạo danh sách tất cả sản phẩm flash sale
   const getAllFlashSaleItems = () => {
@@ -139,9 +156,40 @@ const FlashSalePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 relative overflow-hidden">
+      {/* Ngôi sao và mặt trăng rơi */}
+      {fallingElements.map((element) => (
+        <motion.div
+          key={element.id}
+          className={`absolute z-1 ${
+            element.type === 'star' ? 'text-yellow-400/70' : 'text-pink-300/70'
+          }`}
+          style={{
+            left: `${element.left}%`,
+            top: '-20px',
+            fontSize: element.type === 'star' ? '1.5rem' : '1.2rem'
+          }}
+          animate={{
+            y: ['0vh', '100vh'],
+            rotate: element.type === 'star' ? [0, 360] : [0, -360],
+            opacity: [0, 1, 1, 0]
+          }}
+          transition={{
+            duration: element.animationDuration,
+            delay: element.animationDelay,
+            repeat: Infinity,
+            ease: 'linear'
+          }}
+        >
+          {element.type === 'star' ? <FaStar /> : <FaMoon />}
+        </motion.div>
+      ))}
+
+      {/* Overlay sparkle effect */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
+
       {/* Header */}
-      <div className="bg-white shadow-md sticky top-0 z-40">
+      <div className="bg-white shadow-md sticky top-0 z-40 relative">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
@@ -169,7 +217,7 @@ const FlashSalePage = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Stats */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
