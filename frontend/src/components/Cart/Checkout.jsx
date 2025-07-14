@@ -52,8 +52,9 @@ const Checkout = () => {
         ...prev,
         firstname: firstname || "",
         lastname: lastname || "",
-        phonenumber: user.phonenumber || "",
+        phonenumber: user.phone || "",
         email: user.email || "",
+        address: user.address || "",
         city: "Cần Thơ", // Luôn cố định
       }));
     }
@@ -253,7 +254,7 @@ const Checkout = () => {
                     <div className="flex items-start gap-2">
                       <span className="text-green-500 text-sm flex-shrink-0 mt-0.5">✓</span>
                       <p className="text-xs sm:text-sm text-green-700 leading-relaxed">
-                        Thông tin đã được tự động điền từ hồ sơ của bạn. Bạn có thể chỉnh sửa nếu cần.
+                        Thông tin đã được tự động điền từ hồ sơ của bạn (tên, email, số điện thoại, địa chỉ). Bạn có thể chỉnh sửa nếu cần.
                       </p>
                     </div>
                   </div>
