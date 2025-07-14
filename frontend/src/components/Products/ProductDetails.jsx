@@ -432,13 +432,51 @@ const ProductDetails = ({ productId }) => {
         {selectedProduct.category && (
           <div className="mt-12">
             <h2 className="text-2xl font-semibold mb-6 text-center">🌟 Có thể bạn sẽ thích 🌟</h2>
-            <ProductGrid 
-              products={similarProducts} 
-              loading={loading} 
-              error={error} 
-              category={selectedProduct.category} 
-              currentProductId={idToFetch} 
-            />
+            <div className="-mx-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 px-2">
+                {(similarProducts || []).slice(0, 8).map((product, idx) => (
+                  <div key={product._id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-pink-300 flex flex-col items-center max-w-xs mx-auto">
+                    <div className="w-full aspect-square mb-4 overflow-hidden rounded-xl">
+                      <img
+                        src={product.images && product.images.length > 0 && product.images[0]?.url ? product.images[0].url : 'https://via.placeholder.com/500x500?text=No+Image'}
+                        alt={product.name}
+                        className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-110"
+                      />
+                    </div>
+                    <h3 className="text-lg mb-2 font-semibold text-center line-clamp-2 text-gray-900" title={product.name}>
+                      {product.name}
+                    </h3>
+                    {product.description && (
+                      <p className="text-xs text-gray-600 mb-3 text-center line-clamp-2">
+                        {product.description.length > 80 ? product.description.substring(0, 80) + '...' : product.description}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-center gap-3 mb-2">
+                      {product.category && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-pink-500">{product.category}</span>
+                        </div>
+                      )}
+                      {product.rating && (
+                        <div className="flex items-center gap-1">
+                          <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118l-3.388-2.46c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+                          <span className="text-xs text-gray-600">{product.rating.toFixed(1)}</span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="font-bold text-lg text-center text-pink-500 mb-1">
+                      {product.price ? product.price.toLocaleString('vi-VN') + ' ₫' : ''}
+                    </p>
+                    {product.discountPrice && product.discountPrice < product.price && (
+                      <p className="text-xs text-gray-400 text-center line-through mb-1">
+                        {product.price.toLocaleString('vi-VN')} ₫
+                      </p>
+                    )}
+                    <a href={`/product/${product._id}`} className="mt-auto w-full block text-center bg-pink-500 text-white py-2 rounded-full font-semibold hover:bg-pink-600 transition-colors text-sm mt-4">Xem chi tiết</a>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
