@@ -212,7 +212,7 @@ const FlashSaleBanner = () => {
                   y: -5,
                   boxShadow: '0 20px 40px rgba(236, 72, 153, 0.3)'
                 }}
-                className="bg-white rounded-3xl p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1"
+                className="bg-white rounded-3xl p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1 min-w-[220px] md:min-w-[240px] lg:min-w-[260px]"
                 onClick={() => navigate(item.type === 'product' ? `/product/${item.productId._id}` : `/ingredient/${item.ingredientId._id}`)}
               >
                 <div className="relative mb-4">
@@ -241,7 +241,7 @@ const FlashSaleBanner = () => {
                   </motion.div>
                 </div>
                 
-                <h3 className="font-bold text-gray-900 text-sm md:text-base text-center line-clamp-2 mb-3 group-hover:text-pink-600 transition-colors duration-300">
+                <h3 className="font-bold text-gray-900 text-sm md:text-base text-center line-clamp-2 mb-3 group-hover:text-pink-600 transition-colors duration-300 px-2">
                   {item.type === 'product' ? item.productId.name : item.ingredientId.name}
                 </h3>
                 
