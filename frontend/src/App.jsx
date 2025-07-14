@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/slices/authSlice";
+import { fetchActiveFlashSales } from "./redux/slices/flashSaleSlice";
 import UserLayout from "./components/Layout/UserLayout";
 import Home from "./pages/Home";
 import { Toaster } from "sonner";
@@ -73,6 +74,9 @@ const AppContent = () => {
         localStorage.removeItem('userToken');
       }
     }
+
+    // Fetch active flash sales khi app khởi động
+    dispatch(fetchActiveFlashSales());
   }, [dispatch]);
 
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { FaShoppingCart, FaArrowLeft } from "react-icons/fa";
+import { FaShoppingCart, FaArrowLeft, FaFire } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import { addToCart } from "../../redux/slices/cartSlice";
 import { getProductReviews, clearReviews } from "../../redux/slices/reviewSlice";
 import WishlistButton from "../Common/WishlistButton";
 import Rating from "../Common/Rating";
+import { useIngredientFlashSalePrice, formatPrice } from "../../utils/flashSaleUtils";
 
 const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
 
@@ -31,10 +32,8 @@ const IngredientDetails = ({ ingredientId }) => {
 
     const idToFetch = ingredientId || routeID;
 
-    // Format price function
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat("vi-VN").format(price) + " ₫";
-    };
+    // Flash sale price calculation
+    const flashSalePrice = useIngredientFlashSalePrice(selectedIngredient);
 
     // Get stock status with styling
     const getStockStatus = (quantity) => {
@@ -189,7 +188,7 @@ const IngredientDetails = ({ ingredientId }) => {
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Hình ảnh */}
                     <div className="md:w-1/2 space-y-4">
-                        <div className="overflow-hidden rounded-lg shadow-lg group">
+                        <div className="overflow-hidden rounded-lg shadow-lg group relative">
                             <img
                                 src={mainImage || DEFAULT_IMAGE}
                                 alt={selectedIngredient.name}
@@ -198,6 +197,14 @@ const IngredientDetails = ({ ingredientId }) => {
                                     e.target.src = DEFAULT_IMAGE;
                                 }}
                             />
+                            
+                            {/* Flash Sale Badge */}
+                            {flashSalePrice.isFlashSale && (
+                              <div className="absolute top-3 left-3 bg-gradient-to-r from-pink-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-medium z-10 flex items-center gap-1 animate-pulse">
+                                <FaFire className="text-sm" />
+                                -{flashSalePrice.discountPercent}%
+                              </div>
+                            )}
                         </div>
                         <div className="flex gap-3 overflow-x-auto">
                             {selectedIngredient.images && selectedIngredient.images.length > 0 ? (
@@ -253,7 +260,19 @@ const IngredientDetails = ({ ingredientId }) => {
 
                         {/* Hiển thị giá */}
                         <div className="space-y-1">
-                            {selectedIngredient.discountPrice > 0 && selectedIngredient.discountPrice < selectedIngredient.price ? (
+                            {flashSalePrice.isFlashSale ? (
+                                <>
+                                    <p className="text-3xl text-red-600 font-bold">
+                                        {formatPrice(flashSalePrice.displayPrice)}
+                                    </p>
+                                    <p className="text-xl text-gray-500 line-through">
+                                        {formatPrice(flashSalePrice.originalPrice)}
+                                    </p>
+                                    <p className="text-sm text-red-500 font-medium">
+                                        ⚡ Flash Sale
+                                    </p>
+                                </>
+                            ) : selectedIngredient.discountPrice > 0 && selectedIngredient.discountPrice < selectedIngredient.price ? (
                                 <>
                                     <p className="text-3xl text-pink-500 font-bold">
                                         {formatPrice(selectedIngredient.discountPrice)}

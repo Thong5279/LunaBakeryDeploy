@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { FaShoppingCart, FaArrowLeft, FaStar, FaHeart, FaBirthdayCake } from "react-icons/fa";
+import { FaShoppingCart, FaArrowLeft, FaStar, FaHeart, FaBirthdayCake, FaFire } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { addToCart } from "../../redux/slices/cartSlice";
 import { getProductReviews, clearReviews } from '../../redux/slices/reviewSlice';
 import Rating from '../Common/Rating';
 import WishlistButton from '../Common/WishlistButton';
+import { useProductFlashSalePrice, formatPrice, getTimeRemaining } from "../../utils/flashSaleUtils";
 
 const PREVIOUS_PATH_KEY = 'luna_bakery_previous_path';
 const DEFAULT_IMAGE = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
@@ -31,6 +32,30 @@ const ProductDetails = ({ productId }) => {
 
 
   const idToFetch = productId || routeID;
+  const flashSalePrice = useProductFlashSalePrice(selectedProduct, selectedSize);
+  
+  // Tính toán giá hiển thị với size
+  const getCurrentPrice = () => {
+    if (!selectedProduct) return 0;
+    
+    // Nếu có flash sale, ưu tiên giá flash sale
+    if (flashSalePrice.isFlashSale) {
+      return flashSalePrice.displayPrice;
+    }
+    
+    // Tính giá theo size
+    if (selectedProduct.sizePricing && selectedProduct.sizePricing.length > 0 && selectedSize) {
+      const sizePrice = selectedProduct.sizePricing.find(sp => sp.size === selectedSize);
+      if (sizePrice) {
+        return sizePrice.discountPrice || sizePrice.price;
+      }
+    }
+    
+    // Fallback về giá thường
+    return selectedProduct.discountPrice || selectedProduct.price;
+  };
+  
+  const currentPrice = getCurrentPrice();
 
   // Tạo các floating elements cho background
   const createFloatingElements = () => {
@@ -284,23 +309,57 @@ const ProductDetails = ({ productId }) => {
 
               {/* Hiển thị giá */}
               <div className="space-y-2">
-                {selectedProduct.discountPrice && selectedProduct.discountPrice < selectedProduct.price ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl font-bold text-pink-600">
-                      {selectedProduct.discountPrice.toLocaleString("vi-VN")} ₫
-                    </span>
-                    <span className="text-lg text-gray-400 line-through">
-                      {selectedProduct.price.toLocaleString("vi-VN")} ₫
-                    </span>
-                    <span className="bg-red-500 text-white px-2 py-1 rounded-full text-sm font-bold">
-                      -{Math.round(((selectedProduct.price - selectedProduct.discountPrice) / selectedProduct.price) * 100)}%
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-3xl font-bold text-pink-600">
-                    {selectedProduct.price.toLocaleString("vi-VN")} ₫
-                  </span>
-                )}
+                {(() => {
+                  if (flashSalePrice.isFlashSale) {
+                    return (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-3xl font-bold text-red-600">
+                            {formatPrice(currentPrice)}
+                          </span>
+                          <span className="text-lg text-gray-400 line-through">
+                            {formatPrice(flashSalePrice.originalPrice)}
+                          </span>
+                          <span className="bg-gradient-to-r from-pink-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+                            <FaFire className="inline mr-1" />
+                            -{flashSalePrice.discountPercent}%
+                          </span>
+                        </div>
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <FaFire className="text-red-500" />
+                            <span className="text-sm text-red-500 font-medium">
+                              ⚡ Flash Sale
+                            </span>
+                          </div>
+                          <p className="text-sm text-red-600">
+                            Kết thúc: {getTimeRemaining(flashSalePrice.flashSaleInfo.endDate)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  } else if (selectedProduct.discountPrice && selectedProduct.discountPrice < selectedProduct.price) {
+                    return (
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl font-bold text-pink-600">
+                          {formatPrice(currentPrice)}
+                        </span>
+                        <span className="text-lg text-gray-400 line-through">
+                          {formatPrice(selectedProduct.price)}
+                        </span>
+                        <span className="bg-red-500 text-white px-2 py-1 rounded-full text-sm font-bold">
+                          -{Math.round(((selectedProduct.price - selectedProduct.discountPrice) / selectedProduct.price) * 100)}%
+                        </span>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <span className="text-3xl font-bold text-pink-600">
+                        {formatPrice(currentPrice)}
+                      </span>
+                    );
+                  }
+                })()}
               </div>
 
               {/* Rating */}

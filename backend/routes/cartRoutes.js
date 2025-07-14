@@ -2,6 +2,7 @@ const express = require("express");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const Ingredient = require("../models/Ingredient");
+const FlashSale = require("../models/FlashSale");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -35,24 +36,75 @@ const findProductOrIngredient = async (productId) => {
   return { item, itemType };
 };
 
-// Helper function to calculate price based on size
-const calculatePriceBySize = (product, size) => {
+// Helper function to calculate price based on size and flash sale
+const calculatePriceBySize = async (product, size) => {
+  let basePrice;
+  
   // Nguyên liệu không có size pricing, chỉ có giá cố định
   if (!product.sizePricing) {
-    return product.discountPrice || product.price;
-  }
-  
-  // Nếu có sizePricing và size được chọn (chỉ cho sản phẩm)
-  if (product.sizePricing && product.sizePricing.length > 0 && size) {
-    const sizePrice = product.sizePricing.find(sp => sp.size === size);
-    if (sizePrice) {
-      // Ưu tiên discountPrice nếu có, không thì lấy price
-      return sizePrice.discountPrice || sizePrice.price;
+    basePrice = product.discountPrice || product.price;
+  } else {
+    // Nếu có sizePricing và size được chọn (chỉ cho sản phẩm)
+    if (product.sizePricing && product.sizePricing.length > 0 && size) {
+      const sizePrice = product.sizePricing.find(sp => sp.size === size);
+      if (sizePrice) {
+        // Ưu tiên discountPrice nếu có, không thì lấy price
+        basePrice = sizePrice.discountPrice || sizePrice.price;
+      } else {
+        basePrice = product.discountPrice || product.price;
+      }
+    } else {
+      // Fallback về giá gốc - ưu tiên discountPrice
+      basePrice = product.discountPrice || product.price;
     }
   }
-  
-  // Fallback về giá gốc - ưu tiên discountPrice
-  return product.discountPrice || product.price;
+
+  // Kiểm tra flash sale
+  const activeFlashSales = await FlashSale.find({
+    status: 'active',
+    startDate: { $lte: new Date() },
+    endDate: { $gte: new Date() }
+  });
+
+  for (const flashSale of activeFlashSales) {
+    // Kiểm tra sản phẩm trong flash sale
+    if (flashSale.products) {
+      const flashSaleProduct = flashSale.products.find(fp => 
+        fp.productId.toString() === product._id.toString()
+      );
+      
+      if (flashSaleProduct && flashSaleProduct.soldQuantity < flashSaleProduct.quantity) {
+        // Có flash sale cho sản phẩm này
+        // Nếu có size, tính giá flash sale dựa trên giá size
+        if (product.sizePricing && size) {
+          const sizePrice = product.sizePricing.find(sp => sp.size === size);
+          if (sizePrice) {
+            const sizeBasePrice = sizePrice.discountPrice || sizePrice.price;
+            // Tính % giảm giá từ flash sale và áp dụng cho giá size
+            const discountPercent = (flashSaleProduct.originalPrice - flashSaleProduct.salePrice) / flashSaleProduct.originalPrice;
+            return Math.round(sizeBasePrice * (1 - discountPercent));
+          }
+        }
+        // Không có size hoặc không tìm thấy size, trả về giá flash sale gốc
+        return flashSaleProduct.salePrice;
+      }
+    }
+
+    // Kiểm tra nguyên liệu trong flash sale
+    if (flashSale.ingredients) {
+      const flashSaleIngredient = flashSale.ingredients.find(fi => 
+        fi.ingredientId.toString() === product._id.toString()
+      );
+      
+      if (flashSaleIngredient && flashSaleIngredient.soldQuantity < flashSaleIngredient.quantity) {
+        // Có flash sale cho nguyên liệu này, trả về giá flash sale
+        return flashSaleIngredient.salePrice;
+      }
+    }
+  }
+
+  // Không có flash sale, trả về giá thường
+  return basePrice;
 };
 
 // @route POST /api/cart
@@ -75,8 +127,8 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Tính giá theo size đã chọn
-    const priceBySize = calculatePriceBySize(item, size);
+    // Tính giá theo size đã chọn và flash sale
+    const priceBySize = await calculatePriceBySize(item, size);
 
     let cart = await getCart(userId, guestId);
 
@@ -165,6 +217,9 @@ router.put("/", async (req, res) => {
       });
     }
 
+    // Tính giá theo size đã chọn và flash sale
+    const priceBySize = await calculatePriceBySize(item, size);
+
     const cart = await getCart(userId, guestId);
     if (!cart) {
       return res.status(404).json({ message: "Không tìm thấy giỏ hàng" });
@@ -180,6 +235,7 @@ router.put("/", async (req, res) => {
     if (productIndex > -1) {
       if (quantity > 0) {
         cart.products[productIndex].quantity = quantity;
+        cart.products[productIndex].price = priceBySize; // Cập nhật giá theo flash sale
         cart.products[productIndex].stockQuantity = item.quantity; // Cập nhật số lượng tồn kho
       } else {
         cart.products.splice(productIndex, 1);

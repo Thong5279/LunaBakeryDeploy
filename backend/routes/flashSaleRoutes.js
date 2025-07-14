@@ -296,4 +296,50 @@ router.delete('/:id', protect, admin, async (req, res) => {
   }
 });
 
+// @desc    Cập nhật sold quantity cho flash sale
+// @route   PUT /api/flash-sales/:id/update-sold
+// @access  Public
+router.put('/:id/update-sold', async (req, res) => {
+  try {
+    const { productId, ingredientId, quantity } = req.body;
+    const flashSale = await FlashSale.findById(req.params.id);
+    
+    if (!flashSale) {
+      return res.status(404).json({ message: 'Flash sale không tồn tại' });
+    }
+
+    // Cập nhật sold quantity cho sản phẩm
+    if (productId && flashSale.products) {
+      const productIndex = flashSale.products.findIndex(p => 
+        p.productId.toString() === productId
+      );
+      
+      if (productIndex !== -1) {
+        flashSale.products[productIndex].soldQuantity += quantity;
+      }
+    }
+
+    // Cập nhật sold quantity cho nguyên liệu
+    if (ingredientId && flashSale.ingredients) {
+      const ingredientIndex = flashSale.ingredients.findIndex(i => 
+        i.ingredientId.toString() === ingredientId
+      );
+      
+      if (ingredientIndex !== -1) {
+        flashSale.ingredients[ingredientIndex].soldQuantity += quantity;
+      }
+    }
+
+    await flashSale.save();
+    
+    res.json({
+      message: 'Đã cập nhật sold quantity thành công',
+      flashSale
+    });
+  } catch (error) {
+    console.error('❌ Lỗi cập nhật sold quantity:', error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi cập nhật sold quantity' });
+  }
+});
+
 module.exports = router; 
