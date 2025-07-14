@@ -48,7 +48,9 @@ const Home = () => {
             </section>
 
             {/* Flash Sale Banner */}
-            <FlashSaleBanner />
+            <section id="flash-sale">
+                <FlashSaleBanner />
+            </section>
 
             {/* Categories Section */}
             <section id="categories">

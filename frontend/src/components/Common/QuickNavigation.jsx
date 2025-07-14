@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHome, FaCookieBite, FaStar, FaFire, FaGift, FaArrowUp } from 'react-icons/fa';
+import { FaHome, FaCookieBite, FaStar, FaFire, FaGift, FaArrowUp, FaBolt } from 'react-icons/fa';
 
 const QuickNavigation = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -7,9 +7,9 @@ const QuickNavigation = () => {
 
   const sections = [
     { id: 'hero', name: 'Trang Chủ', icon: FaHome },
+    { id: 'flash-sale', name: 'Flash Sale', icon: FaBolt },
     { id: 'categories', name: 'Danh Mục', icon: FaCookieBite },
     { id: 'new-arrivals', name: 'Mới Nhất', icon: FaGift },
-    { id: 'best-sellers', name: 'Bán Chạy', icon: FaFire },
     { id: 'featured', name: 'Đặc Biệt', icon: FaStar },
   ];
 
@@ -89,13 +89,13 @@ const QuickNavigation = () => {
       {/* Mobile Quick Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 lg:hidden">
         <div className="flex justify-around py-2">
-          {sections.slice(0, 4).map((section) => {
+          {sections.slice(0, 5).map((section) => {
             const IconComponent = section.icon;
             return (
               <button
                 key={section.id}
                 onClick={() => scrollToSection(section.id)}
-                className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                className={`flex flex-col items-center py-2 px-2 rounded-lg transition-colors ${
                   activeSection === section.id
                     ? 'text-pink-500'
                     : 'text-gray-400'
