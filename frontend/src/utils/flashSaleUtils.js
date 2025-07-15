@@ -44,9 +44,17 @@ export const calculateProductDisplayPrice = (product, activeFlashSales = [], sel
           const sizePrice = product.sizePricing.find(sp => sp.size === selectedSize);
           if (sizePrice) {
             const sizeBasePrice = sizePrice.discountPrice || sizePrice.price;
-            // Tính % giảm giá từ flash sale và áp dụng cho giá size
-            const discountPercent = (flashSaleProduct.originalPrice - flashSaleProduct.salePrice) / flashSaleProduct.originalPrice;
-            displayPrice = Math.round(sizeBasePrice * (1 - discountPercent));
+            
+            // Tính toán giá flash sale cho size được chọn
+            if (flashSale.discountType === 'percentage') {
+              // Giảm giá theo % - áp dụng % giảm cho giá size
+              const discountPercent = (flashSaleProduct.originalPrice - flashSaleProduct.salePrice) / flashSaleProduct.originalPrice;
+              displayPrice = Math.round(sizeBasePrice * (1 - discountPercent));
+            } else {
+              // Giảm giá theo số tiền cố định - trừ trực tiếp số tiền giảm
+              const discountAmount = flashSaleProduct.originalPrice - flashSaleProduct.salePrice;
+              displayPrice = Math.max(0, sizeBasePrice - discountAmount);
+            }
           }
         }
         
