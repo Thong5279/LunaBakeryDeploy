@@ -28,8 +28,9 @@ const Navbar = () => {
           {/* Logo bên trái */}
           <div className="text-2xl font-bold text-pink-600 tracking-wide hover:scale-105 transition-transform duration-300">
             <Link to={"/"} className="flex items-center gap-2">
-              <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Luna Bakery Logo" className="w-8 h-8" />
+              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery Logo" className="w-8 h-8" />
               Luna Bakery
+              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery Logo" className="w-8 h-8" />
             </Link>
           </div>
 

@@ -177,8 +177,10 @@ const FlashSaleBanner = () => {
               <FaFire className="text-3xl text-pink-500 drop-shadow-lg" />
             </motion.div>
             <div className="text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold text-pink-700 tracking-wide drop-shadow-lg">
-                🔥 FLASH SALE 🔥
+              <h2 className="text-3xl md:text-4xl font-bold text-pink-700 tracking-wide drop-shadow-lg flex items-center gap-2">
+                <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Fire" className="w-15 h-15" />
+                FLASH SALE
+                <img src="https://i.pinimg.com/originals/ec/b3/45/ecb3455c4ab0058ec05769a7e9f93e49.gif" alt="Fire" className="w-15 h-15" />
               </h2>
               <p className="text-pink-600 text-sm md:text-base mt-1">
                 Giảm giá cực sốc - Số lượng có hạn!
