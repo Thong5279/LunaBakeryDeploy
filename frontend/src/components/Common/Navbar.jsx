@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiShoppingCart, FiUser, FiSearch, FiX } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaCookieBite } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 import CartDrawer from "../Layout/CartDrawer";
@@ -23,115 +23,149 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white shadow-md sticky top-0 z-40  ">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <nav className="bg-gradient-to-r from-pink-50 via-rose-50 to-red-50 shadow-lg sticky top-0 z-40 backdrop-blur-sm border-b border-pink-100">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           {/* Logo bên trái */}
-          <div className="text-xl font-bold text-[#a37ba3] tracking-wide">
-            <Link to={"/"}>Luna Bakery</Link>
+          <div className="text-2xl font-bold text-pink-600 tracking-wide hover:scale-105 transition-transform duration-300">
+            <Link to={"/"} className="flex items-center gap-2">
+              <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Luna Bakery Logo" className="w-8 h-8" />
+              Luna Bakery
+            </Link>
           </div>
 
           {/* Menu chính (ẩn trên mobile) */}
-          <div>
-            <ul className="hidden md:flex gap-6 font-medium text-gray-700">
-              <div>
-                <Link to={"/"} className="hover:text-pink-500 cursor-pointer">
+          <div className="hidden md:block">
+            <ul className="flex gap-8 font-medium">
+              <li className="hover:scale-105 transition-transform duration-300">
+                <Link 
+                  to={"/"} 
+                  className="text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-white/50"
+                >
                   Trang chủ
                 </Link>
-              </div>
-              <div>
+              </li>
+              <li className="hover:scale-105 transition-transform duration-300">
                 <Link
                   to={"collections/all"}
-                  className="hover:text-pink-500 cursor-pointer"
+                  className="text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-white/50"
                 >
                   Sản phẩm
                 </Link>
-              </div>
-              <div>
-                <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
+              </li>
+              <li className="hover:scale-105 transition-transform duration-300">
+                <Link 
+                  to={"/ingredients"} 
+                  className="text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-white/50"
+                >
                   Nguyên liệu
                 </Link>
-              </div>
-              <div>
-                <Link to={"/contact"} className="hover:text-pink-500 cursor-pointer">
+              </li>
+              <li className="hover:scale-105 transition-transform duration-300">
+                <Link 
+                  to={"/contact"} 
+                  className="text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-white/50"
+                >
                   Liên hệ
                 </Link>
-              </div>
-              <div>
-                <Link to={"/about"} className="hover:text-pink-500 cursor-pointer">
+              </li>
+              <li className="hover:scale-105 transition-transform duration-300">
+                <Link 
+                  to={"/about"} 
+                  className="text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-white/50"
+                >
                   Giới Thiệu
                 </Link>
-              </div>
+              </li>
             </ul>
           </div>
 
           {/* Icon bên phải */}
-          <div className="flex items-center gap-4 text-gray-700">
+          <div className="flex items-center gap-4">
+            {/* Role badges */}
             {user && user.role === "admin" && (
-              <Link
-                to={"/admin"}
-                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm"
-              >
-                Admin
-              </Link>
+              <div className="hover:scale-105 transition-transform duration-300">
+                <Link
+                  to={"/admin"}
+                  className="bg-pink-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-pink-600 transition-colors duration-300"
+                >
+                  Admin
+                </Link>
+              </div>
             )}
             {user && user.role === "manager" && (
-              <Link
-                to={"/manager"}
-                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
-              >
-                Quản lý
-              </Link>
+              <div className="hover:scale-105 transition-transform duration-300">
+                <Link
+                  to={"/manager"}
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors duration-300"
+                >
+                  Quản lý
+                </Link>
+              </div>
             )}
             {user && user.role === "baker" && (
-              <Link
-                to={"/baker"}
-                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
-              >
-                Thợ làm bánh
-              </Link>
+              <div className="hover:scale-105 transition-transform duration-300">
+                <Link
+                  to={"/baker"}
+                  className="bg-orange-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors duration-300"
+                >
+                  Thợ làm bánh
+                </Link>
+              </div>
             )}
             {user && user.role === "shipper" && (
-              <Link
-                to={"/delivery"}
-                className="bg-pink-400 px-2 rounded-2xl hover:bg-pink-500 text-sm text-white"
-              >
-                Giao hàng
-              </Link>
+              <div className="hover:scale-105 transition-transform duration-300">
+                <Link
+                  to={"/delivery"}
+                  className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-green-600 transition-colors duration-300"
+                >
+                  Giao hàng
+                </Link>
+              </div>
             )}
 
-            <Link to={"/profile"}>
-              <FiUser
-                className="text-xl hover:text-[#a37ba3] cursor-pointer"
-                title="Tài khoản"
-              />
-            </Link>
-            <Link to={"/wishlist"}>
-              <FaHeart
-                className="text-xl hover:text-[#a37ba3] cursor-pointer"
-                title="Danh sách yêu thích"
-              />
-            </Link>
-            <button onClick={toggleCartDrawer}>
-              <FiShoppingCart className="text-xl hover:text-[#a37ba3] cursor-pointer" />
-              {cartItemCount > 0 && (
-                <span
-                  className="absolute bg-[#a37ba3] text-white text-xs rounded-full px-2 py-0.5"
-                  style={{ top: "6px" }}
-                >
-                  {cartItemCount}
-                </span>
-              )}
-            </button>
+            {/* User Profile */}
+            <div className="hover:scale-110 transition-transform duration-300">
+              <Link to={"/profile"}>
+                <FiUser
+                  className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
+                  title="Tài khoản"
+                />
+              </Link>
+            </div>
 
-            {/*Tìm kiếm */}
+            {/* Wishlist */}
+            <div className="hover:scale-110 transition-transform duration-300">
+              <Link to={"/wishlist"}>
+                <FaHeart
+                  className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
+                  title="Danh sách yêu thích"
+                />
+              </Link>
+            </div>
+
+            {/* Cart */}
+            <div className="hover:scale-110 transition-transform duration-300 relative">
+              <button onClick={toggleCartDrawer}>
+                <FiShoppingCart className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium">
+                    {cartItemCount}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Search */}
             <div className="overflow-hidden">
               <Searchbar />
             </div>
 
-            {/* Nút mở menu mobile */}
-            <div className="md:hidden">
+            {/* Mobile Menu Button */}
+            <div 
+              className="md:hidden hover:scale-110 transition-transform duration-300"
+            >
               <HiMenu
-                className="text-2xl cursor-pointer hover:text-[#a37ba3]"
+                className="text-2xl cursor-pointer text-gray-700 hover:text-pink-600 transition-colors duration-300"
                 title="Menu"
                 onClick={() => setIsMenuOpen(true)}
               />
@@ -143,45 +177,84 @@ const Navbar = () => {
       {/* Mobile Sidebar Menu */}
       <div
         className={`fixed top-0 right-0 h-full w-3/4 sm:w-1/2 md:w-1/3 
-        bg-white transform transition-transform duration-300 shadow-lg z-50  ${
+        bg-gradient-to-br from-pink-50 via-rose-50 to-red-50 transform shadow-2xl z-50 border-l border-pink-200 transition-transform duration-300 ease-in-out ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-lg font-bold text-[#a37ba3]">Menu</h2>
-          <FiX
-            className="text-2xl cursor-pointer hover:text-red-500"
+        <div className="flex justify-between items-center p-6 border-b border-pink-200">
+          <h2 className="text-xl font-bold text-pink-600">
+            Menu
+          </h2>
+          <button
+            className="hover:scale-110 transition-transform duration-300"
             onClick={() => setIsMenuOpen(false)}
-          />
+          >
+            <FiX className="text-2xl cursor-pointer text-gray-700 hover:text-red-500 transition-colors duration-300" />
+          </button>
         </div>
 
-        <ul className="flex flex-col gap-4 p-4 text-gray-700 font-medium">
-          <Link to={"/"} className="hover:text-pink-500 cursor-pointer">
-            Trang chủ
-          </Link>
-          <Link
-            to={"collections/all"}
-            className="hover:text-pink-500 cursor-pointer"
-          >
-            Sản phẩm
-          </Link>
-          <Link to={"/ingredients"} className="hover:text-pink-500 cursor-pointer">
-            Nguyên liệu
-          </Link>
-          <Link to={"/wishlist"} className="hover:text-pink-500 cursor-pointer">
-            Yêu thích
-          </Link>
-          <Link to={"/about"} className="hover:text-pink-500 cursor-pointer">
-            Về chúng tôi
-          </Link>
-          <Link to={"/contact"} className="hover:text-pink-500 cursor-pointer">Liên hệ</Link>
+        <ul className="flex flex-col gap-2 p-6">
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link 
+              to={"/"} 
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Trang chủ
+            </Link>
+          </li>
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link
+              to={"collections/all"}
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Sản phẩm
+            </Link>
+          </li>
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link 
+              to={"/ingredients"} 
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Nguyên liệu
+            </Link>
+          </li>
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link 
+              to={"/wishlist"} 
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Yêu thích
+            </Link>
+          </li>
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link 
+              to={"/about"} 
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Về chúng tôi
+            </Link>
+          </li>
+          <li className="hover:translate-x-2 transition-transform duration-300">
+            <Link 
+              to={"/contact"} 
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Liên hệ
+            </Link>
+          </li>
         </ul>
       </div>
 
       {/* Overlay khi menu mở */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 overlay z-40"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={() => setIsMenuOpen(false)}
         />
       )}

@@ -22,13 +22,13 @@ const ProductItem = ({ product, index }) => {
     );
   };
 
-  // Safe image access with fallback
-  const imageUrl = product.images && product.images.length > 0 && product.images[0]?.url 
-    ? product.images[0].url 
-    : "https://via.placeholder.com/500x500?text=No+Image";
-  const imageAlt = product.images && product.images.length > 0 && product.images[0]?.altText 
-    ? product.images[0].altText 
-    : product.name;
+          // Safe image access with fallback
+          const imageUrl = product.images && product.images.length > 0 && product.images[0]?.url 
+            ? product.images[0].url 
+            : "https://via.placeholder.com/500x500?text=No+Image";
+          const imageAlt = product.images && product.images.length > 0 && product.images[0]?.altText 
+            ? product.images[0].altText 
+            : product.name;
 
   // Tính giá hiển thị
   const getDisplayPrice = () => {
@@ -60,82 +60,82 @@ const ProductItem = ({ product, index }) => {
     return formatPrice(getDisplayPrice());
   };
 
-  return (
+          return (
     <Link to={`/product/${product._id}`} className="block w-full max-w-xs">
-      <div className="bg-white p-4 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 group relative flex flex-col h-full border border-gray-100 hover:border-pink-300">
-        {/* Badge ngừng bán */}
-        {product.status === 'inactive' && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
-            Ngừng bán
-          </div>
-        )}
+              <div className="bg-white p-4 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 group relative flex flex-col h-full border border-gray-100 hover:border-pink-300">
+                {/* Badge ngừng bán */}
+                {product.status === 'inactive' && (
+                  <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
+                    Ngừng bán
+                  </div>
+                )}
 
-        {/* Badge Flash Sale */}
+                {/* Badge Flash Sale */}
         {flashSalePrice.isFlashSale ? (
           <div className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10 flex items-center gap-1 animate-pulse">
             <FaFire className="text-xs" />
             -{flashSalePrice.discountPercent}%
           </div>
         ) : product.discountPrice && product.discountPrice < product.price ? (
-          <div className="absolute top-2 left-2 bg-pink-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10 flex items-center gap-1">
-            <FaFire className="text-xs" />
-            -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
-          </div>
+                  <div className="absolute top-2 left-2 bg-pink-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10 flex items-center gap-1">
+                    <FaFire className="text-xs" />
+                    -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
+                  </div>
         ) : null}
 
-        {/* Ảnh sản phẩm */}
-        <div className={`w-full aspect-square mb-4 overflow-hidden rounded-xl ${product.status === 'inactive' ? 'opacity-60' : ''}`}>
-          <img
-            src={imageUrl}
-            alt={imageAlt}
-            className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110"
-          />
-        </div>
+                {/* Ảnh sản phẩm */}
+                <div className={`w-full aspect-square mb-4 overflow-hidden rounded-xl ${product.status === 'inactive' ? 'opacity-60' : ''}`}>
+                  <img
+                    src={imageUrl}
+                    alt={imageAlt}
+                    className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
 
-        {/* Tên sản phẩm */}
-        <h3 className={`text-base mb-2 font-semibold text-center line-clamp-2 ${product.status === 'inactive' ? 'text-gray-500' : 'text-gray-900'}`} title={product.name}>
-          {product.name}
-        </h3>
+                {/* Tên sản phẩm */}
+                <h3 className={`text-base mb-2 font-semibold text-center line-clamp-2 ${product.status === 'inactive' ? 'text-gray-500' : 'text-gray-900'}`} title={product.name}>
+                  {product.name}
+                </h3>
 
-        {/* Mô tả ngắn */}
-        {product.description && (
-          <p className="text-xs text-gray-600 mb-3 text-center line-clamp-2">
-            {formatDescription(product.description)}
-          </p>
-        )}
+                {/* Mô tả ngắn */}
+                {product.description && (
+                  <p className="text-xs text-gray-600 mb-3 text-center line-clamp-2">
+                    {formatDescription(product.description)}
+                  </p>
+                )}
 
-        {/* Thông tin chi tiết */}
-        <div className="space-y-2 mb-3">
-          {/* Danh mục và đánh giá */}
-          <div className="flex items-center justify-center gap-3">
-            {product.category && (
-              <div className="flex items-center gap-1">
-                <FaTag className="text-pink-400 text-xs" />
-                <span className="text-xs text-gray-600">{product.category}</span>
-              </div>
-            )}
-            {product.rating && getRatingDisplay(product.rating)}
-          </div>
+                {/* Thông tin chi tiết */}
+                <div className="space-y-2 mb-3">
+                  {/* Danh mục và đánh giá */}
+                  <div className="flex items-center justify-center gap-3">
+                    {product.category && (
+                      <div className="flex items-center gap-1">
+                        <FaTag className="text-pink-400 text-xs" />
+                        <span className="text-xs text-gray-600">{product.category}</span>
+                      </div>
+                    )}
+                    {product.rating && getRatingDisplay(product.rating)}
+                  </div>
 
-          {/* Thời gian làm */}
-          {product.bakingTime && (
-            <div className="flex items-center justify-center gap-1">
-              <FaClock className="text-blue-400 text-xs" />
-              <span className="text-xs text-gray-600">{product.bakingTime} phút</span>
-            </div>
-          )}
+                  {/* Thời gian làm */}
+                  {product.bakingTime && (
+                    <div className="flex items-center justify-center gap-1">
+                      <FaClock className="text-blue-400 text-xs" />
+                      <span className="text-xs text-gray-600">{product.bakingTime} phút</span>
+                    </div>
+                  )}
 
-          {/* Trọng lượng */}
-          {product.weight && (
-            <div className="flex items-center justify-center gap-1">
-              <FaWeight className="text-green-400 text-xs" />
-              <span className="text-xs text-gray-600">{product.weight}g</span>
-            </div>
-          )}
-        </div>
+                  {/* Trọng lượng */}
+                  {product.weight && (
+                    <div className="flex items-center justify-center gap-1">
+                      <FaWeight className="text-green-400 text-xs" />
+                      <span className="text-xs text-gray-600">{product.weight}g</span>
+                    </div>
+                  )}
+                </div>
 
-        {/* Giá */}
-        <div className="mt-auto">
+                {/* Giá */}
+                <div className="mt-auto">
           {flashSalePrice.isFlashSale ? (
             <>
               <p className={`font-bold text-base text-center ${product.status === 'inactive' ? 'text-gray-400' : 'text-red-500'}`}>
@@ -150,72 +150,72 @@ const ProductItem = ({ product, index }) => {
             </>
           ) : (
             <>
-              <p className={`font-bold text-base text-center ${product.status === 'inactive' ? 'text-gray-400' : 'text-pink-500'}`}>
+                  <p className={`font-bold text-base text-center ${product.status === 'inactive' ? 'text-gray-400' : 'text-pink-500'}`}>
                 {getMinMaxPriceText()}
-              </p>
-              
-              {/* Giá gốc nếu có giảm giá */}
-              {product.discountPrice && product.discountPrice < product.price && (
-                <p className="text-xs text-gray-400 text-center line-through">
-                  {product.price.toLocaleString("vi-VN")} ₫
-                </p>
+                  </p>
+                  
+                  {/* Giá gốc nếu có giảm giá */}
+                  {product.discountPrice && product.discountPrice < product.price && (
+                    <p className="text-xs text-gray-400 text-center line-through">
+                      {product.price.toLocaleString("vi-VN")} ₫
+                    </p>
               )}
             </>
-          )}
-        </div>
+                  )}
+                </div>
 
-        {/* Thông tin bổ sung */}
-        <div className="mt-3 space-y-1">
-          {/* Thành phần chính */}
-          {product.ingredients && product.ingredients.length > 0 && (
-            <div className="flex flex-wrap gap-1 justify-center">
-              {product.ingredients.slice(0, 3).map((ingredient, idx) => (
-                <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                  {ingredient}
-                </span>
-              ))}
-              {product.ingredients.length > 3 && (
-                <span className="text-xs text-gray-500">+{product.ingredients.length - 3}</span>
-              )}
-            </div>
-          )}
+                {/* Thông tin bổ sung */}
+                <div className="mt-3 space-y-1">
+                  {/* Thành phần chính */}
+                  {product.ingredients && product.ingredients.length > 0 && (
+                    <div className="flex flex-wrap gap-1 justify-center">
+                      {product.ingredients.slice(0, 3).map((ingredient, idx) => (
+                        <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                          {ingredient}
+                        </span>
+                      ))}
+                      {product.ingredients.length > 3 && (
+                        <span className="text-xs text-gray-500">+{product.ingredients.length - 3}</span>
+                      )}
+                    </div>
+                  )}
 
-          {/* Thông tin dinh dưỡng */}
-          {product.nutrition && (
-            <div className="flex justify-center gap-3 text-xs text-gray-500">
-              {product.nutrition.calories && (
-                <span>{product.nutrition.calories} cal</span>
-              )}
-              {product.nutrition.protein && (
-                <span>{product.nutrition.protein}g protein</span>
-              )}
-            </div>
-          )}
+                  {/* Thông tin dinh dưỡng */}
+                  {product.nutrition && (
+                    <div className="flex justify-center gap-3 text-xs text-gray-500">
+                      {product.nutrition.calories && (
+                        <span>{product.nutrition.calories} cal</span>
+                      )}
+                      {product.nutrition.protein && (
+                        <span>{product.nutrition.protein}g protein</span>
+                      )}
+                    </div>
+                  )}
 
-          {/* Lưu ý dị ứng */}
-          {product.allergens && product.allergens.length > 0 && (
-            <div className="flex flex-wrap gap-1 justify-center">
-              {product.allergens.slice(0, 2).map((allergen, idx) => (
-                <span key={idx} className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
-                  {allergen}
-                </span>
-              ))}
-              {product.allergens.length > 2 && (
-                <span className="text-xs text-red-500">+{product.allergens.length - 2}</span>
-              )}
-            </div>
-          )}
-        </div>
+                  {/* Lưu ý dị ứng */}
+                  {product.allergens && product.allergens.length > 0 && (
+                    <div className="flex flex-wrap gap-1 justify-center">
+                      {product.allergens.slice(0, 2).map((allergen, idx) => (
+                        <span key={idx} className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                          {allergen}
+                        </span>
+                      ))}
+                      {product.allergens.length > 2 && (
+                        <span className="text-xs text-red-500">+{product.allergens.length - 2}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
 
-        {/* Trạng thái sản phẩm */}
-        {product.status === 'inactive' && (
-          <p className="text-xs text-red-500 mt-2 font-medium text-center">
-            Sản phẩm tạm ngừng bán
-          </p>
-        )}
-      </div>
-    </Link>
-  );
+                {/* Trạng thái sản phẩm */}
+                {product.status === 'inactive' && (
+                  <p className="text-xs text-red-500 mt-2 font-medium text-center">
+                    Sản phẩm tạm ngừng bán
+                  </p>
+                )}
+              </div>
+            </Link>
+          );
 };
 
 const ProductGrid = ({ products, loading, error }) => {
