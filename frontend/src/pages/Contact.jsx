@@ -110,7 +110,11 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="max-w-7xl mx-auto text-center mb-16"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Liên Hệ Với Chúng Tôi</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
+            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703875151368192/bb51cd6b0db1906da4c9cd596a02dbd3.gif?ex=6877c6b4&is=68767534&hm=c255a6db015976c71dfdba768a4f4f64d1e7c50b389b4f993f022335d8f82b15&" alt="Contact" className="w-12 h-12" />
+            Liên Hệ Với Chúng Tôi
+            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703875151368192/bb51cd6b0db1906da4c9cd596a02dbd3.gif?ex=6877c6b4&is=68767534&hm=c255a6db015976c71dfdba768a4f4f64d1e7c50b389b4f993f022335d8f82b15&" alt="Contact" className="w-12 h-12" />
+          </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn
           </p>

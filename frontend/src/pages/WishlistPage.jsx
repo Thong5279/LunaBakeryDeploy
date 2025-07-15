@@ -63,7 +63,7 @@ const WishlistPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4">💔</div>
+          <img src="https://media.tenor.com/INRqDWIVZtwAAAAj/bugcat-capoo.gif" alt="Login Required" className="w-20 h-20 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Vui lòng đăng nhập</h2>
           <p className="text-gray-600 mb-4">Bạn cần đăng nhập để xem danh sách yêu thích</p>
           <Link
@@ -103,7 +103,7 @@ const WishlistPage = () => {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <FaHeart className="text-3xl text-red-500" />
+            <img src="https://ijudge.it.kmitl.ac.th/loadings/loading6.gif" alt="Fire" className="w-15 h-15" />
               <h1 className="text-3xl font-bold text-gray-800">Danh sách yêu thích</h1>
             </div>
             {items.length > 0 && (

@@ -62,8 +62,9 @@ const Home = () => {
                 <div className="container mx-auto">
                     {/* Tab Navigation */}
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl font-bold text-pink-600 mb-6">
-                            🌟 Sản Phẩm Nổi Bật
+                        <h2 className="text-3xl font-bold text-pink-600 mb-6 flex items-center justify-center gap-2">
+                            <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+                            Sản Phẩm Nổi Bật
                         </h2>
                         <div className="flex justify-center mb-6">
                             <div className="bg-gray-100 rounded-full p-1 inline-flex">

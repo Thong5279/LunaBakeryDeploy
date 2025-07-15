@@ -45,7 +45,7 @@ const FeaturedCakes = () => {
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
               >
-                <FaShoppingCart className="text-xl" />
+                <img src="https://i.pinimg.com/originals/18/65/23/186523fbc4745b7cd94189d6a89db77d.gif" alt="Shopping Cart" className="w-6 h-6" />
               </motion.span>
               Mua ngay
             </Link>

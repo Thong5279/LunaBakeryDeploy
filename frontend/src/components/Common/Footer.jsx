@@ -6,7 +6,11 @@ export const Footer = () => {
     <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
       {/* Logo + mô tả */}
       <div>
-        <h2 className="text-2xl font-bold text-pink-600">🎂 Luna Bakery</h2>
+        <h2 className="text-2xl font-bold text-pink-600 flex items-center gap-2">
+          <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery" className="w-8 h-8" />
+          Luna Bakery
+          <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery" className="w-8 h-8" />
+        </h2>
         <p className="mt-2 text-sm">
           Nơi những chiếc bánh kể câu chuyện ngọt ngào của bạn.
         </p>

@@ -156,7 +156,11 @@ const ZaloPayManualReturn = () => {
           {isProcessing ? (
             <>⚡ Đang hoàn tất đơn hàng...</>
           ) : paymentInfo?.isSuccess ? (
-            <>🎉 Thanh toán ZaloPay thành công!</>
+            <div className="flex items-center justify-center gap-2">
+              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Jumping Cat" className="w-12 h-12" />
+              Thanh toán ZaloPay thành công!
+              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Jumping Cat" className="w-12 h-12" />
+            </div>
           ) : paymentInfo?.status === '0' ? (
             <>😞 Thanh toán ZaloPay thất bại</>
           ) : (

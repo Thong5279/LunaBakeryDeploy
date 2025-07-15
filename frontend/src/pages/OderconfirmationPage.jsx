@@ -53,8 +53,10 @@ const OderconfirmationPage = () => {
           >
             <FaCheckCircle className="text-6xl text-green-500 mx-auto mb-4" />
           </motion.div>
-          <h1 className="text-4xl font-bold text-green-700 mb-4">
-            🎉 Đặt hàng thành công!
+          <h1 className="text-4xl font-bold text-green-700 mb-4 flex items-center justify-center gap-3">
+            <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Jumping Cat" className="w-12 h-12" />
+            Đặt hàng thành công!
+            <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Jumping Cat" className="w-12 h-12" />
           </h1>
           <p className="text-lg text-gray-600">
             Cảm ơn bạn đã tin tưởng Luna Bakery. Đơn hàng của bạn đang được chuẩn bị.

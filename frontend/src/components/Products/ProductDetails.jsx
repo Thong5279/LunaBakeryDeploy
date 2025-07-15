@@ -543,7 +543,11 @@ const ProductDetails = ({ productId }) => {
         {/* Phần sản phẩm tương tự */}
         {selectedProduct.category && (
           <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-6 text-center">🌟 Có thể bạn sẽ thích 🌟</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-center flex items-center justify-center gap-2">
+              <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+              Có thể bạn sẽ thích
+              <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+            </h2>
             <div className="-mx-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 px-2">
                   {(similarProducts || []).slice(0, 8).map((product) => (

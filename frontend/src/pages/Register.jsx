@@ -56,7 +56,11 @@ const Register = () => {
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-pink-500">Luna Bakery</h2>
           </div>
-          <h3 className="text-2xl font-semibold text-center mb-4">Xin chào 👋</h3>
+          <h3 className="text-2xl font-semibold text-center mb-4 flex items-center justify-center gap-2">
+            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703678975512627/GcDa7fw.gif?ex=6877c685&is=68767505&hm=72bfa7eb677160c73b7a9fb8382d6deabb201912623998ff021817b82336f18f&" alt="Hello" className="w-8 h-8" />
+            Xin chào
+            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703678975512627/GcDa7fw.gif?ex=6877c685&is=68767505&hm=72bfa7eb677160c73b7a9fb8382d6deabb201912623998ff021817b82336f18f&" alt="Hello" className="w-8 h-8" />
+          </h3>
           <p className="text-center text-gray-500 mb-6">
             Vui lòng đăng nhập tên tài khoản và mật khẩu để tiếp tục
           </p>

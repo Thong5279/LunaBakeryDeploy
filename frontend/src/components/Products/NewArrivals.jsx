@@ -78,8 +78,9 @@ const NewArrivals = () => {
   return (
     <section>
       <div className="max-w-screen-xl mx-auto text-center mb-10 relative px-4">
-        <h2 className="text-3xl font-bold mb-4 text-pink-600 tracking-wide">
-          🌟 Các loại bánh mới !!
+        <h2 className="text-3xl font-bold mb-4 text-pink-600 tracking-wide flex items-center justify-center gap-2">
+          <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+          Các loại bánh mới !! Các loại bánh mới !!
         </h2>
         <p className="text-gray-500 mb-8">
           Khám phá những loại bánh thơm ngon vừa ra mắt – chỉ dành riêng cho

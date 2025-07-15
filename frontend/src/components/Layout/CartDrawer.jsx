@@ -37,7 +37,10 @@ return (
         <div className='flex-grow p-4 overflow-y-auto'>
             <h2 className='text-xl text-[#a37ba3] font-bold mb-4'>Giỏ hàng</h2>
             {cart && cart?.products?.length > 0 ? ( <CartContents  cart={cart} userId={userId} guestId={guestId}/>) :(
-             <p className='text-gray-500 text-center'>Giỏ hàng của bạn đang trống</p>
+             <div className='text-gray-500 text-center flex flex-col items-center gap-3'>
+               <img src="https://media.tenor.com/INRqDWIVZtwAAAAj/bugcat-capoo.gif" alt="Empty Cart" className="w-16 h-16" />
+               <p>Giỏ hàng của bạn đang trống</p>
+             </div>
             )}
             {/* Add your cart items here */}
            
