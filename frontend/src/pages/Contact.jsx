@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaInstagram, FaStar, FaHeart, FaBirthdayCake } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
 
 const Contact = () => {
+  const { user } = useSelector((state) => state.auth);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,6 +36,18 @@ const Contact = () => {
   };
 
   const floatingElements = createFloatingElements();
+
+  // Tự động điền thông tin người dùng nếu đã đăng nhập
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({

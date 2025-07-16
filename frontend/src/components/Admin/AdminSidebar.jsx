@@ -11,6 +11,7 @@ import {
   FaWarehouse,
   FaStar,
   FaFire,
+  FaEnvelope,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -63,6 +64,12 @@ const AdminSidebar = () => {
       icon: FaClipboardList, 
       label: "Đơn hàng",
       iconColor: "text-pink-500"
+    },
+    { 
+      path: "/admin/contacts", 
+      icon: FaEnvelope, 
+      label: "Tin nhắn liên hệ",
+      iconColor: "text-teal-500"
     },
     { 
       path: "/admin/analytics", 

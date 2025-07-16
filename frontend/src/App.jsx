@@ -29,6 +29,7 @@ import OrderManagement from "./components/Admin/OrderManagement";
 import RecipeManagement from "./components/Admin/RecipeManagement";
 import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import ReviewManagement from "./components/Admin/ReviewManagement";
+import ContactManagement from "./components/Admin/ContactManagement";
 import FlashSaleManagement from "./components/Admin/FlashSaleManagement";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
@@ -134,6 +135,7 @@ const AppContent = () => {
           <Route path="orders" element={<OrderManagement />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="reviews" element={<ReviewManagement />} />
+          <Route path="contacts" element={<ContactManagement />} />
           <Route path="flash-sales" element={<FlashSaleManagement />} />
         </Route>
 
