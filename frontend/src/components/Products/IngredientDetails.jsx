@@ -507,9 +507,19 @@ const IngredientDetails = ({ ingredientId }) => {
                         {similarIngredients.length > 0 && (
                             <div className="mt-12">
                                 <h2 className="text-xl font-bold text-pink-500 mb-6 text-center flex items-center justify-center gap-2">
-                                    <FaHeart className="text-pink-500" />
-                                    🌟 Nguyên liệu tương tự 🌟
-                                    <FaHeart className="text-pink-500" />
+                                  
+                                    <img 
+                                        src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3am93c2J0YTd6czJ5czB4MjdicTF0OWF4aTdycXd0ZHoybGZuNWpnMiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/YswZffvIvv3SE/giphy.gif" 
+                                        alt="Nguyên liệu tương tự" 
+                                        className="w-8 h-8 object-contain"
+                                    />
+                                    Nguyên liệu tương tự
+                                    <img 
+                                        src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3am93c2J0YTd6czJ5czB4MjdicTF0OWF4aTdycXd0ZHoybGZuNWpnMiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/YswZffvIvv3SE/giphy.gif" 
+                                        alt="Nguyên liệu tương tự" 
+                                        className="w-8 h-8 object-contain"
+                                    />
+                                    
                                 </h2>
                                 <IngredientGrid ingredients={similarIngredients} loading={false} error={null} />
                             </div>
