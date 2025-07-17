@@ -126,9 +126,9 @@ const Contact = () => {
           className="max-w-7xl mx-auto text-center mb-16"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
-            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703875151368192/bb51cd6b0db1906da4c9cd596a02dbd3.gif?ex=6877c6b4&is=68767534&hm=c255a6db015976c71dfdba768a4f4f64d1e7c50b389b4f993f022335d8f82b15&" alt="Contact" className="w-12 h-12" />
+            <img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3amkwN3JxZzcydzc3N2Z0aTE4bW53eThpZjR0OGJ1NTZleXUxNXVlbSZlcD12MV9zdGlja2Vyc19yZWxhdGVkJmN0PXM/2weSkZg9hvQW5Zv2fk/giphy.gif" alt="Contact" className="w-12 h-12" />
             Liên Hệ Với Chúng Tôi
-            <img src="https://cdn.discordapp.com/attachments/982223821518032906/1394703875151368192/bb51cd6b0db1906da4c9cd596a02dbd3.gif?ex=6877c6b4&is=68767534&hm=c255a6db015976c71dfdba768a4f4f64d1e7c50b389b4f993f022335d8f82b15&" alt="Contact" className="w-12 h-12" />
+            <img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3amkwN3JxZzcydzc3N2Z0aTE4bW53eThpZjR0OGJ1NTZleXUxNXVlbSZlcD12MV9zdGlja2Vyc19yZWxhdGVkJmN0PXM/2weSkZg9hvQW5Zv2fk/giphy.gif" alt="Contact" className="w-12 h-12" />
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn
