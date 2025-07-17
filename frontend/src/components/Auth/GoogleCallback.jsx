@@ -15,10 +15,17 @@ const GoogleCallback = () => {
       const token = urlParams.get('token');
       const userString = urlParams.get('user');
       const error = urlParams.get('error');
+      const message = urlParams.get('message');
 
       if (error) {
         console.error('Google OAuth error:', error);
-        toast.error('Đăng nhập Google thất bại. Vui lòng thử lại.');
+        
+        if (error === 'account_locked' && message) {
+          toast.error(decodeURIComponent(message));
+        } else {
+          toast.error('Đăng nhập Google thất bại. Vui lòng thử lại.');
+        }
+        
         navigate('/login');
         return;
       }

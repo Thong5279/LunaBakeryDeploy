@@ -150,6 +150,7 @@ const AppContent = () => {
         >
           <Route index element={<ManagerHomePage />} />
           <Route path="orders" element={<ManagerOrderManagement />} />
+          <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="products/:id/edit" element={<EditProductPage />} />
           <Route path="ingredients" element={<IngredientManagement />} />

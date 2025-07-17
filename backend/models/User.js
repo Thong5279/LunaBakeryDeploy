@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema(
         googleId: {
             type: String,
             default: ""
+        },
+        isLocked: {
+            type: Boolean,
+            default: false
         }
     },
     {timestamps: true}, // Automatically manage createdAt and updatedAt fields

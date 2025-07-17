@@ -60,7 +60,8 @@ router.post("/register", async (req, res) => {
             avatar: user.avatar,
             phone: user.phone,
             address: user.address,
-            createdAt: user.createdAt
+            createdAt: user.createdAt,
+            isLocked: user.isLocked
           },
           token,
         });
@@ -85,6 +86,14 @@ router.post("/login", async (req, res) => {
       return res
         .status(400)
         .json({ message: "Thông tin đăng nhập không hợp lệ!" });
+    
+    // Kiểm tra tài khoản có bị khoá không
+    if (user.isLocked) {
+      return res
+        .status(403)
+        .json({ message: "Tài khoản của bạn đã bị khoá. Vui lòng liên hệ admin để được hỗ trợ!" });
+    }
+    
     const isMatch = await user.matchPassword(password);
     //kiểm tra mật khẩu
     if (!isMatch)
@@ -116,7 +125,8 @@ router.post("/login", async (req, res) => {
             avatar: user.avatar,
             phone: user.phone,
             address: user.address,
-            createdAt: user.createdAt
+            createdAt: user.createdAt,
+            isLocked: user.isLocked
           },
           token,
         });
@@ -176,7 +186,8 @@ router.put("/profile", protect, async (req, res) => {
       address: updatedUser.address,
       avatar: updatedUser.avatar,
       role: updatedUser.role,
-      createdAt: updatedUser.createdAt
+      createdAt: updatedUser.createdAt,
+      isLocked: updatedUser.isLocked
     });
 
   } catch (error) {

@@ -19,6 +19,13 @@ router.get('/google/callback',
   passport.authenticate('google', { session: false }),
   (req, res) => {
     try {
+      // Kiểm tra tài khoản có bị khoá không
+      if (req.user.isLocked) {
+        console.log(`🔒 User ${req.user.email} đã bị khoá, từ chối đăng nhập Google`);
+        const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+        return res.redirect(`${frontendURL}/login?error=account_locked&message=${encodeURIComponent('Tài khoản của bạn đã bị khoá. Vui lòng liên hệ admin để được hỗ trợ!')}`);
+      }
+
       // Tạo JWT token
       const payload = {
         user: {
@@ -47,7 +54,8 @@ router.get('/google/callback',
             avatar: req.user.avatar,
             phone: req.user.phone,
             address: req.user.address,
-            createdAt: req.user.createdAt
+            createdAt: req.user.createdAt,
+            isLocked: req.user.isLocked
           }))}`);
         }
       );

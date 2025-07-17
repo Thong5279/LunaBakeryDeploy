@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.jpg";
-import { loginUser, clearError } from "../redux/slices/authSlice"; // Import the login action
+import { loginUser, clearError, setError } from "../redux/slices/authSlice"; // Import the login action
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch from react-redux
 import { mergeCart } from "../redux/slices/cartSlice";
 import { FaGoogle } from "react-icons/fa";
@@ -19,6 +19,21 @@ const Login = () => {
   //lay tham so chuyen huong va kiem tra
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
   const isCheckoutRedirect = redirect.includes("checkout");
+  
+  // Kiểm tra lỗi từ URL parameters (từ Google OAuth)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const error = urlParams.get('error');
+    const message = urlParams.get('message');
+    
+    if (error === 'account_locked' && message) {
+      // Hiển thị thông báo lỗi tài khoản bị khoá
+      const errorMessage = decodeURIComponent(message);
+      dispatch(clearError()); // Xóa lỗi cũ nếu có
+      // Set error message
+      dispatch(setError(errorMessage));
+    }
+  }, [location, dispatch]);
 
   // Generate success message based on user role
   const getSuccessMessage = (userRole) => {
