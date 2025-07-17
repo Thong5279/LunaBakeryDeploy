@@ -57,18 +57,18 @@ const IngredientsPage = () => {
       </div>
 
       {/* Main Content Container - Full Width */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Mobile filter button */}
         <button 
           onClick={toggleSidebar} 
-          className='lg:hidden bg-white border border-gray-300 p-3 rounded-lg flex items-center justify-center shadow-sm hover:shadow-md transition-shadow mb-6 w-full'
+          className='lg:hidden bg-white border border-gray-300 p-4 rounded-lg flex items-center justify-center shadow-sm hover:shadow-md transition-shadow mb-8 w-full'
         >
-          <FaFilter className='mr-2 text-pink-500'/> 
+          <FaFilter className='mr-3 text-pink-500'/> 
           <span className="font-medium">Lọc nguyên liệu</span>
         </button>
 
         {/* Desktop Layout: 1/4 Filter + 3/4 Content */}
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filter Sidebar - 1/4 width */}
           <div 
             ref={sidebarRef} 
@@ -98,7 +98,7 @@ const IngredientsPage = () => {
           {/* Main Content - 3/4 width */}
           <div className="flex-1 lg:w-3/4">
             {/* Sort Options */}
-            <div className="mb-6">
+            <div className="mb-8">
               <IngredientSortOptions />
             </div>
 
@@ -111,11 +111,15 @@ const IngredientsPage = () => {
 
             {/* Pagination */}
             {!loading && !error && ingredients?.length > 0 && (
-              <Pagination
-                currentPage={pagination.page}
-                totalPages={pagination.pages}
-                onPageChange={handlePageChange}
-              />
+              <div className="mt-8 mb-6">
+                <Pagination
+                  currentPage={pagination.page}
+                  totalPages={pagination.pages}
+                  onPageChange={handlePageChange}
+                  hasNextPage={pagination.page < pagination.pages}
+                  hasPrevPage={pagination.page > 1}
+                />
+              </div>
             )}
           </div>
         </div>

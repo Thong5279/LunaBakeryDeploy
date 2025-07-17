@@ -11,6 +11,10 @@ const Pagination = ({
 }) => {
   if (totalPages <= 1) return null;
 
+  // Tính toán hasNextPage và hasPrevPage nếu không được truyền vào
+  const hasNext = hasNextPage !== undefined ? hasNextPage : currentPage < totalPages;
+  const hasPrev = hasPrevPage !== undefined ? hasPrevPage : currentPage > 1;
+
   const getPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
@@ -44,15 +48,15 @@ const Pagination = ({
   };
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
-      <div className="flex items-center space-x-2">
+    <div className={`flex items-center justify-center mt-8 mb-4 ${className}`}>
+      <div className="flex items-center space-x-3">
         {/* Previous Page */}
         <button
           onClick={() => onPageChange(currentPage - 1)}
-          disabled={!hasPrevPage}
-          className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-colors ${
-            hasPrevPage
-              ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+          disabled={!hasPrev}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+            hasPrev
+              ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
               : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
           }`}
         >
@@ -61,15 +65,15 @@ const Pagination = ({
         </button>
         
         {/* Page Numbers */}
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-2">
           {getPageNumbers().map((pageNum) => (
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`px-3 py-2 rounded-lg border transition-colors ${
+              className={`px-4 py-2 rounded-lg border transition-colors ${
                 pageNum === currentPage
                   ? 'bg-pink-500 text-white border-pink-500'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
               }`}
             >
               {pageNum}
@@ -80,10 +84,10 @@ const Pagination = ({
         {/* Next Page */}
         <button
           onClick={() => onPageChange(currentPage + 1)}
-          disabled={!hasNextPage}
-          className={`flex items-center gap-1 px-3 py-2 rounded-lg border transition-colors ${
-            hasNextPage
-              ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+          disabled={!hasNext}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+            hasNext
+              ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
               : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
           }`}
         >
