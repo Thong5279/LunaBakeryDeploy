@@ -95,8 +95,8 @@ const CartContents = ({ cart, userId, guestId }) => {
                     </div>
                   )}
                   
-                  {/* Chỉ hiển thị stock quantity cho sản phẩm không phải nguyên liệu */}
-                  {!isIngredientProduct && product.stockQuantity !== undefined && (
+                  {/* Chỉ hiển thị stock quantity cho nguyên liệu, không hiển thị cho sản phẩm bánh */}
+                  {isIngredientProduct && product.stockQuantity !== undefined && (
                     <p className="text-xs text-gray-400 mt-1">
                       (Còn {product.stockQuantity} sản phẩm)
                     </p>

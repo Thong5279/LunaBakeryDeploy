@@ -63,12 +63,12 @@ const ProductItem = ({ product, index }) => {
           return (
     <Link to={`/product/${product._id}`} className="block w-full max-w-xs">
               <div className="bg-white p-4 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 group relative flex flex-col h-full border border-gray-100 hover:border-pink-300">
-                {/* Badge ngừng bán */}
-                {product.status === 'inactive' && (
+                {/* Badge ngừng bán - Ẩn cho sản phẩm bánh vì làm theo đơn đặt hàng */}
+                {/* {product.status === 'inactive' && (
                   <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
                     Ngừng bán
                   </div>
-                )}
+                )} */}
 
                 {/* Badge Flash Sale */}
         {flashSalePrice.isFlashSale ? (
@@ -84,7 +84,7 @@ const ProductItem = ({ product, index }) => {
         ) : null}
 
                 {/* Ảnh sản phẩm */}
-                <div className={`w-full aspect-square mb-4 overflow-hidden rounded-xl ${product.status === 'inactive' ? 'opacity-60' : ''}`}>
+                <div className="w-full aspect-square mb-4 overflow-hidden rounded-xl">
                   <img
                     src={imageUrl}
                     alt={imageAlt}
@@ -93,7 +93,7 @@ const ProductItem = ({ product, index }) => {
                 </div>
 
                 {/* Tên sản phẩm */}
-                <h3 className={`text-base mb-2 font-semibold text-center line-clamp-2 ${product.status === 'inactive' ? 'text-gray-500' : 'text-gray-900'}`} title={product.name}>
+                <h3 className="text-base mb-2 font-semibold text-center line-clamp-2 text-gray-900" title={product.name}>
                   {product.name}
                 </h3>
 
@@ -138,7 +138,7 @@ const ProductItem = ({ product, index }) => {
                 <div className="mt-auto">
           {flashSalePrice.isFlashSale ? (
             <>
-              <p className={`font-bold text-base text-center ${product.status === 'inactive' ? 'text-gray-400' : 'text-red-500'}`}>
+              <p className="font-bold text-base text-center text-red-500">
                 {formatPrice(flashSalePrice.displayPrice)}
               </p>
               <p className="text-xs text-gray-400 text-center line-through">
@@ -150,7 +150,7 @@ const ProductItem = ({ product, index }) => {
             </>
           ) : (
             <>
-                  <p className={`font-bold text-base text-center ${product.status === 'inactive' ? 'text-gray-400' : 'text-pink-500'}`}>
+                  <p className="font-bold text-base text-center text-pink-500">
                 {getMinMaxPriceText()}
                   </p>
                   
@@ -207,12 +207,12 @@ const ProductItem = ({ product, index }) => {
                   )}
                 </div>
 
-                {/* Trạng thái sản phẩm */}
-                {product.status === 'inactive' && (
+                {/* Trạng thái sản phẩm - Ẩn cho sản phẩm bánh vì làm theo đơn đặt hàng */}
+                {/* {product.status === 'inactive' && (
                   <p className="text-xs text-red-500 mt-2 font-medium text-center">
                     Sản phẩm tạm ngừng bán
                   </p>
-                )}
+                )} */}
               </div>
             </Link>
           );

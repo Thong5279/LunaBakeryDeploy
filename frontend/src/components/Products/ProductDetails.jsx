@@ -294,8 +294,8 @@ const ProductDetails = ({ productId }) => {
                 </p>
               </div>
 
-              {/* Stock status */}
-              <div>
+              {/* Stock status - Ẩn cho sản phẩm bánh vì làm theo đơn đặt hàng */}
+              {/* <div>
                 {selectedProduct.quantity > 0 ? (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                     Còn hàng ({selectedProduct.quantity})
@@ -305,7 +305,7 @@ const ProductDetails = ({ productId }) => {
                     Hết hàng
                   </span>
               )}
-            </div>
+            </div> */}
 
               {/* Hiển thị giá */}
               <div className="space-y-2">
