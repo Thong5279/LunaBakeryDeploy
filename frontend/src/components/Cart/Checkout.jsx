@@ -220,6 +220,29 @@ const Checkout = () => {
           💳 Thanh toán đơn hàng
         </h1>
 
+        {/* Thông báo thời gian làm và giao bánh */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-blue-900 mb-1">
+                ⏰ Thông tin giao hàng
+              </h4>
+              <p className="text-sm text-blue-700 leading-relaxed">
+                Tất cả bánh được làm thủ công tươi ngon theo đơn đặt hàng. 
+                <span className="font-medium">Thời gian tối thiểu 2 ngày</span> để làm và giao đến bạn. 
+                Chúng tôi sẽ liên hệ để xác nhận thời gian giao hàng cụ thể.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Section - Shipping & Payment */}
           <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">

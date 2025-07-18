@@ -81,7 +81,7 @@ const InventoryManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-900">
-          📦 Quản lý Kho hàng
+          📦 Thống kê nguyên liệu và sản phẩm
         </h1>
         <div className="flex items-center space-x-4">
           <FaWarehouse className="text-pink-500 text-2xl" />

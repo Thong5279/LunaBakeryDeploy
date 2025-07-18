@@ -56,7 +56,7 @@ const AdminSidebar = () => {
     { 
       path: "/admin/inventory", 
       icon: FaWarehouse, 
-      label: "Quản lý kho",
+      label: "Thống kê mua bán",
       iconColor: "text-indigo-500"
     },
     { 
