@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setFilters, fetchProductsByFilters } from '../../redux/slices/productsSlice';
 import axios from 'axios';
+import VoiceSearch from './VoiceSearch';
 
 const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:9000';
 
@@ -15,6 +16,7 @@ const Searchbar = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [activeSuggestion, setActiveSuggestion] = useState(-1);
+    const [isListening, setIsListening] = useState(false);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -153,6 +155,16 @@ const Searchbar = () => {
         setSuggestions([]);
         setShowSuggestions(false);
         setActiveSuggestion(-1);
+        setIsListening(false);
+    }
+
+    const handleVoiceResult = (result) => {
+        setSearchTerm(result);
+        // Tự động tìm kiếm sau khi nhận diện giọng nói
+        setTimeout(() => {
+            navigate(`/search?q=${encodeURIComponent(result.trim())}`);
+            handleClear();
+        }, 1000);
     }
 
     const formatPrice = (price) => {
@@ -185,22 +197,31 @@ const Searchbar = () => {
                         autoFocus
                         className='bg-gray-50 px-4 py-3 pl-4 pr-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white border border-gray-200 w-full placeholder:text-gray-500 text-gray-800' 
                     />
-                   {/* Loading or Search icon */}
-                   <button 
-                        type='submit' 
-                        disabled={!searchTerm.trim() || isLoading}
-                        className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full transition-colors ${
-                            searchTerm.trim() && !isLoading
-                                ? 'text-pink-600 hover:text-pink-700 hover:bg-pink-50' 
-                                : 'text-gray-400 cursor-not-allowed'
-                        }`}
-                    >
-                        {isLoading ? (
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-pink-500"></div>
-                        ) : (
-                            <FiSearch className='w-5 h-5'/> 
-                        )}
-                    </button>
+                   {/* Voice Search Button */}
+                   <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
+                        <VoiceSearch 
+                            onVoiceResult={handleVoiceResult}
+                            isListening={isListening}
+                            setIsListening={setIsListening}
+                        />
+                        
+                        {/* Loading or Search icon */}
+                        <button 
+                            type='submit' 
+                            disabled={!searchTerm.trim() || isLoading}
+                            className={`p-1 rounded-full transition-colors ${
+                                searchTerm.trim() && !isLoading
+                                    ? 'text-pink-600 hover:text-pink-700 hover:bg-pink-50' 
+                                    : 'text-gray-400 cursor-not-allowed'
+                            }`}
+                        >
+                            {isLoading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-pink-500"></div>
+                            ) : (
+                                <FiSearch className='w-5 h-5'/> 
+                            )}
+                        </button>
+                   </div>
                    </div>
                    
                    {/* close button */}

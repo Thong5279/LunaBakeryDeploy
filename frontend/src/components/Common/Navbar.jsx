@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { FiShoppingCart, FiUser, FiSearch, FiX } from "react-icons/fi";
+import { FiShoppingCart, FiUser, FiSearch, FiX, FiMic } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
 import { FaHeart, FaCookieBite } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Searchbar from "./Searchbar";
 import CartDrawer from "../Layout/CartDrawer";
+import VoiceSearchModal from "./VoiceSearchModal";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [voiceModalOpen, setVoiceModalOpen] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
 
@@ -156,6 +158,17 @@ const Navbar = () => {
               </button>
             </div>
 
+            {/* Voice Search */}
+            <div className="hover:scale-110 transition-transform duration-300">
+              <button
+                onClick={() => setVoiceModalOpen(true)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                title="Tìm kiếm bằng giọng nói"
+              >
+                <FiMic className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
+              </button>
+            </div>
+
             {/* Search */}
             <div className="overflow-hidden">
               <Searchbar />
@@ -260,6 +273,12 @@ const Navbar = () => {
         />
       )}
       <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer} />
+      
+      {/* Voice Search Modal */}
+      <VoiceSearchModal 
+        isOpen={voiceModalOpen} 
+        onClose={() => setVoiceModalOpen(false)} 
+      />
     </>
   );
 };

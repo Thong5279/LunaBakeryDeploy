@@ -8,6 +8,7 @@ import FeaturedColection from "../components/Products/featuredCollection";
 import QuickNavigation from "../components/Common/QuickNavigation";
 import Chatbot from "../components/Common/Chatbot";
 import FlashSaleBanner from "../components/Common/FlashSaleBanner";
+import VoiceSearchBanner from "../components/Common/VoiceSearchBanner";
 import { useDispatch } from "react-redux";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 import axios from "axios";
@@ -50,6 +51,13 @@ const Home = () => {
             {/* Flash Sale Banner */}
             <section id="flash-sale">
                 <FlashSaleBanner />
+            </section>
+
+            {/* Voice Search Banner */}
+            <section className="py-4 px-4">
+                <div className="container mx-auto">
+                    <VoiceSearchBanner />
+                </div>
             </section>
 
             {/* Thông báo thời gian làm và giao bánh */}
