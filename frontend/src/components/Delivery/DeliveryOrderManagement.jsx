@@ -69,6 +69,8 @@ const DeliveryOrderManagement = () => {
   const [showCannotDeliverModal, setShowCannotDeliverModal] = useState(false);
   const [showDeliveredModal, setShowDeliveredModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchDeliveryOrders());
@@ -217,32 +219,19 @@ const DeliveryOrderManagement = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Mã đơn hàng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Khách hàng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Địa chỉ giao hàng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Số điện thoại
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Trạng thái
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Thao tác
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã đơn hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Khách hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Địa chỉ giao hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số điện thoại</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chi tiết</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {orders.map((order) => (
                 <tr key={order._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    #{order._id.slice(-8)}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order._id.slice(-8)}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{order.user?.name}</div>
@@ -256,55 +245,39 @@ const DeliveryOrderManagement = () => {
                       <div>{order.shippingAddress?.city}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {order.shippingAddress?.phonenumber || 'Chưa có'}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.shippingAddress?.phonenumber || 'Chưa có'}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                      {getStatusText(order.status)}
-                    </span>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>{getStatusText(order.status)}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                     {order.status === 'ready' && (
-                      <button
-                        onClick={() => handleStartShipping(order._id)}
-                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                      >
-                        Bắt đầu giao hàng
-                      </button>
+                      <button onClick={() => handleStartShipping(order._id)} className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">Bắt đầu giao hàng</button>
                     )}
                     {order.status === 'shipping' && (
                       <>
-                        <button
-                          onClick={() => handleMarkDeliveredClick(order._id)}
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                          Đã giao hàng
-                        </button>
-                        <button
-                          onClick={() => handleCannotDeliverClick(order._id)}
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          Không thể giao
-                        </button>
+                        <button onClick={() => handleMarkDeliveredClick(order._id)} className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Đã giao hàng</button>
+                        <button onClick={() => handleCannotDeliverClick(order._id)} className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Không thể giao</button>
                       </>
                     )}
                     {order.status === 'cannot_deliver' && (
-                      <span className="text-xs text-red-500">
-                        Giao hàng thất bại
-                      </span>
+                      <span className="text-xs text-red-500">Giao hàng thất bại</span>
                     )}
                     {order.status === 'delivered' && (
-                      <span className="text-xs text-green-500">
-                        Hoàn thành giao hàng
-                      </span>
+                      <span className="text-xs text-green-500">Hoàn thành giao hàng</span>
                     )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <button
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 font-medium text-xs"
+                      onClick={() => { setSelectedOrder(order); setShowDetailModal(true); }}
+                    >
+                      Xem chi tiết
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          
           {orders.length === 0 && (
             <div className="text-center py-8">
               <p className="text-gray-500">Không có đơn hàng nào</p>
@@ -312,6 +285,64 @@ const DeliveryOrderManagement = () => {
           )}
         </div>
       </div>
+
+      {/* Modal chi tiết đơn hàng */}
+      {showDetailModal && selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative animate-fadeIn">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-pink-500 text-xl"
+              onClick={() => setShowDetailModal(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold text-pink-600 mb-4">Chi tiết đơn hàng #{selectedOrder._id.slice(-8)}</h2>
+            <div className="mb-4">
+              <h3 className="font-semibold text-gray-800 mb-1">Thông tin khách hàng</h3>
+              <div className="text-sm text-gray-700">
+                <div><span className="font-medium">Tên:</span> {selectedOrder.user?.name || 'Không xác định'}</div>
+                <div><span className="font-medium">Email:</span> {selectedOrder.user?.email || 'Không xác định'}</div>
+                <div><span className="font-medium">SĐT:</span> {selectedOrder.shippingAddress?.phonenumber || 'Không xác định'}</div>
+                <div><span className="font-medium">Địa chỉ:</span> {selectedOrder.shippingAddress?.address || 'Không xác định'}</div>
+                <div><span className="font-medium">Thành phố:</span> {selectedOrder.shippingAddress?.city || 'Không xác định'}</div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-1">Sản phẩm đã mua</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm border">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-3 py-2 border">Tên sản phẩm</th>
+                      <th className="px-3 py-2 border">Số lượng</th>
+                      <th className="px-3 py-2 border">Size</th>
+                      <th className="px-3 py-2 border">Vị</th>
+                      <th className="px-3 py-2 border">Giá</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedOrder.orderItems?.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="px-3 py-2 border">{item.name}</td>
+                        <td className="px-3 py-2 border text-center">{item.quantity}</td>
+                        <td className="px-3 py-2 border text-center">{item.size || '-'}</td>
+                        <td className="px-3 py-2 border text-center">{item.flavor || '-'}</td>
+                        <td className="px-3 py-2 border text-right">{item.price?.toLocaleString('vi-VN')} ₫</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {selectedOrder.status === 'cannot_deliver' && selectedOrder.cannotDeliverReason && (
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <h4 className="font-semibold text-red-600 mb-2">Lý do không thể giao hàng</h4>
+                <p className="text-red-700 text-sm">{selectedOrder.cannotDeliverReason}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Cannot Deliver Modal */}
       <CannotDeliverModal
