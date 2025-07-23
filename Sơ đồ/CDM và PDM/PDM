@@ -1,0 +1,245 @@
+@startuml
+' Định nghĩa các bảng vật lý với kiểu dữ liệu, PK, FK
+
+entity User {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  email : varchar(100) <<unique>>
+  password : varchar(255)
+  role : varchar(20)
+  phone : varchar(20)
+  address : varchar(255)
+  avatar : varchar(255)
+  googleId : varchar(255)
+  isLocked : boolean
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Product {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  description : text
+  price : decimal(12,2)
+  discountPrice : decimal(12,2)
+  sizePricing : json
+  countInStock : int
+  sku : varchar(50) <<unique>>
+  category : varchar(50)
+  status : varchar(20)
+  sizes : json
+  flavors : json
+  images : json
+  isFeatured : boolean
+  isPublished : boolean
+  rating : float
+  numReviews : int
+  tags : json
+  user : ObjectId <<FK>>
+  metaTitle : varchar(255)
+  metaKeywords : varchar(255)
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Ingredient {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  description : text
+  category : varchar(50)
+  price : decimal(12,2)
+  discountPrice : decimal(12,2)
+  quantity : int
+  unit : varchar(20)
+  sku : varchar(50) <<unique>>
+  images : json
+  status : varchar(20)
+  supplier : varchar(100)
+  notes : varchar(500)
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Order {
+  * _id : ObjectId <<PK>>
+  user : ObjectId <<FK>>
+  orderItems : json
+  shippingAddress : json
+  paymentMethod : varchar(50)
+  totalPrice : decimal(12,2)
+  isPaid : boolean
+  paidAt : datetime
+  isDelivered : boolean
+  deliveredAt : datetime
+  paymentStatus : varchar(20)
+  status : varchar(20)
+  cancelReason : varchar(255)
+  cannotDeliverReason : varchar(255)
+  statusHistory : json
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Review {
+  * _id : ObjectId <<PK>>
+  user : ObjectId <<FK>>
+  product : ObjectId <<FK>>
+  itemType : varchar(20)
+  order : ObjectId <<FK>>
+  rating : int
+  comment : varchar(500)
+  images : json
+  status : varchar(20)
+  createdAt : datetime
+}
+
+entity FlashSale {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  description : text
+  startDate : datetime
+  endDate : datetime
+  discountType : varchar(20)
+  discountValue : decimal(12,2)
+  status : varchar(20)
+  products : json
+  ingredients : json
+  createdBy : ObjectId <<FK>>
+  isActive : boolean
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Wishlist {
+  * _id : ObjectId <<PK>>
+  userId : ObjectId <<FK>>
+  items : json
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Recipe {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  description : text
+  instructions : text
+  image : json
+  category : varchar(50)
+  difficulty : varchar(20)
+  preparationTime : int
+  cookingTime : int
+  servings : int
+  ingredients : json
+  tags : json
+  status : varchar(20)
+  isPublished : boolean
+  publishedAt : datetime
+  createdBy : ObjectId <<FK>>
+  updatedBy : ObjectId <<FK>>
+  views : int
+  rating : float
+  totalRatings : int
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Subscriber {
+  * _id : ObjectId <<PK>>
+  email : varchar(100) <<unique>>
+  subscriberAt : datetime
+}
+
+entity Chat {
+  * _id : ObjectId <<PK>>
+  userId : ObjectId <<FK>>
+  messages : json
+  sessionId : varchar(100)
+  context : json
+  createdAt : datetime
+}
+
+entity Checkout {
+  * _id : ObjectId <<PK>>
+  user : ObjectId <<FK>>
+  checkoutItems : json
+  shippingAddress : json
+  paymentMethod : varchar(50)
+  totalPrice : decimal(12,2)
+  isPaid : boolean
+  paidAt : datetime
+  paymentStatus : varchar(20)
+  paymentDetails : json
+  isFinalized : boolean
+  isFinalizedAt : datetime
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Contact {
+  * _id : ObjectId <<PK>>
+  name : varchar(100)
+  email : varchar(100)
+  phone : varchar(20)
+  subject : varchar(100)
+  message : text
+  status : varchar(20)
+  createdAt : datetime
+}
+
+entity Inventory {
+  * _id : ObjectId <<PK>>
+  productId : ObjectId <<FK>>
+  productType : varchar(20)
+  productName : varchar(100)
+  currentStock : int
+  minimumStock : int
+  maximumStock : int
+  purchasePrice : decimal(12,2)
+  sellingPrice : decimal(12,2)
+  transactions : json
+  alertLowStock : boolean
+  alertExpiry : boolean
+  expiryDate : datetime
+  lastImportDate : datetime
+  lastSaleDate : datetime
+  daysInStock : int
+  status : varchar(20)
+  location : varchar(100)
+  supplier : varchar(100)
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity Cart {
+  * _id : ObjectId <<PK>>
+  user : ObjectId <<FK>>
+  guestId : varchar(100)
+  products : json
+  totalPrice : decimal(12,2)
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+' Các mối quan hệ vật lý chính
+User ||--o{ Order : ""
+User ||--o{ Review : ""
+User ||--o{ Wishlist : ""
+User ||--o{ Cart : ""
+User ||--o{ Chat : ""
+User ||--o{ Recipe : ""
+User ||--o{ FlashSale : ""
+User ||--o{ Checkout : ""
+Order ||--|{ Review : ""
+Order ||--|{ Checkout : ""
+Product ||--o{ Review : ""
+Product ||--o{ Inventory : ""
+Ingredient ||--o{ Inventory : ""
+Product ||--o{ FlashSale : ""
+Ingredient ||--o{ FlashSale : ""
+Product ||--o{ Wishlist : ""
+Ingredient ||--o{ Wishlist : ""
+Recipe ||--o{ Ingredient : ""
+Cart ||--o{ Product : ""
+Cart ||--o{ Ingredient : ""
+
+@enduml

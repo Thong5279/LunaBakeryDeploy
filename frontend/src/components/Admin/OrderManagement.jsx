@@ -19,6 +19,8 @@ const OrderManagement = () => {
     startDate: "",
     endDate: "",
   });
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -238,54 +240,31 @@ const OrderManagement = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Mã đơn hàng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Khách hàng
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tổng tiền
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Trạng thái hiện tại
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ngày đặt
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Cập nhật trạng thái
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã đơn hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Khách hàng</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng tiền</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái hiện tại</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày đặt</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cập nhật trạng thái</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chi tiết</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {sortedOrders.length > 0 ? (
                 sortedOrders.map((order) => (
                   <tr key={order._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      #{order._id.slice(-8)}
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order._id.slice(-8)}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {order.user?.name || "Không xác định"}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {order.user?.email || ""}
-                        </div>
+                        <div className="text-sm font-medium text-gray-900">{order.user?.name || "Không xác định"}</div>
+                        <div className="text-sm text-gray-500">{order.user?.email || ""}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Intl.NumberFormat("vi-VN").format(order.totalPrice)} VNĐ
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Intl.NumberFormat("vi-VN").format(order.totalPrice)} VNĐ</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                        {getStatusText(order.status)}
-                      </span>
+                      <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>{getStatusText(order.status)}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(order.createdAt).toLocaleDateString('vi-VN')}
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <select
                         value={order.status || 'pending'}
@@ -302,11 +281,19 @@ const OrderManagement = () => {
                         <option value="cannot_deliver">Không thể giao hàng</option>
                       </select>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 font-medium text-xs"
+                        onClick={() => { setSelectedOrder(order); setShowDetailModal(true); }}
+                      >
+                        Xem chi tiết
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                     <div className="flex flex-col items-center justify-center">
                       <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -321,6 +308,57 @@ const OrderManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Modal chi tiết đơn hàng */}
+      {showDetailModal && selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative animate-fadeIn">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-pink-500 text-xl"
+              onClick={() => setShowDetailModal(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold text-pink-600 mb-4">Chi tiết đơn hàng #{selectedOrder._id.slice(-8)}</h2>
+            <div className="mb-4">
+              <h3 className="font-semibold text-gray-800 mb-1">Thông tin khách hàng</h3>
+              <div className="text-sm text-gray-700">
+                <div><span className="font-medium">Tên:</span> {selectedOrder.user?.name || 'Không xác định'}</div>
+                <div><span className="font-medium">Email:</span> {selectedOrder.user?.email || 'Không xác định'}</div>
+                <div><span className="font-medium">SĐT:</span> {selectedOrder.shippingAddress?.phonenumber || 'Không xác định'}</div>
+                <div><span className="font-medium">Địa chỉ:</span> {selectedOrder.shippingAddress?.address || 'Không xác định'}</div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-1">Sản phẩm đã mua</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm border">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-3 py-2 border">Tên sản phẩm</th>
+                      <th className="px-3 py-2 border">Số lượng</th>
+                      <th className="px-3 py-2 border">Size</th>
+                      <th className="px-3 py-2 border">Vị</th>
+                      <th className="px-3 py-2 border">Giá</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedOrder.orderItems?.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="px-3 py-2 border">{item.name}</td>
+                        <td className="px-3 py-2 border text-center">{item.quantity}</td>
+                        <td className="px-3 py-2 border text-center">{item.size || '-'}</td>
+                        <td className="px-3 py-2 border text-center">{item.flavor || '-'}</td>
+                        <td className="px-3 py-2 border text-right">{item.price?.toLocaleString('vi-VN')} ₫</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

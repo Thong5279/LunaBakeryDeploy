@@ -1,0 +1,259 @@
+@startuml
+' Định nghĩa các entity (bảng) và thuộc tính chính
+
+class User {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  email : String
+  password : String
+  role : String
+  phone : String
+  address : String
+  avatar : String
+  googleId : String
+  isLocked : Boolean
+  createdAt : Date
+  updatedAt : Date
+}
+
+class Product {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  description : String
+  price : Number
+  discountPrice : Number
+  sizePricing : Array
+  countInStock : Number
+  sku : String
+  category : String
+  status : String
+  sizes : Array
+  flavors : Array
+  images : Array
+  isFeatured : Boolean
+  isPublished : Boolean
+  rating : Number
+  numReviews : Number
+  tags : Array
+  user : ObjectId <<FK>>
+  metaTitle : String
+  metaKeywords : String
+  createdAt : Date
+  updatedAt : Date
+}
+
+class Ingredient {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  description : String
+  category : String
+  price : Number
+  discountPrice : Number
+  quantity : Number
+  unit : String
+  sku : String
+  images : Array
+  status : String
+  supplier : String
+  notes : String
+  createdAt : Date
+  updatedAt : Date
+}
+
+class Order {
+  * _id : ObjectId <<PK>>
+  --
+  user : ObjectId <<FK>>
+  orderItems : Array
+  shippingAddress : Object
+  paymentMethod : String
+  totalPrice : Number
+  isPaid : Boolean
+  paidAt : Date
+  isDelivered : Boolean
+  deliveredAt : Date
+  paymentStatus : String
+  status : String
+  cancelReason : String
+  cannotDeliverReason : String
+  statusHistory : Array
+  createdAt : Date
+  updatedAt : Date
+}
+
+class Review {
+  * _id : ObjectId <<PK>>
+  --
+  user : ObjectId <<FK>>
+  product : ObjectId <<FK>>
+  itemType : String
+  order : ObjectId <<FK>>
+  rating : Number
+  comment : String
+  images : Array
+  status : String
+  createdAt : Date
+}
+
+entity FlashSale {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  description : String
+  startDate : Date
+  endDate : Date
+  discountType : String
+  discountValue : Number
+  status : String
+  products : Array
+  ingredients : Array
+  createdBy : ObjectId <<FK>>
+  isActive : Boolean
+  createdAt : Date
+  updatedAt : Date
+}
+
+entity Wishlist {
+  * _id : ObjectId <<PK>>
+  --
+  userId : ObjectId <<FK>>
+  items : Array
+  createdAt : Date
+  updatedAt : Date
+}
+
+entity Recipe {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  description : String
+  instructions : String
+  image : Object
+  category : String
+  difficulty : String
+  preparationTime : Number
+  cookingTime : Number
+  servings : Number
+  ingredients : Array
+  tags : Array
+  status : String
+  isPublished : Boolean
+  publishedAt : Date
+  createdBy : ObjectId <<FK>>
+  updatedBy : ObjectId <<FK>>
+  views : Number
+  rating : Number
+  totalRatings : Number
+  createdAt : Date
+  updatedAt : Date
+}
+
+entity Subscriber {
+  * _id : ObjectId <<PK>>
+  --
+  email : String
+  subscriberAt : Date
+}
+
+entity Chat {
+  * _id : ObjectId <<PK>>
+  --
+  userId : ObjectId <<FK>>
+  messages : Array
+  sessionId : String
+  context : Object
+  createdAt : Date
+}
+
+entity Checkout {
+  * _id : ObjectId <<PK>>
+  --
+  user : ObjectId <<FK>>
+  checkoutItems : Array
+  shippingAddress : Object
+  paymentMethod : String
+  totalPrice : Number
+  isPaid : Boolean
+  paidAt : Date
+  paymentStatus : String
+  paymentDetails : Object
+  isFinalized : Boolean
+  isFinalizedAt : Date
+  createdAt : Date
+  updatedAt : Date
+}
+
+entity Contact {
+  * _id : ObjectId <<PK>>
+  --
+  name : String
+  email : String
+  phone : String
+  subject : String
+  message : String
+  status : String
+  createdAt : Date
+}
+
+entity Inventory {
+  * _id : ObjectId <<PK>>
+  --
+  productId : ObjectId <<FK>>
+  productType : String
+  productName : String
+  currentStock : Number
+  minimumStock : Number
+  maximumStock : Number
+  purchasePrice : Number
+  sellingPrice : Number
+  transactions : Array
+  alertLowStock : Boolean
+  alertExpiry : Boolean
+  expiryDate : Date
+  lastImportDate : Date
+  lastSaleDate : Date
+  daysInStock : Number
+  status : String
+  location : String
+  supplier : String
+  createdAt : Date
+  updatedAt : Date
+}
+
+entity Cart {
+  * _id : ObjectId <<PK>>
+  --
+  user : ObjectId <<FK>>
+  guestId : String
+  products : Array
+  totalPrice : Number
+  createdAt : Date
+  updatedAt : Date
+}
+
+' Các mối quan hệ chính
+User ||--o{ Order : "đặt"
+User ||--o{ Review : "viết"
+User ||--o{ Wishlist : "sở hữu"
+User ||--o{ Cart : "có"
+User ||--o{ Chat : "chat"
+User ||--o{ Recipe : "tạo"
+User ||--o{ FlashSale : "tạo"
+User ||--o{ Checkout : "thanh toán"
+Order ||--|{ Review : "có"
+Order ||--|{ Checkout : "liên kết"
+Product ||--o{ Review : "bị đánh giá"
+Product ||--o{ Inventory : "quản lý kho"
+Ingredient ||--o{ Inventory : "quản lý kho"
+Product ||--o{ FlashSale : "áp dụng"
+Ingredient ||--o{ FlashSale : "áp dụng"
+Product ||--o{ Wishlist : "yêu thích"
+Ingredient ||--o{ Wishlist : "yêu thích"
+Recipe ||--o{ Ingredient : "sử dụng"
+Cart ||--o{ Product : "chứa"
+Cart ||--o{ Ingredient : "chứa"
+
+@enduml
