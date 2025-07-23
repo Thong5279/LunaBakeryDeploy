@@ -481,6 +481,12 @@ const ManagerOrderManagement = () => {
                 </table>
               </div>
             </div>
+            {selectedOrder.status === 'cannot_deliver' && selectedOrder.cannotDeliverReason && (
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <h4 className="font-semibold text-red-600 mb-2">Lý do không thể giao hàng</h4>
+                <p className="text-red-700 text-sm">{selectedOrder.cannotDeliverReason}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
