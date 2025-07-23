@@ -55,6 +55,7 @@ import FlashSalePage from "./pages/FlashSalePage";
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
 import ProtectedRoute from "./components/ProtectedRoute";
+import ManagerRecipeManagement from "./components/Manager/ManagerRecipeManagement";
 
 const AppContent = () => {
   const dispatch = useDispatch();
@@ -158,6 +159,7 @@ const AppContent = () => {
           <Route path="inventory" element={<InventoryManagement />} />
           <Route path="reviews" element={<ReviewManagement />} />
           <Route path="flash-sales" element={<FlashSaleManagement />} />
+          <Route path="recipes" element={<ManagerRecipeManagement />} />
         </Route>
 
         {/* baker */}

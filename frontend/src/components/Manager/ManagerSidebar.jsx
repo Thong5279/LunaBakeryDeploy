@@ -105,6 +105,20 @@ const ManagerSidebar = () => {
           <span className="">Đánh giá</span>
         </NavLink>
 
+        {/* Quản lý công thức */}
+        <NavLink
+          to={"/manager/recipes"}
+          className={({ isActive }) =>
+            isActive
+              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
+              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+          }
+          end
+        >
+          <FaBoxOpen className="text-pink-500"></FaBoxOpen>
+          <span className="">Công thức</span>
+        </NavLink>
+
         {/* Trở về trang chủ */}
         <NavLink
           to={"/"}

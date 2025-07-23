@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ManagerSidebar from "./ManagerSidebar";
 import ManagerHomePage from "../../pages/ManagerHomePage";
+import ManagerRecipeManagement from './ManagerRecipeManagement';
 import { Outlet } from "react-router-dom";
 
 const ManagerLayout = () => {

@@ -1,13 +1,13 @@
 const express = require("express");
 const Recipe = require("../models/Recipe");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { protect, adminOrManager, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 // @route GET /api/admin/recipes
-// @desc Get all recipes (Admin only)
-// @access Private/Admin
-router.get("/", protect, admin, async (req, res) => {
+// @desc Get all recipes (Admin & Manager)
+// @access Private/Admin or Manager
+router.get("/", protect, adminOrManager, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -54,9 +54,9 @@ router.get("/", protect, admin, async (req, res) => {
 });
 
 // @route GET /api/admin/recipes/:id
-// @desc Get single recipe by ID (Admin only)
-// @access Private/Admin
-router.get("/:id", protect, admin, async (req, res) => {
+// @desc Get single recipe by ID (Admin & Manager)
+// @access Private/Admin or Manager
+router.get("/:id", protect, adminOrManager, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id)
       .populate("createdBy", "name email")
@@ -74,9 +74,9 @@ router.get("/:id", protect, admin, async (req, res) => {
 });
 
 // @route POST /api/admin/recipes
-// @desc Create new recipe (Admin only)
-// @access Private/Admin
-router.post("/", protect, admin, async (req, res) => {
+// @desc Create new recipe (Admin & Manager)
+// @access Private/Admin or Manager
+router.post("/", protect, adminOrManager, async (req, res) => {
   try {
     const {
       name,
@@ -133,9 +133,9 @@ router.post("/", protect, admin, async (req, res) => {
 });
 
 // @route PUT /api/admin/recipes/:id
-// @desc Update recipe (Admin only)
-// @access Private/Admin
-router.put("/:id", protect, admin, async (req, res) => {
+// @desc Update recipe (Admin & Manager)
+// @access Private/Admin or Manager
+router.put("/:id", protect, adminOrManager, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     
@@ -203,9 +203,9 @@ router.put("/:id", protect, admin, async (req, res) => {
 });
 
 // @route DELETE /api/admin/recipes/:id
-// @desc Delete recipe (Admin only)
-// @access Private/Admin
-router.delete("/:id", protect, admin, async (req, res) => {
+// @desc Delete recipe (Admin & Manager)
+// @access Private/Admin or Manager
+router.delete("/:id", protect, adminOrManager, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     
@@ -229,9 +229,9 @@ router.delete("/:id", protect, admin, async (req, res) => {
 });
 
 // @route PATCH /api/admin/recipes/:id/toggle-status
-// @desc Toggle recipe status (Admin only)
-// @access Private/Admin
-router.patch("/:id/toggle-status", protect, admin, async (req, res) => {
+// @desc Toggle recipe status (Admin & Manager)
+// @access Private/Admin or Manager
+router.patch("/:id/toggle-status", protect, adminOrManager, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     
@@ -259,9 +259,9 @@ router.patch("/:id/toggle-status", protect, admin, async (req, res) => {
 });
 
 // @route PATCH /api/admin/recipes/:id/toggle-publish
-// @desc Toggle recipe publish status (Admin only)
-// @access Private/Admin
-router.patch("/:id/toggle-publish", protect, admin, async (req, res) => {
+// @desc Toggle recipe publish (Admin & Manager)
+// @access Private/Admin or Manager
+router.patch("/:id/toggle-publish", protect, adminOrManager, async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     
