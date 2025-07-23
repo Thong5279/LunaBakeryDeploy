@@ -1350,6 +1350,24 @@
             <mxPoint x="815" y="840" as="targetPoint" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="urZfg_tq8mF_nVO3w11a-3" value="Lọc theo trạng thái&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" vertex="1" parent="1">
+          <mxGeometry x="-211.5" y="740" width="121.5" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="urZfg_tq8mF_nVO3w11a-4" value="&lt;meta charset=&quot;utf-8&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;Extends&lt;/span&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;endArrow=open;endFill=0;strokeColor=#A8201A;" edge="1" source="urZfg_tq8mF_nVO3w11a-3" parent="1" target="JYvhK1XlAqGOu87SIQMi-44">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="988" y="1049" as="sourcePoint" />
+            <mxPoint x="200.5" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="urZfg_tq8mF_nVO3w11a-7" value="Tìm kiếm&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#FAE5C7;strokeColor=#0F8B8D;fontColor=#143642;" vertex="1" parent="1">
+          <mxGeometry x="-90" y="720" width="121.5" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="urZfg_tq8mF_nVO3w11a-8" value="&lt;meta charset=&quot;utf-8&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;Extends&lt;/span&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;endArrow=open;endFill=0;strokeColor=#A8201A;" edge="1" parent="1" source="urZfg_tq8mF_nVO3w11a-7" target="JYvhK1XlAqGOu87SIQMi-44">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="998" y="994" as="sourcePoint" />
+            <mxPoint x="210.5" y="735" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

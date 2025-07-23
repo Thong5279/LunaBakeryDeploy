@@ -30,6 +30,7 @@ import {
 } from "../../constants/recipeConstants";
 import ConfirmModal from "../Common/ConfirmModal";
 import RecipeModal from "./RecipeModal";
+import RecipeViewModal from "./RecipeViewModal";
 
 const RecipeManagement = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,8 @@ const RecipeManagement = () => {
     search: "",
     status: "",
   });
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [viewingRecipe, setViewingRecipe] = useState(null);
 
   // Load recipes on component mount and when filters change
   useEffect(() => {
@@ -301,7 +304,7 @@ const RecipeManagement = () => {
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden"
               >
                 {/* Recipe Image */}
-                <div className="relative h-48 bg-gray-200">
+                <div className="relative h-48 bg-gray-200 cursor-pointer" onClick={() => { setViewingRecipe(recipe); setShowViewModal(true); }}>
                   {recipe.image?.url ? (
                     <img
                       src={recipe.image.url}
@@ -337,7 +340,7 @@ const RecipeManagement = () => {
                 {/* Recipe Info */}
                 <div className="p-4">
                   <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1 line-clamp-1">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1 line-clamp-1 cursor-pointer" onClick={() => { setViewingRecipe(recipe); setShowViewModal(true); }}>
                       {recipe.name}
                     </h3>
                     <p className="text-sm text-gray-600 line-clamp-2">
@@ -468,6 +471,15 @@ const RecipeManagement = () => {
         confirmText="Xóa công thức"
         cancelText="Hủy bỏ"
       />
+
+      {/* Recipe View Modal */}
+      {showViewModal && (
+        <RecipeViewModal
+          isOpen={showViewModal}
+          onClose={() => { setShowViewModal(false); setViewingRecipe(null); }}
+          recipe={viewingRecipe}
+        />
+      )}
     </div>
   );
 };

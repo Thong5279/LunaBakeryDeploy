@@ -25,48 +25,13 @@ const ManagerSidebar = () => {
   };
 
   const menuItems = [
-    { 
-      path: "/manager/orders", 
-      icon: FaClipboardList, 
-      label: "Đơn hàng",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/products", 
-      icon: FaBoxOpen, 
-      label: "Sản phẩm",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/ingredients", 
-      icon: FaBox, 
-      label: "Nguyên liệu",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/inventory", 
-      icon: FaWarehouse, 
-      label: "Thống kê mua bán",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/reviews", 
-      icon: FaStar, 
-      label: "Đánh giá",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/recipes", 
-      icon: FaBoxOpen, 
-      label: "Công thức",
-      iconColor: "text-pink-500"
-    },
-    { 
-      path: "/manager/contacts", 
-      icon: FaEnvelope, 
-      label: "Tin nhắn liên hệ",
-      iconColor: "text-teal-500"
-    },
+    { path: "/manager/orders", icon: FaClipboardList, label: "Đơn hàng", iconColor: "text-pink-500" },
+    { path: "/manager/products", icon: FaBoxOpen, label: "Sản phẩm", iconColor: "text-purple-500" },
+    { path: "/manager/ingredients", icon: FaBox, label: "Nguyên liệu", iconColor: "text-green-500" },
+    { path: "/manager/inventory", icon: FaWarehouse, label: "Thống kê mua bán", iconColor: "text-indigo-500" },
+    { path: "/manager/reviews", icon: FaStar, label: "Đánh giá", iconColor: "text-yellow-500" },
+    { path: "/manager/recipes", icon: FaBoxOpen, label: "Công thức", iconColor: "text-yellow-600" },
+    { path: "/manager/contacts", icon: FaEnvelope, label: "Tin nhắn liên hệ", iconColor: "text-teal-500" },
   ];
 
   return (
@@ -87,33 +52,30 @@ const ManagerSidebar = () => {
             to={item.path}
             className={({ isActive }) =>
               isActive
-                ? `text-${item.iconColor} px-4 py-3 rounded flex items-center space-x-2 bg-${item.iconColor}-100`
+                ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2"
                 : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
             }
             end
           >
-            <item.icon className={`text-${item.iconColor}`}></item.icon>
-            <span className="">{item.label}</span>
+            <item.icon className={`${item.iconColor} transition-colors duration-200`} />
+            <span>{item.label}</span>
           </NavLink>
         ))}
-
-        {/* Trở về trang chủ */}
         <NavLink
           to={"/"}
           className="text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
         >
-          <FaStore className="text-pink-500"></FaStore>
-          <span className="">Trang chủ</span>
+          <FaStore className="text-teal-500" />
+          <span>Trang chủ</span>
         </NavLink>
       </nav>
 
-      {/* Nút đăng xuất */}
-      <div className="mt-6">
+      <div className="mt-4">
         <button
           onClick={handleLogout}
-          className="w-full bg-pink-400 hover:bg-pink-500 py-2 rounded-3xl flex items-center justify-center space-x-2 transition-colors"
+          className="w-full bg-pink-400 hover:bg-pink-500 py-2 rounded-3xl flex items-center justify-center space-x-2"
         >
-          <FaSignOutAlt />
+          <FaSignOutAlt className="text-white" />
           <span className="text-white">Đăng xuất</span>
         </button>
       </div>
