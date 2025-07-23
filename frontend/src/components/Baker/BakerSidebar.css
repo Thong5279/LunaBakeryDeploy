@@ -1,0 +1,104 @@
+/* BakerSidebar.css - CSS riêng để tránh conflict */
+.baker-sidebar-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%);
+}
+
+.baker-nav-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  width: 100% !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+  color: #be185d !important;
+  margin-bottom: 4px !important;
+}
+
+.baker-nav-text {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: 500 !important;
+}
+
+.baker-nav-icon {
+  flex-shrink: 0 !important;
+  font-size: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #be185d !important;
+}
+
+.baker-nav-list {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.baker-nav-list li {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.baker-nav-list li + li {
+  margin-top: 8px !important;
+}
+
+/* Đảm bảo không bị thụt vào khi active */
+.baker-nav-item.active {
+  background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%) !important;
+  color: #be185d !important;
+  box-shadow: 0 4px 12px rgba(190, 24, 93, 0.2) !important;
+  transform: translateX(4px) !important;
+  border: 2px solid #f472b6 !important;
+}
+
+.baker-nav-item:hover {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%) !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 2px 8px rgba(190, 24, 93, 0.15) !important;
+}
+
+/* Header styling */
+.baker-sidebar-container .p-6 {
+  background: rgba(252, 231, 243, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(190, 24, 93, 0.2) !important;
+}
+
+.baker-sidebar-container h2 {
+  color: #be185d !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.baker-sidebar-container p {
+  color: #be185d !important;
+}
+
+/* Footer styling */
+.baker-sidebar-container .border-t {
+  border-top: 1px solid rgba(190, 24, 93, 0.2) !important;
+  background: rgba(252, 231, 243, 0.5) !important;
+}
+
+/* Reset tất cả margin và padding có thể gây conflict */
+.baker-sidebar-container * {
+  box-sizing: border-box !important;
+}
+
+.baker-nav-item * {
+  box-sizing: border-box !important;
+} 

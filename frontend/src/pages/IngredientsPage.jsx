@@ -112,13 +112,13 @@ const IngredientsPage = () => {
             {/* Pagination */}
             {!loading && !error && ingredients?.length > 0 && (
               <div className="mt-8 mb-6">
-                <Pagination
-                  currentPage={pagination.page}
-                  totalPages={pagination.pages}
-                  onPageChange={handlePageChange}
+              <Pagination
+                currentPage={pagination.page}
+                totalPages={pagination.pages}
+                onPageChange={handlePageChange}
                   hasNextPage={pagination.page < pagination.pages}
                   hasPrevPage={pagination.page > 1}
-                />
+              />
               </div>
             )}
           </div>

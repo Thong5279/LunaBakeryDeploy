@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaHome, FaUser, FaBirthdayCake, FaSignOutAlt, FaArrowLeft, FaClipboardList, FaBook } from "react-icons/fa";
 import { logout } from "../../redux/slices/authSlice";
 import { clearCart } from "../../redux/slices/cartSlice";
+import "./BakerSidebar.css";
 
 const BakerSidebar = () => {
   const location = useLocation();
@@ -22,12 +23,12 @@ const BakerSidebar = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="baker-sidebar-container">
       {/* Header */}
       <div className="p-6 border-b border-pink-200">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
-            <FaBirthdayCake className="text-white text-lg" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center">
+            <img src="https://images-platform.99static.com/lU-GBE1-IiZezutUfdYfUThnGfQ=/500x500/top/smart/99designs-contests-attachments/17/17795/attachment_17795074" alt="" />
           </div>
           <div>
             <h2 className="font-bold text-lg text-pink-700">Thợ làm bánh</h2>
@@ -38,56 +39,50 @@ const BakerSidebar = () => {
 
       {/* Navigation */}
       <nav className="flex-1 p-4">
-        <ul className="space-y-2">
+        <ul className="baker-nav-list space-y-2">
           <li>
             <Link
               to="/baker"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                isActive("/baker")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
+              className={`baker-nav-item ${
+                isActive("/baker") ? "active" : ""
               }`}
             >
-              <FaHome className="text-lg" />
-              <span>Trang chủ</span>
+              <FaHome className="baker-nav-icon" />
+              <span className="baker-nav-text">Trang chủ</span>
             </Link>
           </li>
           
           <li>
             <Link
               to="/baker/orders"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                isActive("/baker/orders")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
+              className={`baker-nav-item ${
+                isActive("/baker/orders") ? "active" : ""
               }`}
             >
-              <FaClipboardList className="text-lg" />
-              <span>Quản lý đơn hàng</span>
+              <FaClipboardList className="baker-nav-icon" />
+              <span className="baker-nav-text">Quản lý đơn hàng</span>
             </Link>
           </li>
           
           <li>
             <Link
               to="/baker/recipes"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                isActive("/baker/recipes")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
+              className={`baker-nav-item ${
+                isActive("/baker/recipes") ? "active" : ""
               }`}
             >
-              <FaBook className="text-lg" />
-              <span>Sổ tay công thức</span>
+              <FaBook className="baker-nav-icon" />
+              <span className="baker-nav-text">Sổ tay công thức</span>
             </Link>
           </li>
           
           <li>
             <Link
               to="/"
-              className="flex items-center space-x-3 p-3 rounded-lg transition-colors text-pink-700 hover:bg-pink-100"
+              className="baker-nav-item"
             >
-              <FaArrowLeft className="text-lg" />
-              <span>Về trang chủ</span>
+              <FaArrowLeft className="baker-nav-icon" />
+              <span className="baker-nav-text">Về trang chủ</span>
             </Link>
           </li>
         </ul>
@@ -105,10 +100,10 @@ const BakerSidebar = () => {
         
         <button
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 p-3 rounded-lg transition-colors text-pink-700 hover:bg-pink-100 hover:text-pink-800"
+          className="baker-nav-item w-full"
         >
-          <FaSignOutAlt className="text-lg" />
-          <span>Đăng xuất</span>
+          <FaSignOutAlt className="baker-nav-icon" />
+          <span className="baker-nav-text">Đăng xuất</span>
         </button>
       </div>
     </div>
