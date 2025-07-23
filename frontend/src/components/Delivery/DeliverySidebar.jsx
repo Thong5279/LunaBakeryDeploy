@@ -22,12 +22,16 @@ const DeliverySidebar = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col" style={{ background: 'linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%)' }}>
       {/* Header */}
-      <div className="p-6 border-b border-pink-200">
+      <div className="p-6 border-b border-pink-200" style={{ background: 'rgba(252, 231, 243, 0.8)', backdropFilter: 'blur(10px)' }}>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
-            <FaTruck className="text-white text-lg" />
+          <div className="w-10 h-10 rounded-full flex items-center justify-center">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/128/3272/3272682.png" 
+              alt="Nhân viên giao hàng" 
+              className="w-6 h-6"
+            />
           </div>
           <div>
             <h2 className="font-bold text-lg text-pink-700">Nhân viên giao hàng</h2>
@@ -42,45 +46,45 @@ const DeliverySidebar = () => {
           <li>
             <Link
               to="/delivery"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+              className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
                 isActive("/delivery")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
+                  ? "bg-pink-100 text-pink-700 border-2 border-pink-300 shadow-md"
+                  : "text-pink-700 hover:bg-pink-50"
               }`}
             >
               <FaHome className="text-lg" />
-              <span>Trang chủ</span>
+              <span className="font-medium">Trang chủ</span>
             </Link>
           </li>
           
           <li>
             <Link
               to="/delivery/orders"
-              className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+              className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 ${
                 isActive("/delivery/orders")
-                  ? "bg-pink-200 text-pink-800"
-                  : "text-pink-700 hover:bg-pink-100"
+                  ? "bg-pink-100 text-pink-700 border-2 border-pink-300 shadow-md"
+                  : "text-pink-700 hover:bg-pink-50"
               }`}
             >
               <FaClipboardList className="text-lg" />
-              <span>Quản lý đơn hàng</span>
+              <span className="font-medium">Quản lý đơn hàng</span>
             </Link>
           </li>
           
           <li>
             <Link
               to="/"
-              className="flex items-center space-x-3 p-3 rounded-lg transition-colors text-pink-700 hover:bg-pink-100"
+              className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 text-pink-700 hover:bg-pink-50"
             >
               <FaArrowLeft className="text-lg" />
-              <span>Về trang chủ</span>
+              <span className="font-medium">Về trang chủ</span>
             </Link>
           </li>
         </ul>
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-pink-200">
+      <div className="p-4 border-t border-pink-200" style={{ background: 'rgba(252, 231, 243, 0.5)' }}>
         <div className="flex items-center space-x-3 text-pink-600 mb-4">
           <FaUser className="text-lg" />
           <div>
@@ -91,10 +95,10 @@ const DeliverySidebar = () => {
         
         <button
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 p-3 rounded-lg transition-colors text-pink-700 hover:bg-pink-100 hover:text-pink-800"
+          className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 text-pink-700 hover:bg-pink-50"
         >
           <FaSignOutAlt className="text-lg" />
-          <span>Đăng xuất</span>
+          <span className="font-medium">Đăng xuất</span>
         </button>
       </div>
     </div>

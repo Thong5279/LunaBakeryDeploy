@@ -72,9 +72,103 @@ const DeliveryOrderManagement = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
+  // State cho tính năng lọc và tìm kiếm
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState('desc');
+
   useEffect(() => {
     dispatch(fetchDeliveryOrders());
   }, [dispatch]);
+
+  // Lọc và sắp xếp đơn hàng
+  const filteredAndSortedOrders = orders
+    .filter(order => {
+      // Lọc theo từ khóa tìm kiếm
+      const searchLower = searchTerm.toLowerCase();
+      const orderId = order._id.toLowerCase();
+      const customerName = order.user?.name?.toLowerCase() || '';
+      const customerEmail = order.user?.email?.toLowerCase() || '';
+      const customerPhone = order.shippingAddress?.phonenumber?.toLowerCase() || '';
+      const customerAddress = order.shippingAddress?.address?.toLowerCase() || '';
+      
+      const matchesSearch = !searchTerm || 
+        orderId.includes(searchLower) ||
+        customerName.includes(searchLower) ||
+        customerEmail.includes(searchLower) ||
+        customerPhone.includes(searchLower) ||
+        customerAddress.includes(searchLower);
+
+      // Lọc theo trạng thái
+      const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
+
+      // Lọc theo ngày
+      const orderDate = new Date(order.createdAt);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      const lastMonth = new Date(today);
+      lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+      let matchesDate = true;
+      switch (dateFilter) {
+        case 'today':
+          matchesDate = orderDate.toDateString() === today.toDateString();
+          break;
+        case 'yesterday':
+          matchesDate = orderDate.toDateString() === yesterday.toDateString();
+          break;
+        case 'lastWeek':
+          matchesDate = orderDate >= lastWeek;
+          break;
+        case 'lastMonth':
+          matchesDate = orderDate >= lastMonth;
+          break;
+        default:
+          matchesDate = true;
+      }
+
+      return matchesSearch && matchesStatus && matchesDate;
+    })
+    .sort((a, b) => {
+      let aValue, bValue;
+      
+      switch (sortBy) {
+        case 'createdAt':
+          aValue = new Date(a.createdAt);
+          bValue = new Date(b.createdAt);
+          break;
+        case 'customerName':
+          aValue = a.user?.name || '';
+          bValue = b.user?.name || '';
+          break;
+        case 'orderId':
+          aValue = a._id;
+          bValue = b._id;
+          break;
+        case 'status':
+          aValue = a.status;
+          bValue = b.status;
+          break;
+        case 'customerPhone':
+          aValue = a.shippingAddress?.phonenumber || '';
+          bValue = b.shippingAddress?.phonenumber || '';
+          break;
+        default:
+          aValue = new Date(a.createdAt);
+          bValue = new Date(b.createdAt);
+      }
+
+      if (sortOrder === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
 
   const handleStartShipping = async (orderId) => {
     try {
@@ -152,6 +246,14 @@ const DeliveryOrderManagement = () => {
     }
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setStatusFilter('all');
+    setDateFilter('all');
+    setSortBy('createdAt');
+    setSortOrder('desc');
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -176,36 +278,189 @@ const DeliveryOrderManagement = () => {
 
   return (
     <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng - Nhân viên giao hàng</h1>
-        <p className="text-gray-600 mt-1">
-          Quản lý quá trình giao hàng
-        </p>
+      <div className="mb-6 flex items-center gap-4">
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng - Nhân viên giao hàng</h1>
+          <p className="text-gray-600 mt-1">
+            Quản lý quá trình giao hàng
+          </p>
+        </div>
+        <div className="flex-shrink-0">
+          <img 
+            src="https://cdn-icons-png.flaticon.com/128/3272/3272682.png" 
+            alt="Nhân viên giao hàng" 
+            className="w-20 h-20 rounded-lg"
+          />
+        </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-700">Tổng đơn hàng</h3>
-          <p className="text-3xl font-bold text-pink-600">{orders.length}</p>
+        <div className="bg-white p-6 rounded-lg shadow relative">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-gray-700">Tổng đơn hàng</h3>
+              <p className="text-3xl font-bold text-pink-600">{orders.length}</p>
+            </div>
+            <div className="flex-shrink-0 ml-4">
+              <img 
+                src="https://cdn-icons-gif.flaticon.com/14357/14357121.gif" 
+                alt="Tổng đơn hàng" 
+                className="w-26 h-26 rounded-lg object-cover"
+              />
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-700">Chờ giao hàng</h3>
-          <p className="text-3xl font-bold text-blue-600">
-            {orders.filter(order => order.status === 'ready').length}
-          </p>
+        <div className="bg-white p-6 rounded-lg shadow relative">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-gray-700">Chờ giao hàng</h3>
+              <p className="text-3xl font-bold text-blue-600">
+                {orders.filter(order => order.status === 'ready').length}
+              </p>
+            </div>
+            <div className="flex-shrink-0 ml-4">
+              <img 
+                src="https://cdn-icons-gif.flaticon.com/18485/18485058.gif" 
+                alt="Chờ giao hàng" 
+                className="w-26 h-26 rounded-lg object-cover"
+              />
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-700">Đang giao hàng</h3>
-          <p className="text-3xl font-bold text-purple-600">
-            {orders.filter(order => order.status === 'shipping').length}
-          </p>
+        <div className="bg-white p-6 rounded-lg shadow relative">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-gray-700">Đang giao hàng</h3>
+              <p className="text-3xl font-bold text-purple-600">
+                {orders.filter(order => order.status === 'shipping').length}
+              </p>
+            </div>
+            <div className="flex-shrink-0 ml-4">
+              <img 
+                src="https://cdn-icons-gif.flaticon.com/11933/11933522.gif" 
+                alt="Đang giao hàng" 
+                className="w-26 h-26 rounded-lg object-cover"
+              />
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-700">Đã giao hàng</h3>
-          <p className="text-3xl font-bold text-green-600">
-            {orders.filter(order => order.status === 'delivered').length}
-          </p>
+        <div className="bg-white p-6 rounded-lg shadow relative">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-gray-700">Đã giao hàng</h3>
+              <p className="text-3xl font-bold text-green-600">
+                {orders.filter(order => order.status === 'delivered').length}
+              </p>
+            </div>
+            <div className="flex-shrink-0 ml-4">
+              <img 
+                src="https://cdn-icons-gif.flaticon.com/11614/11614839.gif" 
+                alt="Đã giao hàng" 
+                className="w-26 h-26 rounded-lg object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Search and Filter Section */}
+      <div className="bg-white shadow rounded-lg p-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-4">
+          {/* Search */}
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tìm kiếm
+            </label>
+            <input
+              type="text"
+              placeholder="Tìm theo mã đơn hàng, tên khách hàng, SĐT, địa chỉ..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Status Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Trạng thái
+            </label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            >
+              <option value="all">Tất cả</option>
+              <option value="ready">Chờ giao hàng</option>
+              <option value="shipping">Đang giao hàng</option>
+              <option value="cannot_deliver">Không thể giao hàng</option>
+              <option value="delivered">Đã giao hàng</option>
+            </select>
+          </div>
+
+          {/* Date Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Thời gian
+            </label>
+            <select
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            >
+              <option value="all">Tất cả</option>
+              <option value="today">Hôm nay</option>
+              <option value="yesterday">Hôm qua</option>
+              <option value="lastWeek">Tuần này</option>
+              <option value="lastMonth">Tháng này</option>
+            </select>
+          </div>
+
+          {/* Sort */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Sắp xếp
+            </label>
+            <select
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(e) => {
+                const [newSortBy, newSortOrder] = e.target.value.split('-');
+                setSortBy(newSortBy);
+                setSortOrder(newSortOrder);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            >
+              <option value="createdAt-desc">Mới nhất</option>
+              <option value="createdAt-asc">Cũ nhất</option>
+              <option value="customerName-asc">Tên A-Z</option>
+              <option value="customerName-desc">Tên Z-A</option>
+              <option value="status-asc">Trạng thái A-Z</option>
+              <option value="status-desc">Trạng thái Z-A</option>
+              <option value="customerPhone-asc">SĐT A-Z</option>
+              <option value="customerPhone-desc">SĐT Z-A</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Filter Summary and Clear Button */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+          <div className="text-sm text-gray-600">
+            Hiển thị {filteredAndSortedOrders.length} / {orders.length} đơn hàng
+            {(searchTerm || statusFilter !== 'all' || dateFilter !== 'all') && (
+              <span className="ml-2 text-pink-600">
+                (Đã lọc)
+              </span>
+            )}
+          </div>
+          {(searchTerm || statusFilter !== 'all' || dateFilter !== 'all') && (
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-pink-600 font-medium"
+            >
+              Xóa bộ lọc
+            </button>
+          )}
         </div>
       </div>
 
@@ -229,7 +484,7 @@ const DeliveryOrderManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {orders.map((order) => (
+              {filteredAndSortedOrders.map((order) => (
                 <tr key={order._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order._id.slice(-8)}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -278,9 +533,11 @@ const DeliveryOrderManagement = () => {
               ))}
             </tbody>
           </table>
-          {orders.length === 0 && (
+          {filteredAndSortedOrders.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-500">Không có đơn hàng nào</p>
+              <p className="text-gray-500">
+                {orders.length === 0 ? 'Không có đơn hàng nào' : 'Không tìm thấy đơn hàng phù hợp với bộ lọc'}
+              </p>
             </div>
           )}
         </div>
