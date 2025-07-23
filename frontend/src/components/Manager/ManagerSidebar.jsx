@@ -88,7 +88,7 @@ const ManagerSidebar = () => {
           end
         >
           <FaWarehouse className="text-pink-500"></FaWarehouse>
-          <span className="">Quản lý kho</span>
+          <span className="">Thống kê mua bán</span>
         </NavLink>
 
         {/* Quản lý đánh giá */}
