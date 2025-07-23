@@ -319,9 +319,18 @@ const FlashSaleManagement = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Quản lý Flash Sale</h1>
-            <p className="text-gray-600 mt-2">Tạo và quản lý các chương trình giảm giá nhanh</p>
+          <div className="flex items-center space-x-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Quản lý Flash Sale</h1>
+              <p className="text-gray-600 mt-2">Tạo và quản lý các chương trình giảm giá nhanh</p>
+            </div>
+            <div className="flex-shrink-0">
+              <img 
+                src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" 
+                alt="Flash Sale Animation" 
+                className="w-20 h-20 rounded-lg"
+              />
+            </div>
           </div>
           <motion.button
             onClick={() => setShowCreateForm(true)}
