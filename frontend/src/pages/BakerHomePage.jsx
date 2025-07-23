@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaBirthdayCake, FaClock, FaCalendar, FaChartLine, FaQuoteLeft, FaBook, FaExclamationTriangle, FaListUl } from "react-icons/fa";
+import { FaBirthdayCake, FaClock, FaCalendar, FaChartLine, FaQuoteLeft, FaBook, FaExclamationTriangle, FaListUl, FaUserFriends, FaCheckCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { fetchBakerOrders } from "../redux/slices/bakerOrderSlice";
 
 const RULES = [
@@ -59,12 +59,6 @@ const BakerHomePage = () => {
   );
   const totalOrders = orders.length;
 
-  // Lịch sử hoạt động gần đây (5 đơn gần nhất)
-  const recentOrders = useMemo(() =>
-    orders.slice(0, 5),
-    [orders]
-  );
-
   // Random quote
   const randomQuote = useMemo(() => {
     const idx = Math.floor(Math.random() * MOTIVATION_QUOTES.length);
@@ -72,125 +66,228 @@ const BakerHomePage = () => {
   }, []);
 
   return (
-    <div className="space-y-6">
-      {/* Chào mừng + avatar thợ làm bánh */}
-      <div className="flex items-center gap-6 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 p-6 rounded-lg shadow-lg border border-blue-200">
-        <img
-          src="https://images-platform.99static.com/lU-GBE1-IiZezutUfdYfUThnGfQ=/500x500/top/smart/99designs-contests-attachments/17/17795/attachment_17795074"
-          alt="Baker Icon"
-          className="w-20 h-20 rounded-full border-4 border-blue-300 shadow-lg"
-        />
-        <div>
-          <h1 className="text-2xl font-bold text-blue-700 mb-1">Chào mừng, {user?.name || "Thợ làm bánh"}!</h1>
-          <p className="text-blue-600">Trang làm việc dành cho thợ làm bánh LunaBakery</p>
+    <div className="space-y-8 p-6">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-pink-100 to-purple-100 border border-pink-200 p-8 rounded-2xl shadow-sm">
+        <div className="flex items-center space-x-6">
+          <div className="w-20 h-20 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-md">
+            <FaBirthdayCake className="text-3xl text-pink-600" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Chào mừng, {user?.name || "Thợ làm bánh"}!</h1>
+            <p className="text-gray-600 text-lg">Trang làm việc dành cho thợ làm bánh LunaBakery</p>
+            <div className="flex items-center mt-3 space-x-4">
+              <div className="flex items-center space-x-2">
+                <FaClock className="text-pink-500" />
+                <span className="text-gray-600">{new Date().toLocaleDateString('vi-VN', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FaMapMarkerAlt className="text-purple-500" />
+                <span className="text-gray-600">LunaBakery Kitchen</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-pink-600 text-sm font-medium mb-1">Đơn hàng hôm nay</p>
+              <p className="text-3xl font-bold text-gray-900">{loading ? '...' : ordersToday.length}</p>
+              <p className="text-green-500 text-sm">+2 so với hôm qua</p>
+            </div>
+            <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center">
+              <FaCalendar className="text-pink-600 text-2xl" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-blue-600 text-sm font-medium mb-1">Tổng đơn hàng</p>
+              <p className="text-3xl font-bold text-gray-900">{loading ? '...' : totalOrders}</p>
+              <p className="text-blue-500 text-sm">Đang xử lý</p>
+            </div>
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+              <FaBirthdayCake className="text-blue-600 text-2xl" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-green-600 text-sm font-medium mb-1">Tỷ lệ hoàn thành</p>
+              <p className="text-3xl font-bold text-gray-900">100%</p>
+              <p className="text-green-500 text-sm">Xuất sắc</p>
+            </div>
+            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
+              <FaCheckCircle className="text-green-600 text-2xl" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-purple-600 text-sm font-medium mb-1">Đang làm bánh</p>
+              <p className="text-3xl font-bold text-gray-900">5</p>
+              <p className="text-purple-500 text-sm">Trung bình 2.3h/đơn</p>
+            </div>
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center">
+              <FaChartLine className="text-purple-600 text-2xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Nội quy */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-900">Nội quy</h3>
+            <div className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-medium">
+              Bắt buộc
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            {RULES.map((rule, index) => (
+              <div key={index} className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    index === 0 ? 'bg-pink-100' : 
+                    index === 1 ? 'bg-blue-100' : 
+                    index === 2 ? 'bg-green-100' : 
+                    index === 3 ? 'bg-purple-100' : 'bg-orange-100'
+                  }`}>
+                    <FaBirthdayCake className={`text-lg ${
+                      index === 0 ? 'text-pink-600' : 
+                      index === 1 ? 'text-blue-600' : 
+                      index === 2 ? 'text-green-600' : 
+                      index === 3 ? 'text-purple-600' : 'text-orange-600'
+                    }`} />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">Quy tắc {index + 1}</p>
+                    <p className="text-sm text-gray-600">{rule}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quy định */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-900">Quy định</h3>
+            <div className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+              Quan trọng
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            {REGULATIONS.map((regulation, index) => (
+              <div key={index} className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">Quy định {index + 1}</p>
+                    <p className="text-sm text-gray-600">{regulation}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 p-6 rounded-2xl">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center">
+              <FaListUl className="text-pink-600 text-xl" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Đơn hàng cần làm</h4>
+              <p className="text-sm text-gray-600">Xem danh sách đơn hàng</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-2xl">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center">
+              <FaBook className="text-blue-600 text-xl" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Công thức</h4>
+              <p className="text-sm text-gray-600">Xem công thức làm bánh</p>
+            </div>
+            <div className="flex-shrink-0">
+              <img 
+                src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3aTU3NHhqd2NqeDRiN3N5dTV4NzZhM2dkODQzdzY2amVqOGt6bXJ6ZyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/aU1zEDJ9xPVjFBbtvJ/giphy.gif" 
+                alt="Linh vật xem công thức" 
+                className="w-16 h-16 rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-green-50 to-purple-50 border border-green-200 p-6 rounded-2xl">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center">
+              <FaExclamationTriangle className="text-green-600 text-xl" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900">Báo cáo sự cố</h4>
+              <p className="text-sm text-gray-600">Báo cáo vấn đề</p>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Thông báo nội bộ */}
       {NOTIFICATIONS.length > 0 && (
-        <div className="space-y-2">
-          {NOTIFICATIONS.map(n => (
-            <div key={n.id} className={`p-4 rounded-lg shadow flex items-center gap-3 ${n.type === 'warning' ? 'bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800' : 'bg-green-50 border-l-4 border-green-400 text-green-800'}`}>
-              {n.type === 'warning' ? <FaExclamationTriangle className="text-yellow-400" /> : <FaBirthdayCake className="text-green-400" />}
-              <span>{n.message}</span>
-            </div>
-          ))}
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 p-6 rounded-2xl">
+          <div className="flex items-center space-x-3 mb-4">
+            <FaExclamationTriangle className="text-yellow-600 text-xl" />
+            <h3 className="text-lg font-semibold text-gray-800">Thông báo nội bộ</h3>
+          </div>
+          <div className="space-y-2">
+            {NOTIFICATIONS.map(n => (
+              <div key={n.id} className="flex items-center space-x-3 p-3 bg-white rounded-lg border border-yellow-200">
+                <FaExclamationTriangle className="text-yellow-500" />
+                <span className="text-gray-700">{n.message}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Nút truy cập nhanh */}
-      <div className="flex flex-wrap gap-4">
-        <a href="/baker/orders" className="flex items-center gap-2 px-4 py-2 bg-blue-200 text-blue-700 rounded-lg shadow hover:bg-blue-300 transition-colors">
-          <FaListUl /> Đơn hàng cần làm
-        </a>
-        <a href="/baker/recipes" className="flex items-center gap-2 px-4 py-2 bg-purple-200 text-purple-700 rounded-lg shadow hover:bg-purple-300 transition-colors">
-          <FaBook /> Công thức
-        </a>
-        <a href="/baker/report" className="flex items-center gap-2 px-4 py-2 bg-pink-200 text-pink-700 rounded-lg shadow hover:bg-pink-300 transition-colors">
-          <FaExclamationTriangle /> Báo cáo sự cố
-        </a>
-      </div>
-
-      {/* Thống kê nhanh */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-blue-200 to-blue-300 p-6 rounded-lg shadow-lg flex items-center justify-between">
-          <div>
-            <p className="text-blue-700 text-sm font-medium">Đơn hàng hôm nay</p>
-            <p className="text-3xl font-bold text-blue-800">{loading ? '...' : ordersToday.length}</p>
-          </div>
-          <FaCalendar className="text-blue-600 text-3xl" />
-        </div>
-        <div className="bg-gradient-to-br from-purple-200 to-purple-300 p-6 rounded-lg shadow-lg flex items-center justify-between">
-          <div>
-            <p className="text-purple-700 text-sm font-medium">Tổng số đơn làm bánh</p>
-            <p className="text-3xl font-bold text-purple-800">{loading ? '...' : totalOrders}</p>
-          </div>
-          <FaBirthdayCake className="text-purple-600 text-3xl" />
-        </div>
-        <div className="bg-gradient-to-br from-pink-200 to-pink-300 p-6 rounded-lg shadow-lg flex items-center justify-between">
-          <div>
-            <p className="text-pink-700 text-sm font-medium">Tỷ lệ hoàn thành</p>
-            <p className="text-3xl font-bold text-pink-800">100%</p>
-          </div>
-          <FaChartLine className="text-pink-600 text-3xl" />
-        </div>
-      </div>
-
-      {/* Nội quy và Quy định */}
-      <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 border-l-4 border-blue-300 p-6 rounded-lg shadow-lg relative overflow-hidden">
-        <div className="flex items-start gap-4">
-          <div className="flex-1">
-            <h2 className="text-xl font-bold text-blue-700 mb-4">Nội quy & Quy định LunaBakery</h2>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-semibold text-purple-600 mb-2">📋 Nội quy dành cho thợ làm bánh</h3>
-                <ul className="list-disc pl-6 text-blue-800 space-y-1">
-                  {RULES.map((rule, idx) => <li key={idx}>{rule}</li>)}
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-semibold text-pink-600 mb-2">📖 Quy định của LunaBakery</h3>
-                <ul className="list-disc pl-6 text-purple-800 space-y-1">
-                  {REGULATIONS.map((reg, idx) => <li key={idx}>{reg}</li>)}
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="flex-shrink-0">
-            <img 
-              src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3aTU3NHhqd2NqeDRiN3N5dTV4NzZhM2dkODQzdzY2amVqOGt6bXJ6ZyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/aU1zEDJ9xPVjFBbtvJ/giphy.gif" 
-              alt="Linh vật đọc nội quy và quy định" 
-              className="w-24 h-24 rounded-lg"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Lịch sử hoạt động gần đây */}
-      <div className="bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 border border-blue-300 p-6 rounded-lg shadow-lg">
-        <h3 className="text-lg font-bold text-blue-700 mb-3">Lịch sử hoạt động gần đây</h3>
-        {recentOrders.length === 0 ? (
-          <p className="text-blue-600 italic">Chưa có đơn hàng nào.</p>
-        ) : (
-          <ul className="divide-y divide-blue-300">
-            {recentOrders.map((order, idx) => (
-              <li key={order._id || idx} className="py-3 flex items-center gap-4 hover:bg-blue-200 rounded-lg px-2 transition-colors">
-                <FaBirthdayCake className="text-purple-500" />
-                <span className="font-medium text-blue-800">#{order._id?.slice(-6) || '---'}</span>
-                <span className="text-purple-600 text-sm">{new Date(order.createdAt).toLocaleString('vi-VN')}</span>
-                <span className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-blue-300 to-purple-300 text-white ml-auto">{order.status}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
       {/* Câu nói truyền cảm hứng */}
-      <div className="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 border-l-4 border-blue-400 p-6 rounded-lg shadow-lg flex items-center gap-4">
-        <FaQuoteLeft className="text-blue-600 text-3xl" />
-        <span className="italic text-blue-800 text-lg font-medium">{randomQuote}</span>
+      <div className="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 p-8 rounded-2xl">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+          <FaQuoteLeft className="text-pink-600 mr-3" />
+          Câu nói truyền cảm hứng
+        </h3>
+        <div className="text-center">
+          <p className="italic text-gray-700 text-lg font-medium">"{randomQuote}"</p>
+        </div>
       </div>
     </div>
   );
