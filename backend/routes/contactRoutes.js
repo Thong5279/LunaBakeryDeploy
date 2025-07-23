@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protect, admin, adminOrManager } = require('../middleware/authMiddleware');
 
 // Gửi form liên hệ
 router.post('/', async (req, res) => {
@@ -33,8 +33,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Lấy danh sách tin nhắn liên hệ (chỉ admin)
-router.get('/admin', protect, admin, async (req, res) => {
+// Lấy danh sách tin nhắn liên hệ (admin & manager)
+router.get('/admin', protect, adminOrManager, async (req, res) => {
   try {
     const { page = 1, limit = 10, status = '', search = '' } = req.query;
     
@@ -84,8 +84,8 @@ router.get('/admin', protect, admin, async (req, res) => {
   }
 });
 
-// Cập nhật trạng thái tin nhắn (chỉ admin)
-router.put('/admin/:id/status', protect, admin, async (req, res) => {
+// Cập nhật trạng thái tin nhắn (admin & manager)
+router.put('/admin/:id/status', protect, adminOrManager, async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -124,8 +124,8 @@ router.put('/admin/:id/status', protect, admin, async (req, res) => {
   }
 });
 
-// Xóa tin nhắn (chỉ admin)
-router.delete('/admin/:id', protect, admin, async (req, res) => {
+// Xóa tin nhắn (admin & manager)
+router.delete('/admin/:id', protect, adminOrManager, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -151,8 +151,8 @@ router.delete('/admin/:id', protect, admin, async (req, res) => {
   }
 });
 
-// Lấy thống kê tin nhắn (chỉ admin)
-router.get('/admin/stats', protect, admin, async (req, res) => {
+// Lấy thống kê tin nhắn (admin & manager)
+router.get('/admin/stats', protect, adminOrManager, async (req, res) => {
   try {
     const total = await Contact.countDocuments();
     const newMessages = await Contact.countDocuments({ status: 'new' });

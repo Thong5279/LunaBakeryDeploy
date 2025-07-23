@@ -7,6 +7,7 @@ import {
   FaWarehouse,
   FaClipboardList,
   FaStar,
+  FaEnvelope,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -23,6 +24,51 @@ const ManagerSidebar = () => {
     navigate("/");
   };
 
+  const menuItems = [
+    { 
+      path: "/manager/orders", 
+      icon: FaClipboardList, 
+      label: "Đơn hàng",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/products", 
+      icon: FaBoxOpen, 
+      label: "Sản phẩm",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/ingredients", 
+      icon: FaBox, 
+      label: "Nguyên liệu",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/inventory", 
+      icon: FaWarehouse, 
+      label: "Thống kê mua bán",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/reviews", 
+      icon: FaStar, 
+      label: "Đánh giá",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/recipes", 
+      icon: FaBoxOpen, 
+      label: "Công thức",
+      iconColor: "text-pink-500"
+    },
+    { 
+      path: "/manager/contacts", 
+      icon: FaEnvelope, 
+      label: "Tin nhắn liên hệ",
+      iconColor: "text-teal-500"
+    },
+  ];
+
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -35,89 +81,21 @@ const ManagerSidebar = () => {
       </h2>
 
       <nav className="flex flex-col space-y-2">
-        {/* Quản lý đơn hàng */}
-        <NavLink
-          to={"/manager/orders"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaClipboardList className="text-pink-500"></FaClipboardList>
-          <span className="">Đơn hàng</span>
-        </NavLink>
-
-        {/* Quản lý sản phẩm */}
-        <NavLink
-          to={"/manager/products"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaBoxOpen className="text-pink-500"></FaBoxOpen>
-          <span className="">Sản phẩm</span>
-        </NavLink>
-
-        {/* Quản lý nguyên liệu */}
-        <NavLink
-          to={"/manager/ingredients"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaBox className="text-pink-500"></FaBox>
-          <span className="">Nguyên liệu</span>
-        </NavLink>
-
-        {/* Quản lý kho */}
-        <NavLink
-          to={"/manager/inventory"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaWarehouse className="text-pink-500"></FaWarehouse>
-          <span className="">Thống kê mua bán</span>
-        </NavLink>
-
-        {/* Quản lý đánh giá */}
-        <NavLink
-          to={"/manager/reviews"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaStar className="text-pink-500"></FaStar>
-          <span className="">Đánh giá</span>
-        </NavLink>
-
-        {/* Quản lý công thức */}
-        <NavLink
-          to={"/manager/recipes"}
-          className={({ isActive }) =>
-            isActive
-              ? "text-pink-500 px-4 py-3 rounded flex items-center space-x-2 bg-pink-100"
-              : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
-          }
-          end
-        >
-          <FaBoxOpen className="text-pink-500"></FaBoxOpen>
-          <span className="">Công thức</span>
-        </NavLink>
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              isActive
+                ? `text-${item.iconColor} px-4 py-3 rounded flex items-center space-x-2 bg-${item.iconColor}-100`
+                : "text-gray-700 hover:bg-pink-100 px-4 py-3 rounded flex items-center space-x-2"
+            }
+            end
+          >
+            <item.icon className={`text-${item.iconColor}`}></item.icon>
+            <span className="">{item.label}</span>
+          </NavLink>
+        ))}
 
         {/* Trở về trang chủ */}
         <NavLink

@@ -40,9 +40,11 @@ const ManagerLayout = () => {
         <ManagerSidebar />
       </div>
       {/* nội dung chính của trang quản lý*/}
-      <div className="flex-grow p-6 overflow-auto">
-        <Outlet/>
-      </div>
+      <main className="flex-1 min-h-screen">
+        <div className="container mx-auto px-4 py-6 md:py-8 mt-14 md:mt-0">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 };

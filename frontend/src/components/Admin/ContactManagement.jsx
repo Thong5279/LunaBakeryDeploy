@@ -39,8 +39,7 @@ const ContactManagement = () => {
     pagination,
     filters,
     loading, 
-    error,
-    actionLoading 
+    error
   } = useSelector((state) => state.adminContacts);
 
   // Local state
@@ -52,7 +51,7 @@ const ContactManagement = () => {
   const [searchInput, setSearchInput] = useState(filters.search);
 
   useEffect(() => {
-    if (!user || user.role !== "admin") {
+    if (!user || (user.role !== "admin" && user.role !== "manager")) {
       navigate("/");
     } else {
       dispatch(fetchAdminContacts(filters));
@@ -144,7 +143,7 @@ const ContactManagement = () => {
     });
   };
 
-  if (!user || user.role !== "admin") {
+  if (!user || (user.role !== "admin" && user.role !== "manager")) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -153,7 +152,7 @@ const ContactManagement = () => {
             Không có quyền truy cập
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Chỉ Admin mới có thể truy cập chức năng này.
+            Chỉ Admin hoặc Manager mới có thể truy cập chức năng này.
           </p>
         </div>
       </div>
