@@ -8,6 +8,7 @@ import {
   FaClipboardList,
   FaStar,
   FaEnvelope,
+  FaChartBar,
 } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -29,6 +30,7 @@ const ManagerSidebar = () => {
     { path: "/manager/products", icon: FaBoxOpen, label: "Sản phẩm", iconColor: "text-purple-500" },
     { path: "/manager/ingredients", icon: FaBox, label: "Nguyên liệu", iconColor: "text-green-500" },
     { path: "/manager/inventory", icon: FaWarehouse, label: "Thống kê mua bán", iconColor: "text-indigo-500" },
+    { path: "/manager/analytics", icon: FaChartBar, label: "Thống kê", iconColor: "text-orange-500" },
     { path: "/manager/reviews", icon: FaStar, label: "Đánh giá", iconColor: "text-yellow-500" },
     { path: "/manager/recipes", icon: FaBoxOpen, label: "Công thức", iconColor: "text-yellow-600" },
     { path: "/manager/contacts", icon: FaEnvelope, label: "Tin nhắn liên hệ", iconColor: "text-teal-500" },

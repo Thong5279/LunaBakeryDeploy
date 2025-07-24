@@ -52,6 +52,7 @@ import About from "./pages/About";
 import WishlistPage from "./pages/WishlistPage";
 import FlashSalePage from "./pages/FlashSalePage";
 import ManagerContactManagement from "./pages/ManagerContactManagement";
+import ManagerAnalytics from "./components/Manager/ManagerAnalytics";
 
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Assuming you have a Redux store set up
@@ -151,6 +152,7 @@ const AppContent = () => {
           }
         >
           <Route index element={<ManagerHomePage />} />
+          <Route path="analytics" element={<ManagerAnalytics />} />
           <Route path="orders" element={<ManagerOrderManagement />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
@@ -161,7 +163,7 @@ const AppContent = () => {
           <Route path="reviews" element={<ReviewManagement />} />
           <Route path="flash-sales" element={<FlashSaleManagement />} />
           <Route path="recipes" element={<ManagerRecipeManagement />} />
-          <Route path="/manager/contacts" element={<ProtectedRoute roles={["admin", "manager"]}><ManagerContactManagement /></ProtectedRoute>} />
+          <Route path="contacts" element={<ManagerContactManagement />} />
         </Route>
 
         {/* baker */}

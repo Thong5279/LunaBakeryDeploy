@@ -5,8 +5,8 @@ const { protect, admin, adminOrManager } = require("../middleware/authMiddleware
 
 // @desc    Get revenue analytics
 // @route   GET /api/analytics/revenue
-// @access  Private/Admin
-router.get("/revenue", protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get("/revenue", protect, adminOrManager, async (req, res) => {
   try {
     const { period = "month", year, month, quarter } = req.query;
     let startDate, endDate, groupBy;
@@ -115,8 +115,8 @@ router.get("/revenue", protect, admin, async (req, res) => {
 
 // @desc    Get dashboard summary
 // @route   GET /api/analytics/summary
-// @access  Private/Admin
-router.get("/summary", protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get("/summary", protect, adminOrManager, async (req, res) => {
   try {
     const today = new Date();
     const startOfDay = new Date(today.setHours(0, 0, 0, 0));
@@ -243,8 +243,8 @@ router.get("/summary", protect, admin, async (req, res) => {
 
 // @desc    Get order status distribution
 // @route   GET /api/analytics/order-status
-// @access  Private/Admin
-router.get("/order-status", protect, admin, async (req, res) => {
+// @access  Private/Admin or Manager
+router.get("/order-status", protect, adminOrManager, async (req, res) => {
   try {
     const statusDistribution = await Order.aggregate([
       {
