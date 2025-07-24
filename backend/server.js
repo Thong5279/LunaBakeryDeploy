@@ -92,7 +92,9 @@ app.use(cors({
         process.env.VITE_FRONTEND_URL || "http://localhost:5173",
         "http://localhost:5174",
         "http://localhost:5175",
-        "http://localhost:5176"
+        "http://localhost:5176",
+        "https://luna-bakery-frontend-5fy1vs8ug-iamthongs-projects.vercel.app",
+        "https://luna-bakery-frontend.vercel.app"
     ],
     credentials: true
 }));
