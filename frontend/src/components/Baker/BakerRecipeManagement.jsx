@@ -27,10 +27,8 @@ const BakerRecipeManagement = () => {
   const dispatch = useDispatch();
   const { 
     recipes, 
-    categories, 
     searchResults, 
     loading, 
-    searchLoading, 
     error, 
     pagination, 
     filters 
@@ -120,7 +118,7 @@ const BakerRecipeManagement = () => {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
-          <FaBook className="text-2xl text-pink-600" />
+          <img src="https://cdn-icons-gif.flaticon.com/15713/15713226.gif" alt="Sổ tay công thức" className="w-10 h-10 rounded-full border-2 border-pink-200 shadow" />
           <h1 className="text-2xl font-bold text-gray-900">Sổ tay công thức</h1>
         </div>
         <p className="text-gray-600">
@@ -263,7 +261,7 @@ const BakerRecipeManagement = () => {
               <p className="text-pink-600 text-sm font-medium">Tổng công thức</p>
               <p className="text-2xl font-bold text-gray-900">{pagination.totalRecipes}</p>
             </div>
-            <FaBook className="text-pink-500 text-2xl" />
+            <img src="https://cdn-icons-gif.flaticon.com/12817/12817525.gif" alt="Tổng công thức" className="w-16 h-16 rounded-full border-2 border-pink-200 shadow" />
           </div>
         </div>
 
@@ -275,7 +273,7 @@ const BakerRecipeManagement = () => {
                 {recipes.filter(r => r.difficulty === 'Trung bình').length}
               </p>
             </div>
-            <FaUtensils className="text-pink-500 text-2xl" />
+            <img src="https://cdn-icons-gif.flaticon.com/17659/17659518.gif" alt="Trung bình" className="w-16 h-16 rounded-full border-2 border-pink-200 shadow" />
           </div>
         </div>
 
@@ -287,7 +285,7 @@ const BakerRecipeManagement = () => {
                 {recipes.filter(r => r.difficulty === 'Khó').length}
               </p>
             </div>
-            <FaUtensils className="text-pink-500 text-2xl" />
+            <img src="https://cdn-icons-gif.flaticon.com/17659/17659554.gif" alt="Khó" className="w-16 h-16 rounded-full border-2 border-pink-200 shadow" />
           </div>
         </div>
 
@@ -299,7 +297,7 @@ const BakerRecipeManagement = () => {
                 {recipes.filter(r => r.difficulty === 'Dễ').length}
               </p>
             </div>
-            <FaClock className="text-pink-500 text-2xl" />
+            <img src="https://cdn-icons-gif.flaticon.com/17659/17659499.gif" alt="Dễ làm" className="w-16 h-16 rounded-full border-2 border-pink-200 shadow" />
           </div>
         </div>
       </div>

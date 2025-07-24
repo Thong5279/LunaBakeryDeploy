@@ -10,9 +10,7 @@ const DeliveryHomePage = () => {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-pink-100 to-purple-100 border border-pink-200 p-8 rounded-2xl shadow-sm">
         <div className="flex items-center space-x-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-md">
-            <FaTruck className="text-3xl text-pink-600" />
-          </div>
+          <img src="https://cdn-icons-gif.flaticon.com/13471/13471023.gif" alt="Chào mừng" className="w-20 h-20 rounded-full border-2 border-pink-300 shadow" />
           <div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2">Chào mừng, {user?.name}!</h1>
             <p className="text-gray-600 text-lg">Trang làm việc dành cho nhân viên giao hàng</p>
@@ -44,9 +42,7 @@ const DeliveryHomePage = () => {
               <p className="text-3xl font-bold text-gray-900">8</p>
               <p className="text-green-500 text-sm">+1 hôm nay</p>
             </div>
-            <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center">
-              <FaBoxOpen className="text-pink-600 text-2xl" />
-            </div>
+            <img src="https://cdn-icons-gif.flaticon.com/11779/11779500.gif" alt="Đơn cần giao" className="w-16 h-16 rounded-full border-2 border-pink-300 shadow" />
           </div>
         </div>
 
@@ -57,9 +53,7 @@ const DeliveryHomePage = () => {
               <p className="text-3xl font-bold text-gray-900">3</p>
               <p className="text-blue-500 text-sm">Đang xử lý</p>
             </div>
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
-              <FaRoute className="text-blue-600 text-2xl" />
-            </div>
+            <img src="https://cdn-icons-gif.flaticon.com/18485/18485030.gif" alt="Đang giao" className="w-16 h-16 rounded-full border-2 border-blue-300 shadow" />
           </div>
         </div>
 
@@ -70,9 +64,7 @@ const DeliveryHomePage = () => {
               <p className="text-3xl font-bold text-gray-900">5</p>
               <p className="text-green-500 text-sm">+2 so với hôm qua</p>
             </div>
-            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
-              <FaCheckCircle className="text-green-600 text-2xl" />
-            </div>
+            <img src="https://cdn-icons-gif.flaticon.com/18485/18485014.gif" alt="Hoàn thành hôm nay" className="w-16 h-16 rounded-full border-2 border-green-300 shadow" />
           </div>
         </div>
 
@@ -83,9 +75,7 @@ const DeliveryHomePage = () => {
               <p className="text-3xl font-bold text-gray-900">18 km</p>
               <p className="text-purple-500 text-sm">Trung bình 2.3km/đơn</p>
             </div>
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center">
-              <FaMapMarkerAlt className="text-purple-600 text-2xl" />
-            </div>
+            <img src="https://cdn-icons-gif.flaticon.com/11201/11201870.gif" alt="Tổng khoảng cách" className="w-16 h-16 rounded-full border-2 border-purple-300 shadow" />
           </div>
         </div>
       </div>
@@ -105,9 +95,7 @@ const DeliveryHomePage = () => {
             {/* Nội quy items */}
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-                  <FaBoxOpen className="text-pink-600" />
-                </div>
+                <img src="https://cdn-icons-gif.flaticon.com/18485/18485045.gif" alt="Kiểm tra đơn hàng" className="w-12 h-12 rounded-full border-2 border-pink-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Kiểm tra đơn hàng</p>
                   <p className="text-sm text-gray-600">Xác nhận thông tin khách hàng, địa chỉ, số điện thoại trước khi giao</p>
@@ -117,9 +105,7 @@ const DeliveryHomePage = () => {
 
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <FaRoute className="text-blue-600" />
-                </div>
+                <img src="http://cdn-icons-gif.flaticon.com/15309/15309671.gif" alt="Tuân thủ lộ trình" className="w-12 h-12 rounded-full border-2 border-blue-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Tuân thủ lộ trình</p>
                   <p className="text-sm text-gray-600">Giao hàng theo thứ tự đã định, không tự ý thay đổi</p>
@@ -129,9 +115,7 @@ const DeliveryHomePage = () => {
 
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <FaCheckCircle className="text-green-600" />
-                </div>
+                <img src="https://cdn-icons-gif.flaticon.com/15401/15401345.gif" alt="Cập nhật trạng thái" className="w-12 h-12 rounded-full border-2 border-green-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Cập nhật trạng thái</p>
                   <p className="text-sm text-gray-600">Báo cáo ngay khi hoàn thành giao hàng</p>
@@ -141,9 +125,7 @@ const DeliveryHomePage = () => {
 
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <FaUserFriends className="text-purple-600" />
-                </div>
+                <img src="https://cdn-icons-gif.flaticon.com/11779/11779515.gif" alt="Liên hệ khách hàng" className="w-12 h-12 rounded-full border-2 border-purple-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Liên hệ khách hàng</p>
                   <p className="text-sm text-gray-600">Gọi điện xác nhận trước khi đến giao hàng</p>
@@ -153,9 +135,7 @@ const DeliveryHomePage = () => {
 
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                  <FaClock className="text-orange-600" />
-                </div>
+                <img src="https://cdn-icons-gif.flaticon.com/17904/17904640.gif" alt="Đúng giờ" className="w-12 h-12 rounded-full border-2 border-orange-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Đúng giờ</p>
                   <p className="text-sm text-gray-600">Giao hàng đúng thời gian đã hẹn với khách hàng</p>
@@ -165,9 +145,7 @@ const DeliveryHomePage = () => {
 
             <div className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-300">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                  <FaMapMarkerAlt className="text-red-600" />
-                </div>
+                <img src="https://cdn-icons-gif.flaticon.com/17882/17882586.gif" alt="Bảo quản hàng hóa" className="w-12 h-12 rounded-full border-2 border-red-300 shadow" />
                 <div>
                   <p className="font-medium text-gray-900">Bảo quản hàng hóa</p>
                   <p className="text-sm text-gray-600">Đảm bảo sản phẩm không bị hư hỏng trong quá trình vận chuyển</p>
