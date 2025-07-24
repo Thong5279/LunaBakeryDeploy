@@ -157,6 +157,5 @@ app.use((err, req, res, next) => {
     });
 });
 
-httpServer.listen(PORT, () => {
-    console.log(`Server chay tren http://localhost:${PORT}`);
-});
+// Không listen khi deploy serverless trên Vercel
+module.exports = app;
