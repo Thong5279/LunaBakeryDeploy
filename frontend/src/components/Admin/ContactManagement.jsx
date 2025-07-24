@@ -163,7 +163,12 @@ const ContactManagement = () => {
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Quản lý tin nhắn liên hệ</h2>
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+          <span className="w-19 h-19 bg-pink-100 rounded-full flex items-center justify-center p-1">
+            <img src="https://cdn-icons-gif.flaticon.com/15594/15594419.gif" alt="Quản lý tin nhắn liên hệ" className="w-18 h-18 object-cover rounded-full border-2 border-white shadow" />
+          </span>
+          Quản lý tin nhắn liên hệ
+        </h1>
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setShowFilters(!showFilters)}

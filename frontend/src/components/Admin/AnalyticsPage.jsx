@@ -42,7 +42,6 @@ ChartJS.register(
 const AnalyticsPage = () => {
   const dispatch = useDispatch();
   const [selectedPeriod, setSelectedPeriod] = useState("month");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const {
     revenue,
@@ -52,14 +51,14 @@ const AnalyticsPage = () => {
 
   useEffect(() => {
     dispatch(fetchSummary());
-    dispatch(fetchRevenue({ period: selectedPeriod, year: selectedYear }));
+    dispatch(fetchRevenue({ period: selectedPeriod, year: new Date().getFullYear() }));
     dispatch(fetchOrderStatus());
-  }, [dispatch, selectedPeriod, selectedYear]);
+  }, [dispatch, selectedPeriod]);
 
   const handlePeriodChange = (period) => {
     setSelectedPeriod(period);
     dispatch(setPeriod(period));
-    dispatch(fetchRevenue({ period, year: selectedYear }));
+    dispatch(fetchRevenue({ period, year: new Date().getFullYear() }));
   };
 
   const formatCurrency = (amount) => {
@@ -341,8 +340,12 @@ const AnalyticsPage = () => {
                   {summary.data.summary.today.orders} đơn hàng
                 </p>
               </div>
-              <div className="p-3 rounded-full bg-green-100">
-                <FaCalendarDay className="text-green-600 text-xl" />
+              <div className="p-1 rounded-full bg-green-100 flex items-center justify-center">
+                <img
+                  src="https://cdn-icons-gif.flaticon.com/17771/17771121.gif"
+                  alt="Doanh thu hôm nay"
+                  className="w-17 h-17 object-cover rounded-full border-2 border-white shadow"
+                />
               </div>
             </div>
           </div>
@@ -358,8 +361,12 @@ const AnalyticsPage = () => {
                   {summary.data.summary.month.orders} đơn hàng
                 </p>
               </div>
-              <div className="p-3 rounded-full bg-blue-100">
-                <FaCalendarAlt className="text-blue-600 text-xl" />
+              <div className="p-1 rounded-full bg-blue-100 flex items-center justify-center">
+                <img
+                  src="https://cdn-icons-gif.flaticon.com/15578/15578911.gif"
+                  alt="Doanh thu tháng này"
+                  className="w-17 h-17 object-cover rounded-full border-2 border-white shadow"
+                />
               </div>
             </div>
           </div>
@@ -375,8 +382,8 @@ const AnalyticsPage = () => {
                   {summary.data.summary.year.orders} đơn hàng
                 </p>
               </div>
-              <div className="p-3 rounded-full bg-purple-100">
-                <FaArrowUp className="text-purple-600 text-xl" />
+              <div className="p-1 rounded-full bg-purple-100">
+               <img src="https://cdn-icons-gif.flaticon.com/15578/15578963.gif" alt="" className="w-17 h-17 object-cover rounded-full border-2 border-white shadow" />
               </div>
             </div>
           </div>

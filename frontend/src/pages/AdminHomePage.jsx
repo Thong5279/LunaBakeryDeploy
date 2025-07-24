@@ -40,8 +40,6 @@ const AdminHomePage = () => {
 
   // Tính toán thống kê
   const pendingOrders = orders.filter(order => order.status === 'pending').length;
-  const completedOrders = orders.filter(order => order.status === 'completed').length;
-  const cancelledOrders = orders.filter(order => order.status === 'cancelled').length;
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -139,8 +137,8 @@ const AdminHomePage = () => {
                 </p>
                 <p className="text-gray-500 text-sm mt-1">VNĐ</p>
               </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center">
-                <FaChartLine className="text-pink-600 text-2xl" />
+              <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/17904/17904683.gif" alt="Tổng doanh thu" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
               </div>
             </div>
           </div>
@@ -153,8 +151,8 @@ const AdminHomePage = () => {
                 <p className="text-3xl font-bold text-gray-900 mt-2">{totalOrders}</p>
                 <p className="text-blue-500 text-sm mt-1">Đơn hàng</p>
               </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
-                <FaShoppingCart className="text-blue-600 text-2xl" />
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/15309/15309674.gif" alt="Tổng đơn hàng" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
               </div>
             </div>
           </div>
@@ -167,8 +165,8 @@ const AdminHomePage = () => {
                 <p className="text-3xl font-bold text-gray-900 mt-2">{products.length}</p>
                 <p className="text-green-500 text-sm mt-1">Sản phẩm</p>
               </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
-                <FaBox className="text-green-600 text-2xl" />
+              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/15713/15713189.gif" alt="Sản phẩm chờ xử lý" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
               </div>
             </div>
           </div>
@@ -181,8 +179,8 @@ const AdminHomePage = () => {
                 <p className="text-3xl font-bold text-gray-900 mt-2">{pendingOrders}</p>
                 <p className="text-purple-500 text-sm mt-1">Đơn hàng</p>
               </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center">
-                <FaClock className="text-purple-600 text-2xl" />
+            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/15578/15578806.gif" alt="Sản phẩm chờ xử lý" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
               </div>
             </div>
           </div>
@@ -199,7 +197,9 @@ const AdminHomePage = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Quản lý đơn hàng</h3>
                 <p className="text-gray-600">Xem và xử lý đơn hàng</p>
               </div>
-              <FaShoppingCart className="text-3xl text-pink-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/11779/11779500.gif" alt="Quản lý đơn hàng" className="w-12 h-12 object-cover rounded-full border-2 border-white shadow" />
+              </div>
             </div>
           </Link>
 
@@ -212,7 +212,9 @@ const AdminHomePage = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Quản lý sản phẩm</h3>
                 <p className="text-gray-600">Thêm, sửa, xóa sản phẩm</p>
               </div>
-              <FaBox className="text-3xl text-blue-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/19012/19012996.gif" alt="Quản lý sản phẩm" className="w-12 h-12 object-cover rounded-full border-2 border-white shadow" />
+              </div>
             </div>
           </Link>
 
@@ -225,7 +227,9 @@ const AdminHomePage = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Quản lý người dùng</h3>
                 <p className="text-gray-600">Quản lý tài khoản</p>
               </div>
-              <FaUsers className="text-3xl text-green-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/15401/15401352.gif" alt="Quản lý người dùng" className="w-12 h-12 object-cover rounded-full border-2 border-white shadow" />
+              </div>
             </div>
           </Link>
         </div>

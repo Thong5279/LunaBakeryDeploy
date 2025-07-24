@@ -171,7 +171,9 @@ const RecipeManagement = () => {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-              <FaUtensils className="text-pink-500" />
+              <span className="w-18 h-18 rounded-full flex items-center justify-center p-1">
+                <img src="https://cdn-icons-gif.flaticon.com/12817/12817456.gif" alt="Quản lý Công thức" className="w-18 h-18 object-cover rounded-full border-2 border-white shadow" />
+              </span>
               Quản lý Công thức
             </h1>
             <p className="text-gray-600 mt-2">

@@ -80,11 +80,13 @@ const InventoryManagement = () => {
     <div className="p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          📦 Thống kê nguyên liệu và sản phẩm
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+          <span className="w-19 h-19 bg-pink-100 rounded-full flex items-center justify-center p-1">
+            <img src="https://cdn-icons-gif.flaticon.com/19012/19012991.gif" alt="Thống kê nguyên liệu" className="w-18 h-18 object-cover rounded-full border-2 border-white shadow" />
+          </span>
+          Thống kê nguyên liệu và sản phẩm
         </h1>
         <div className="flex items-center space-x-4">
-          <FaWarehouse className="text-pink-500 text-2xl" />
           <span className="text-lg font-medium text-gray-700">
             Thống kê tồn kho và bán hàng
           </span>
@@ -125,56 +127,60 @@ const InventoryManagement = () => {
           {/* Product Summary Cards */}
           {productSales.data && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <FaBox className="text-blue-500 text-3xl mr-4" />
+              {/* Tổng số sản phẩm */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Tổng sản phẩm</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {productSales.data.totalProducts}
-                    </p>
-                    <p className="text-xs text-gray-500">loại bánh</p>
+                    <p className="text-pink-600 text-sm font-medium mb-1">Tổng số sản phẩm</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{productSales.data.totalProducts}</p>
+                    <p className="text-gray-500 text-sm mt-1">Sản phẩm</p>
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center p-1">
+                    <img src="https://cdn-icons-gif.flaticon.com/11188/11188746.gif" alt="Tổng số sản phẩm" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <FaTrophy className="text-green-500 text-3xl mr-4" />
+              {/* Đã có bán */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Đã có bán</p>
-                    <p className="text-2xl font-bold text-green-600">
-                      {productSales.data.totalProductsSold}
-                    </p>
-                    <p className="text-xs text-gray-500">loại bánh</p>
+                    <p className="text-green-600 text-sm font-medium mb-1">Đã có bán</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{productSales.data.totalProductsSold}</p>
+                    <p className="text-green-500 text-sm mt-1">Sản phẩm</p>
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center p-1">
+                    <img src="https://cdn-icons-gif.flaticon.com/15576/15576189.gif" alt="Đã có bán" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <FaBan className="text-red-500 text-3xl mr-4" />
+              {/* Chưa bán được */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Chưa bán được</p>
-                    <p className="text-2xl font-bold text-red-600">
-                      {productSales.data.totalProductsNotSold}
-                    </p>
-                    <p className="text-xs text-gray-500">loại bánh</p>
+                    <p className="text-yellow-600 text-sm font-medium mb-1">Chưa bán được</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{productSales.data.totalProductsNotSold}</p>
+                    <p className="text-yellow-500 text-sm mt-1">Sản phẩm</p>
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center p-1">
+                    <img src="https://cdn-icons-gif.flaticon.com/15576/15576071.gif" alt="Chưa bán được" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center">
-                  <FaChartBar className="text-purple-500 text-3xl mr-4" />
+              {/* Tỷ lệ bán được */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Tỷ lệ bán được</p>
-                    <p className="text-2xl font-bold text-purple-600">
-                      {productSales.data.totalProducts > 0 
+                    <p className="text-blue-600 text-sm font-medium mb-1">Tỷ lệ bán được</p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">{productSales.data.totalProducts > 0 
                         ? Math.round((productSales.data.totalProductsSold / productSales.data.totalProducts) * 100)
-                        : 0}%
-                    </p>
-                    <p className="text-xs text-gray-500">hiệu suất</p>
+                        : 0}%</p>
+                    <p className="text-blue-500 text-sm mt-1">Tỷ lệ</p>
+                  </div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center p-1">
+                    <img src="https://cdn-icons-gif.flaticon.com/11679/11679193.gif" alt="Tỷ lệ bán được" className="w-14 h-14 object-cover rounded-full border-2 border-white shadow" />
                   </div>
                 </div>
               </div>
