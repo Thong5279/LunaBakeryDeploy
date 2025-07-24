@@ -4,6 +4,9 @@ import { fetchManagerOrders, approveOrder, cancelOrder } from '../../redux/slice
 import { toast } from 'sonner';
 import ConfirmModal from '../Common/ConfirmModal';
 import { FaSearch, FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CancelOrderModal = ({ isOpen, onClose, onConfirm }) => {
   const [reason, setReason] = useState('');
@@ -210,6 +213,96 @@ const ManagerOrderManagement = () => {
     }
   };
 
+  const getStatusLabel = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'pending':
+        return 'Chờ xử lý';
+      case 'approved':
+        return 'Đã duyệt';
+      case 'baking':
+        return 'Đang làm bánh';
+      case 'ready':
+        return 'Sẵn sàng giao hàng';
+      case 'shipping':
+        return 'Đang giao hàng';
+      case 'delivered':
+        return 'Đã giao hàng';
+      case 'cancelled':
+        return 'Đã hủy';
+      case 'cannot_deliver':
+        return 'Không thể giao hàng';
+      default:
+        return 'Không xác định';
+    }
+  };
+
+  // Tổng hợp dữ liệu trạng thái đơn hàng cho biểu đồ
+  const statusCounts = orders.reduce((acc, order) => {
+    const label = getStatusLabel(order.status);
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {});
+  const doughnutData = {
+    labels: Object.keys(statusCounts),
+    datasets: [
+      {
+        data: Object.values(statusCounts),
+        backgroundColor: [
+          'rgba(251, 191, 36, 0.8)',  // Chờ xử lý - vàng
+          'rgba(59, 130, 246, 0.8)',  // Đã duyệt - xanh dương
+          'rgba(249, 115, 22, 0.8)',  // Đang làm bánh - cam
+          'rgba(147, 51, 234, 0.8)',  // Sẵn sàng giao hàng - tím
+          'rgba(34, 197, 94, 0.8)',   // Đã giao hàng - xanh lá
+          'rgba(239, 68, 68, 0.8)',   // Đã hủy/Không thể giao hàng - đỏ
+          'rgba(99, 102, 241, 0.8)',  // Đang giao hàng - xanh chàm
+          'rgba(156, 163, 175, 0.8)', // Không xác định - xám
+        ],
+        borderColor: [
+          'rgba(251, 191, 36, 1)',
+          'rgba(59, 130, 246, 1)',
+          'rgba(249, 115, 22, 1)',
+          'rgba(147, 51, 234, 1)',
+          'rgba(34, 197, 94, 1)',
+          'rgba(239, 68, 68, 1)',
+          'rgba(99, 102, 241, 1)',
+          'rgba(156, 163, 175, 1)',
+        ],
+        borderWidth: 2,
+      },
+    ],
+  };
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      },
+      title: {
+        display: true,
+        text: 'Phân bố trạng thái đơn hàng',
+        font: {
+          size: 16,
+          weight: 'bold'
+        },
+        padding: 20
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
+            const percentage = ((context.parsed * 100) / total).toFixed(1);
+            return `${context.label}: ${context.parsed} đơn (${percentage}%)`;
+          }
+        }
+      }
+    },
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -234,6 +327,13 @@ const ManagerOrderManagement = () => {
 
   return (
     <div className="p-6">
+      {/* Biểu đồ phân bố trạng thái đơn hàng */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Phân bố Trạng thái Đơn hàng</h3>
+        <div className="h-80">
+          <Doughnut data={doughnutData} options={doughnutOptions} />
+        </div>
+      </div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng</h1>
         <p className="text-gray-600 mt-1">

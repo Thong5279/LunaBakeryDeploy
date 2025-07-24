@@ -92,18 +92,26 @@ const AnalyticsPage = () => {
   };
 
   const getStatusLabel = (status) => {
-    const statusLabels = {
-      Processing: "Đang xử lý",
-      Approved: "Đã duyệt",
-      Cancelled: "Đã hủy",
-      Baking: "Đang làm bánh",
-      Ready: "Sẵn sàng giao hàng",
-      CannotDeliver: "Không thể giao hàng",
-      Delivered: "Đã giao hàng thành công",
-      // Legacy support
-      Shipped: "Đã vận chuyển"
-    };
-    return statusLabels[status] || status;
+    switch (status?.toLowerCase()) {
+      case 'pending':
+        return 'Chờ xử lý';
+      case 'approved':
+        return 'Đã duyệt';
+      case 'baking':
+        return 'Đang làm bánh';
+      case 'ready':
+        return 'Sẵn sàng giao hàng';
+      case 'shipping':
+        return 'Đang giao hàng';
+      case 'delivered':
+        return 'Đã giao hàng';
+      case 'cancelled':
+        return 'Đã hủy';
+      case 'cannot_deliver':
+        return 'Không thể giao hàng';
+      default:
+        return 'Không xác định';
+    }
   };
 
   const getStatusColor = (status) => {
@@ -159,12 +167,14 @@ const AnalyticsPage = () => {
     const labels = orderStatus.data.map(item => getStatusLabel(item._id));
     const data = orderStatus.data.map(item => item.count);
     const backgroundColors = [
-      'rgba(251, 191, 36, 0.8)',  // Processing - Yellow
-      'rgba(59, 130, 246, 0.8)',  // Approved - Blue  
-      'rgba(249, 115, 22, 0.8)',  // Baking - Orange
-      'rgba(147, 51, 234, 0.8)',  // Ready - Purple
-      'rgba(34, 197, 94, 0.8)',   // Delivered - Green
-      'rgba(239, 68, 68, 0.8)',   // Cancelled/CannotDeliver - Red
+      'rgba(251, 191, 36, 0.8)',  // Chờ xử lý - vàng
+      'rgba(59, 130, 246, 0.8)',  // Đã duyệt - xanh dương
+      'rgba(249, 115, 22, 0.8)',  // Đang làm bánh - cam
+      'rgba(147, 51, 234, 0.8)',  // Sẵn sàng giao hàng - tím
+      'rgba(34, 197, 94, 0.8)',   // Đã giao hàng - xanh lá
+      'rgba(239, 68, 68, 0.8)',   // Đã hủy/Không thể giao hàng - đỏ
+      'rgba(99, 102, 241, 0.8)',  // Đang giao hàng - xanh chàm
+      'rgba(156, 163, 175, 0.8)', // Không xác định - xám
     ];
 
     return {
