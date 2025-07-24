@@ -44,7 +44,7 @@ const Home = () => {
     return (
         <div className="pb-16 lg:pb-0">
             {/* Hero Section */}
-            <section id="hero">
+            <section id="Hero">
                 <Hero />
             </section>
 
