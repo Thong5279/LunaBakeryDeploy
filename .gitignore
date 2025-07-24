@@ -13,7 +13,8 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 *.env
-
+fontend/.env
+backend/.env
 # Build outputs
 dist/
 build/
