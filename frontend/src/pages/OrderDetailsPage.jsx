@@ -119,25 +119,27 @@ const OrderDetailsPage = () => {
     };
 
     const getStatusIcon = (status) => {
+        const iconStyle = "w-12 h-12 object-contain";
+        
         switch (status?.toLowerCase()) {
             case 'pending':
-                return <FaClock className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/11237/11237478.gif" alt="Chờ xác nhận" className={iconStyle} />;
             case 'approved':
-                return <FaCheckCircle className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/15309/15309746.gif" alt="Đã duyệt" className={iconStyle} />;
             case 'baking':
-                return <FaBox className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/15713/15713162.gif" alt="Đang làm bánh" className={iconStyle} />;
             case 'ready':
-                return <FaBox className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/12817/12817464.gif" alt="Bánh đã sẵn sàng" className={iconStyle} />;
             case 'shipping':
-                return <FaTruck className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/11933/11933522.gif" alt="Đang giao hàng" className={iconStyle} />;
             case 'delivered':
-                return <FaCheckCircle className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/18485/18485036.gif" alt="Đã giao hàng" className={iconStyle} />;
             case 'cancelled':
-                return <FaTimesCircle className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/15746/15746288.gif" alt="Đã hủy" className={iconStyle} />;
             case 'cannot_deliver':
-                return <FaTimesCircle className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/11614/11614840.gif" alt="Không thể giao hàng" className={iconStyle} />;
             default:
-                return <FaClock className="w-6 h-6" />;
+                return <img src="https://cdn-icons-gif.flaticon.com/11237/11237478.gif" alt="Chờ xác nhận" className={iconStyle} />;
         }
     };
 
@@ -221,7 +223,7 @@ const OrderDetailsPage = () => {
                 <div className="mb-8">
                     <h2 className="text-lg font-semibold mb-4">Trạng thái đơn hàng</h2>
                     <div className="flex items-start space-x-4">
-                        <div className={`${getStatusColor(order.status)} p-3 rounded-full acity-10`}>
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
                             {getStatusIcon(order.status)}
                         </div>
                         <div>
@@ -245,7 +247,7 @@ const OrderDetailsPage = () => {
                         <div className="space-y-4">
                             {order.statusHistory.map((history) => (
                                 <div key={history._id || history.updatedAt.toString()} className="flex items-start space-x-4">
-                                    <div className={`${getStatusColor(history.status)} mt-1`}>
+                                    <div className="p-2 bg-white rounded-lg shadow-sm">
                                         {getStatusIcon(history.status)}
                                     </div>
                                     <div>
