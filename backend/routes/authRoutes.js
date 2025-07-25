@@ -22,7 +22,9 @@ router.get('/google/callback',
       // Kiểm tra tài khoản có bị khoá không
       if (req.user.isLocked) {
         console.log(`🔒 User ${req.user.email} đã bị khoá, từ chối đăng nhập Google`);
-        const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const frontendURL = process.env.NODE_ENV === 'production' 
+          ? 'https://luna-bakery-frontend.vercel.app'
+          : (process.env.FRONTEND_URL || 'http://localhost:5173');
         return res.redirect(`${frontendURL}/login?error=account_locked&message=${encodeURIComponent('Tài khoản của bạn đã bị khoá. Vui lòng liên hệ admin để được hỗ trợ!')}`);
       }
 
@@ -41,11 +43,16 @@ router.get('/google/callback',
         (err, token) => {
           if (err) {
             console.error('JWT signing error:', err);
-            return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=auth_failed`);
+            const frontendURL = process.env.NODE_ENV === 'production' 
+              ? 'https://luna-bakery-frontend.vercel.app'
+              : (process.env.FRONTEND_URL || 'http://localhost:5173');
+            return res.redirect(`${frontendURL}/login?error=auth_failed`);
           }
 
           // Redirect về frontend với token
-          const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+          const frontendURL = process.env.NODE_ENV === 'production' 
+            ? 'https://luna-bakery-frontend.vercel.app'
+            : (process.env.FRONTEND_URL || 'http://localhost:5173');
           res.redirect(`${frontendURL}/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify({
             _id: req.user._id,
             name: req.user.name,
@@ -61,7 +68,9 @@ router.get('/google/callback',
       );
     } catch (error) {
       console.error('Google callback error:', error);
-      const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+      const frontendURL = process.env.NODE_ENV === 'production' 
+        ? 'https://luna-bakery-frontend.vercel.app'
+        : (process.env.FRONTEND_URL || 'http://localhost:5173');
       res.redirect(`${frontendURL}/login?error=auth_failed`);
     }
   }
