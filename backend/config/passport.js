@@ -9,7 +9,9 @@ console.log('Google Client Secret:', process.env.GOOGLE_CLIENT_SECRET ? 'Found' 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID || "821903307979-00a3s51711pnfmannsa004bm0eiqkcp.apps.googleusercontent.com",
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || "GOCSPX-1n_WgvZiYccZAK9Bdytzeubv0nW",
-  callbackURL: "/api/auth/google/callback"
+  callbackURL: process.env.NODE_ENV === 'production' 
+    ? "https://backend-rosy-eta.vercel.app/api/auth/google/callback"
+    : "http://localhost:9000/api/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     // Kiểm tra user đã tồn tại chưa
