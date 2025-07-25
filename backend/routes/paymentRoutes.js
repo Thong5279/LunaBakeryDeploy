@@ -34,12 +34,16 @@ router.post("/zalopay/create", protect, async (req, res) => {
       app_time: Date.now(),
       item: JSON.stringify([]),
       embed_data: JSON.stringify({
-        redirecturl: "http://localhost:5173/zalopay-return"
+        redirecturl: process.env.NODE_ENV === 'production' 
+          ? "https://luna-bakery-frontend.vercel.app/zalopay-return"
+          : "http://localhost:5173/zalopay-return"
       }),
       amount: parseInt(amount),
       description: "Thanh toan don hang #" + transID,
       bank_code: "",
-      callback_url: "http://localhost:9000/api/payment/zalopay/callback"
+      callback_url: process.env.NODE_ENV === 'production' 
+        ? "https://backend-rosy-eta.vercel.app/api/payment/zalopay/callback"
+        : "http://localhost:9000/api/payment/zalopay/callback"
     };
 
     // Create MAC signature according to ZaloPay specs
