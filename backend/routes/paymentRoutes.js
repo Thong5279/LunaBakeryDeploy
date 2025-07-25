@@ -181,14 +181,20 @@ router.get("/zalopay/return", async (req, res) => {
     console.log('🔍 Full ZaloPay return URL:', req.url);
 
     // Redirect về frontend zalopay-return page
-    const redirectUrl = `http://localhost:5173/zalopay-return?status=${status || '1'}&apptransid=${apptransid || ''}&amount=${amount || '0'}&source=zalopay_gateway`;
+    const frontendURL = process.env.NODE_ENV === 'production' 
+      ? 'https://luna-bakery-frontend.vercel.app'
+      : 'http://localhost:5173';
+    const redirectUrl = `${frontendURL}/zalopay-return?status=${status || '1'}&apptransid=${apptransid || ''}&amount=${amount || '0'}&source=zalopay_gateway`;
     
     console.log('🔄 Redirecting to zalopay-return page:', redirectUrl);
     res.redirect(redirectUrl);
 
   } catch (error) {
     console.error('❌ ZaloPay redirect error:', error);
-    res.redirect('http://localhost:5173/zalopay-return?status=0&source=error');
+    const frontendURL = process.env.NODE_ENV === 'production' 
+      ? 'https://luna-bakery-frontend.vercel.app'
+      : 'http://localhost:5173';
+    res.redirect(`${frontendURL}/zalopay-return?status=0&source=error`);
   }
 });
 
@@ -203,14 +209,20 @@ router.post("/zalopay/return", async (req, res) => {
     const { status, apptransid, amount } = req.body.data ? JSON.parse(req.body.data) : req.body;
 
     // Redirect về frontend với status
-    const redirectUrl = `http://localhost:5173/payment-success?status=${status}&apptransid=${apptransid}&amount=${amount}`;
+    const frontendURL = process.env.NODE_ENV === 'production' 
+      ? 'https://luna-bakery-frontend.vercel.app'
+      : 'http://localhost:5173';
+    const redirectUrl = `${frontendURL}/payment-success?status=${status}&apptransid=${apptransid}&amount=${amount}`;
     
     console.log('🔄 POST Redirecting to:', redirectUrl);
     res.redirect(redirectUrl);
 
   } catch (error) {
     console.error('❌ ZaloPay POST redirect error:', error);
-    res.redirect('http://localhost:5173/payment-success?status=0');
+    const frontendURL = process.env.NODE_ENV === 'production' 
+      ? 'https://luna-bakery-frontend.vercel.app'
+      : 'http://localhost:5173';
+    res.redirect(`${frontendURL}/payment-success?status=0`);
   }
 });
 
