@@ -501,8 +501,8 @@ router.post('/:id/cleanup-cart', async (req, res) => {
     // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
     const cartsWithFlashSaleItems = await Cart.find({
       $or: [
-        { 'items.productId': { $in: flashSaleProductIds } },
-        { 'items.ingredientId': { $in: flashSaleIngredientIds } }
+        { 'products.productId': { $in: flashSaleProductIds } },
+        { 'products.ingredientId': { $in: flashSaleIngredientIds } }
       ]
     });
 
@@ -513,8 +513,8 @@ router.post('/:id/cleanup-cart', async (req, res) => {
       let cartUpdated = false;
       
       // Lọc ra các item không phải flash sale
-      const originalItems = cart.items;
-      cart.items = cart.items.filter(item => {
+      const originalProducts = cart.products;
+      cart.products = cart.products.filter(item => {
         const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
         const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
         
@@ -528,7 +528,7 @@ router.post('/:id/cleanup-cart', async (req, res) => {
 
       // Cập nhật tổng giá
       if (cartUpdated) {
-        cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
         await cart.save();
         cleanedCarts++;
       }
@@ -578,15 +578,15 @@ router.post('/cleanup-expired', async (req, res) => {
 
       const cartsWithFlashSaleItems = await Cart.find({
         $or: [
-          { 'items.productId': { $in: flashSaleProductIds } },
-          { 'items.ingredientId': { $in: flashSaleIngredientIds } }
+          { 'products.productId': { $in: flashSaleProductIds } },
+          { 'products.ingredientId': { $in: flashSaleIngredientIds } }
         ]
       });
 
       for (const cart of cartsWithFlashSaleItems) {
         let cartUpdated = false;
         
-        cart.items = cart.items.filter(item => {
+        cart.products = cart.products.filter(item => {
           const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
           const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
           
@@ -599,7 +599,7 @@ router.post('/cleanup-expired', async (req, res) => {
         });
 
         if (cartUpdated) {
-          cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+          cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
           await cart.save();
           totalCleanedCarts++;
         }

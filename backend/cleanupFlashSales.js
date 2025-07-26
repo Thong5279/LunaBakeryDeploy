@@ -45,8 +45,8 @@ const cleanupFlashSales = async () => {
       // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
       const cartsWithFlashSaleItems = await Cart.find({
         $or: [
-          { 'items.productId': { $in: flashSaleProductIds } },
-          { 'items.ingredientId': { $in: flashSaleIngredientIds } }
+          { 'products.productId': { $in: flashSaleProductIds } },
+          { 'products.ingredientId': { $in: flashSaleIngredientIds } }
         ]
       });
 
@@ -56,7 +56,7 @@ const cleanupFlashSales = async () => {
         let cartUpdated = false;
         
         // Lọc ra các item không phải flash sale
-        cart.items = cart.items.filter(item => {
+        cart.products = cart.products.filter(item => {
           const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
           const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
           
@@ -71,7 +71,7 @@ const cleanupFlashSales = async () => {
 
         // Cập nhật tổng giá
         if (cartUpdated) {
-          cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+          cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
           await cart.save();
           totalCleanedCarts++;
           console.log(`✅ Updated cart for user: ${cart.user}`);
