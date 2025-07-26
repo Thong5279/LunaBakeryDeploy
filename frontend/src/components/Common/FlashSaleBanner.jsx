@@ -12,6 +12,7 @@ const FlashSaleBanner = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
+    console.log('🔥 FlashSaleBanner: Fetching active flash sales...');
     dispatch(fetchActiveFlashSales());
     
     // Cập nhật thời gian mỗi giây
@@ -29,6 +30,14 @@ const FlashSaleBanner = () => {
   const formatTimeRemaining = (endDate) => {
     const end = new Date(endDate);
     const diff = end - currentTime;
+    
+    console.log('🕐 Flash Sale Time Debug:', {
+      endDate,
+      end: end.toISOString(),
+      currentTime: currentTime.toISOString(),
+      diff,
+      diffHours: diff / (1000 * 60 * 60)
+    });
     
     if (diff <= 0) return 'Đã kết thúc';
     
@@ -113,7 +122,14 @@ const FlashSaleBanner = () => {
     );
   }
 
+  console.log('🔥 FlashSaleBanner Debug:', {
+    activeFlashSales: activeFlashSales?.length || 0,
+    featuredItems: featuredItems?.length || 0,
+    loading
+  });
+
   if (!activeFlashSales || activeFlashSales.length === 0 || featuredItems.length === 0) {
+    console.log('🔥 FlashSaleBanner: No active flash sales to display');
     return null;
   }
 

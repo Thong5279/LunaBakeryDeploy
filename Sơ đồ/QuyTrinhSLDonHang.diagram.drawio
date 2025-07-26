@@ -1,26 +1,33 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="27.1.1">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.6">
   <diagram id="order_process_flow_vi" name="Sơ đồ Quy trình Xử lý Đơn hàng">
-    <mxGraphModel dx="1639" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+    <mxGraphModel dx="1130" dy="617" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="swimlane_customer" value="Khách hàng" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
-          <mxGeometry x="50" y="50" width="220" height="1190" as="geometry" />
+          <mxGeometry x="40" y="50" width="230" height="1190" as="geometry" />
         </mxCell>
         <mxCell id="customer_view_order" value="Xem chi tiết đơn hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_customer" vertex="1">
-          <mxGeometry x="30" y="270" width="120" height="60" as="geometry" />
+          <mxGeometry x="40" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.905;exitY=1.014;exitDx=0;exitDy=0;curved=0;exitPerimeter=0;" edge="1" parent="swimlane_customer" source="customer_track_order" target="6ixnhJhx9L3-02buVht_-40">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="571" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="customer_track_order" value="Theo dõi trạng thái đơn hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_customer" vertex="1">
-          <mxGeometry x="30" y="370" width="120" height="60" as="geometry" />
+          <mxGeometry x="40" y="510" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="customer_receive_confirm" value="Nhận hàng &amp; Xác nhận" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_customer" vertex="1">
-          <mxGeometry x="30" y="740" width="120" height="60" as="geometry" />
+          <mxGeometry x="90" y="960" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="customer_review_optional" value="Đánh giá sản phẩm/dịch vụ (Tùy chọn)" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_customer" vertex="1">
-          <mxGeometry x="30" y="840" width="120" height="60" as="geometry" />
+          <mxGeometry x="90" y="1060" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="customer_end_node" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" parent="swimlane_customer" vertex="1">
-          <mxGeometry x="80" y="940" width="20" height="20" as="geometry" />
+          <mxGeometry x="140" y="1160" width="20" height="20" as="geometry" />
         </mxCell>
         <mxCell id="flow_customer_view_to_track" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_customer" source="customer_view_order" target="customer_track_order" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -28,9 +35,9 @@
             <mxPoint x="110" y="150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="flow_customer_track_to_receive" value="Đơn hàng đã giao" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_customer" source="customer_track_order" target="customer_receive_confirm" edge="1">
+        <mxCell id="flow_customer_track_to_receive" value="Đơn hàng đã giao" style="endArrow=classic;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="swimlane_customer" source="6ixnhJhx9L3-02buVht_-40" target="customer_receive_confirm" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="210" as="sourcePoint" />
+            <mxPoint x="90" y="680" as="sourcePoint" />
             <mxPoint x="110" y="250" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -45,6 +52,22 @@
             <mxPoint x="110" y="610" as="sourcePoint" />
             <mxPoint x="110" y="650" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" edge="1" parent="swimlane_customer" source="6ixnhJhx9L3-02buVht_-40" target="customer_end_node">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="20" y="840" />
+              <mxPoint x="20" y="1170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-44" value="không giao" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="6ixnhJhx9L3-02buVht_-41">
+          <mxGeometry x="-0.8296" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-40" value="Đơn hàng" style="rhombus;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="swimlane_customer">
+          <mxGeometry x="105" y="810" width="90" height="60" as="geometry" />
         </mxCell>
         <mxCell id="swimlane_manager" value="Quản lý" style="swimlane;whiteSpace=wrap;html=1;startSize=20;fillColor=#FFF2CC;strokeColor=#D6B656;" parent="1" vertex="1">
           <mxGeometry x="270" y="50" width="220" height="1190" as="geometry" />
@@ -97,7 +120,7 @@
             <mxPoint x="110" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="yBXTgzc2NDiFwJCppLHH-3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=light-dark(#000000, #ff9090);rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="yBXTgzc2NDiFwJCppLHH-2" parent="swimlane_manager" target="order_created_activity">
+        <mxCell id="yBXTgzc2NDiFwJCppLHH-3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=light-dark(#000000, #ff9090);rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="swimlane_manager" source="yBXTgzc2NDiFwJCppLHH-2" target="order_created_activity" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="25" y="140" as="targetPoint" />
           </mxGeometry>
@@ -132,7 +155,7 @@
         <mxCell id="order_created_activity" value="Đơn hàng mới được tạo" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_manager" vertex="1">
           <mxGeometry x="50" y="160" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="yBXTgzc2NDiFwJCppLHH-2" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="swimlane_manager">
+        <mxCell id="yBXTgzc2NDiFwJCppLHH-2" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" parent="swimlane_manager" vertex="1">
           <mxGeometry x="95" y="100" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="start_label" value="Bắt đầu: Đăng nhập &amp;amp;&lt;div&gt;&amp;nbsp;Mua hàng thành công&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="swimlane_manager" vertex="1">
@@ -186,14 +209,11 @@
         <mxCell id="delivery_view_order" value="Xem thông tin đơn hàng &amp; địa chỉ giao hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
           <mxGeometry x="50" y="430" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="delivery_pickup_order" value="Lấy hàng từ tiệm bánh" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
-          <mxGeometry x="50" y="530" width="120" height="60" as="geometry" />
+        <mxCell id="6ixnhJhx9L3-02buVht_-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="swimlane_delivery" source="delivery_deliver_order" target="6ixnhJhx9L3-02buVht_-28">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="delivery_deliver_order" value="Tiến hành giao hàng" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
           <mxGeometry x="50" y="630" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="delivery_confirm_payment" value="Yêu cầu Khách hàng xác nhận &amp; Thu tiền (nếu COD)" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
-          <mxGeometry x="50" y="750" width="120" height="70" as="geometry" />
         </mxCell>
         <mxCell id="delivery_update_report" value="Cập nhật trạng thái giao hàng &amp; Báo cáo Quản lý" style="rounded=1;whiteSpace=wrap;html=1;" parent="swimlane_delivery" vertex="1">
           <mxGeometry x="50" y="890" width="120" height="70" as="geometry" />
@@ -201,27 +221,15 @@
         <mxCell id="delivery_end_node" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" parent="swimlane_delivery" vertex="1">
           <mxGeometry x="100" y="1000" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="flow_delivery_view_to_pickup" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_delivery" source="delivery_view_order" target="delivery_pickup_order" edge="1">
+        <mxCell id="flow_delivery_pickup_to_deliver" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;" parent="swimlane_delivery" source="delivery_view_order" target="delivery_deliver_order" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="110" as="sourcePoint" />
-            <mxPoint x="110" y="150" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="flow_delivery_pickup_to_deliver" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_delivery" source="delivery_pickup_order" target="delivery_deliver_order" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="210" as="sourcePoint" />
+            <mxPoint x="110" y="590" as="sourcePoint" />
             <mxPoint x="110" y="250" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="flow_delivery_deliver_to_confirm_payment" value="Giao hàng thành công" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_delivery" source="delivery_deliver_order" target="delivery_confirm_payment" edge="1">
+        <mxCell id="flow_delivery_confirm_to_update_report" value="Gao hàng thành công" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;" parent="swimlane_delivery" source="6ixnhJhx9L3-02buVht_-28" target="delivery_update_report" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="310" as="sourcePoint" />
-            <mxPoint x="110" y="350" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="flow_delivery_confirm_to_update_report" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="swimlane_delivery" source="delivery_confirm_payment" target="delivery_update_report" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="110" y="420" as="sourcePoint" />
+            <mxPoint x="110" y="820" as="sourcePoint" />
             <mxPoint x="110" y="450" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -230,6 +238,9 @@
             <mxPoint x="110" y="520" as="sourcePoint" />
             <mxPoint x="110" y="550" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-28" value="Giao hàng" style="rhombus;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="swimlane_delivery">
+          <mxGeometry x="65" y="740" width="90" height="60" as="geometry" />
         </mxCell>
         <mxCell id="flow_order_created_to_customer_view" value="Thông báo đơn hàng mới" style="endArrow=classic;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;edgeStyle=orthogonalEdgeStyle;exitDx=0;exitDy=0;" parent="1" source="order_created_activity" target="customer_view_order" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -259,16 +270,6 @@
             <mxPoint x="550" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="flow_delivery_confirm_to_customer_receive" value="Xác nhận giao hàng" style="endArrow=classic;html=1;entryX=1;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" parent="1" target="customer_receive_confirm" edge="1">
-          <mxGeometry x="0.0015" width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="760" y="820" as="sourcePoint" />
-            <mxPoint x="710" y="385" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="760" y="820" />
-            </Array>
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="flow_delivery_update_to_manager_track" value="Báo cáo Quản lý" style="endArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.75;edgeStyle=orthogonalEdgeStyle;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" parent="1" source="delivery_update_report" target="manager_track_delivery" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="770" y="450" as="sourcePoint" />
@@ -278,13 +279,13 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="flow_decision_to_customer_notify_cancel" value="Có (Hủy)" style="endArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" parent="1" source="manager_decision_cancel" target="customer_track_order" edge="1">
+        <mxCell id="flow_decision_to_customer_notify_cancel" value="Có (Hủy)" style="endArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;edgeStyle=orthogonalEdgeStyle;entryDx=0;entryDy=0;" parent="1" source="manager_decision_cancel" target="customer_track_order" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="270" y="280" as="sourcePoint" />
             <mxPoint x="270" y="280" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="240" y="590" />
-              <mxPoint x="240" y="450" />
+              <mxPoint x="210" y="590" />
+              <mxPoint x="210" y="590" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -297,6 +298,19 @@
               <mxPoint x="680" y="510" />
             </Array>
             <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-37" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;" edge="1" parent="1" source="6ixnhJhx9L3-02buVht_-28" target="customer_track_order">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="230" y="820" />
+              <mxPoint x="230" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6ixnhJhx9L3-02buVht_-38" value="giao hàng không thành công" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="6ixnhJhx9L3-02buVht_-37">
+          <mxGeometry x="-0.3578" relative="1" as="geometry">
+            <mxPoint x="64" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>

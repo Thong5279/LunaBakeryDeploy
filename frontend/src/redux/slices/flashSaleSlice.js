@@ -117,7 +117,7 @@ export const fetchActiveFlashSales = createAsyncThunk(
   'flashSale/fetchActive',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/flash-sales/active/active`);
+      const response = await axios.get(`${API_URL}/api/flash-sales/active`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi lấy active flash sales');

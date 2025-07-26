@@ -31,6 +31,7 @@ import AnalyticsPage from "./components/Admin/AnalyticsPage";
 import ReviewManagement from "./components/Admin/ReviewManagement";
 import ContactManagement from "./components/Admin/ContactManagement";
 import FlashSaleManagement from "./components/Admin/FlashSaleManagement";
+import FlashSaleDebug from "./components/Admin/FlashSaleDebug";
 import ManagerLayout from "./components/Manager/ManagerLayout";
 import ManagerHomePage from "./pages/ManagerHomePage";
 import ManagerOrderManagement from "./components/Manager/ManagerOrderManagement";
@@ -140,6 +141,7 @@ const AppContent = () => {
           <Route path="reviews" element={<ReviewManagement />} />
           <Route path="contacts" element={<ContactManagement />} />
           <Route path="flash-sales" element={<FlashSaleManagement />} />
+          <Route path="flash-sales-debug" element={<FlashSaleDebug />} />
         </Route>
 
         {/* manager */}

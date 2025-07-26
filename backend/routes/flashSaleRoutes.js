@@ -87,6 +87,13 @@ router.post('/', protect, adminOrManager, async (req, res) => {
       }
     }
 
+    console.log('📅 Flash Sale Date Debug:', {
+      startDate,
+      endDate,
+      parsedStartDate: new Date(startDate),
+      parsedEndDate: new Date(endDate)
+    });
+
     const flashSale = new FlashSale({
       name,
       description,
@@ -100,6 +107,7 @@ router.post('/', protect, adminOrManager, async (req, res) => {
     });
 
     const savedFlashSale = await flashSale.save();
+    console.log('✅ Flash Sale created successfully:', savedFlashSale._id);
 
     res.status(201).json({
       message: 'Flash sale đã được tạo thành công!',
@@ -210,9 +218,24 @@ router.get('/items/available', protect, adminOrManager, async (req, res) => {
 // @desc    Lấy flash sales đang hoạt động (cho frontend)
 // @route   GET /api/flash-sales/active
 // @access  Public
-router.get('/active/active', async (req, res) => {
+router.get('/active', async (req, res) => {
   try {
     const now = new Date();
+    
+    // Cập nhật status cho tất cả flash sales trước khi query
+    await FlashSale.updateMany(
+      { endDate: { $lt: now } },
+      { status: 'expired' }
+    );
+    
+    await FlashSale.updateMany(
+      { 
+        startDate: { $lte: now },
+        endDate: { $gte: now }
+      },
+      { status: 'active' }
+    );
+    
     const activeFlashSales = await FlashSale.find({
       startDate: { $lte: now },
       endDate: { $gte: now },
@@ -221,6 +244,7 @@ router.get('/active/active', async (req, res) => {
     }).populate('products.productId', 'name price images category')
       .populate('ingredients.ingredientId', 'name price images category');
 
+    console.log('🔥 Active Flash Sales found:', activeFlashSales.length);
     res.json(activeFlashSales);
   } catch (error) {
     console.error('❌ Lỗi lấy active flash sales:', error);
@@ -339,6 +363,41 @@ router.put('/:id/update-sold', async (req, res) => {
   } catch (error) {
     console.error('❌ Lỗi cập nhật sold quantity:', error);
     res.status(500).json({ message: 'Có lỗi xảy ra khi cập nhật sold quantity' });
+  }
+});
+
+// @desc    Test route để kiểm tra flash sales
+// @route   GET /api/flash-sales/test/debug
+// @access  Public
+router.get('/test/debug', async (req, res) => {
+  try {
+    const now = new Date();
+    console.log('🔧 Debug Flash Sales - Current time:', now.toISOString());
+    
+    // Lấy tất cả flash sales
+    const allFlashSales = await FlashSale.find({});
+    console.log(`📊 Total Flash Sales: ${allFlashSales.length}`);
+    
+    const debugInfo = allFlashSales.map(fs => ({
+      id: fs._id,
+      name: fs.name,
+      startDate: fs.startDate.toISOString(),
+      endDate: fs.endDate.toISOString(),
+      status: fs.status,
+      isActive: fs.isActive,
+      productsCount: fs.products.length,
+      ingredientsCount: fs.ingredients.length,
+      isCurrentlyActive: fs.startDate <= now && fs.endDate >= now
+    }));
+    
+    res.json({
+      currentTime: now.toISOString(),
+      totalFlashSales: allFlashSales.length,
+      flashSales: debugInfo
+    });
+  } catch (error) {
+    console.error('❌ Debug error:', error);
+    res.status(500).json({ message: 'Debug error', error: error.message });
   }
 });
 

@@ -180,6 +180,14 @@ export const getTimeRemaining = (endDate) => {
   const now = new Date();
   const diff = end - now;
   
+  console.log('🕐 getTimeRemaining Debug:', {
+    endDate,
+    end: end.toISOString(),
+    now: now.toISOString(),
+    diff,
+    diffHours: diff / (1000 * 60 * 60)
+  });
+  
   if (diff <= 0) return 'Đã kết thúc';
   
   const hours = Math.floor(diff / (1000 * 60 * 60));
