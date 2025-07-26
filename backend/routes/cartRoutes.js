@@ -397,4 +397,113 @@ router.post("/merge", protect, async (req, res) => {
   }
 });
 
+// @route POST /api/cart/refresh
+// @desc Refresh cart prices and remove expired flash sale items
+// @access Private
+router.post("/refresh", protect, async (req, res) => {
+  try {
+    console.log('🔄 Starting cart refresh for user:', req.user._id);
+    
+    const cart = await Cart.findOne({ user: req.user._id });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const now = new Date();
+    let cartUpdated = false;
+    let removedItems = 0;
+    let updatedItems = 0;
+
+    // Tìm tất cả flash sale đang active
+    const activeFlashSales = await FlashSale.find({
+      status: 'active',
+      startDate: { $lte: now },
+      endDate: { $gte: now }
+    });
+
+    // Tìm tất cả flash sale đã hết hạn
+    const expiredFlashSales = await FlashSale.find({
+      endDate: { $lt: now },
+      status: { $ne: 'expired' }
+    });
+
+    // Cập nhật status cho flash sale đã hết hạn
+    for (const flashSale of expiredFlashSales) {
+      flashSale.status = 'expired';
+      await flashSale.save();
+    }
+
+    // Lấy danh sách sản phẩm flash sale đã hết hạn
+    const expiredProductIds = expiredFlashSales.flatMap(fs => 
+      fs.products.map(p => p.productId.toString())
+    );
+    const expiredIngredientIds = expiredFlashSales.flatMap(fs => 
+      fs.ingredients.map(i => i.ingredientId.toString())
+    );
+
+    // Lọc và cập nhật sản phẩm trong giỏ hàng
+    const originalProducts = [...cart.products];
+    cart.products = cart.products.filter(item => {
+      const itemProductId = item.productId.toString();
+      
+      // Kiểm tra sản phẩm flash sale đã hết hạn
+      const isExpiredFlashSaleProduct = expiredProductIds.includes(itemProductId);
+      const isExpiredFlashSaleIngredient = expiredIngredientIds.includes(itemProductId);
+      
+      if (isExpiredFlashSaleProduct || isExpiredFlashSaleIngredient) {
+        console.log(`🗑️ Removing expired flash sale item: ${item.name}`);
+        removedItems++;
+        cartUpdated = true;
+        return false; // Xóa sản phẩm này
+      }
+      
+      return true; // Giữ lại sản phẩm này
+    });
+
+    // Cập nhật giá cho sản phẩm còn lại
+    for (let i = 0; i < cart.products.length; i++) {
+      const item = cart.products[i];
+      const { item: product, itemType } = await findProductOrIngredient(item.productId);
+      
+      if (!product) {
+        console.log(`⚠️ Product not found: ${item.productId}`);
+        continue;
+      }
+
+      // Tính giá mới dựa trên flash sale hiện tại
+      const newPrice = await calculatePriceBySize(product, item.size);
+      
+      if (newPrice !== item.price) {
+        console.log(`💰 Updating price for ${item.name}: ${item.price} → ${newPrice}`);
+        item.price = newPrice;
+        updatedItems++;
+        cartUpdated = true;
+      }
+    }
+
+    // Cập nhật tổng giá nếu có thay đổi
+    if (cartUpdated) {
+      cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
+      await cart.save();
+      
+      console.log(`✅ Cart refresh completed:`);
+      console.log(`   - Removed items: ${removedItems}`);
+      console.log(`   - Updated items: ${updatedItems}`);
+      console.log(`   - Total price: ${cart.totalPrice.toLocaleString()}₫`);
+    }
+
+    res.json({
+      message: "Cart refreshed successfully",
+      cart: cart,
+      removedItems,
+      updatedItems,
+      totalPrice: cart.totalPrice
+    });
+
+  } catch (error) {
+    console.error('❌ Error refreshing cart:', error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;

@@ -1,12 +1,43 @@
 import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiRefreshCw } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import { updateCartItemQuantity, removeFromCart } from "../../redux/slices/cartSlice";
+import { updateCartItemQuantity, removeFromCart, refreshCart } from "../../redux/slices/cartSlice";
 import { toast } from "sonner";
 
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshCart = async () => {
+    if (!userId) {
+      toast.error("Vui lòng đăng nhập để làm mới giỏ hàng");
+      return;
+    }
+
+    setIsRefreshing(true);
+    try {
+      const result = await dispatch(refreshCart()).unwrap();
+      
+      if (result.removedItems > 0) {
+        toast.success(`Đã xóa ${result.removedItems} sản phẩm flash sale đã hết hạn`);
+      }
+      
+      if (result.updatedItems > 0) {
+        toast.success(`Đã cập nhật giá ${result.updatedItems} sản phẩm`);
+      }
+      
+      if (result.removedItems === 0 && result.updatedItems === 0) {
+        toast.info("Giỏ hàng đã được cập nhật với giá mới nhất");
+      }
+      
+    } catch (error) {
+      toast.error(error || "Lỗi khi làm mới giỏ hàng");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const handleAddToCart = (productId, delta, quantity, size, flavor, maxQuantity) => {
     const newQuantity = quantity + delta;
@@ -54,6 +85,25 @@ const CartContents = ({ cart, userId, guestId }) => {
 
   return (
     <div className="space-y-2 sm:space-y-3 md:space-y-4">
+      {/* Nút Refresh Cart - chỉ hiển thị cho user đã đăng nhập */}
+      {userId && (
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleRefreshCart}
+            disabled={isRefreshing}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              isRefreshing
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-pink-50 text-pink-600 hover:bg-pink-100 hover:text-pink-700'
+            }`}
+            title="Làm mới giỏ hàng với giá mới nhất"
+          >
+            <FiRefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            {isRefreshing ? 'Đang cập nhật...' : 'Làm mới giỏ hàng'}
+          </button>
+        </div>
+      )}
+
       {cart.products.map((product, index) => {
         const isIngredientProduct = isIngredient(product);
         
