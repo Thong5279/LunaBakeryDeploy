@@ -160,10 +160,18 @@ const FlashSaleManagement = () => {
   };
 
   const handleSearchItems = () => {
+    // Chỉ tìm kiếm nếu đã có thời gian
+    if (!formData.startDate || !formData.endDate) {
+      toast.error('Vui lòng chọn thời gian bắt đầu và kết thúc trước khi tìm kiếm sản phẩm');
+      return;
+    }
+
     dispatch(fetchAvailableItems({
       search: searchTerm,
       category: selectedCategory,
-      type: selectedType
+      type: selectedType,
+      startDate: formData.startDate,
+      endDate: formData.endDate
     }));
     setShowItemSelector(true);
   };
@@ -272,7 +280,24 @@ const FlashSaleManagement = () => {
     };
 
     console.log('Flash Sale Data:', flashSaleData);
-    dispatch(createFlashSale(flashSaleData));
+    
+    // Gửi request với xử lý lỗi chi tiết
+    dispatch(createFlashSale(flashSaleData)).then((result) => {
+      if (result.error) {
+        const errorMessage = result.payload;
+        
+        // Kiểm tra nếu có lỗi xung đột sản phẩm
+        if (errorMessage.includes('đã có flash sale')) {
+          // Hiển thị thông báo lỗi chi tiết
+          toast.error('Không thể tạo flash sale do xung đột thời gian với flash sale khác');
+          
+          // Log chi tiết lỗi
+          console.error('❌ Flash Sale Conflict Error:', errorMessage);
+        } else {
+          toast.error(errorMessage);
+        }
+      }
+    });
   };
 
   const handleDeleteFlashSale = (id) => {
@@ -299,6 +324,25 @@ const FlashSaleManagement = () => {
   const handleEditFlashSale = () => {
     // TODO: Implement edit functionality
     toast.info('Tính năng chỉnh sửa flash sale sẽ được phát triển trong phiên bản tiếp theo');
+  };
+
+  const handleCleanupExpired = async () => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/flash-sales/cleanup-expired`, {}, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      });
+      
+      toast.success(`Đã cleanup ${response.data.expiredFlashSales} flash sale, ${response.data.cleanedCarts} giỏ hàng, ${response.data.removedItems} sản phẩm`);
+      
+      // Refresh danh sách flash sale
+      dispatch(fetchFlashSales());
+      
+    } catch (error) {
+      console.error('❌ Cleanup error:', error);
+      toast.error('Có lỗi xảy ra khi cleanup flash sale');
+    }
   };
 
   const formatPrice = (price) => {
@@ -373,15 +417,26 @@ const FlashSaleManagement = () => {
               />
             </div>
           </div>
-          <motion.button
-            onClick={() => setShowCreateForm(true)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-pink-500 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-pink-600 transition-colors"
-          >
-            <FaPlus />
-            Tạo Flash Sale
-          </motion.button>
+          <div className="flex gap-3">
+            <motion.button
+              onClick={handleCleanupExpired}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-orange-500 text-white px-4 py-3 rounded-lg flex items-center gap-2 hover:bg-orange-600 transition-colors"
+            >
+              <FaTrash />
+              Cleanup Flash Sale
+            </motion.button>
+            <motion.button
+              onClick={() => setShowCreateForm(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-pink-500 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-pink-600 transition-colors"
+            >
+              <FaPlus />
+              Tạo Flash Sale
+            </motion.button>
+          </div>
         </div>
 
         {/* Flash Sales List */}

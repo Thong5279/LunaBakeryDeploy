@@ -41,6 +41,73 @@ router.post('/', protect, adminOrManager, async (req, res) => {
       return res.status(400).json({ message: 'Loại giảm giá không hợp lệ' });
     }
 
+    // Kiểm tra sản phẩm đã có flash sale
+    const conflictingProducts = [];
+    const conflictingIngredients = [];
+
+    if (products && products.length > 0) {
+      for (const product of products) {
+        // Kiểm tra flash sale hiện tại hoặc sắp diễn ra
+        const existingFlashSale = await FlashSale.findOne({
+          'products.productId': product.productId,
+          $or: [
+            { status: 'active' },
+            { 
+              startDate: { $lte: new Date(endDate) },
+              endDate: { $gte: new Date(startDate) }
+            }
+          ]
+        });
+
+        if (existingFlashSale) {
+          const productDoc = await Product.findById(product.productId);
+          conflictingProducts.push({
+            id: product.productId,
+            name: productDoc?.name || 'Unknown Product',
+            flashSaleName: existingFlashSale.name,
+            startDate: existingFlashSale.startDate,
+            endDate: existingFlashSale.endDate
+          });
+        }
+      }
+    }
+
+    if (ingredients && ingredients.length > 0) {
+      for (const ingredient of ingredients) {
+        // Kiểm tra flash sale hiện tại hoặc sắp diễn ra
+        const existingFlashSale = await FlashSale.findOne({
+          'ingredients.ingredientId': ingredient.ingredientId,
+          $or: [
+            { status: 'active' },
+            { 
+              startDate: { $lte: new Date(endDate) },
+              endDate: { $gte: new Date(startDate) }
+            }
+          ]
+        });
+
+        if (existingFlashSale) {
+          const ingredientDoc = await Ingredient.findById(ingredient.ingredientId);
+          conflictingIngredients.push({
+            id: ingredient.ingredientId,
+            name: ingredientDoc?.name || 'Unknown Ingredient',
+            flashSaleName: existingFlashSale.name,
+            startDate: existingFlashSale.startDate,
+            endDate: existingFlashSale.endDate
+          });
+        }
+      }
+    }
+
+    // Nếu có xung đột, trả về lỗi
+    if (conflictingProducts.length > 0 || conflictingIngredients.length > 0) {
+      return res.status(400).json({
+        message: 'Một số sản phẩm/nguyên liệu đã có flash sale trong khoảng thời gian này',
+        conflictingProducts,
+        conflictingIngredients
+      });
+    }
+
     // Validate products và ingredients
     const flashSaleProducts = [];
     const flashSaleIngredients = [];
@@ -146,8 +213,8 @@ router.get('/', protect, adminOrManager, async (req, res) => {
 // @access  Admin, Manager
 router.get('/items/available', protect, adminOrManager, async (req, res) => {
   try {
-    const { search, category, type } = req.query;
-    console.log('🔍 Flash Sale Items Query:', { search, category, type });
+    const { search, category, type, startDate, endDate } = req.query;
+    console.log('🔍 Flash Sale Items Query:', { search, category, type, startDate, endDate });
     
     let products = [];
     let ingredients = [];
@@ -169,6 +236,29 @@ router.get('/items/available', protect, adminOrManager, async (req, res) => {
         .select('name price images category countInStock sku')
         .sort({ name: 1 });
       console.log('📦 Found Products:', products.length);
+
+      // Lọc sản phẩm đã có flash sale nếu có thời gian
+      if (startDate && endDate) {
+        const conflictingFlashSales = await FlashSale.find({
+          $or: [
+            { status: 'active' },
+            { 
+              startDate: { $lte: new Date(endDate) },
+              endDate: { $gte: new Date(startDate) }
+            }
+          ]
+        });
+
+        const conflictingProductIds = conflictingFlashSales.flatMap(fs => 
+          fs.products.map(p => p.productId.toString())
+        );
+
+        products = products.filter(product => 
+          !conflictingProductIds.includes(product._id.toString())
+        );
+
+        console.log('📦 Products after filtering conflicts:', products.length);
+      }
     }
 
     // Lấy nguyên liệu
@@ -188,6 +278,29 @@ router.get('/items/available', protect, adminOrManager, async (req, res) => {
         .select('name price images category quantity sku')
         .sort({ name: 1 });
       console.log('🥘 Found Ingredients:', ingredients.length);
+
+      // Lọc nguyên liệu đã có flash sale nếu có thời gian
+      if (startDate && endDate) {
+        const conflictingFlashSales = await FlashSale.find({
+          $or: [
+            { status: 'active' },
+            { 
+              startDate: { $lte: new Date(endDate) },
+              endDate: { $gte: new Date(startDate) }
+            }
+          ]
+        });
+
+        const conflictingIngredientIds = conflictingFlashSales.flatMap(fs => 
+          fs.ingredients.map(i => i.ingredientId.toString())
+        );
+
+        ingredients = ingredients.filter(ingredient => 
+          !conflictingIngredientIds.includes(ingredient._id.toString())
+        );
+
+        console.log('🥘 Ingredients after filtering conflicts:', ingredients.length);
+      }
     }
 
     res.json({
@@ -366,6 +479,145 @@ router.put('/:id/update-sold', async (req, res) => {
   } catch (error) {
     console.error('❌ Lỗi cập nhật sold quantity:', error);
     res.status(500).json({ message: 'Có lỗi xảy ra khi cập nhật sold quantity' });
+  }
+});
+
+// @desc    Xóa sản phẩm flash sale khỏi giỏ hàng khi flash sale kết thúc
+// @route   POST /api/flash-sales/:id/cleanup-cart
+// @access  Private
+router.post('/:id/cleanup-cart', async (req, res) => {
+  try {
+    const flashSale = await FlashSale.findById(req.params.id);
+    if (!flashSale) {
+      return res.status(404).json({ message: 'Flash sale không tồn tại' });
+    }
+
+    const Cart = require('../models/Cart');
+    
+    // Lấy danh sách sản phẩm và nguyên liệu trong flash sale
+    const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
+    const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
+
+    // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
+    const cartsWithFlashSaleItems = await Cart.find({
+      $or: [
+        { 'items.productId': { $in: flashSaleProductIds } },
+        { 'items.ingredientId': { $in: flashSaleIngredientIds } }
+      ]
+    });
+
+    let cleanedCarts = 0;
+    let removedItems = 0;
+
+    for (const cart of cartsWithFlashSaleItems) {
+      let cartUpdated = false;
+      
+      // Lọc ra các item không phải flash sale
+      const originalItems = cart.items;
+      cart.items = cart.items.filter(item => {
+        const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
+        const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
+        
+        if (isFlashSaleProduct || isFlashSaleIngredient) {
+          removedItems++;
+          cartUpdated = true;
+          return false;
+        }
+        return true;
+      });
+
+      // Cập nhật tổng giá
+      if (cartUpdated) {
+        cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        await cart.save();
+        cleanedCarts++;
+      }
+    }
+
+    console.log(`🧹 Cleaned ${cleanedCarts} carts, removed ${removedItems} flash sale items`);
+
+    res.json({
+      message: 'Đã xóa sản phẩm flash sale khỏi giỏ hàng',
+      cleanedCarts,
+      removedItems
+    });
+
+  } catch (error) {
+    console.error('❌ Lỗi cleanup cart:', error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi xóa sản phẩm flash sale khỏi giỏ hàng' });
+  }
+});
+
+// @desc    Cleanup tất cả flash sale đã kết thúc
+// @route   POST /api/flash-sales/cleanup-expired
+// @access  Private
+router.post('/cleanup-expired', async (req, res) => {
+  try {
+    const now = new Date();
+    
+    // Tìm tất cả flash sale đã kết thúc
+    const expiredFlashSales = await FlashSale.find({
+      endDate: { $lt: now },
+      status: { $ne: 'expired' }
+    });
+
+    console.log(`🕐 Found ${expiredFlashSales.length} expired flash sales`);
+
+    let totalCleanedCarts = 0;
+    let totalRemovedItems = 0;
+
+    for (const flashSale of expiredFlashSales) {
+      // Cập nhật status thành expired
+      flashSale.status = 'expired';
+      await flashSale.save();
+
+      // Cleanup cart cho flash sale này
+      const Cart = require('../models/Cart');
+      const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
+      const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
+
+      const cartsWithFlashSaleItems = await Cart.find({
+        $or: [
+          { 'items.productId': { $in: flashSaleProductIds } },
+          { 'items.ingredientId': { $in: flashSaleIngredientIds } }
+        ]
+      });
+
+      for (const cart of cartsWithFlashSaleItems) {
+        let cartUpdated = false;
+        
+        cart.items = cart.items.filter(item => {
+          const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
+          const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
+          
+          if (isFlashSaleProduct || isFlashSaleIngredient) {
+            totalRemovedItems++;
+            cartUpdated = true;
+            return false;
+          }
+          return true;
+        });
+
+        if (cartUpdated) {
+          cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+          await cart.save();
+          totalCleanedCarts++;
+        }
+      }
+    }
+
+    console.log(`🧹 Cleanup completed: ${totalCleanedCarts} carts, ${totalRemovedItems} items`);
+
+    res.json({
+      message: 'Đã cleanup tất cả flash sale đã kết thúc',
+      expiredFlashSales: expiredFlashSales.length,
+      cleanedCarts: totalCleanedCarts,
+      removedItems: totalRemovedItems
+    });
+
+  } catch (error) {
+    console.error('❌ Lỗi cleanup expired flash sales:', error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi cleanup flash sale đã kết thúc' });
   }
 });
 

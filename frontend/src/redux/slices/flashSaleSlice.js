@@ -17,6 +17,31 @@ export const createFlashSale = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      console.error('❌ Flash Sale Creation Error:', error.response?.data);
+      
+      // Xử lý lỗi xung đột sản phẩm
+      if (error.response?.status === 400 && error.response?.data?.conflictingProducts) {
+        const { conflictingProducts, conflictingIngredients } = error.response.data;
+        
+        let errorMessage = 'Không thể tạo flash sale do xung đột:\n';
+        
+        if (conflictingProducts && conflictingProducts.length > 0) {
+          errorMessage += '\nSản phẩm xung đột:\n';
+          conflictingProducts.forEach(product => {
+            errorMessage += `- ${product.name} (đã có trong "${product.flashSaleName}")\n`;
+          });
+        }
+        
+        if (conflictingIngredients && conflictingIngredients.length > 0) {
+          errorMessage += '\nNguyên liệu xung đột:\n';
+          conflictingIngredients.forEach(ingredient => {
+            errorMessage += `- ${ingredient.name} (đã có trong "${ingredient.flashSaleName}")\n`;
+          });
+        }
+        
+        return rejectWithValue(errorMessage);
+      }
+      
       return rejectWithValue(error.response?.data?.message || 'Có lỗi xảy ra khi tạo flash sale');
     }
   }
@@ -93,13 +118,15 @@ export const deleteFlashSale = createAsyncThunk(
 
 export const fetchAvailableItems = createAsyncThunk(
   'flashSale/fetchAvailableItems',
-  async ({ search, category, type }, { rejectWithValue }) => {
+  async ({ search, category, type, startDate, endDate }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('userToken');
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       if (category) params.append('category', category);
       if (type) params.append('type', type);
+      if (startDate) params.append('startDate', startDate);
+      if (endDate) params.append('endDate', endDate);
 
       const response = await axios.get(`${API_URL}/api/flash-sales/items/available?${params}`, {
         headers: {
