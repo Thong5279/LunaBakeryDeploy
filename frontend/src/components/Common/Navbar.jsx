@@ -26,18 +26,19 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-gradient-to-r from-pink-50 via-rose-50 to-red-50 shadow-lg sticky top-0 z-40 backdrop-blur-sm border-b border-pink-100">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex justify-between items-center">
           {/* Logo bên trái */}
-          <div className="text-2xl font-bold text-pink-600 tracking-wide hover:scale-105 transition-transform duration-300">
-            <Link to={"/"} className="flex items-center gap-2">
-              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery Logo" className="w-8 h-8" />
-              Luna Bakery
+          <div className="text-lg sm:text-xl lg:text-2xl font-bold text-pink-600 tracking-wide hover:scale-105 transition-transform duration-300">
+            <Link to={"/"} className="flex items-center gap-1 sm:gap-2">
+              <img src="https://s1.aigei.com/src/img/gif/9c/9c4918a5e46448649534c632e8596fcf.gif?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:bGDEkSIp468d-4_SLIaaDP558dQ=" alt="Luna Bakery Logo" className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="hidden sm:block">Luna Bakery</span>
+              <span className="sm:hidden">Luna</span>
             </Link>
           </div>
 
           {/* Menu chính (ẩn trên mobile) */}
           <div className="hidden md:block">
-            <ul className="flex gap-8 font-medium">
+            <ul className="flex gap-6 lg:gap-8 font-medium">
               <li className="hover:scale-105 transition-transform duration-300">
                 <Link 
                   to={"/"} 
@@ -82,13 +83,13 @@ const Navbar = () => {
           </div>
 
           {/* Icon bên phải */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Role badges */}
             {user && user.role === "admin" && (
               <div className="hover:scale-105 transition-transform duration-300">
                 <Link
                   to={"/admin"}
-                  className="bg-pink-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-pink-600 transition-colors duration-300"
+                  className="bg-pink-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium hover:bg-pink-600 transition-colors duration-300"
                 >
                   Admin
                 </Link>
@@ -98,7 +99,7 @@ const Navbar = () => {
               <div className="hover:scale-105 transition-transform duration-300">
                 <Link
                   to={"/manager"}
-                  className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors duration-300"
+                  className="bg-blue-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium hover:bg-blue-600 transition-colors duration-300"
                 >
                   Quản lý
                 </Link>
@@ -108,7 +109,7 @@ const Navbar = () => {
               <div className="hover:scale-105 transition-transform duration-300">
                 <Link
                   to={"/baker"}
-                  className="bg-orange-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors duration-300"
+                  className="bg-orange-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium hover:bg-orange-600 transition-colors duration-300"
                 >
                   Thợ làm bánh
                 </Link>
@@ -118,7 +119,7 @@ const Navbar = () => {
               <div className="hover:scale-105 transition-transform duration-300">
                 <Link
                   to={"/delivery"}
-                  className="bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-green-600 transition-colors duration-300"
+                  className="bg-green-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium hover:bg-green-600 transition-colors duration-300"
                 >
                   Giao hàng
                 </Link>
@@ -127,9 +128,9 @@ const Navbar = () => {
 
             {/* User Profile */}
             <div className="hover:scale-110 transition-transform duration-300">
-              <Link to={"/profile"}>
+              <Link to={"/profile"} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <FiUser
-                  className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
+                  className="text-lg sm:text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
                   title="Tài khoản"
                 />
               </Link>
@@ -137,9 +138,9 @@ const Navbar = () => {
 
             {/* Wishlist */}
             <div className="hover:scale-110 transition-transform duration-300">
-              <Link to={"/wishlist"}>
+              <Link to={"/wishlist"} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <FaHeart
-                  className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
+                  className="text-lg sm:text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300"
                   title="Danh sách yêu thích"
                 />
               </Link>
@@ -147,10 +148,10 @@ const Navbar = () => {
 
             {/* Cart */}
             <div className="hover:scale-110 transition-transform duration-300 relative">
-              <button onClick={toggleCartDrawer}>
-                <FiShoppingCart className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
+              <button onClick={toggleCartDrawer} className="min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <FiShoppingCart className="text-lg sm:text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-pink-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-medium">
                     {cartItemCount}
                   </span>
                 )}
@@ -161,10 +162,10 @@ const Navbar = () => {
             <div className="hover:scale-110 transition-transform duration-300">
               <button
                 onClick={() => setVoiceModalOpen(true)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Tìm kiếm bằng giọng nói"
               >
-                <FiMic className="text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
+                <FiMic className="text-lg sm:text-xl text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300" />
               </button>
             </div>
 
@@ -178,7 +179,7 @@ const Navbar = () => {
               className="md:hidden hover:scale-110 transition-transform duration-300"
             >
               <HiMenu
-                className="text-2xl cursor-pointer text-gray-700 hover:text-pink-600 transition-colors duration-300"
+                className="text-xl sm:text-2xl cursor-pointer text-gray-700 hover:text-pink-600 transition-colors duration-300"
                 title="Menu"
                 onClick={() => setIsMenuOpen(true)}
               />
@@ -194,23 +195,23 @@ const Navbar = () => {
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center p-6 border-b border-pink-200">
-          <h2 className="text-xl font-bold text-pink-600">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-pink-200">
+          <h2 className="text-lg sm:text-xl font-bold text-pink-600">
             Menu
           </h2>
           <button
-            className="hover:scale-110 transition-transform duration-300"
+            className="hover:scale-110 transition-transform duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setIsMenuOpen(false)}
           >
-            <FiX className="text-2xl cursor-pointer text-gray-700 hover:text-red-500 transition-colors duration-300" />
+            <FiX className="text-xl sm:text-2xl cursor-pointer text-gray-700 hover:text-red-500 transition-colors duration-300" />
           </button>
         </div>
 
-        <ul className="flex flex-col gap-2 p-6">
+        <ul className="flex flex-col gap-1 sm:gap-2 p-4 sm:p-6">
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link 
               to={"/"} 
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Trang chủ
@@ -219,7 +220,7 @@ const Navbar = () => {
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link
               to={"collections/all"}
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Sản phẩm
@@ -228,7 +229,7 @@ const Navbar = () => {
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link 
               to={"/ingredients"} 
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Nguyên liệu
@@ -237,7 +238,7 @@ const Navbar = () => {
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link 
               to={"/wishlist"} 
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Yêu thích
@@ -246,7 +247,7 @@ const Navbar = () => {
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link 
               to={"/about"} 
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Về chúng tôi
@@ -255,7 +256,7 @@ const Navbar = () => {
           <li className="hover:translate-x-2 transition-transform duration-300">
             <Link 
               to={"/contact"} 
-              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium"
+              className="block text-gray-700 hover:text-pink-600 cursor-pointer transition-colors duration-300 px-4 py-3 rounded-lg hover:bg-white/50 font-medium min-h-[44px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Liên hệ

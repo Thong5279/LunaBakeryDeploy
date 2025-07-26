@@ -179,8 +179,8 @@ const Searchbar = () => {
         >
             {isOpen ? (
             <div className="w-full">
-                <form onSubmit={handleSearch} className='relative flex items-center justify-center w-full border-b-2 border-pink-300 py-4'> 
-                   <div className='relative w-1/2 max-w-md' ref={searchInputRef}>
+                <form onSubmit={handleSearch} className='relative flex items-center justify-center w-full border-b-2 border-pink-300 py-3 sm:py-4'> 
+                   <div className='relative w-full max-w-md px-4 sm:px-0' ref={searchInputRef}>
                     <input 
                         type="text"
                         placeholder='Tìm kiếm sản phẩm, nguyên liệu...'
@@ -195,7 +195,7 @@ const Searchbar = () => {
                             }
                         }}
                         autoFocus
-                        className='bg-gray-50 px-4 py-3 pl-4 pr-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white border border-gray-200 w-full placeholder:text-gray-500 text-gray-800' 
+                        className='bg-gray-50 px-4 py-3 pl-4 pr-20 sm:pr-12 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white border border-gray-200 w-full placeholder:text-gray-500 text-gray-800 text-sm sm:text-base' 
                     />
                    {/* Voice Search Button */}
                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
@@ -209,16 +209,16 @@ const Searchbar = () => {
                         <button 
                             type='submit' 
                             disabled={!searchTerm.trim() || isLoading}
-                            className={`p-1 rounded-full transition-colors ${
+                            className={`p-2 sm:p-1 rounded-full transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${
                                 searchTerm.trim() && !isLoading
                                     ? 'text-pink-600 hover:text-pink-700 hover:bg-pink-50' 
                                     : 'text-gray-400 cursor-not-allowed'
                             }`}
                         >
                             {isLoading ? (
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-pink-500"></div>
+                                <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-pink-500"></div>
                             ) : (
-                                <FiSearch className='w-5 h-5'/> 
+                                <FiSearch className='w-4 h-4 sm:w-5 sm:h-5'/> 
                             )}
                         </button>
                    </div>
@@ -227,10 +227,10 @@ const Searchbar = () => {
                    {/* close button */}
                     <button 
                         type='button' 
-                        className='absolute right-4 top-1/2 transform -translate-y-1/2 p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors' 
+                        className='absolute right-4 top-1/2 transform -translate-y-1/2 p-2 sm:p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center' 
                         onClick={handleClear}
                     >
-                        <HiMiniXMark className='w-6 h-6'/>
+                        <HiMiniXMark className='w-5 h-5 sm:w-6 sm:h-6'/>
                     </button>
                 </form>
 
@@ -238,7 +238,7 @@ const Searchbar = () => {
                 {showSuggestions && suggestions.length > 0 && (
                     <div 
                         ref={suggestionsRef}
-                        className="absolute left-1/2 transform -translate-x-1/2 w-1/2 max-w-md bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-80 overflow-y-auto z-60"
+                        className="absolute left-1/2 transform -translate-x-1/2 w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-80 overflow-y-auto z-60 mx-4 sm:mx-0"
                     >
                         <div className="p-3 border-b border-gray-100">
                             <p className="text-sm text-gray-600 font-medium">Gợi ý tìm kiếm</p>
@@ -247,12 +247,12 @@ const Searchbar = () => {
                             <div
                                 key={`${suggestion.type}-${suggestion.id}`}
                                 onClick={() => handleSuggestionClick(suggestion)}
-                                className={`flex items-center p-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50 last:border-b-0 ${
+                                className={`flex items-center p-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50 last:border-b-0 min-h-[44px] ${
                                     index === activeSuggestion ? 'bg-pink-50' : ''
                                 }`}
                             >
                                 {/* Image */}
-                                <div className="w-12 h-12 flex-shrink-0 mr-3">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 mr-3">
                                     {suggestion.image ? (
                                         <img 
                                             src={suggestion.image} 
@@ -261,7 +261,7 @@ const Searchbar = () => {
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center">
-                                            <FiSearch className="w-4 h-4 text-gray-400" />
+                                            <FiSearch className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" />
                                         </div>
                                     )}
                                 </div>
@@ -294,7 +294,7 @@ const Searchbar = () => {
                         <div className="p-3 bg-gray-50">
                             <button
                                 onClick={() => handleSearch({ preventDefault: () => {} })}
-                                className="w-full text-sm text-pink-600 hover:text-pink-700 font-medium text-center py-1"
+                                className="w-full text-sm text-pink-600 hover:text-pink-700 font-medium text-center py-2 min-h-[44px]"
                             >
                                 Xem tất cả kết quả cho "{searchTerm}"
                             </button>
@@ -310,10 +310,10 @@ const Searchbar = () => {
             ) : (
                 <button 
                     onClick={handleSearchToggle}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                     title="Tìm kiếm sản phẩm và nguyên liệu"
                 >
-                    <FiSearch className='w-6 h-6 text-gray-700 hover:text-pink-600'/>
+                    <FiSearch className='w-5 h-5 sm:w-6 sm:h-6 text-gray-700 hover:text-pink-600'/>
                 </button> 
             )}
         </div>

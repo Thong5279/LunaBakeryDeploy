@@ -92,7 +92,7 @@ const VoiceSearchBanner = () => {
     }
 
     return (
-        <div className="bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-lg p-4 mb-6 relative">
+        <div className="bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 relative">
             {/* Close button */}
             <button
                 onClick={() => setShowBanner(false)}
@@ -101,21 +101,21 @@ const VoiceSearchBanner = () => {
                 <FiX className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                 <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-pink-800 mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-pink-800 mb-1 sm:mb-2">
                         🎤 Tìm kiếm bằng giọng nói
                     </h3>
-                    <p className="text-sm text-pink-700 mb-3">
+                    <p className="text-xs sm:text-sm text-pink-700 mb-2 sm:mb-3">
                         Nói tên sản phẩm hoặc nguyên liệu bạn muốn tìm kiếm
                     </p>
                     
                     {/* Hiển thị kết quả nhận diện */}
                     {transcript && !isListening && (
-                        <div className="bg-green-100 border border-green-200 rounded-lg p-3 mb-3">
+                        <div className="bg-green-100 border border-green-200 rounded-lg p-2 sm:p-3 mb-2 sm:mb-3">
                             <div className="flex items-center gap-2">
-                                <FiVolume2 className="w-4 h-4 text-green-600" />
-                                <span className="text-sm font-medium text-green-800">
+                                <FiVolume2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
+                                <span className="text-xs sm:text-sm font-medium text-green-800">
                                     "{transcript}"
                                 </span>
                             </div>
@@ -124,17 +124,17 @@ const VoiceSearchBanner = () => {
                     
                     {/* Hiển thị lỗi */}
                     {error && (
-                        <div className="bg-red-100 border border-red-200 rounded-lg p-3 mb-3">
-                            <p className="text-sm text-red-800">{error}</p>
+                        <div className="bg-red-100 border border-red-200 rounded-lg p-2 sm:p-3 mb-2 sm:mb-3">
+                            <p className="text-xs sm:text-sm text-red-800">{error}</p>
                         </div>
                     )}
                 </div>
 
-                <div className="flex-shrink-0 ml-4">
+                <div className="flex-shrink-0 flex justify-center sm:ml-4">
                     <button
                         onClick={handleMicClick}
                         disabled={!isSupported}
-                        className={`p-4 rounded-full transition-all duration-300 ${
+                        className={`p-3 sm:p-4 rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] ${
                             isListening
                                 ? 'bg-red-500 text-white animate-pulse shadow-lg scale-110'
                                 : isSupported
@@ -150,9 +150,9 @@ const VoiceSearchBanner = () => {
                         }
                     >
                         {isListening ? (
-                            <FiMicOff className="w-6 h-6" />
+                            <FiMicOff className="w-5 h-5 sm:w-6 sm:h-6" />
                         ) : (
-                            <FiMic className="w-6 h-6" />
+                            <FiMic className="w-5 h-5 sm:w-6 sm:h-6" />
                         )}
                     </button>
                     
@@ -160,10 +160,10 @@ const VoiceSearchBanner = () => {
                     {isListening && (
                         <div className="mt-2 text-center">
                             <div className="flex justify-center space-x-1 mb-1">
-                                <div className="w-1 h-4 bg-white rounded-full animate-pulse"></div>
-                                <div className="w-1 h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-                                <div className="w-1 h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                                <div className="w-1 h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                                <div className="w-1 h-3 sm:h-4 bg-white rounded-full animate-pulse"></div>
+                                <div className="w-1 h-3 sm:h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+                                <div className="w-1 h-3 sm:h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                                <div className="w-1 h-3 sm:h-4 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
                             </div>
                             <p className="text-xs text-pink-600 font-medium">Đang nghe...</p>
                         </div>
@@ -172,7 +172,7 @@ const VoiceSearchBanner = () => {
             </div>
 
             {/* Hướng dẫn sử dụng */}
-            <div className="mt-4 pt-3 border-t border-pink-200">
+            <div className="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-pink-200">
                 <p className="text-xs text-pink-600">
                     💡 <strong>Gợi ý:</strong> Thử nói "bánh chocolate", "nguyên liệu bột mì", "bánh sinh nhật"...
                 </p>

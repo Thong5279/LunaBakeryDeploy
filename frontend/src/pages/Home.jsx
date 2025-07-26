@@ -54,16 +54,16 @@ const Home = () => {
             </section>
 
             {/* Voice Search Banner */}
-            <section className="py-4 px-4">
+            <section className="py-3 px-3 sm:py-4 sm:px-4">
                 <div className="container mx-auto">
                     <VoiceSearchBanner />
                 </div>
             </section>
 
             {/* Thông báo thời gian làm và giao bánh */}
-            <section className="py-4 px-4">
+            <section className="py-3 px-3 sm:py-4 sm:px-4">
                 <div className="container mx-auto">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 sm:p-4">
                         <div className="flex items-start gap-3">
                             <div className="flex-shrink-0">
                                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -76,7 +76,7 @@ const Home = () => {
                                 <h4 className="text-sm font-semibold text-blue-900 mb-1">
                                     ⏰ Thông tin giao hàng
                                 </h4>
-                                <p className="text-sm text-blue-700 leading-relaxed">
+                                <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
                                     Tất cả bánh được làm thủ công tươi ngon theo đơn đặt hàng. 
                                     <span className="font-medium">Thời gian tối thiểu 2 ngày</span> để làm và giao đến bạn. 
                                     Chúng tôi sẽ liên hệ để xác nhận thời gian giao hàng cụ thể.
@@ -93,19 +93,19 @@ const Home = () => {
             </section>
 
             {/* New Arrivals & Best Sellers Combined Section */}
-            <section id="new-arrivals" className="py-8 px-4">
+            <section id="new-arrivals" className="py-6 px-3 sm:py-8 sm:px-4">
                 <div className="container mx-auto">
                     {/* Tab Navigation */}
-                    <div className="text-center mb-8">
-                        <h2 className="text-3xl font-bold text-pink-600 mb-6 flex items-center justify-center gap-2">
-                            <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+                    <div className="text-center mb-6 sm:mb-8">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-pink-600 mb-4 sm:mb-6 flex items-center justify-center gap-2">
+                            <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-6 h-6 sm:w-8 sm:h-8" />
                             Sản Phẩm Nổi Bật
                         </h2>
-                        <div className="flex justify-center mb-6">
-                            <div className="bg-gray-100 rounded-full p-1 inline-flex">
+                        <div className="flex justify-center mb-4 sm:mb-6">
+                            <div className="bg-gray-100 rounded-full p-1 inline-flex w-full max-w-xs sm:max-w-none">
                                 <button
                                     onClick={() => setActiveTab('new')}
-                                    className={`px-6 py-2 rounded-full transition-all duration-300 ${
+                                    className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-2 rounded-full transition-all duration-300 text-sm sm:text-base ${
                                         activeTab === 'new'
                                             ? 'bg-pink-500 text-white shadow-md'
                                             : 'text-gray-600 hover:text-pink-500'
@@ -115,7 +115,7 @@ const Home = () => {
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('bestseller')}
-                                    className={`px-6 py-2 rounded-full transition-all duration-300 ${
+                                    className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-2 rounded-full transition-all duration-300 text-sm sm:text-base ${
                                         activeTab === 'bestseller'
                                             ? 'bg-pink-500 text-white shadow-md'
                                             : 'text-gray-600 hover:text-pink-500'
@@ -135,9 +135,9 @@ const Home = () => {
                                 {bestSellers?._id ? (
                                     <ProductDetails productId={bestSellers._id} />
                                 ) : (
-                                    <div className="text-center py-12">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
-                                        <p className="text-gray-600">Đang tải sản phẩm bán chạy nhất...</p>
+                                    <div className="text-center py-8 sm:py-12">
+                                        <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
+                                        <p className="text-sm sm:text-base text-gray-600">Đang tải sản phẩm bán chạy nhất...</p>
                                     </div>
                                 )}
                             </div>

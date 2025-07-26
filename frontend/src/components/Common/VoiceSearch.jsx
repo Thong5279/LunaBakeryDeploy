@@ -80,11 +80,11 @@ const VoiceSearch = ({ onVoiceResult, isListening, setIsListening }) => {
     if (!isSupported) {
         return (
             <button
-                className="p-2 text-gray-400 cursor-not-allowed"
+                className="p-2 text-gray-400 cursor-not-allowed min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Trình duyệt không hỗ trợ nhận diện giọng nói"
                 disabled
             >
-                <FiMic className="w-5 h-5" />
+                <FiMic className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
         );
     }
@@ -93,7 +93,7 @@ const VoiceSearch = ({ onVoiceResult, isListening, setIsListening }) => {
         <div className="relative">
             <button
                 onClick={handleMicClick}
-                className={`p-2 rounded-full transition-all duration-300 ${
+                className={`p-2 rounded-full transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
                     isListening
                         ? 'bg-red-500 text-white animate-pulse shadow-lg'
                         : 'text-gray-600 hover:text-pink-600 hover:bg-pink-50'
@@ -101,9 +101,9 @@ const VoiceSearch = ({ onVoiceResult, isListening, setIsListening }) => {
                 title={isListening ? 'Dừng nhận diện giọng nói' : 'Tìm kiếm bằng giọng nói'}
             >
                 {isListening ? (
-                    <FiMicOff className="w-5 h-5" />
+                    <FiMicOff className="w-4 h-4 sm:w-5 sm:h-5" />
                 ) : (
-                    <FiMic className="w-5 h-5" />
+                    <FiMic className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
             </button>
             
@@ -112,29 +112,29 @@ const VoiceSearch = ({ onVoiceResult, isListening, setIsListening }) => {
                 <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-pink-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">
                     <div className="flex items-center gap-1">
                         <div className="flex space-x-1">
-                            <div className="w-1 h-3 bg-white rounded-full animate-pulse"></div>
-                            <div className="w-1 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-                            <div className="w-1 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                            <div className="w-1 h-2 sm:h-3 bg-white rounded-full animate-pulse"></div>
+                            <div className="w-1 h-2 sm:h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-1 h-2 sm:h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                         </div>
-                        <span>Đang nghe...</span>
+                        <span className="text-xs">Đang nghe...</span>
                     </div>
                 </div>
             )}
             
             {/* Hiển thị kết quả nhận diện */}
             {transcript && !isListening && (
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50 max-w-[200px] sm:max-w-xs">
                     <div className="flex items-center gap-1">
-                        <FiVolume2 className="w-3 h-3" />
-                        <span>"{transcript}"</span>
+                        <FiVolume2 className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">"{transcript}"</span>
                     </div>
                 </div>
             )}
             
             {/* Hiển thị lỗi */}
             {error && (
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50 max-w-xs">
-                    {error}
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50 max-w-[200px] sm:max-w-xs">
+                    <span className="truncate">{error}</span>
                 </div>
             )}
         </div>

@@ -77,18 +77,18 @@ const NewArrivals = () => {
 
   return (
     <section>
-      <div className="max-w-screen-xl mx-auto text-center mb-10 relative px-4">
-        <h2 className="text-3xl font-bold mb-4 text-pink-600 tracking-wide flex items-center justify-center gap-2">
-          <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-8 h-8" />
+      <div className="max-w-screen-xl mx-auto text-center mb-6 sm:mb-10 relative px-3 sm:px-4">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-4 text-pink-600 tracking-wide flex items-center justify-center gap-2">
+          <img src="https://i.pinimg.com/originals/25/80/e2/2580e21fcf640ef972e85c088a7f97ca.gif" alt="Star" className="w-6 h-6 sm:w-8 sm:h-8" />
           Các loại bánh mới !! Các loại bánh mới !!
         </h2>
-        <p className="text-gray-500 mb-8">
+        <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-8 px-2">
           Khám phá những loại bánh thơm ngon vừa ra mắt – chỉ dành riêng cho
           bạn!
         </p>
 
-        {/* Nút scroll */}
-        <div className="absolute right-4 top-[50%] transform -translate-y-1/2 hidden sm:flex space-x-2 z-10">
+        {/* Nút scroll - ẩn trên mobile, hiện trên desktop */}
+        <div className="absolute right-4 top-[50%] transform -translate-y-1/2 hidden lg:flex space-x-2 z-10">
           <button
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
@@ -118,27 +118,27 @@ const NewArrivals = () => {
       {/* Danh sách sản phẩm scroll ngang */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto space-x-6 px-4 scroll-smooth"
+        className="flex overflow-x-auto space-x-3 sm:space-x-4 lg:space-x-6 px-3 sm:px-4 scroll-smooth pb-2"
         style={{ scrollBehavior: "smooth" }}
       >
         {Array.isArray(newArrivals) && newArrivals.map((product) => (
           <div
             key={product._id}
-            className="min-w-[80%] sm:min-w-[50%] lg:min-w-[30%] relative group rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
+            className="min-w-[85%] sm:min-w-[60%] md:min-w-[45%] lg:min-w-[30%] relative group rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300"
           >
             <div className="overflow-hidden rounded-xl">
               <img
                 src={product.images?.[0]?.url || "https://via.placeholder.com/500"}
                 alt={product.images?.[0]?.altText || product.name}
-                className="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover transition-transform duration-500 group-hover:scale-110"
               />
             </div>
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-5">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-3 sm:p-4 lg:p-5">
               <Link to={`/product/${product._id}`}>
-                <h4 className="text-xl font-semibold group-hover:text-pink-400 transition duration-300">
+                <h4 className="text-base sm:text-lg lg:text-xl font-semibold group-hover:text-pink-400 transition duration-300 line-clamp-2">
                   {product.name}
                 </h4>
-                <p className="text-pink-500 font-bold text-sm">
+                <p className="text-pink-500 font-bold text-sm sm:text-base mt-1">
                   {getDisplayPrice(product).toLocaleString("vi-VN")} ₫
                 </p>
               </Link>

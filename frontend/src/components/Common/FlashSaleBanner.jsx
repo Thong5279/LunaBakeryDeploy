@@ -115,10 +115,10 @@ const FlashSaleBanner = () => {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-r from-pink-400 to-pink-600 text-white p-6 rounded-lg">
+      <div className="bg-gradient-to-r from-pink-400 to-pink-600 text-white p-4 sm:p-6 rounded-lg">
         <div className="flex justify-center items-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-          <span className="ml-3 text-lg font-medium">Đang tải Flash Sale...</span>
+          <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-white"></div>
+          <span className="ml-3 text-sm sm:text-lg font-medium">Đang tải Flash Sale...</span>
         </div>
       </div>
     );
@@ -136,7 +136,7 @@ const FlashSaleBanner = () => {
   }
 
   return (
-    <div className="relative w-full py-12 px-2 md:px-0 overflow-hidden">
+    <div className="relative w-full py-6 sm:py-8 lg:py-12 px-2 sm:px-4 md:px-0 overflow-hidden">
       {/* Background gradient phù hợp với theme */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300" />
       <div className="absolute inset-0 z-0 bg-gradient-to-t from-pink-50/80 via-transparent to-pink-200/80" />
@@ -175,12 +175,12 @@ const FlashSaleBanner = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header với hiệu ứng nổi bật */}
         <motion.div 
-          className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4"
+          className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 sm:mb-8 gap-3 sm:gap-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-4 justify-center md:justify-start">
+          <div className="flex items-center gap-2 sm:gap-4 justify-center md:justify-start">
             <motion.div
               animate={{ 
                 scale: [1, 1.2, 1],
@@ -192,24 +192,24 @@ const FlashSaleBanner = () => {
                 ease: 'easeInOut'
               }}
             >
-              <FaFire className="text-3xl text-pink-500 drop-shadow-lg" />
+              <FaFire className="text-2xl sm:text-3xl text-pink-500 drop-shadow-lg" />
             </motion.div>
             <div className="text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold text-pink-700 tracking-wide drop-shadow-lg flex items-center gap-2">
-                <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Fire" className="w-15 h-15" />
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-pink-700 tracking-wide drop-shadow-lg flex items-center gap-1 sm:gap-2">
+                <img src="https://i.pinimg.com/originals/6f/d3/43/6fd34383dcc18aa07775bf1f62af2ec1.gif" alt="Fire" className="w-8 h-8 sm:w-12 sm:h-12 lg:w-15 lg:h-15" />
                 FLASH SALE
-                <img src="https://i.pinimg.com/originals/ec/b3/45/ecb3455c4ab0058ec05769a7e9f93e49.gif" alt="Fire" className="w-15 h-15" />
+                <img src="https://i.pinimg.com/originals/ec/b3/45/ecb3455c4ab0058ec05769a7e9f93e49.gif" alt="Fire" className="w-8 h-8 sm:w-12 sm:h-12 lg:w-15 lg:h-15" />
               </h2>
-              <p className="text-pink-600 text-sm md:text-base mt-1">
+              <p className="text-pink-600 text-xs sm:text-sm md:text-base mt-1">
                 Giảm giá cực sốc - Số lượng có hạn!
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 justify-center md:justify-end bg-white/30 backdrop-blur-sm rounded-full px-6 py-3 border border-pink-200">
-            <FaClock className="text-xl text-pink-500" />
-            <span className="font-medium text-pink-700">Còn lại:</span>
+          <div className="flex items-center gap-2 sm:gap-3 justify-center md:justify-end bg-white/30 backdrop-blur-sm rounded-full px-3 sm:px-6 py-2 sm:py-3 border border-pink-200">
+            <FaClock className="text-lg sm:text-xl text-pink-500" />
+            <span className="font-medium text-pink-700 text-sm sm:text-base">Còn lại:</span>
             <motion.span 
-              className="font-bold text-pink-600 text-xl"
+              className="font-bold text-pink-600 text-lg sm:text-xl"
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             >
@@ -218,9 +218,9 @@ const FlashSaleBanner = () => {
           </div>
         </motion.div>
 
-        {/* Grid sản phẩm flash sale - to hơn trên PC */}
+        {/* Grid sản phẩm flash sale - responsive */}
         <div className="w-full pb-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6" style={{minWidth: '320px'}}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
             {featuredItems.map((item, index) => (
               <motion.div
                 key={`${item.type}-${item.type === 'product' ? item.productId._id : item.ingredientId._id}`}
@@ -232,21 +232,21 @@ const FlashSaleBanner = () => {
                   y: -5,
                   boxShadow: '0 20px 40px rgba(236, 72, 153, 0.3)'
                 }}
-                className="bg-white rounded-3xl p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1 min-w-[220px] md:min-w-[240px] lg:min-w-[260px]"
+                className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1"
                 onClick={() => navigate(item.type === 'product' ? `/product/${item.productId._id}` : `/ingredient/${item.ingredientId._id}`)}
               >
-                <div className="relative mb-4">
+                <div className="relative mb-3 sm:mb-4">
                   <img
                     src={getImageUrl(item.type === 'product' ? item.productId : item.ingredientId)}
                     alt={item.type === 'product' ? item.productId.name : item.ingredientId.name}
-                    className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-2xl mb-3 shadow-lg group-hover:scale-110 transition-transform duration-300"
+                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 object-cover rounded-xl sm:rounded-2xl mb-2 sm:mb-3 shadow-lg group-hover:scale-110 transition-transform duration-300"
                     onError={(e) => {
                       e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y3ZjdmNyIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=';
                     }}
                   />
                   {/* Badge giảm giá với hiệu ứng */}
                   <motion.div 
-                    className="absolute -top-3 -right-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg"
+                    className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg"
                     animate={{ 
                       scale: [1, 1.1, 1],
                       rotate: [0, 5, -5, 0]
@@ -261,22 +261,22 @@ const FlashSaleBanner = () => {
                   </motion.div>
                 </div>
                 
-                <h3 className="font-bold text-gray-900 text-sm md:text-base text-center line-clamp-2 mb-3 group-hover:text-pink-600 transition-colors duration-300 px-2">
+                <h3 className="font-bold text-gray-900 text-xs sm:text-sm md:text-base text-center line-clamp-2 mb-2 sm:mb-3 group-hover:text-pink-600 transition-colors duration-300 px-1 sm:px-2">
                   {item.type === 'product' ? item.productId.name : item.ingredientId.name}
                 </h3>
                 
-                <div className="flex items-center gap-2 justify-center mb-3">
-                  <span className="text-gray-400 line-through text-xs md:text-sm">
+                <div className="flex items-center gap-1 sm:gap-2 justify-center mb-2 sm:mb-3">
+                  <span className="text-gray-400 line-through text-xs sm:text-sm">
                     {formatPrice(item.originalPrice)}
                   </span>
-                  <span className="text-pink-600 font-bold text-lg md:text-xl">
+                  <span className="text-pink-600 font-bold text-sm sm:text-lg md:text-xl">
                     {formatPrice(item.salePrice)}
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-2 justify-center bg-pink-50 rounded-full px-3 py-1">
-                  <FaTag className="text-pink-500 text-sm" />
-                  <span className="text-pink-600 text-xs md:text-sm font-medium">
+                <div className="flex items-center gap-1 sm:gap-2 justify-center bg-pink-50 rounded-full px-2 sm:px-3 py-1">
+                  <FaTag className="text-pink-500 text-xs sm:text-sm" />
+                  <span className="text-pink-600 text-xs sm:text-sm font-medium">
                     Tiết kiệm {formatPrice(item.originalPrice - item.salePrice)}
                   </span>
                 </div>
@@ -286,11 +286,11 @@ const FlashSaleBanner = () => {
         </div>
 
         {/* Nút xem tất cả với hiệu ứng */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6 sm:mt-8">
           <motion.button
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-10 py-4 rounded-full font-bold shadow-2xl hover:from-pink-600 hover:to-pink-700 transition-all duration-300 text-lg tracking-wide border-2 border-pink-400 hover:border-pink-500 transform hover:rotate-1"
+            className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-full font-bold shadow-2xl hover:from-pink-600 hover:to-pink-700 transition-all duration-300 text-sm sm:text-base lg:text-lg tracking-wide border-2 border-pink-400 hover:border-pink-500 transform hover:rotate-1 min-h-[44px]"
             onClick={() => navigate('/flash-sale')}
           >
             🎉 Xem tất cả Flash Sale ({featuredItems.length}+ sản phẩm) 🎉

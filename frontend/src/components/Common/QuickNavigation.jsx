@@ -47,7 +47,7 @@ const QuickNavigation = () => {
 
   return (
     <>
-      {/* Quick Navigation */}
+      {/* Quick Navigation - Desktop */}
       <div className="fixed top-1/2 right-4 transform -translate-y-1/2 z-40 hidden lg:block">
         <div className="bg-white rounded-full shadow-lg border border-gray-200 p-2">
           {sections.map((section) => {
@@ -79,7 +79,7 @@ const QuickNavigation = () => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 w-12 h-12 bg-pink-500 text-white rounded-full shadow-lg hover:bg-pink-600 transition-all duration-300 z-40 flex items-center justify-center"
+          className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 w-12 h-12 bg-pink-500 text-white rounded-full shadow-lg hover:bg-pink-600 transition-all duration-300 z-40 flex items-center justify-center"
           title="Về đầu trang"
         >
           <FaArrowUp className="text-lg" />
@@ -88,21 +88,21 @@ const QuickNavigation = () => {
 
       {/* Mobile Quick Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 lg:hidden">
-        <div className="flex justify-around py-2">
+        <div className="flex justify-around py-3 px-2">
           {sections.slice(0, 5).map((section) => {
             const IconComponent = section.icon;
             return (
               <button
                 key={section.id}
                 onClick={() => scrollToSection(section.id)}
-                className={`flex flex-col items-center py-2 px-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center py-2 px-1 rounded-lg transition-colors min-h-[44px] justify-center ${
                   activeSection === section.id
-                    ? 'text-pink-500'
-                    : 'text-gray-400'
+                    ? 'text-pink-500 bg-pink-50'
+                    : 'text-gray-400 hover:text-pink-500'
                 }`}
               >
-                <IconComponent className="text-lg mb-1" />
-                <span className="text-xs">{section.name}</span>
+                <IconComponent className="text-lg sm:text-xl mb-1" />
+                <span className="text-xs font-medium">{section.name}</span>
               </button>
             );
           })}
