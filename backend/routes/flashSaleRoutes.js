@@ -732,6 +732,116 @@ router.post('/:id/sync-cart-prices', async (req, res) => {
   }
 });
 
+// @desc    Cập nhật giá flash sale trong giỏ hàng khi flash sale bắt đầu
+// @route   POST /api/flash-sales/:id/update-cart-prices
+// @access  Private
+router.post('/:id/update-cart-prices', async (req, res) => {
+  try {
+    const flashSale = await FlashSale.findById(req.params.id);
+    if (!flashSale) {
+      return res.status(404).json({ message: 'Flash sale không tồn tại' });
+    }
+
+    const Cart = require('../models/Cart');
+    const Product = require('../models/Product');
+    const Ingredient = require('../models/Ingredient');
+    
+    // Lấy danh sách sản phẩm và nguyên liệu trong flash sale
+    const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
+    const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
+
+    console.log('🔍 Flash Sale Products:', flashSaleProductIds);
+    console.log('🔍 Flash Sale Ingredients:', flashSaleIngredientIds);
+
+    // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
+    const cartsWithFlashSaleItems = await Cart.find({
+      'products.productId': { 
+        $in: [...flashSaleProductIds, ...flashSaleIngredientIds] 
+      }
+    });
+
+    console.log(`📦 Found ${cartsWithFlashSaleItems.length} carts with flash sale items`);
+
+    let updatedCarts = 0;
+    let updatedItems = 0;
+
+    for (const cart of cartsWithFlashSaleItems) {
+      let cartUpdated = false;
+      
+      for (let i = 0; i < cart.products.length; i++) {
+        const item = cart.products[i];
+        const itemProductId = item.productId.toString();
+        const isFlashSaleProduct = flashSaleProductIds.includes(itemProductId);
+        const isFlashSaleIngredient = flashSaleIngredientIds.includes(itemProductId);
+        
+        if (isFlashSaleProduct || isFlashSaleIngredient) {
+          // Tìm flash sale item để lấy giá flash sale
+          let flashSaleItem;
+          if (isFlashSaleProduct) {
+            flashSaleItem = flashSale.products.find(p => p.productId.toString() === itemProductId);
+          } else {
+            flashSaleItem = flashSale.ingredients.find(i => i.ingredientId.toString() === itemProductId);
+          }
+
+          if (flashSaleItem) {
+            // Tính giá flash sale dựa trên size nếu có
+            let flashSalePrice = flashSaleItem.salePrice;
+            if (item.size && flashSaleItem.originalPrice) {
+              // Tính tỷ lệ giảm giá
+              const discountRatio = flashSaleItem.salePrice / flashSaleItem.originalPrice;
+              
+              // Tìm sản phẩm gốc để lấy giá size
+              let originalItem;
+              if (isFlashSaleProduct) {
+                originalItem = await Product.findById(itemProductId);
+              } else {
+                originalItem = await Ingredient.findById(itemProductId);
+              }
+
+              if (originalItem && originalItem.sizePricing) {
+                const sizePrice = originalItem.sizePricing.find(sp => sp.size === item.size);
+                if (sizePrice) {
+                  const originalSizePrice = sizePrice.discountPrice || sizePrice.price;
+                  flashSalePrice = Math.round(originalSizePrice * discountRatio);
+                }
+              }
+            }
+
+            // Cập nhật giá flash sale
+            if (item.price !== flashSalePrice) {
+              console.log(`💰 Updating flash sale price for ${item.name}: ${item.price} → ${flashSalePrice}`);
+              item.price = flashSalePrice;
+              cartUpdated = true;
+              updatedItems++;
+            }
+          }
+        }
+      }
+
+      // Cập nhật tổng giá
+      if (cartUpdated) {
+        cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        await cart.save();
+        updatedCarts++;
+        console.log(`✅ Updated cart ${cart._id}: updated prices for ${updatedItems} items`);
+      }
+    }
+
+    console.log(`💰 Flash sale price update completed: ${updatedCarts} carts, ${updatedItems} items`);
+
+    res.json({
+      message: 'Đã cập nhật giá flash sale trong giỏ hàng',
+      updatedCarts,
+      updatedItems,
+      flashSaleName: flashSale.name
+    });
+
+  } catch (error) {
+    console.error('❌ Lỗi update cart prices:', error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi cập nhật giá flash sale' });
+  }
+});
+
 // @desc    Test route để kiểm tra flash sales
 // @route   GET /api/flash-sales/test/debug
 // @access  Public

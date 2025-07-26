@@ -13,7 +13,8 @@ import {
   FaEye,
   FaClock,
   FaFire,
-  FaSync
+  FaSync,
+  FaDollarSign
 } from 'react-icons/fa';
 import { 
   createFlashSale, 
@@ -362,6 +363,22 @@ const FlashSaleManagement = () => {
     }
   };
 
+  const handleUpdateFlashSalePrices = async (flashSaleId) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/flash-sales/${flashSaleId}/update-cart-prices`, {}, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      });
+      
+      toast.success(`Đã cập nhật giá flash sale cho ${response.data.updatedCarts} giỏ hàng, ${response.data.updatedItems} sản phẩm`);
+      
+    } catch (error) {
+      console.error('❌ Update flash sale prices error:', error);
+      toast.error('Có lỗi xảy ra khi cập nhật giá flash sale');
+    }
+  };
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' ₫';
   };
@@ -515,6 +532,13 @@ const FlashSaleManagement = () => {
                         title="Xem chi tiết"
                       >
                         <FaEye />
+                      </button>
+                      <button 
+                        onClick={() => handleUpdateFlashSalePrices(flashSale._id)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                        title="Cập nhật giá Flash Sale"
+                      >
+                        <FaDollarSign />
                       </button>
                       <button 
                         onClick={() => handleSyncCartPrices(flashSale._id)}
