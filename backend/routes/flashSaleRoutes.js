@@ -91,7 +91,10 @@ router.post('/', protect, adminOrManager, async (req, res) => {
       startDate,
       endDate,
       parsedStartDate: new Date(startDate),
-      parsedEndDate: new Date(endDate)
+      parsedEndDate: new Date(endDate),
+      startDateISO: new Date(startDate).toISOString(),
+      endDateISO: new Date(endDate).toISOString(),
+      serverTime: new Date().toISOString()
     });
 
     const flashSale = new FlashSale({

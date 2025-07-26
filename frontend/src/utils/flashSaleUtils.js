@@ -185,7 +185,9 @@ export const getTimeRemaining = (endDate) => {
     end: end.toISOString(),
     now: now.toISOString(),
     diff,
-    diffHours: diff / (1000 * 60 * 60)
+    diffHours: diff / (1000 * 60 * 60),
+    endLocal: end.toLocaleString('vi-VN'),
+    nowLocal: now.toLocaleString('vi-VN')
   });
   
   if (diff <= 0) return 'Đã kết thúc';

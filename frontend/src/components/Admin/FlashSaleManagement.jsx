@@ -71,6 +71,31 @@ const FlashSaleManagement = () => {
   const [productPrices, setProductPrices] = useState({});
   const [ingredientPrices, setIngredientPrices] = useState({});
 
+  // Hàm để format thời gian cho datetime-local input
+  const formatDateTimeForInput = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  // Set thời gian mặc định khi mở form
+  useEffect(() => {
+    if (showCreateForm) {
+      const now = new Date();
+      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // 1 giờ sau
+      
+      setFormData(prev => ({
+        ...prev,
+        startDate: formatDateTimeForInput(now),
+        endDate: formatDateTimeForInput(oneHourLater)
+      }));
+    }
+  }, [showCreateForm]);
+
   useEffect(() => {
     dispatch(fetchFlashSales());
   }, [dispatch]);
@@ -214,12 +239,26 @@ const FlashSaleManagement = () => {
       return;
     }
 
+    // Xử lý timezone - chuyển đổi thời gian local thành UTC
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    
+    console.log('🕐 Flash Sale Time Debug:', {
+      originalStartDate: formData.startDate,
+      originalEndDate: formData.endDate,
+      startDateLocal: startDate.toLocaleString('vi-VN'),
+      endDateLocal: endDate.toLocaleString('vi-VN'),
+      startDateUTC: startDate.toISOString(),
+      endDateUTC: endDate.toISOString(),
+      timezoneOffset: startDate.getTimezoneOffset()
+    });
+
     // Chuẩn bị dữ liệu để gửi lên API
     const flashSaleData = {
       name: formData.name,
       description: formData.description || '',
-      startDate: formData.startDate,
-      endDate: formData.endDate,
+      startDate: startDate.toISOString(), // Gửi dưới dạng ISO string
+      endDate: endDate.toISOString(), // Gửi dưới dạng ISO string
       discountType: formData.discountType,
       discountValue: discountValue,
       products: formData.products.map(product => ({
@@ -267,12 +306,14 @@ const FlashSaleManagement = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Ho_Chi_Minh'
     });
   };
 
