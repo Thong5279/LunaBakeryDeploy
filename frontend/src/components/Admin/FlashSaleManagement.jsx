@@ -12,7 +12,8 @@ import {
   FaEdit,
   FaEye,
   FaClock,
-  FaFire
+  FaFire,
+  FaSync
 } from 'react-icons/fa';
 import { 
   createFlashSale, 
@@ -345,6 +346,22 @@ const FlashSaleManagement = () => {
     }
   };
 
+  const handleSyncCartPrices = async (flashSaleId) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/flash-sales/${flashSaleId}/sync-cart-prices`, {}, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+        },
+      });
+      
+      toast.success(`Đã đồng bộ giá cho ${response.data.updatedCarts} giỏ hàng, ${response.data.updatedItems} sản phẩm`);
+      
+    } catch (error) {
+      console.error('❌ Sync cart prices error:', error);
+      toast.error('Có lỗi xảy ra khi đồng bộ giá giỏ hàng');
+    }
+  };
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' ₫';
   };
@@ -498,6 +515,13 @@ const FlashSaleManagement = () => {
                         title="Xem chi tiết"
                       >
                         <FaEye />
+                      </button>
+                      <button 
+                        onClick={() => handleSyncCartPrices(flashSale._id)}
+                        className="p-2 text-purple-600 hover:bg-purple-50 rounded"
+                        title="Đồng bộ giá giỏ hàng"
+                      >
+                        <FaSync />
                       </button>
                       <button 
                         onClick={() => handleEditFlashSale(flashSale)}

@@ -498,13 +498,17 @@ router.post('/:id/cleanup-cart', async (req, res) => {
     const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
     const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
 
+    console.log('🔍 Flash Sale Products:', flashSaleProductIds);
+    console.log('🔍 Flash Sale Ingredients:', flashSaleIngredientIds);
+
     // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
     const cartsWithFlashSaleItems = await Cart.find({
-      $or: [
-        { 'products.productId': { $in: flashSaleProductIds } },
-        { 'products.ingredientId': { $in: flashSaleIngredientIds } }
-      ]
+      'products.productId': { 
+        $in: [...flashSaleProductIds, ...flashSaleIngredientIds] 
+      }
     });
+
+    console.log(`📦 Found ${cartsWithFlashSaleItems.length} carts with flash sale items`);
 
     let cleanedCarts = 0;
     let removedItems = 0;
@@ -513,12 +517,14 @@ router.post('/:id/cleanup-cart', async (req, res) => {
       let cartUpdated = false;
       
       // Lọc ra các item không phải flash sale
-      const originalProducts = cart.products;
+      const originalProducts = [...cart.products];
       cart.products = cart.products.filter(item => {
-        const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
-        const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
+        const itemProductId = item.productId.toString();
+        const isFlashSaleProduct = flashSaleProductIds.includes(itemProductId);
+        const isFlashSaleIngredient = flashSaleIngredientIds.includes(itemProductId);
         
         if (isFlashSaleProduct || isFlashSaleIngredient) {
+          console.log(`🗑️ Removing item: ${item.name} (${itemProductId}) from cart ${cart._id}`);
           removedItems++;
           cartUpdated = true;
           return false;
@@ -531,15 +537,17 @@ router.post('/:id/cleanup-cart', async (req, res) => {
         cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
         await cart.save();
         cleanedCarts++;
+        console.log(`✅ Updated cart ${cart._id}: removed ${originalProducts.length - cart.products.length} items`);
       }
     }
 
-    console.log(`🧹 Cleaned ${cleanedCarts} carts, removed ${removedItems} flash sale items`);
+    console.log(`🧹 Cleanup completed: ${cleanedCarts} carts, ${removedItems} items`);
 
     res.json({
       message: 'Đã xóa sản phẩm flash sale khỏi giỏ hàng',
       cleanedCarts,
-      removedItems
+      removedItems,
+      flashSaleName: flashSale.name
     });
 
   } catch (error) {
@@ -567,6 +575,8 @@ router.post('/cleanup-expired', async (req, res) => {
     let totalRemovedItems = 0;
 
     for (const flashSale of expiredFlashSales) {
+      console.log(`🔄 Processing expired flash sale: ${flashSale.name}`);
+      
       // Cập nhật status thành expired
       flashSale.status = 'expired';
       await flashSale.save();
@@ -577,20 +587,24 @@ router.post('/cleanup-expired', async (req, res) => {
       const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
 
       const cartsWithFlashSaleItems = await Cart.find({
-        $or: [
-          { 'products.productId': { $in: flashSaleProductIds } },
-          { 'products.ingredientId': { $in: flashSaleIngredientIds } }
-        ]
+        'products.productId': { 
+          $in: [...flashSaleProductIds, ...flashSaleIngredientIds] 
+        }
       });
+
+      console.log(`📦 Found ${cartsWithFlashSaleItems.length} carts for flash sale: ${flashSale.name}`);
 
       for (const cart of cartsWithFlashSaleItems) {
         let cartUpdated = false;
         
+        const originalProducts = [...cart.products];
         cart.products = cart.products.filter(item => {
-          const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
-          const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
+          const itemProductId = item.productId.toString();
+          const isFlashSaleProduct = flashSaleProductIds.includes(itemProductId);
+          const isFlashSaleIngredient = flashSaleIngredientIds.includes(itemProductId);
           
           if (isFlashSaleProduct || isFlashSaleIngredient) {
+            console.log(`🗑️ Removing expired item: ${item.name} (${itemProductId}) from cart ${cart._id}`);
             totalRemovedItems++;
             cartUpdated = true;
             return false;
@@ -602,6 +616,7 @@ router.post('/cleanup-expired', async (req, res) => {
           cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
           await cart.save();
           totalCleanedCarts++;
+          console.log(`✅ Updated cart ${cart._id}: removed ${originalProducts.length - cart.products.length} items`);
         }
       }
     }
@@ -618,6 +633,102 @@ router.post('/cleanup-expired', async (req, res) => {
   } catch (error) {
     console.error('❌ Lỗi cleanup expired flash sales:', error);
     res.status(500).json({ message: 'Có lỗi xảy ra khi cleanup flash sale đã kết thúc' });
+  }
+});
+
+// @desc    Đồng bộ giá sản phẩm trong giỏ hàng khi flash sale kết thúc
+// @route   POST /api/flash-sales/:id/sync-cart-prices
+// @access  Private
+router.post('/:id/sync-cart-prices', async (req, res) => {
+  try {
+    const flashSale = await FlashSale.findById(req.params.id);
+    if (!flashSale) {
+      return res.status(404).json({ message: 'Flash sale không tồn tại' });
+    }
+
+    const Cart = require('../models/Cart');
+    const Product = require('../models/Product');
+    const Ingredient = require('../models/Ingredient');
+    
+    // Lấy danh sách sản phẩm và nguyên liệu trong flash sale
+    const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
+    const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
+
+    console.log('🔍 Flash Sale Products:', flashSaleProductIds);
+    console.log('🔍 Flash Sale Ingredients:', flashSaleIngredientIds);
+
+    // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
+    const cartsWithFlashSaleItems = await Cart.find({
+      'products.productId': { 
+        $in: [...flashSaleProductIds, ...flashSaleIngredientIds] 
+      }
+    });
+
+    console.log(`📦 Found ${cartsWithFlashSaleItems.length} carts with flash sale items`);
+
+    let updatedCarts = 0;
+    let updatedItems = 0;
+
+    for (const cart of cartsWithFlashSaleItems) {
+      let cartUpdated = false;
+      
+      for (let i = 0; i < cart.products.length; i++) {
+        const item = cart.products[i];
+        const itemProductId = item.productId.toString();
+        const isFlashSaleProduct = flashSaleProductIds.includes(itemProductId);
+        const isFlashSaleIngredient = flashSaleIngredientIds.includes(itemProductId);
+        
+        if (isFlashSaleProduct || isFlashSaleIngredient) {
+          // Tìm sản phẩm/nguyên liệu để lấy giá gốc
+          let originalItem;
+          if (isFlashSaleProduct) {
+            originalItem = await Product.findById(itemProductId);
+          } else {
+            originalItem = await Ingredient.findById(itemProductId);
+          }
+
+          if (originalItem) {
+            // Tính giá gốc dựa trên size nếu có
+            let originalPrice = originalItem.price;
+            if (item.size && originalItem.sizePricing) {
+              const sizePrice = originalItem.sizePricing.find(sp => sp.size === item.size);
+              if (sizePrice) {
+                originalPrice = sizePrice.discountPrice || sizePrice.price;
+              }
+            }
+
+            // Cập nhật giá về giá gốc
+            if (item.price !== originalPrice) {
+              console.log(`💰 Updating price for ${item.name}: ${item.price} → ${originalPrice}`);
+              item.price = originalPrice;
+              cartUpdated = true;
+              updatedItems++;
+            }
+          }
+        }
+      }
+
+      // Cập nhật tổng giá
+      if (cartUpdated) {
+        cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        await cart.save();
+        updatedCarts++;
+        console.log(`✅ Updated cart ${cart._id}: synced prices for ${updatedItems} items`);
+      }
+    }
+
+    console.log(`💰 Price sync completed: ${updatedCarts} carts, ${updatedItems} items`);
+
+    res.json({
+      message: 'Đã đồng bộ giá sản phẩm flash sale trong giỏ hàng',
+      updatedCarts,
+      updatedItems,
+      flashSaleName: flashSale.name
+    });
+
+  } catch (error) {
+    console.error('❌ Lỗi sync cart prices:', error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi đồng bộ giá sản phẩm' });
   }
 });
 

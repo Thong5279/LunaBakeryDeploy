@@ -2,15 +2,16 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const cleanupFlashSales = async () => {
+// Kết nối MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+const FlashSale = require('./models/FlashSale');
+const Cart = require('./models/Cart');
+
+async function cleanupExpiredFlashSales() {
   try {
-    // Kết nối database
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('✅ Connected to MongoDB');
-
-    const FlashSale = require('./models/FlashSale');
-    const Cart = require('./models/Cart');
-
     const now = new Date();
     console.log('🕐 Current time:', now.toISOString());
     
@@ -22,75 +23,72 @@ const cleanupFlashSales = async () => {
 
     console.log(`🕐 Found ${expiredFlashSales.length} expired flash sales`);
 
-    if (expiredFlashSales.length === 0) {
-      console.log('✅ No expired flash sales to cleanup');
-      return;
-    }
-
     let totalCleanedCarts = 0;
     let totalRemovedItems = 0;
 
     for (const flashSale of expiredFlashSales) {
-      console.log(`🧹 Processing flash sale: ${flashSale.name}`);
+      console.log(`🔄 Processing expired flash sale: ${flashSale.name}`);
       
       // Cập nhật status thành expired
       flashSale.status = 'expired';
       await flashSale.save();
-      console.log(`✅ Updated status to expired for: ${flashSale.name}`);
 
       // Lấy danh sách sản phẩm và nguyên liệu trong flash sale
       const flashSaleProductIds = flashSale.products.map(p => p.productId.toString());
       const flashSaleIngredientIds = flashSale.ingredients.map(i => i.ingredientId.toString());
 
+      console.log('🔍 Flash Sale Products:', flashSaleProductIds);
+      console.log('🔍 Flash Sale Ingredients:', flashSaleIngredientIds);
+
       // Tìm tất cả giỏ hàng có chứa sản phẩm flash sale
       const cartsWithFlashSaleItems = await Cart.find({
-        $or: [
-          { 'products.productId': { $in: flashSaleProductIds } },
-          { 'products.ingredientId': { $in: flashSaleIngredientIds } }
-        ]
+        'products.productId': { 
+          $in: [...flashSaleProductIds, ...flashSaleIngredientIds] 
+        }
       });
 
-      console.log(`🛒 Found ${cartsWithFlashSaleItems.length} carts with flash sale items`);
+      console.log(`📦 Found ${cartsWithFlashSaleItems.length} carts for flash sale: ${flashSale.name}`);
 
       for (const cart of cartsWithFlashSaleItems) {
         let cartUpdated = false;
         
-        // Lọc ra các item không phải flash sale
+        const originalProducts = [...cart.products];
         cart.products = cart.products.filter(item => {
-          const isFlashSaleProduct = flashSaleProductIds.includes(item.productId?.toString());
-          const isFlashSaleIngredient = flashSaleIngredientIds.includes(item.ingredientId?.toString());
+          const itemProductId = item.productId.toString();
+          const isFlashSaleProduct = flashSaleProductIds.includes(itemProductId);
+          const isFlashSaleIngredient = flashSaleIngredientIds.includes(itemProductId);
           
           if (isFlashSaleProduct || isFlashSaleIngredient) {
+            console.log(`🗑️ Removing expired item: ${item.name} (${itemProductId}) from cart ${cart._id}`);
             totalRemovedItems++;
             cartUpdated = true;
-            console.log(`🗑️ Removed item from cart: ${item.name || 'Unknown'}`);
             return false;
           }
           return true;
         });
 
-        // Cập nhật tổng giá
         if (cartUpdated) {
           cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
           await cart.save();
           totalCleanedCarts++;
-          console.log(`✅ Updated cart for user: ${cart.user}`);
+          console.log(`✅ Updated cart ${cart._id}: removed ${originalProducts.length - cart.products.length} items`);
         }
       }
     }
 
-    console.log(`🧹 Cleanup completed:`);
-    console.log(`  - Expired flash sales: ${expiredFlashSales.length}`);
-    console.log(`  - Cleaned carts: ${totalCleanedCarts}`);
-    console.log(`  - Removed items: ${totalRemovedItems}`);
+    console.log(`🧹 Cleanup completed: ${totalCleanedCarts} carts, ${totalRemovedItems} items`);
+
+    if (expiredFlashSales.length === 0) {
+      console.log('✅ No expired flash sales to cleanup');
+    }
 
   } catch (error) {
     console.error('❌ Error during cleanup:', error);
   } finally {
-    await mongoose.disconnect();
     console.log('🔌 Disconnected from MongoDB');
+    mongoose.disconnect();
   }
-};
+}
 
 // Chạy cleanup
-cleanupFlashSales(); 
+cleanupExpiredFlashSales(); 
