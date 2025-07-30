@@ -232,7 +232,7 @@ const FlashSaleBanner = () => {
                   y: -5,
                   boxShadow: '0 20px 40px rgba(236, 72, 153, 0.3)'
                 }}
-                className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1"
+                className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col items-center border-2 border-pink-200 hover:border-pink-400 group cursor-pointer transform hover:rotate-1 h-full"
                 onClick={() => navigate(item.type === 'product' ? `/product/${item.productId._id}` : `/ingredient/${item.ingredientId._id}`)}
               >
                 <div className="relative mb-3 sm:mb-4">
@@ -261,22 +261,22 @@ const FlashSaleBanner = () => {
                   </motion.div>
                 </div>
                 
-                <h3 className="font-bold text-gray-900 text-xs sm:text-sm md:text-base text-center line-clamp-2 mb-2 sm:mb-3 group-hover:text-pink-600 transition-colors duration-300 px-1 sm:px-2">
+                <h3 className="font-bold text-gray-900 text-xs sm:text-sm md:text-base text-center line-clamp-2 mb-2 sm:mb-3 group-hover:text-pink-600 transition-colors duration-300 px-1 sm:px-2 w-full min-h-[2.5rem] sm:min-h-[3rem] flex items-center justify-center">
                   {item.type === 'product' ? item.productId.name : item.ingredientId.name}
                 </h3>
                 
-                <div className="flex items-center gap-1 sm:gap-2 justify-center mb-2 sm:mb-3">
-                  <span className="text-gray-400 line-through text-xs sm:text-sm">
+                <div className="flex flex-col items-center gap-1 sm:gap-2 justify-center mb-2 sm:mb-3 w-full">
+                  <span className="text-gray-400 line-through text-xs sm:text-sm whitespace-nowrap">
                     {formatPrice(item.originalPrice)}
                   </span>
-                  <span className="text-pink-600 font-bold text-sm sm:text-lg md:text-xl">
+                  <span className="text-pink-600 font-bold text-sm sm:text-lg md:text-xl whitespace-nowrap">
                     {formatPrice(item.salePrice)}
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-1 sm:gap-2 justify-center bg-pink-50 rounded-full px-2 sm:px-3 py-1">
-                  <FaTag className="text-pink-500 text-xs sm:text-sm" />
-                  <span className="text-pink-600 text-xs sm:text-sm font-medium">
+                <div className="flex items-center gap-1 sm:gap-2 justify-center bg-pink-50 rounded-full px-2 sm:px-3 py-1 w-full">
+                  <FaTag className="text-pink-500 text-xs sm:text-sm flex-shrink-0" />
+                  <span className="text-pink-600 text-xs sm:text-sm font-medium whitespace-nowrap">
                     Tiết kiệm {formatPrice(item.originalPrice - item.salePrice)}
                   </span>
                 </div>
