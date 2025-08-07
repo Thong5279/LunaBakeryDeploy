@@ -32,11 +32,11 @@ const Navbar = () => {
             {/* Social Media & Contact */}
             <div className="flex items-center gap-4 sm:gap-6 text-sm">
               <div className="flex items-center gap-3">
-                <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors">
+                <a href="https://www.facebook.com/pham.huynh.thong.2025/" className="text-gray-600 hover:text-pink-600 transition-colors">
                   <FaFacebook className="w-4 h-4" />
                 </a>
                 <span className="text-gray-600 font-medium">Zalo</span>
-                <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors">
+                <a href="https://www.instagram.com/thongpham.huynh/" className="text-gray-600 hover:text-pink-600 transition-colors">
                   <FaInstagram className="w-4 h-4" />
                 </a>
               </div>
